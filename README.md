@@ -1,2 +1,3 @@
-I stopped at trying to install Tailwind.
-tl::dr - taken more than an hour to get BE and FE packages installed.  this is obviously an issue for someone new.  need to test to make sure that they work properly before writing any code.
+## 1) Set Up took longer than I thought it would.  The challenge was in installing tailwinds.  Instead of asking AI to fix it (it kept coming with variations of the same step) - have it ask for diagnostics, to understand where the error is coming from and then fix it.
+## 2) API for BackEnd set to port 8080
+## 3) Pending - Docker and also, Commiting to Git
