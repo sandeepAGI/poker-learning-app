@@ -1,0 +1,2 @@
+I stopped at trying to install Tailwind.
+tl::dr - taken more than an hour to get BE and FE packages installed.  this is obviously an issue for someone new.  need to test to make sure that they work properly before writing any code.
