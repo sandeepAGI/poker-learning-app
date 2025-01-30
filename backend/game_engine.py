@@ -12,11 +12,13 @@ class Player:
     hole_cards: List[str] = field(default_factory=list)
     is_active: bool = True
     current_bet: int = 0
+    all_in: bool = False
 
     def bet(self, amount: int):
         """Places a bet, reducing stack size."""
         if amount > self.stack:
-            raise ValueError("Insufficient chips to bet this amount.")
+            amount = self.stack
+            self.all_in = True
         self.stack -= amount
         self.current_bet += amount
         return amount
@@ -50,41 +52,33 @@ class PokerGame:
     dealer_index: int = 0
     hand_count: int = 0
 
-    def showdown(self):
-        """Determines the winner at showdown."""
-        evaluator = Evaluator()
-        winners = []
-        best_score = float("inf")
+    def post_blinds(self):
+        """Assigns small and big blinds at the start of each hand and rotates dealer."""
+        self.dealer_index = (self.dealer_index + 1) % len(self.players)
+        sb_index = (self.dealer_index + 1) % len(self.players)
+        bb_index = (self.dealer_index + 2) % len(self.players)
+        sb_player = self.players[sb_index]
+        bb_player = self.players[bb_index]
+        try:
+            sb_player.bet(self.small_blind)
+            bb_player.bet(self.big_blind)
+            self.pot += self.small_blind + self.big_blind
+            self.current_bet = self.big_blind
+        except ValueError:
+            pass
+        if self.hand_count % 2 == 0:
+            self.small_blind += 5
+            self.big_blind = self.small_blind * 2
 
-        print("\n🔹 Showdown: Evaluating Hands...")
-        for player in self.players:
-            if player.is_active:
-                hole_cards = [Card.new(card.replace("10", "T")) for card in player.hole_cards]
-                board = [Card.new(card.replace("10", "T")) for card in self.community_cards]
-                hand_score = evaluator.evaluate(board, hole_cards)
-                
-                if hand_score < best_score:
-                    best_score = hand_score
-                    winners = [player]
-                elif hand_score == best_score:
-                    winners.append(player)
-
-        # Distribute pot among winners
-        if len(winners) > 0:
-            split_pot = self.pot // len(winners)
-            for winner in winners:
-                winner.stack += split_pot
-                print(f"🏆 {winner.player_id} wins {split_pot} chips!")
-
-        print(f"💰 Total pot at showdown: {self.pot} chips")  # Debugging statement
+    def distribute_pot(self, winner):
+        """Awards the pot to the winning player."""
+        winner.stack += self.pot
+        print(f"🏆 {winner.player_id} wins {self.pot} chips!")
         self.pot = 0
-        self.community_cards = []
 
 def run_game_test():
-    """Runs a short poker simulation with AI and player decisions (max 10 hands)."""
-    
     players = [
-        Player("User"),  # Human player (for testing)
+        Player("User"),
         AIPlayer("AI-1", personality="Conservative"),
         AIPlayer("AI-2", personality="Risk Taker"),
         AIPlayer("AI-3", personality="Probability-Based"),
@@ -92,8 +86,7 @@ def run_game_test():
     ]
 
     game = PokerGame(players)
-
-    base_deck = [rank + suit for rank in "23456789TJQKA" for suit in "shdc"]  # Full deck
+    base_deck = [rank + suit for rank in "23456789TJQKA" for suit in "shdc"]
 
     while game.hand_count < 10 and sum(p.is_active for p in game.players) > 1:
         game.deck = base_deck[:]
@@ -108,43 +101,38 @@ def run_game_test():
             if player.is_active:
                 player.receive_cards([game.deck.pop(), game.deck.pop()])
 
+        game.post_blinds()
+
         game_state = {"community_cards": game.community_cards, "current_bet": game.current_bet}
         max_bet = game.current_bet
-        
+
         for player in game.players:
             if isinstance(player, AIPlayer) and player.is_active:
                 decision = player.make_decision(game_state, game.deck)
                 if decision == "call":
-                    bet_amount = max_bet - player.current_bet
+                    bet_amount = min(max_bet - player.current_bet, player.stack)
                 elif decision == "raise":
-                    bet_amount = max_bet * 2
+                    bet_amount = max(min(max_bet * 2, player.stack), game.big_blind)
                     max_bet = bet_amount
                 else:
                     bet_amount = 0
-                
                 if bet_amount > 0:
                     try:
-                        player.bet(bet_amount)
-                        game.pot += bet_amount  # ✅ Add bet to pot
-                        player.current_bet += bet_amount
+                        actual_bet = player.bet(bet_amount)
+                        game.pot += actual_bet
                     except ValueError:
                         player.is_active = False
-                print(f"{player.player_id} decides to {decision}. Bet: {bet_amount}")
-        
+                print(f"{player.player_id} decides to {decision}. Bet: {actual_bet if bet_amount > 0 else 0}")
         game.current_bet = max_bet
-        
         game.community_cards = [game.deck.pop(), game.deck.pop(), game.deck.pop()]
         print(f"\n🔹 Flop: {game.community_cards}")
-        
         game.community_cards.append(game.deck.pop())
         print(f"\n🔹 Turn: {game.community_cards}")
-        
         game.community_cards.append(game.deck.pop())
         print(f"\n🔹 River: {game.community_cards}")
-        
-        game.showdown()
-
-    winner = next(p for p in game.players if p.is_active)
-    print(f"\n🏆 {winner.player_id} wins the game with {winner.stack} chips! 🏆")
-
+        winner = next(p for p in game.players if p.is_active)
+        game.distribute_pot(winner)
+        print("\n📊 Player Stacks:")
+        for player in game.players:
+            print(f"{player.player_id}: {player.stack} chips")
 run_game_test()
