@@ -6,12 +6,20 @@ class RiskTakerStrategy(BaseAI):
     def __init__(self):
         super().__init__()
 
-    def make_decision(self, hole_cards, game_state, deck):
-        """Decides AI action based on risk-taking behavior."""
-        hand_score = self.evaluate_hand(hole_cards, game_state["community_cards"], deck)
+    def make_decision(self, hole_cards, game_state, deck, pot_size, spr):
+        """Decides AI action based on risk-taking behavior and SPR."""
+        hand_score = super().make_decision(hole_cards, game_state, deck, pot_size, spr)
 
-        if hand_score is None:
+        # Risk Taker AI applies its own SPR-based decision-making
+        if spr < 3:  # Low SPR → Commit aggressively, shove or raise often
             return "raise"
-        elif hand_score > 6000:
-            return "call"
-        return "raise"
+
+        elif 3 <= spr <= 6:  # Medium SPR → Still aggressive, but calls more
+            if hand_score < 6000:
+                return "call"
+            return "raise"
+
+        else:  # High SPR → More selective aggression
+            if hand_score < 5000:
+                return "call"
+            return "raise"

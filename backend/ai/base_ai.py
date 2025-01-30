@@ -30,15 +30,7 @@ class BaseAI:
         # Return the average hand strength
         return sum(scores) / len(scores)
 
-    def make_decision(self, hole_cards, game_state, deck):
-        """Handles AI decision-making with Monte Carlo if needed."""
+    def make_decision(self, hole_cards, game_state, deck, pot_size, spr):
+        """Provides hand strength evaluation but does not apply strategy."""
         community_cards = game_state.get("community_cards", [])
-
-        hand_score = self.evaluate_hand(hole_cards, community_cards, deck)
-
-        # Use AI logic based on estimated hand strength
-        if hand_score > 7000:
-            return "fold"
-        elif hand_score > 5000:
-            return "call"
-        return "raise"
+        return self.evaluate_hand(hole_cards, community_cards, deck)
