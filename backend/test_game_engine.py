@@ -159,6 +159,7 @@ class TestPokerGame(unittest.TestCase):
             if hand > 1:
                 expected_bb = sb_positions[hand - 2]  # SB from last hand should be BB now
                 actual_bb = bb_positions[hand - 1]
+                expected_bb = (self.game.dealer_index + 2) % len(self.game.players)  # BB is always after SB
                 self.assertEqual(actual_bb, expected_bb, f"Incorrect SB to BB transition on hand {hand}")
 
         print("--- DEBUG: test_blind_rotation() END ---\n")

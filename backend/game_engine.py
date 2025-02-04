@@ -56,15 +56,22 @@ class PokerGame:
 
     def post_blinds(self):
         """Assigns small and big blinds at the start of each hand, ensuring SB becomes BB next hand."""
-    
+
         print(f"\n--- DEBUG: post_blinds() START ---")
         print(f"🃏 Hand {self.hand_count} - Dealer Before Rotation: {self.dealer_index}")
 
-        # ✅ Rotate dealer position correctly
+        # Rotate dealer position correctly
         self.dealer_index = (self.dealer_index + 1) % len(self.players)
-    
+
         sb_index = (self.dealer_index + 1) % len(self.players)  # SB is after the dealer
-        bb_index = (sb_index + 1) % len(self.players)  # BB is after SB
+
+    
+        # Instead of guessing, we find who was SB in the previous round
+        if self.hand_count > 1:
+            previous_sb = (self.dealer_index) % len(self.players)  # Previous dealer was the last SB
+            bb_index = previous_sb  # Set BB to be the previous SB
+        else:
+            bb_index = (sb_index + 1) % len(self.players)  # Standard for first hand
 
         print(f"➡️ New Dealer: {self.dealer_index}")
         print(f"➡️ Expected SB: {sb_index}, Expected BB: {bb_index}")
@@ -81,16 +88,15 @@ class PokerGame:
         self.pot += self.small_blind + self.big_blind
         self.current_bet = self.big_blind  
 
-        # ✅ Print blind values before potential increase
         print(f"🎯 Small Blind: {self.small_blind}, Big Blind: {self.big_blind}")
 
-        # ✅ Increase blinds every 2 hands
+        # Increase blinds every 2 hands
         if self.hand_count % 2 == 0:  
             self.small_blind += 5
             self.big_blind = self.small_blind * 2
             print(f"⬆️ Blinds Increased! New SB: {self.small_blind}, New BB: {self.big_blind}")
 
-        print("--- DEBUG: post_blinds() END ---\n")
+        print("--- DEBUG: post_blinds() END ---\n")       
 
     def betting_round(self):
         """Handles betting rounds where players must match the highest bet, raise, or fold."""
@@ -138,9 +144,9 @@ class PokerGame:
 
     def distribute_pot(self, deck):
         """Determines the winner and distributes the pot accordingly."""
-        print("\n--- DEBUG: distribute_pot() START ---")
-        print(f"Total Pot Before Distribution: {self.pot}")
-        print("Player Stacks Before Distribution:")
+#        print("\n--- DEBUG: distribute_pot() START ---")
+#        print(f"Total Pot Before Distribution: {self.pot}")
+#        print("Player Stacks Before Distribution:")
         for player in self.players:
             print(f"  {player.player_id}: {player.stack} chips, Active: {player.is_active}")
 
@@ -148,7 +154,7 @@ class PokerGame:
         if not deck:
             deck.extend([rank + suit for rank in "23456789TJQKA" for suit in "shdc"])
             random.shuffle(deck)
-            print("🔄 Deck was empty! Resetting and shuffling deck.")
+#            print("🔄 Deck was empty! Resetting and shuffling deck.")
 
         # ✅ Case where only one player remains (everyone else folded)
         active_players = [player for player in self.players if player.is_active]
@@ -158,7 +164,7 @@ class PokerGame:
             print(f"🏆 {winner.player_id} wins {self.pot} chips by default (all others folded).")
             winner.stack += self.pot
             self.pot = 0
-            print("--- DEBUG: distribute_pot() END ---\n")
+#            print("--- DEBUG: distribute_pot() END ---\n")
             return
 
         # ✅ Use AI's Monte Carlo hand evaluator
@@ -278,4 +284,4 @@ game = PokerGame([
     AIPlayer("AI-3", personality="Probability-Based"),
     AIPlayer("AI-4", personality="Bluffer"),
 ])
-game.run_game_test()
+#game.run_game_test()
