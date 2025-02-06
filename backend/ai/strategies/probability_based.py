@@ -8,25 +8,26 @@ class ProbabilityBasedStrategy(BaseAI):
 
     def make_decision(self, hole_cards, game_state, deck, pot_size, spr):
         """Makes a decision based on probability and hand strength."""
-        hand_score = super().make_decision(hole_cards, game_state, deck, pot_size, spr)
+        hand_score, hand_rank = super().make_decision(hole_cards, game_state, deck, pot_size, spr)
+        print(f"[DEBUG] Probability AI - Computed Hand Score: {hand_score}, SPR: {spr}")
 
-        """Makes a decision based on probability and hand strength."""
         if spr == 0:  # All-in scenario
             return "call"
 
-        # Probability AI applies its own SPR-based decision-making
-        if spr < 3:  # Low SPR → More willing to risk if hand strength is decent
-            if hand_score < 5000:
+        # Low SPR (More willing to commit)
+        if spr < 3:
+            if hand_score < 4500:
                 return "raise"
             return "call"
 
-        elif 3 <= spr <= 6:  # Medium SPR → Balanced optimal play
-            if hand_score < 6000:
+        # Medium SPR (Balanced Decision-Making)
+        elif 3 <= spr <= 6:
+            if hand_score < 5500:
                 return "call"
             return "raise"
 
-        else:  # High SPR → Play cautiously, only take strong hands
+        # High SPR (Tighter Play, but Still Some Raising)
+        else:
             if hand_score < 5000:
                 return "fold"
-            return "call" if hand_score < 7000 else "raise"
-
+            return "call" if hand_score < 6500 else "raise"
