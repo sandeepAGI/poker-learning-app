@@ -10,6 +10,11 @@ class RiskTakerStrategy(BaseAI):
         """Decides AI action based on risk-taking behavior and SPR."""
         hand_score = super().make_decision(hole_cards, game_state, deck, pot_size, spr)
 
+        """Makes a decision based on probability and hand strength."""
+        if spr == 0:  # All-in scenario
+            return "call"
+
+
         # Risk Taker AI applies its own SPR-based decision-making
         if spr < 3:  # Low SPR → Commit aggressively, shove or raise often
             return "raise"

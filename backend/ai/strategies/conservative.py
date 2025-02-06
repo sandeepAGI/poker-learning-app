@@ -9,7 +9,9 @@ class ConservativeStrategy(BaseAI):
     def make_decision(self, hole_cards, game_state, deck, pot_size, spr):
         """Decides AI action based on conservative strategy, using deck for Monte Carlo evaluation"""
         hand_score = super().make_decision(hole_cards, game_state, deck, pot_size, spr)
-
+        """Makes a decision based on probability and hand strength."""
+        if spr == 0:  # All-in scenario
+            return "call"
         # Conservative AI applies SPR logic here
         if spr < 3:  # Low SPR → Commit but only if very strong
             if hand_score < 4000:

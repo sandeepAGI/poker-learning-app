@@ -11,20 +11,20 @@ class BaseAI:
         """Evaluates the hand strength, using Monte Carlo if needed."""
     
         # ✅ Print input data before evaluation
-        print(f"\n--- DEBUG: evaluate_hand() START ---")
-        print(f"🃏 Hole Cards: {hole_cards}")
-        print(f"🂡 Community Cards: {community_cards}")
-        print(f"🃏 Deck Before Monte Carlo: {len(deck)} cards")
+        #print(f"\n--- DEBUG: evaluate_hand() START ---")
+        #print(f"🃏 Hole Cards: {hole_cards}")
+        #print(f"🂡 Community Cards: {community_cards}")
+        #print(f"🃏 Deck Before Monte Carlo: {len(deck)} cards")
 
         board = [Card.new(card.replace("10", "T")) for card in community_cards]
         hole = [Card.new(card.replace("10", "T")) for card in hole_cards]
 
         # ✅ Check if we have enough cards for evaluation
         total_cards = len(board) + len(hole)
-        print(f"🃏 Total Cards Available: {total_cards}")
+        #print(f"🃏 Total Cards Available: {total_cards}")
 
         if total_cards >= 5:
-            print("✅ Evaluating normally without Monte Carlo.")
+         #   print("✅ Evaluating normally without Monte Carlo.")
             return self.evaluator.evaluate(board, hole)
 
         # ✅ Monte Carlo simulation: complete the board 100 times
@@ -48,10 +48,10 @@ class BaseAI:
 
         # ✅ Prevent division by zero
         if not scores:
-            print("❌ ERROR: No valid hands were evaluated, returning worst score.")
+          #  print("❌ ERROR: No valid hands were evaluated, returning worst score.")
             return float("inf")
 
-        print(f"✅ Hand evaluation complete. Average score: {sum(scores) / len(scores)}")
+        #print(f"✅ Hand evaluation complete. Average score: {sum(scores) / len(scores)}")
         return sum(scores) / len(scores)
 
 

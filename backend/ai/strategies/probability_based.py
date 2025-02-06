@@ -10,6 +10,10 @@ class ProbabilityBasedStrategy(BaseAI):
         """Makes a decision based on probability and hand strength."""
         hand_score = super().make_decision(hole_cards, game_state, deck, pot_size, spr)
 
+        """Makes a decision based on probability and hand strength."""
+        if spr == 0:  # All-in scenario
+            return "call"
+
         # Probability AI applies its own SPR-based decision-making
         if spr < 3:  # Low SPR → More willing to risk if hand strength is decent
             if hand_score < 5000:

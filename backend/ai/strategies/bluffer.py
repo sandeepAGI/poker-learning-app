@@ -11,6 +11,10 @@ class BlufferStrategy(BaseAI):
         """Bluffer AI makes unpredictable bets, using SPR to adjust bluffing frequency."""
         hand_score = super().make_decision(hole_cards, game_state, deck, pot_size, spr)
 
+        """Makes a decision based on probability and hand strength."""
+        if spr == 0:  # All-in scenario
+            return "call"
+        
         # Bluffer AI applies its own SPR-based decision-making
         if spr < 3:  # Low SPR → Go aggressive, try to steal the pot
             if random.random() < 0.7:  # 70% chance to bluff
