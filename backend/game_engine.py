@@ -39,7 +39,16 @@ class AIPlayer(Player):
 
     def make_decision(self, game_state, deck, pot_size, spr):
         """Delegates AI decision-making to ai_manager.py, passing deck for Monte Carlo evaluation."""
-        return AIDecisionMaker.make_decision(self.personality, self.hole_cards, game_state, deck, pot_size, spr)
+        
+        print(f"\n[CRITICAL DEBUG] game_engine.py - AIPlayer {self.player_id} making decision")
+        print(f"  Deck Size Before Sending to AI Manager: {len(deck)}")  # 🔴 ADD THIS LINE
+
+        decision = AIDecisionMaker.make_decision(self.personality, self.hole_cards, game_state, deck, pot_size, spr)
+
+        print(f"  AI Decision: {decision}")  # 🔴 CONFIRM DECISION
+        print(f"  Deck Size After AI Decision: {len(deck)}")  # 🔴 TRACK IF DECK IS LOST
+
+        return decision
 
 @dataclass
 class PokerGame:
@@ -167,38 +176,36 @@ class PokerGame:
 #            print("--- DEBUG: distribute_pot() END ---\n")
             return
 
-        # ✅ Use AI's Monte Carlo hand evaluator
+        # Use AI's Monte Carlo hand evaluator
         ai_helper = BaseAI()
         best_score = None
         winner = None
+        best_hand_rank = None  # Track best hand rank for display
 
         for player in active_players:
             if player.hole_cards:
                 print(f"🃏 Evaluating hand for {player.player_id}: {player.hole_cards}")
-                print(f"🂡 Community Cards Before Evaluation: {self.community_cards}")
-                print(f"🃏 Deck Size Before Evaluation: {len(deck)}")
 
-                # ✅ Call AI-based hand evaluation with deck explicitly passed
-                hand_score = ai_helper.evaluate_hand(
+                # ✅ Call AI-based hand evaluation
+                hand_score, hand_rank = ai_helper.evaluate_hand(
                     hole_cards=player.hole_cards,
-                    community_cards=self.community_cards,  
-                    deck=deck  # ✅ Now the deck is passed correctly
+                    community_cards=self.community_cards,
+                    deck=deck
                 )
-            
-                print(f"🃏 {player.player_id} - Hand Score: {hand_score}")  
+    
+                print(f"🃏 {player.player_id} - Hand Score: {hand_score} ({hand_rank})")  # Show rank with score  
 
+                # ✅ Determine the winning hand based on score
                 if best_score is None or hand_score < best_score:  
                     best_score = hand_score
+                    best_hand_rank = hand_rank  # Track winning hand rank
                     winner = player
 
-        # ✅ Make sure a winner is chosen
-        if winner is None:
-            print("❌ ERROR: No winner was determined. Pot remains unassigned!")
-            return  
-
-        print(f"🏆 {winner.player_id} wins {self.pot} chips with the best hand!")
-        winner.stack += self.pot  
-        self.pot = 0  
+        # ✅ Display the winner's hand rank
+        if winner:
+            print(f"🏆 {winner.player_id} wins {self.pot} chips with a {best_hand_rank}!")
+            winner.stack += self.pot  
+            self.pot = 0  
 
         print("Player Stacks After Distribution:")
         for player in self.players:
@@ -210,78 +217,3 @@ class PokerGame:
         # ✅ Eliminate players with <5 chips after pot distribution
         for player in self.players:
             player.eliminate()
-
-    def run_game_test(self):
-        """Simulates a 10-hand poker game for testing."""
-        base_deck = [rank + suit for rank in "23456789TJQKA" for suit in "shdc"]
-    
-        self.players = [
-            AIPlayer("AI-1", personality="Conservative"),
-            AIPlayer("AI-2", personality="Risk Taker"),
-            AIPlayer("AI-3", personality="Probability-Based"),
-            AIPlayer("AI-4", personality="Bluffer"),
-        ]
-
-        for hand in range(1, 6):  # Limit to 5 hands for debugging
-            self.deck = base_deck[:]
-            random.shuffle(self.deck)
-
-            self.community_cards = []
-            self.pot = 0
-            self.hand_count = hand  # ✅ Ensure hand_count is updated BEFORE post_blinds()
-        
-            print(f"\n=== 🃏 Hand {self.hand_count} ===")
-
-            self.post_blinds()  # ✅ Call post_blinds() after updating hand_count
-
-            # ✅ Print dealer, SB, and BB for verification
-            dealer_position = self.dealer_index
-            sb_position = (self.dealer_index + 1) % len(self.players)
-            bb_position = (sb_position + 1) % len(self.players)
-            print(f"🔄 Hand {self.hand_count} - Dealer: {dealer_position}, SB: {sb_position}, BB: {bb_position}")
-
-            # ✅ Deal Hole Cards to AI Players
-            for player in self.players:
-                player.receive_cards([self.deck.pop(), self.deck.pop()])
-
-            # ✅ Pre-Flop Betting Round
-            print("\n🔹 Pre-Flop Betting Round:")
-            self.betting_round()
-
-            # ✅ Deal Flop and Start Betting
-            self.community_cards = [self.deck.pop(), self.deck.pop(), self.deck.pop()]
-            print(f"\n🂡 Flop: {self.community_cards}")
-            print("\n🔹 Flop Betting Round:")
-            self.betting_round()
-
-            # ✅ Deal Turn and Start Betting
-            self.community_cards.append(self.deck.pop())
-            print(f"\n🂡 Turn: {self.community_cards}")
-            print("\n🔹 Turn Betting Round:")
-            self.betting_round()
-
-            # ✅ Deal River and Start Betting
-            self.community_cards.append(self.deck.pop())
-            print(f"\n🂡 River: {self.community_cards}")
-            print("\n🔹 River Betting Round:")
-            self.betting_round()
-
-            # ✅ Reveal AI Hole Cards at End of Hand
-            print("\n🔹 Revealing Hole Cards:")
-            for player in self.players:
-                print(f"{player.player_id} Hole Cards: {player.hole_cards}")
-
-            # ✅ Distribute Pot & Reset for Next Hand
-            self.distribute_pot(self.deck)
-
-
-
-#Initialize and run test
-game = PokerGame([
-#    Player("User"),
-    AIPlayer("AI-1", personality="Conservative"),
-    AIPlayer("AI-2", personality="Risk Taker"),
-    AIPlayer("AI-3", personality="Probability-Based"),
-    AIPlayer("AI-4", personality="Bluffer"),
-])
-#game.run_game_test()

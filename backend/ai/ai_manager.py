@@ -24,10 +24,25 @@ class AIDecisionMaker:
 
     @staticmethod
     def make_decision(personality, hole_cards, game_state, deck, pot_size, spr):
-        """Delegates decision-making to the appropriate strategy, passing deck for Monte Carlo simulation."""
+        """Ensures the deck is passed correctly to AI strategies."""
+
+        print(f"\n[CRITICAL DEBUG] ai_manager.py - Making decision for {personality}")
+        print(f"  Deck Size Before AI Strategy: {len(deck)}")  # 🔴 TRACK IF AI RECEIVES A DECK
+
         if personality not in AIDecisionMaker.STRATEGY_MAP:
             raise ValueError(f"Unknown personality type: {personality}")
 
         strategy_class = AIDecisionMaker.STRATEGY_MAP[personality]()
-        return strategy_class.make_decision(hole_cards, game_state, deck, pot_size, spr)  # ✅ Pass `deck`
 
+        # ✅ Only retrieve `hand_score`, ignore `hand_rank`
+        hand_score, _ = strategy_class.evaluate_hand(hole_cards, game_state["community_cards"], deck)
+
+        print(f"  [CRITICAL DEBUG] AI Manager - Hand Score: {hand_score}")  # 🔴 CONFIRM AI IS WORKING
+        print(f"  Deck Size Before Passing to AI Strategy: {len(deck)}")  # 🔴 CONFIRM DECK SIZE
+
+        decision = strategy_class.make_decision(hole_cards, game_state, deck, pot_size, spr)
+
+        print(f"  [CRITICAL DEBUG] AI Decision: {decision}")
+        print(f"  Deck Size After AI Decision: {len(deck)}")  # 🔴 CONFIRM IF DECK IS LOST
+
+        return decision

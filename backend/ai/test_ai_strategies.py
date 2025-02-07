@@ -1,68 +1,59 @@
 import unittest
-from ai.strategies.bluffer import BlufferStrategy
-from ai.strategies.conservative import ConservativeStrategy
-from ai.strategies.probability_based import ProbabilityBasedStrategy
-from ai.strategies.risk_taker import RiskTakerStrategy
+from game_engine import GameEngine  # ✅ Use game engine to manage game state
 
-class TestPokerStrategies(unittest.TestCase):
+class TestAIStrategies(unittest.TestCase):
+    """Unit tests for AI strategies using game_engine.py to ensure a valid game state."""
+
     def setUp(self):
-        self.bluffer_ai = BlufferStrategy()
-        self.conservative_ai = ConservativeStrategy()
-        self.probability_ai = ProbabilityBasedStrategy()
-        self.risk_taker_ai = RiskTakerStrategy()
-    
-    def test_bluffer_ai_behavior(self):
-        """Test if the Bluffer AI bluffs correctly based on SPR."""
-        hole_cards = ["2c", "7d"]  # Weak hand
-        game_state = {"current_bet": 50, "community_cards": ["Ah", "Kd", "3c"]}
-        deck = ["7s", "Jd", "2d", "9h", "Qh"] * 3
-        pot_size = 300
-        spr_low = 2.0  # Low SPR scenario
-        spr_high = 7.0  # High SPR scenario
-        spr_zero = 0.0  # All-in scenario
-        
-        decision_zero_spr = self.bluffer_ai.make_decision(hole_cards, game_state, deck, pot_size, spr_zero)
-        print(f"[DEBUG] Bluffer AI - Expected: Call at SPR ({spr_zero}), Actual: {decision_zero_spr}")
-        self.assertEqual(decision_zero_spr, "call")
-    
-    def test_conservative_ai_behavior(self):
-        """Test if the Conservative AI plays only strong hands."""
-        hole_cards = ["As", "Ks"]  # Strong hand
-        game_state = {"current_bet": 100, "community_cards": ["Ah", "Kd", "3c"]}
-        deck = ["7s", "Jd", "2d", "9h", "Qh"] * 3
-        pot_size = 500
-        spr = 5.0
-        spr_zero = 0.0  # All-in scenario
-        
-        decision_zero_spr = self.conservative_ai.make_decision(hole_cards, game_state, deck, pot_size, spr_zero)
-        print(f"[DEBUG] Conservative AI - Expected: Call at SPR ({spr_zero}), Actual: {decision_zero_spr}")
-        self.assertEqual(decision_zero_spr, "call")
-    
-    def test_probability_ai_behavior(self):
-        """Test if the Probability-Based AI makes optimal decisions based on hand strength."""
-        hole_cards = ["9h", "8h"]  # Mid-strength hand
-        game_state = {"current_bet": 75, "community_cards": ["Ah", "Kd", "3c"]}
-        deck = ["7s", "Jd", "2d", "9h", "Qh"] * 3
-        pot_size = 400
-        spr = 4.0
-        spr_zero = 0.0  # All-in scenario
-        
-        decision_zero_spr = self.probability_ai.make_decision(hole_cards, game_state, deck, pot_size, spr_zero)
-        print(f"[DEBUG] Probability AI - Expected: Call at SPR ({spr_zero}), Actual: {decision_zero_spr}")
-        self.assertEqual(decision_zero_spr, "call")
-    
-    def test_risk_taker_ai_behavior(self):
-        """Test if the Risk-Taker AI raises aggressively regardless of hand strength."""
-        hole_cards = ["3c", "7d"]  # Weak hand
-        game_state = {"current_bet": 50, "community_cards": ["Ah", "Kd", "3c"]}
-        deck = ["7s", "Jd", "2d", "9h", "Qh"] * 3
-        pot_size = 300
-        spr = 2.0  # Low SPR scenario
-        spr_zero = 0.0  # All-in scenario
-        
-        decision_zero_spr = self.risk_taker_ai.make_decision(hole_cards, game_state, deck, pot_size, spr_zero)
-        print(f"[DEBUG] Risk-Taker AI - Expected: Call at SPR ({spr_zero}), Actual: {decision_zero_spr}")
-        self.assertEqual(decision_zero_spr, "call")
+        """Initialize game engine before each test."""
+        self.engine = GameEngine()  # ✅ Create an instance of the game engine
+        self.engine.initialize_players()  # ✅ Initialize AI players
+        self.engine.shuffle_deck()  # ✅ Shuffle deck for testing
+
+    def simulate_ai_decision(self, ai_player, spr, expected_choices):
+        """Simulates an AI decision using game_engine.py and ensures it is valid."""
+
+        game_state = {"community_cards": self.engine.community_cards, "current_bet": 100}  # ✅ Get game state from engine
+        deck = self.engine.deck  # ✅ Use deck from game engine
+        pot_size = 1000  # Arbitrary pot size
+
+        print(f"\n[CRITICAL DEBUG] test_ai_strategies.py - Running test for {ai_player.personality}")
+        print(f"  Deck Size Before Decision: {len(deck)}")  # ✅ Confirm deck is available
+
+        decision = ai_player.make_decision(game_state, deck, pot_size, spr)
+
+        print(f"  AI Decision: {decision}")
+        print(f"  Deck Size After Decision: {len(deck)}")  # ✅ Confirm deck remains intact
+
+        self.assertIn(decision, expected_choices, f"{ai_player.personality} failed for SPR {spr}")
+
+    def test_bluffer_strategy(self):
+        """Test the Bluffer AI's decision-making logic using game_engine.py."""
+        ai_player = self.engine.players[0]  # ✅ Use an AI player from game engine
+        self.simulate_ai_decision(ai_player, spr=2, expected_choices=["raise", "call"])
+        self.simulate_ai_decision(ai_player, spr=5, expected_choices=["raise", "call"])
+        self.simulate_ai_decision(ai_player, spr=7, expected_choices=["call", "fold"])
+
+    def test_conservative_strategy(self):
+        """Test the Conservative AI's decision-making logic using game_engine.py."""
+        ai_player = self.engine.players[1]  # ✅ Use an AI player from game engine
+        self.simulate_ai_decision(ai_player, spr=2, expected_choices=["call", "fold"])
+        self.simulate_ai_decision(ai_player, spr=5, expected_choices=["call", "fold"])
+        self.simulate_ai_decision(ai_player, spr=7, expected_choices=["fold"])
+
+    def test_probability_based_strategy(self):
+        """Test the Probability-Based AI's decision-making logic using game_engine.py."""
+        ai_player = self.engine.players[2]  # ✅ Use an AI player from game engine
+        self.simulate_ai_decision(ai_player, spr=2, expected_choices=["raise", "call"])
+        self.simulate_ai_decision(ai_player, spr=5, expected_choices=["call"])
+        self.simulate_ai_decision(ai_player, spr=7, expected_choices=["fold"])
+
+    def test_risk_taker_strategy(self):
+        """Test the Risk Taker AI's decision-making logic using game_engine.py."""
+        ai_player = self.engine.players[3]  # ✅ Use an AI player from game engine
+        self.simulate_ai_decision(ai_player, spr=2, expected_choices=["raise"])
+        self.simulate_ai_decision(ai_player, spr=5, expected_choices=["raise", "call"])
+        self.simulate_ai_decision(ai_player, spr=7, expected_choices=["call"])
 
 if __name__ == "__main__":
     unittest.main()
