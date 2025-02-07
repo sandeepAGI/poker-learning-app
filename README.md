@@ -8,6 +8,8 @@
 6) ALl unit tests passed.
 7) Testing next AI decisions to make sure they are as expected.
 8) How is call or fold handeled when SPR =0 ... the decision maker says call but we need to make sure that the logic in game_engine will force a fold if someone else raises.
+9) Fixed errors in game_engine in how hands are dealt with to all players.  there were missing logic.
+10) Need thorough testing of a game sequence
 
 
 #Always save to github once all testing on current passes before you add new functionality.  it sometimes overwrites prior code and difficult to restore.
@@ -34,3 +36,5 @@ Full Game Simulation
 Dockerization (Optional)
 
 ⏳ Set up Dockerfile for backend deployment.
+
+

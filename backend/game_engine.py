@@ -25,7 +25,13 @@ class Player:
         return amount
 
     def receive_cards(self, cards: List[str]):
-        """Assigns hole cards to the player."""
+        """Assigns hole cards to the player, but warns if already set."""
+        print(f"[DEBUG] {self.player_id} receiving new cards: {cards} (Previous: {self.hole_cards})")
+
+        if self.hole_cards:  # ✅ Warn if cards are already assigned
+            print(f"[WARNING] {self.player_id} already had hole cards! This might be a duplicate deal.")
+            return
+
         self.hole_cards = cards
 
     def eliminate(self):
@@ -43,10 +49,10 @@ class AIPlayer(Player):
         print(f"\n[CRITICAL DEBUG] game_engine.py - AIPlayer {self.player_id} making decision")
         print(f"  Deck Size Before Sending to AI Manager: {len(deck)}")  # 🔴 ADD THIS LINE
 
-        decision = AIDecisionMaker.make_decision(self.personality, self.hole_cards, game_state, deck, pot_size, spr)
+        decision = AIDecisionMaker.make_decision(self.personality, self.hole_cards, game_state, self.deck, pot_size, spr)
 
         print(f"  AI Decision: {decision}")  # 🔴 CONFIRM DECISION
-        print(f"  Deck Size After AI Decision: {len(deck)}")  # 🔴 TRACK IF DECK IS LOST
+        print(f"  Deck Size After AI Decision: {len(self.deck)}")  # 🔴 TRACK IF DECK IS LOST
 
         return decision
 
@@ -62,6 +68,39 @@ class PokerGame:
     dealer_index: int = -1  # Dealer starts at -1 so first hand SB/BB starts correctly
     hand_count: int = 0
     evaluator: Evaluator = field(default_factory=Evaluator)
+
+    def reset_deck(self):
+        """Ensures a new shuffled deck at the start of each hand."""
+        self.deck = [rank + suit for rank in "23456789TJQKA" for suit in "shdc"]
+        random.shuffle(self.deck)    
+        print(f"[DEBUG] Resetting deck: New deck size = {len(self.deck)}")
+
+    def deal_hole_cards(self):
+        """Deals 2 hole cards to each active player at the start of a new hand."""
+        if self.hand_count == self.last_hand_dealt:
+            print(f"[DEBUG] Hole cards already dealt for hand {self.hand_count}, skipping.")
+            return
+
+        print(f"[DEBUG] Dealing hole cards for new hand {self.hand_count}... Initial Deck Size: {len(self.deck)}")
+
+        assigned_players = []  # Track players who received cards
+
+        for player in self.players:
+            if player.is_active:
+                if player.hole_cards:
+                    print(f"[WARNING] {player.player_id} already has hole cards! Skipping dealing.")
+                    continue  
+
+                hole_cards = self.deck[:2]  # ✅ Get 2 unique cards for this player
+                player.receive_cards(hole_cards)
+                print(f"[DEBUG] Assigning to {player.player_id}: {hole_cards}")
+
+                self.deck = self.deck[2:]  # ✅ Remove assigned cards from deck IMMEDIATELY
+                assigned_players.append(player)
+
+        print(f"[DEBUG] Deck Size After Dealing Hole Cards: {len(self.deck)}")
+        self.last_hand_dealt = self.hand_count  # ✅ Marks that hole cards were assigned
+
 
     def post_blinds(self):
         """Assigns small and big blinds at the start of each hand, ensuring SB becomes BB next hand."""
@@ -105,8 +144,16 @@ class PokerGame:
             self.big_blind = self.small_blind * 2
             print(f"⬆️ Blinds Increased! New SB: {self.small_blind}, New BB: {self.big_blind}")
 
-        print("--- DEBUG: post_blinds() END ---\n")       
+        # ✅ Call `deal_hole_cards()` ONLY if we are starting a NEW hand
+        if self.hand_count > self.last_hand_dealt:
+            print(f"[DEBUG] New hand detected: {self.hand_count}, dealing hole cards.")
+            self.deal_hole_cards()
+            self.last_hand_dealt = self.hand_count  # ✅ Update last hand dealt
+        else:
+            print(f"[DEBUG] No new hand detected. Skipping hole card deal.")
 
+        print("--- DEBUG: post_blinds() END ---\n")
+        
     def betting_round(self):
         """Handles betting rounds where players must match the highest bet, raise, or fold."""
         self.current_bet = 0  # ✅ Reset current bet for each betting round
@@ -122,6 +169,8 @@ class PokerGame:
                         # ✅ Calculate Stack-to-Pot Ratio (SPR)
                         effective_stack = min(player.stack, max(p.stack for p in self.players if p != player and p.is_active))
                         spr = effective_stack / self.pot if self.pot > 0 else float("inf")
+
+                        print(f"[DEBUG] game_engine.py - Passing Deck of Size {len(self.deck)} to AI Manager")
 
                         # ✅ AI Decision
                         decision = player.make_decision(
@@ -153,17 +202,8 @@ class PokerGame:
 
     def distribute_pot(self, deck):
         """Determines the winner and distributes the pot accordingly."""
-#        print("\n--- DEBUG: distribute_pot() START ---")
-#        print(f"Total Pot Before Distribution: {self.pot}")
-#        print("Player Stacks Before Distribution:")
         for player in self.players:
             print(f"  {player.player_id}: {player.stack} chips, Active: {player.is_active}")
-
-        # ✅ Ensure deck is available before evaluation
-        if not deck:
-            deck.extend([rank + suit for rank in "23456789TJQKA" for suit in "shdc"])
-            random.shuffle(deck)
-#            print("🔄 Deck was empty! Resetting and shuffling deck.")
 
         # ✅ Case where only one player remains (everyone else folded)
         active_players = [player for player in self.players if player.is_active]
@@ -185,12 +225,13 @@ class PokerGame:
         for player in active_players:
             if player.hole_cards:
                 print(f"🃏 Evaluating hand for {player.player_id}: {player.hole_cards}")
+                assert len(self.deck) > 0, "[ERROR] game_engine.py - Deck is empty before AI decision!"
 
                 # ✅ Call AI-based hand evaluation
                 hand_score, hand_rank = ai_helper.evaluate_hand(
                     hole_cards=player.hole_cards,
                     community_cards=self.community_cards,
-                    deck=deck
+                    deck=self.deck
                 )
     
                 print(f"🃏 {player.player_id} - Hand Score: {hand_score} ({hand_rank})")  # Show rank with score  
@@ -206,6 +247,8 @@ class PokerGame:
             print(f"🏆 {winner.player_id} wins {self.pot} chips with a {best_hand_rank}!")
             winner.stack += self.pot  
             self.pot = 0  
+            self.hand_count += 1  # ✅ New hand starts
+            self.reset_deck()  # ✅ Fresh deck for the next hand
 
         print("Player Stacks After Distribution:")
         for player in self.players:
