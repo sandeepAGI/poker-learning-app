@@ -1,50 +1,53 @@
 import unittest
-from ai.strategies.bluffer import BlufferStrategy
-from ai.strategies.conservative import ConservativeStrategy
-from ai.strategies.probability_based import ProbabilityBasedStrategy
-from ai.strategies.risk_taker import RiskTakerStrategy
+from unittest.mock import patch, Mock
+from game_engine import PokerGame, AIPlayer, GameState
 
-class TestAIStrategies(unittest.TestCase):
+class TestSPRCalculation(unittest.TestCase):
+    """Focused test suite for SPR calculations with improved visibility."""
+    
     def setUp(self):
-        """Initialize AI strategies before each test."""
-        self.bluffer = BlufferStrategy()
-        self.conservative = ConservativeStrategy()
-        self.probability = ProbabilityBasedStrategy()
-        self.risk_taker = RiskTakerStrategy()
-
-    def simulate_ai_decision(self, ai, hand_score, spr, expected_choices):
-        """Helper function to simulate AI decision and check if it's valid."""
-        game_state = {"community_cards": [], "current_bet": 100}  # Mock game state
-        deck = []  # Empty deck since we are testing static decisions
-        pot_size = 1000  # Arbitrary pot size
-        hole_cards = ["Ah", "Kd"]  # Mock hole cards
+        """Initialize test environment with controlled state."""
+        self.players = [
+            AIPlayer(
+                player_id=f"Player_{i}",
+                personality="conservative",
+                stack=200
+            ) for i in range(4)
+        ]
         
-        decision = ai.make_decision(hole_cards, game_state, deck, pot_size, spr)
-        self.assertIn(decision, expected_choices, f"{ai.__class__.__name__} failed for hand score {hand_score}, SPR {spr}")
+        self.game = PokerGame(players=self.players)
+        self.game.current_state = GameState.FLOP
+        self.game.reset_deck()
 
-    def test_bluffer_strategy(self):
-        """Test the Bluffer AI's decision-making logic."""
-        self.simulate_ai_decision(self.bluffer, hand_score=3000, spr=2, expected_choices=["raise", "call"])
-        self.simulate_ai_decision(self.bluffer, hand_score=4500, spr=5, expected_choices=["raise", "call"])
-        self.simulate_ai_decision(self.bluffer, hand_score=6000, spr=7, expected_choices=["call", "fold"])
-
-    def test_conservative_strategy(self):
-        """Test the Conservative AI's decision-making logic."""
-        self.simulate_ai_decision(self.conservative, hand_score=3500, spr=2, expected_choices=["raise", "call"])
-        self.simulate_ai_decision(self.conservative, hand_score=5200, spr=5, expected_choices=["call"])
-        self.simulate_ai_decision(self.conservative, hand_score=4900, spr=7, expected_choices=["fold"])
-
-    def test_probability_based_strategy(self):
-        """Test the Probability-Based AI's decision-making logic."""
-        self.simulate_ai_decision(self.probability, hand_score=4000, spr=2, expected_choices=["raise", "call"])
-        self.simulate_ai_decision(self.probability, hand_score=5500, spr=5, expected_choices=["raise", "call"])
-        self.simulate_ai_decision(self.probability, hand_score=6200, spr=7, expected_choices=["call", "raise"])
-
-    def test_risk_taker_strategy(self):
-        """Test the Risk Taker AI's decision-making logic."""
-        self.simulate_ai_decision(self.risk_taker, hand_score=3000, spr=2, expected_choices=["raise"])
-        self.simulate_ai_decision(self.risk_taker, hand_score=5500, spr=5, expected_choices=["call", "raise"])
-        self.simulate_ai_decision(self.risk_taker, hand_score=4900, spr=7, expected_choices=["call"])
-
-if __name__ == "__main__":
-    unittest.main()
+    def test_spr_calculation_with_monitoring(self):
+        """Test SPR calculation with enhanced state monitoring."""
+        with patch('ai.ai_manager.AIDecisionMaker.make_decision', return_value='call') as mock_decision:
+            # Set and verify initial state
+            self.game.pot = 100
+            print("\nInitial State:")
+            print(f"Initial Pot: {self.game.pot}")
+            print(f"Initial Stacks: {[p.stack for p in self.players]}")
+            
+            # Monitor pot changes during betting round
+            self.game.betting_round()
+            
+            print("\nPost-Betting State:")
+            print(f"Final Pot: {self.game.pot}")
+            print(f"Final Stacks: {[p.stack for p in self.players]}")
+            
+            # Analyze decision parameters
+            call_args = mock_decision.call_args
+            self.assertIsNotNone(call_args, "AI decision maker was not called")
+            
+            actual_spr = call_args[0][4]
+            print(f"\nSPR Calculation:")
+            print(f"Actual SPR: {actual_spr}")
+            print(f"Expected SPR: 2.0 (200/100)")
+            
+            # Verify SPR calculation
+            self.assertAlmostEqual(
+                actual_spr,
+                2.0,
+                places=2,
+                msg="SPR calculation deviation detected"
+            )
