@@ -11,7 +11,8 @@
 9) Fixed errors in game_engine in how hands are dealt with to all players.  there were missing logic.
 10) Need thorough testing of a game sequence
 
-11) Need to check SPR calculation - why it looks at effective stack and not player.stack.  Also need to fix continued issue with test.
+11) Effective stack and SPR calculation (by each player, before each round), was correct but variable to AIDecision maker was not in same order, mixing up calculations.  Fixed and also cleaned code to make sure the arguments being passes were correct using kwargs
+
 
 
 #Always save to github once all testing on current passes before you add new functionality.  it sometimes overwrites prior code and difficult to restore.
