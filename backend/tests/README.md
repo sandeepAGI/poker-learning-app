@@ -53,6 +53,30 @@ Our approach to testing involved:
 4. **Boundary Testing**: Testing edge cases and limit conditions
    - Example: `test_player_elimination_threshold()` tests various stack sizes around the elimination threshold
 
+## Edge Case Testing Suite
+
+In addition to our comprehensive testing, we've developed a dedicated test suite for edge cases to ensure the system is robust in unusual or extreme situations:
+
+1. **Deck Exhaustion**: Testing behavior when the deck runs out of cards
+   - `test_deck_deal_exhaustion()`: Verifies appropriate errors when dealing beyond deck capacity
+   - `test_deal_community_insufficient_cards()`: Tests handling insufficient cards for community card deals
+   - `test_game_handles_deck_exhaustion()`: Confirms the game engine handles deck exhaustion gracefully
+
+2. **Multi-way All-In Pots**: Tests complex scenarios with multiple players all-in
+   - `test_three_way_all_in_different_stacks()`: Verifies correct pot distribution with three players all-in with different stack sizes
+
+3. **AI with Incomplete Cards**: Tests AI evaluation with partial community cards
+   - `test_evaluate_hand_preflop()`: Tests hand evaluation with just hole cards before flop
+   - `test_evaluate_hand_partial_board()`: Tests evaluation with partial community cards
+
+4. **DeckManager Validation**: Ensuring the DeckManager properly handles edge cases
+   - `test_deal_invalid_card_count()`: Tests error handling for invalid card requests
+   - `test_deck_size_tracking()`: Confirms accurate tracking of deck size during operations
+   - `test_deck_reset()`: Verifies deck reset functionality works correctly
+
+5. **Stack-to-Pot Ratio (SPR) Calculation**: Tests SPR edge cases
+   - `test_equal_stacks_spr()`: Verifies SPR behavior when all players have identical stacks
+
 ## Testing Challenges and Solutions
 
 During testing, we encountered several challenges:
@@ -70,7 +94,11 @@ During testing, we encountered several challenges:
    - Example: Test that pot is empty after distribution rather than specific distribution mechanics
 
 4. **Mock Requirements**: Some components needed realistic mocks to be testable
-   - Solution: Create mock classes (e.g., `MockEvaluator`, `MockBaseAI`) to simulate complex behaviors
+   - Solution: Create mock classes (e.g., `MockHandEvaluator`) to simulate complex behaviors
+
+5. **Race Conditions**: Some tests were sensitive to the order of operations
+   - Solution: Use patching to control behavior of randomized components
+   - Example: Patching card deck generation to ensure deterministic outcomes
 
 ## Test Verification Approach
 
@@ -120,8 +148,31 @@ Based on our comprehensive testing, we can confirm that the following requiremen
 - ❌ Statistics Tracking (Phase 2)
 - ❌ API Integration (not part of core engine)
 
+## Code Architecture Improvements
+
+After completing our initial implementation, we performed significant refactoring to improve the code architecture:
+
+1. **Protocol-Based AI Strategy System**:
+   - Created a proper `AIStrategyProtocol` to define a consistent interface for AI strategies
+   - Implemented composition over inheritance for improved flexibility and maintainability
+   - Added proper type hints throughout the AI code for better type safety
+
+2. **DeckManager Class**:
+   - Implemented a dedicated `DeckManager` class to encapsulate all deck operations
+   - Added proper validation and error handling for card deals
+   - Implemented tracking of dealt, community, and burnt cards
+   - Added utility methods for card conversions and statistics
+
+3. **Logging System**:
+   - Created a centralized logging system with different severity levels
+   - Configured separate log files for different concerns (general, errors, AI decisions)
+   - Replaced all print statements with structured logging
+   - Added context-rich log messages for easier debugging
+
 ## Conclusion
 
 Our testing confirms that the core poker game engine functionality has been successfully implemented according to the requirements. The code handles all aspects of poker game management including round transitions, community card dealing, pot distribution, blind management, and player elimination.
 
-The implementation is robust and correctly handles edge cases like split pots, side pots, and player elimination. The test suite we've developed provides good coverage of the functionality and can serve as a basis for future extensions to the system.
+The implementation is robust and correctly handles edge cases like split pots, side pots, player elimination, and deck exhaustion. The test suite we've developed provides good coverage of the functionality and can serve as a basis for future extensions to the system.
+
+The architectural improvements made during refactoring have significantly improved code quality, maintainability, and robustness, making the system more resilient to errors and easier to extend with new features.

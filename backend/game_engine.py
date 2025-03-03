@@ -5,7 +5,12 @@ from enum import Enum
 import config
 from treys import Evaluator, Card
 from ai.ai_manager import AIDecisionMaker
-from ai.base_ai import BaseAI
+from ai.hand_evaluator import HandEvaluator
+from deck_manager import DeckManager
+from logger import get_logger
+
+# Create a logger for the game engine
+logger = get_logger("game_engine")
 
 class GameState(Enum):
     PRE_FLOP = "pre_flop"
@@ -123,48 +128,64 @@ class PokerGame:
 
     def reset_deck(self) -> None:
         """Ensures a new shuffled deck at the start of each hand."""
-        self.deck = [rank + suit for rank in "23456789TJQKA" for suit in "shdc"]
-        random.shuffle(self.deck)
+        deck_manager = DeckManager()
+        self.deck = deck_manager.get_deck()
+        logger.debug(f"Deck reset with {len(self.deck)} cards")
 
     def deal_hole_cards(self) -> None:
         """Deals 2 hole cards to each active player."""
+        deck_manager = DeckManager()
+        deck_manager._deck = self.deck.copy()  # Initialize with current deck
+        
         for player in self.players:
             if player.is_active and not player.hole_cards:
-                hole_cards = self.deck[:2]
-                player.receive_cards(hole_cards)
-                self.deck = self.deck[2:]
+                try:
+                    hole_cards = deck_manager.deal_to_player(2)
+                    player.receive_cards(hole_cards)
+                except ValueError as e:
+                    logger.error(f"Error dealing cards: {e}")
+                    
+        # Update the game's deck
+        self.deck = deck_manager.get_deck()
         self.last_hand_dealt = self.hand_count
+        logger.debug(f"Dealt hole cards to players, {len(self.deck)} cards remaining")
 
     def deal_community_cards(self) -> None:
         """Deals community cards based on current game state."""
         current_hand = self.hand_count
+        deck_manager = DeckManager()
+        deck_manager._deck = self.deck.copy()  # Initialize with current deck
 
-        if self.current_state == GameState.FLOP:
-            if self.last_community_cards[GameState.FLOP] == current_hand:
-                return
-            self.deck = self.deck[1:]  # Burn card
-            flop_cards = self.deck[:3]
-            self.community_cards.extend(flop_cards)
-            self.deck = self.deck[3:]
-            self.last_community_cards[GameState.FLOP] = current_hand
+        try:
+            if self.current_state == GameState.FLOP:
+                if self.last_community_cards[GameState.FLOP] == current_hand:
+                    return
+                flop_cards = deck_manager.deal_flop()
+                self.community_cards.extend(flop_cards)
+                self.last_community_cards[GameState.FLOP] = current_hand
+                logger.debug(f"Dealt flop: {', '.join(flop_cards)}")
 
-        elif self.current_state == GameState.TURN:
-            if self.last_community_cards[GameState.TURN] == current_hand:
-                return
-            self.deck = self.deck[1:]  # Burn card
-            turn_card = [self.deck[0]]
-            self.community_cards.extend(turn_card)
-            self.deck = self.deck[1:]
-            self.last_community_cards[GameState.TURN] = current_hand
+            elif self.current_state == GameState.TURN:
+                if self.last_community_cards[GameState.TURN] == current_hand:
+                    return
+                turn_card = deck_manager.deal_turn()
+                self.community_cards.append(turn_card)
+                self.last_community_cards[GameState.TURN] = current_hand
+                logger.debug(f"Dealt turn: {turn_card}")
 
-        elif self.current_state == GameState.RIVER:
-            if self.last_community_cards[GameState.RIVER] == current_hand:
-                return
-            self.deck = self.deck[1:]  # Burn card
-            river_card = [self.deck[0]]
-            self.community_cards.extend(river_card)
-            self.deck = self.deck[1:]
-            self.last_community_cards[GameState.RIVER] = current_hand
+            elif self.current_state == GameState.RIVER:
+                if self.last_community_cards[GameState.RIVER] == current_hand:
+                    return
+                river_card = deck_manager.deal_river()
+                self.community_cards.append(river_card)
+                self.last_community_cards[GameState.RIVER] = current_hand
+                logger.debug(f"Dealt river: {river_card}")
+                
+            # Update the game's deck
+            self.deck = deck_manager.get_deck()
+            
+        except ValueError as e:
+            logger.error(f"Error dealing community cards: {e}")
 
     def post_blinds(self) -> None:
         """Assigns small and big blinds at the start of each hand."""
@@ -376,18 +397,19 @@ class PokerGame:
             self.pot = 0
             return
             
-        ai_helper = BaseAI()
+        hand_evaluator = HandEvaluator()
         
         # Evaluate hands for all active players
         player_hands = {}
         for player in active_players:
             if player.hole_cards:
-                hand_score, hand_rank = ai_helper.evaluate_hand(
+                hand_score, hand_rank = hand_evaluator.evaluate_hand(
                     hole_cards=player.hole_cards,
                     community_cards=self.community_cards,
                     deck=self.deck
                 )
                 player_hands[player.player_id] = (hand_score, hand_rank, player)
+                logger.info(f"Player {player.player_id} hand: {', '.join(player.hole_cards)} - {hand_rank} ({hand_score})")
         
         # Distribute each pot to winner(s)
         for pot in pots:

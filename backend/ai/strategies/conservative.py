@@ -1,26 +1,40 @@
-from ai.base_ai import BaseAI
+from typing import List, Dict, Any, Tuple
+import sys
+import os
 
-class ConservativeStrategy(BaseAI):
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+from ai.hand_evaluator import HandEvaluator
+from ai.ai_protocol import AIStrategyProtocol
+
+class ConservativeStrategy:
     """Conservative AI: Plays only strong hands."""
 
     def __init__(self):
-        super().__init__()
+        self.evaluator = HandEvaluator()
 
-    def make_decision(self, hole_cards, game_state, deck, pot_size, spr):
+    def evaluate_hand(self, hole_cards: List[str], community_cards: List[str], 
+                     deck: List[str]) -> Tuple[float, str]:
+        """
+        Evaluates the strength of a poker hand.
+        
+        Args:
+            hole_cards: Player's private cards
+            community_cards: Shared community cards
+            deck: Current deck state
+            
+        Returns:
+            Tuple containing:
+            - hand_score: Numerical score of the hand (lower is better)
+            - hand_rank_str: String representation of the hand rank
+        """
+        return self.evaluator.evaluate_hand(hole_cards, community_cards, deck)
+
+    def make_decision(self, hole_cards: List[str], game_state: Dict[str, Any], 
+                     deck: List[str], pot_size: int, spr: float) -> str:
         """Decides AI action based on conservative strategy."""
 
-        # 🔴 NEW DEBUG STATEMENT: Log deck size before evaluation
-        print(f"\n[CRITICAL DEBUG] AI Strategy: {self.__class__.__name__}")
-        print(f"  Deck Size Before Evaluation: {len(deck)}")  # 🔴 ADD THIS LINE
-
-        if len(deck) == 0:
-            print("[CRITICAL ERROR] The deck was lost inside the AI strategy!")  # 🔴 ADD THIS LINE
-
-        hand_score = super().make_decision(hole_cards, game_state, deck, pot_size, spr)
-
-        # 🔴 NEW DEBUG STATEMENT: Log deck size after evaluation
-        print(f"  [CRITICAL DEBUG] AI Hand Score: {hand_score}")  # 🔴 ADD THIS LINE
-        print(f"  Deck Size After Evaluation: {len(deck)}")  # 🔴 ADD THIS LINE
+        hand_score, _ = self.evaluate_hand(hole_cards, game_state["community_cards"], deck)
 
         if spr == 0:  # All-in scenario
             return "call"
