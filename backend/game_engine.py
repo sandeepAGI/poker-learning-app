@@ -213,10 +213,13 @@ class PokerGame:
                 player = self.players[current_pos]
                 
                 if isinstance(player, AIPlayer) and player.is_active and player.stack > 0:
-                    effective_stack = min(
-                        player.stack,
-                        max(p.stack for p in self.players if p != player and p.is_active)
-                    )
+                    # Get stacks of other active players
+                    other_active_stacks = [p.stack for p in self.players if p != player and p.is_active]
+                    
+                    if other_active_stacks:
+                        effective_stack = min(player.stack, max(other_active_stacks))
+                    else:
+                        effective_stack = player.stack  # Only one active player left
                     spr = effective_stack / self.pot if self.pot > 0 else float('inf')
                     
                     game_state_info = {
