@@ -85,6 +85,21 @@ class AIPlayer(Player):
         )
 
 @dataclass
+class PotInfo:
+    """Represents a pot and eligible players."""
+    amount: int
+    eligible_players: List[Player]
+
+@dataclass
+class HandResult:
+    """Holds hand evaluation results for showdown."""
+    player: Player
+    score: float
+    hand_rank: str
+
+
+
+@dataclass
 class PokerGame:
     players: List[Player]
     deck: List[str] = field(default_factory=list)
@@ -280,42 +295,92 @@ class PokerGame:
             player.current_bet = 0
             player.all_in = False
 
-    def distribute_pot(self, deck: List[str]) -> None:
-        """Determines the winner and distributes the pot.
+    def calculate_pots(self) -> List[PotInfo]:
+        """Calculate main pot and side pots based on player bets.
+    
+        Returns:
+            List[PotInfo]: List of pots with their eligible players
+        """
+        all_pots = []
+        remaining_players = [p for p in self.players if p.is_active]
+    
+        while remaining_players:
+            # Find smallest bet amount among remaining players
+            min_bet = min(p.current_bet for p in remaining_players)
+            if min_bet == 0:
+                break
+            
+            # Calculate pot amount and eligible players
+            eligible = [p for p in self.players if p.is_active and p.current_bet >= min_bet]
+            pot_amount = min_bet * len(eligible)
+            all_pots.append(PotInfo(pot_amount, eligible))
         
+            # Subtract processed bet amount from all players
+            for player in self.players:
+                if player.current_bet >= min_bet:
+                    player.current_bet -= min_bet
+                
+            # Update remaining players
+            remaining_players = [p for p in self.players 
+                               if p.is_active and p.current_bet > 0]
+    
+        # Add any remaining amount to the first pot
+        remaining_total = sum(p.current_bet for p in self.players)
+        if remaining_total > 0 and all_pots:
+            all_pots[0].amount += remaining_total
+        
+        return all_pots
+    
+    def distribute_pot(self, deck: List[str]) -> None:
+        """Determines winners and distributes main and side pots.
+    
         Args:
             deck (List[str]): Current deck state for hand evaluation
         """
-        active_players = [player for player in self.players if player.is_active]
-
+        active_players = [p for p in self.players if p.is_active]
+    
+        # Single player remaining - award pot directly
         if len(active_players) == 1:
-            winner = active_players[0]
-            winner.stack += self.pot
+            active_players[0].stack += self.pot
             self.pot = 0
             return
+        
+        # Calculate all pots (main and side pots)
+        pots = self.calculate_pots()
+    
+        # Process each pot
+        for pot in pots:
+            # Get hand results for all eligible players
+            results = []
+            for player in pot.eligible_players:
+                if player.hole_cards:
+                    score, rank = BaseAI().evaluate_hand(
+                        hole_cards=player.hole_cards,
+                        community_cards=self.community_cards,
+                        deck=deck
+                    )
+                    results.append(HandResult(player, score, rank))
+        
+            if not results:
+                continue
+            
+            # Find best hand(s)
+            best_score = min(r.score for r in results)
+            winners = [r for r in results if r.score == best_score]
+        
+            # Split pot among winners
+            amount_per_player = pot.amount // len(winners)
+            remainder = pot.amount % len(winners)
+        
+            for result in winners:
+                result.player.stack += amount_per_player
+                if remainder > 0:
+                    result.player.stack += 1
+                    remainder -= 1
 
-        ai_helper = BaseAI()
-        best_score: float = float('inf')
-        winner: Optional[Player] = None
-        best_hand_rank: Optional[str] = None
-
-        for player in active_players:
-            if player.hole_cards:
-                hand_score, hand_rank = ai_helper.evaluate_hand(
-                    hole_cards=player.hole_cards,
-                    community_cards=self.community_cards,
-                    deck=self.deck
-                )
-
-                if hand_score < best_score:
-                    best_score = hand_score
-                    best_hand_rank = hand_rank
-                    winner = player
-
-        if winner:
-            winner.stack += self.pot
-            self.pot = 0
-            self.reset_deck()
-
+        # Reset pot
+        self.pot = 0
+    
+        # Check for eliminations
         for player in self.players:
             player.eliminate()

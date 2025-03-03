@@ -38,3 +38,19 @@ class BaseAI:
         avg_rank_str = self.evaluator.class_to_string(avg_rank)
 
         return avg_score, avg_rank_str
+    
+    def make_decision(self, hole_cards, game_state, deck, pot_size, spr):
+        """Base method to evaluate hand strength for decision making.
+    
+        Args:
+            hole_cards (List[str]): Player's hole cards
+            game_state (dict): Current game state information
+            deck (List[str]): Current deck
+            pot_size (int): Current pot size
+            spr (float): Stack-to-pot ratio
+        
+        Returns:
+            float: Hand score from evaluation (lower is better)
+        """
+        hand_score, _ = self.evaluate_hand(hole_cards, game_state["community_cards"], deck)
+        return hand_score
