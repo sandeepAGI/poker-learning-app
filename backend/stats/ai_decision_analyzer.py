@@ -259,6 +259,7 @@ class AIDecisionAnalyzer:
         was_optimal = decision_data["was_optimal"]
         spr = decision_data["spr"]
         game_state = decision_data["game_state"]
+        strategy_decisions = decision_data.get("strategy_decisions", {})
         
         feedback = []
         
@@ -268,8 +269,10 @@ class AIDecisionAnalyzer:
         # Optimal strategy feedback
         if was_optimal:
             feedback.append(f"This was the optimal decision in this situation!")
-        else:
+        elif optimal_strategy in strategy_decisions:
             feedback.append(f"A {optimal_strategy} might have decided to {strategy_decisions[optimal_strategy]} in this situation.")
+        else:
+            feedback.append(f"A {optimal_strategy} strategy might have been more optimal in this situation.")
         
         # SPR-based feedback
         if spr < 3:

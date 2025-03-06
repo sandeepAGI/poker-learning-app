@@ -758,3 +758,389 @@
 2025-03-06 10:36:07 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
 2025-03-06 10:36:07 - game.poker_game - DEBUG - Deck reset with 52 cards
 2025-03-06 10:36:07 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:04:58 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:04:58 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: 35905cff-6381-4873-a65d-89bff673b924
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: 35905cff-6381-4873-a65d-89bff673b924
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: d8f57e85-1c5f-43cb-aeba-412cd112c876
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: d8f57e85-1c5f-43cb-aeba-412cd112c876
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: 72779839-1f29-4beb-bb12-3a09069555a9
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: 72779839-1f29-4beb-bb12-3a09069555a9
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt hole cards to players, 46 cards remaining
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: 480ef50f-7f07-4d68-989e-74459fb20c0c
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: 480ef50f-7f07-4d68-989e-74459fb20c0c
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt flop: Ts, Qs, 2d
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: 3932390d-2e6e-44af-8d68-7c57a9d333a6
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: 3932390d-2e6e-44af-8d68-7c57a9d333a6
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt flop: 6c, Ac, 2h
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: a71ad07f-317d-4851-b6b5-835496d5c8c8
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: a71ad07f-317d-4851-b6b5-835496d5c8c8
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt flop: 6c, 8s, Ts
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt turn: 4s
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt river: 9d
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: 883c16d8-aa6b-4dbf-aadd-b22df5a87cd8
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: 883c16d8-aa6b-4dbf-aadd-b22df5a87cd8
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt flop: 6d, Qd, 5d
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt turn: 6h
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: f9f8f228-89d6-4a92-b2e4-b8e3023b1bc3
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: f9f8f228-89d6-4a92-b2e4-b8e3023b1bc3
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: b77cec4e-b762-4f25-b978-2e59233928b3
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: b77cec4e-b762-4f25-b978-2e59233928b3
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: a88a8391-cf77-44e2-8ff1-a7a8993fc936
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: a88a8391-cf77-44e2-8ff1-a7a8993fc936
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt flop: 8c, Tc, Jd
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt turn: 6c
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Dealt river: 3d
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: 78a9fdbc-7c6d-455f-b3d9-bd755cebaafb
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: 78a9fdbc-7c6d-455f-b3d9-bd755cebaafb
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - Pot distributed to winners: {}
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: eda703b1-1121-494f-a4f7-ace0941e8bd2
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: eda703b1-1121-494f-a4f7-ace0941e8bd2
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: 84b0d3ed-da4b-4568-a219-bd2ba8e5ee79
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: 84b0d3ed-da4b-4568-a219-bd2ba8e5ee79
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: 13a3cfac-b001-414b-aeed-eb7fd139d472
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: 13a3cfac-b001-414b-aeed-eb7fd139d472
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: 885f014d-f30a-46e1-9ea5-60d2a974344b
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: 885f014d-f30a-46e1-9ea5-60d2a974344b
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:04:58 - statistics_manager - INFO - Started new session: 86589e66-b907-410f-9be5-55eb64fac67b
+2025-03-06 11:04:58 - game.learning_tracker - INFO - Started learning session: 86589e66-b907-410f-9be5-55eb64fac67b
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:04:58 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:04:58 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:05:06 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:05:06 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:05:06 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 11:05:06 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:05:06 - statistics_manager - INFO - Started new session: 0e636757-54bd-4b01-89d3-f0680b2f4813
+2025-03-06 11:05:06 - game.learning_tracker - INFO - Started learning session: 0e636757-54bd-4b01-89d3-f0680b2f4813
+2025-03-06 11:05:06 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:05:06 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:05:06 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:05:06 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 11:05:06 - game.poker_game - DEBUG - Dealt hole cards to players, 0 cards remaining
+2025-03-06 11:05:06 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:05:06 - statistics_manager - INFO - Started new session: 4f2e47f2-3bfa-4106-b7ea-982572b2dd7c
+2025-03-06 11:05:06 - game.learning_tracker - INFO - Started learning session: 4f2e47f2-3bfa-4106-b7ea-982572b2dd7c
+2025-03-06 11:05:06 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:05:06 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:05:06 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:05:06 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 11:05:06 - statistics_manager - INFO - Started new session: 4d37daa5-77e0-4db9-b74d-13022258ba08
+2025-03-06 11:05:06 - game.learning_tracker - INFO - Started learning session: 4d37daa5-77e0-4db9-b74d-13022258ba08
+2025-03-06 11:05:06 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 11:05:06 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 11:05:06 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 11:08:30 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:08:30 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: call
+2025-03-06 11:08:30 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:08:30 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: call
+2025-03-06 11:08:30 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - Player test_player_123 decision: call | Matching strategy: Probability-Based | Optimal strategy: Conservative | Was optimal: False
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:08:30 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: fold
+2025-03-06 11:08:30 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:08:30 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: call
+2025-03-06 11:08:30 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - Player test_player_123 decision: raise | Matching strategy: Risk Taker | Optimal strategy: Probability-Based | Was optimal: False
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:08:30 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:12:38 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:12:38 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: call
+2025-03-06 11:12:38 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:12:38 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: fold
+2025-03-06 11:12:38 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - Player test_player_123 decision: call | Matching strategy: Conservative | Optimal strategy: Conservative | Was optimal: True
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:12:38 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: fold
+2025-03-06 11:12:38 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:12:38 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: call
+2025-03-06 11:12:38 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - Player test_player_123 decision: raise | Matching strategy: Risk Taker | Optimal strategy: Probability-Based | Was optimal: False
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:12:38 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:19:55 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:19:55 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: call
+2025-03-06 11:19:55 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:19:55 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: fold
+2025-03-06 11:19:55 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - Player test_player_123 decision: call | Matching strategy: Conservative | Optimal strategy: Conservative | Was optimal: True
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:19:55 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: fold
+2025-03-06 11:19:55 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:19:55 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: call
+2025-03-06 11:19:55 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - Player test_player_123 decision: raise | Matching strategy: Risk Taker | Optimal strategy: Probability-Based | Was optimal: False
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:19:55 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:21:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:21:20 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:21:20 - statistics_manager - INFO - Ended session: test_session_456
+2025-03-06 11:21:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:21:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:21:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:21:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:21:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:21:20 - statistics_manager - DEBUG - Loaded learning statistics for player: test_player_123
+2025-03-06 11:21:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:21:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:21:20 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:21:20 - statistics_manager - DEBUG - Recorded decision for player test_player_123: call
+2025-03-06 11:21:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:21:20 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:21:20 - statistics_manager - INFO - Started new session: 794ba2fa-fb7b-4eec-8cb1-9be2cfddfbf1
+2025-03-06 11:25:18 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:25:18 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: call
+2025-03-06 11:25:18 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:25:18 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: fold
+2025-03-06 11:25:18 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - Player test_player_123 decision: call | Matching strategy: Conservative | Optimal strategy: Conservative | Was optimal: True
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:25:18 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: fold
+2025-03-06 11:25:18 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:25:18 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: call
+2025-03-06 11:25:18 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - Player test_player_123 decision: raise | Matching strategy: Risk Taker | Optimal strategy: Probability-Based | Was optimal: False
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:25:18 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:25:18 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:25:18 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:25:18 - statistics_manager - INFO - Ended session: test_session_456
+2025-03-06 11:25:18 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:25:18 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:25:18 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:25:18 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:25:18 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:25:18 - statistics_manager - DEBUG - Loaded learning statistics for player: test_player_123
+2025-03-06 11:25:18 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:25:18 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:25:18 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:25:18 - statistics_manager - DEBUG - Recorded decision for player test_player_123: call
+2025-03-06 11:25:18 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:25:18 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:25:18 - statistics_manager - INFO - Started new session: a8ddba72-2ac8-429a-9d95-f2f970ecdc1b
+2025-03-06 11:29:47 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:29:47 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: call
+2025-03-06 11:29:47 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:29:47 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: fold
+2025-03-06 11:29:47 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - Player test_player_123 decision: call | Matching strategy: Conservative | Optimal strategy: Conservative | Was optimal: True
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:29:47 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: fold
+2025-03-06 11:29:47 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:29:47 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: call
+2025-03-06 11:29:47 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - Player test_player_123 decision: raise | Matching strategy: Risk Taker | Optimal strategy: Probability-Based | Was optimal: False
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:29:47 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:31:43 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:43 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:31:43 - statistics_manager - INFO - Ended session: test_session_456
+2025-03-06 11:31:43 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:43 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:43 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:43 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:43 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:43 - statistics_manager - DEBUG - Loaded learning statistics for player: test_player_123
+2025-03-06 11:31:43 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:43 - statistics_manager - INFO - Pruned detailed data for session: session_0
+2025-03-06 11:31:43 - statistics_manager - INFO - Pruned detailed data for session: session_1
+2025-03-06 11:31:43 - statistics_manager - INFO - Pruned detailed data for session: session_2
+2025-03-06 11:31:43 - statistics_manager - INFO - Pruned detailed data for session: session_3
+2025-03-06 11:31:43 - statistics_manager - INFO - Pruned detailed data for session: session_4
+2025-03-06 11:31:43 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:43 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:31:43 - statistics_manager - DEBUG - Recorded decision for player test_player_123: call
+2025-03-06 11:31:43 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:43 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:31:43 - statistics_manager - INFO - Started new session: f89760dd-2568-454a-b9af-ce8a28daaf05
+2025-03-06 11:31:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:31:50 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: call
+2025-03-06 11:31:50 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:31:50 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: fold
+2025-03-06 11:31:50 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - Player test_player_123 decision: call | Matching strategy: Conservative | Optimal strategy: Conservative | Was optimal: True
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:31:50 - ai.decision_analyzer - DEBUG - Strategy Conservative decision: fold
+2025-03-06 11:31:50 - ai.decision_analyzer - DEBUG - Strategy Risk Taker decision: raise
+2025-03-06 11:31:50 - ai.decision_analyzer - DEBUG - Strategy Probability-Based decision: call
+2025-03-06 11:31:50 - ai.decision_analyzer - DEBUG - Strategy Bluffer decision: fold
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - Player test_player_123 decision: raise | Matching strategy: Risk Taker | Optimal strategy: Probability-Based | Was optimal: False
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:31:50 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 11:31:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:50 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:31:50 - statistics_manager - INFO - Ended session: test_session_456
+2025-03-06 11:31:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:50 - statistics_manager - DEBUG - Loaded learning statistics for player: test_player_123
+2025-03-06 11:31:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:50 - statistics_manager - INFO - Pruned detailed data for session: session_0
+2025-03-06 11:31:50 - statistics_manager - INFO - Pruned detailed data for session: session_1
+2025-03-06 11:31:50 - statistics_manager - INFO - Pruned detailed data for session: session_2
+2025-03-06 11:31:50 - statistics_manager - INFO - Pruned detailed data for session: session_3
+2025-03-06 11:31:50 - statistics_manager - INFO - Pruned detailed data for session: session_4
+2025-03-06 11:31:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:50 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:31:50 - statistics_manager - DEBUG - Recorded decision for player test_player_123: call
+2025-03-06 11:31:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:31:50 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:31:50 - statistics_manager - INFO - Started new session: ca24ad22-e38b-49ec-9fd2-8a21e41035b8
+2025-03-06 11:32:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:32:52 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:32:52 - statistics_manager - INFO - Ended session: test_session_456
+2025-03-06 11:32:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:32:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:32:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:32:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:32:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:32:52 - statistics_manager - DEBUG - Loaded learning statistics for player: test_player_123
+2025-03-06 11:32:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:32:52 - statistics_manager - INFO - Pruned detailed data for session: session_0
+2025-03-06 11:32:52 - statistics_manager - INFO - Pruned detailed data for session: session_1
+2025-03-06 11:32:52 - statistics_manager - INFO - Pruned detailed data for session: session_2
+2025-03-06 11:32:52 - statistics_manager - INFO - Pruned detailed data for session: session_3
+2025-03-06 11:32:52 - statistics_manager - INFO - Pruned detailed data for session: session_4
+2025-03-06 11:32:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:32:52 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:32:52 - statistics_manager - DEBUG - Recorded decision for player test_player_123: call
+2025-03-06 11:32:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 11:32:52 - statistics_manager - INFO - Started new session: test_session_456
+2025-03-06 11:32:52 - statistics_manager - INFO - Started new session: f6e98e0d-bc02-4b78-b03f-e9bd44e21d4c
