@@ -15,13 +15,16 @@ The Learning Statistics system will:
 
 ## Implementation Tasks
 
-### 1. Create LearningStatistics Class (2 days)
+### 1. Create LearningStatistics Class
 
 ```python
 class LearningStatistics:
     """
     Tracks a player's decision quality and learning progress over time.
     """
+    
+    # Constants for storage management
+    MAX_DETAILED_DECISIONS = 100  # Only store last 100 detailed decisions
     
     def __init__(self, player_id: str):
         self.player_id = player_id
@@ -33,25 +36,85 @@ class LearningStatistics:
             "Bluffer": 0
         }
         self.optimal_decisions = 0
-        self.decision_history = []  # List of recent decisions with context
+        self.decision_history = []  # Limited list of recent decisions with context
+        self.current_session_id = None
         self.improvement_by_spr = {
             "low": [],    # SPR < 3
             "medium": [], # 3 <= SPR <= 6
             "high": []    # SPR > 6
         }
+    
+    def add_decision(self, decision_data):
+        """Add a new decision, managing the history size."""
+        self.total_decisions += 1
+        
+        # Update strategy alignment counter
+        matching_strategy = decision_data.get("matching_strategy")
+        if matching_strategy in self.decisions_by_strategy:
+            self.decisions_by_strategy[matching_strategy] += 1
+            
+        # Check if decision was optimal
+        if decision_data.get("was_optimal", False):
+            self.optimal_decisions += 1
+            
+        # Add to history, maintaining size limit
+        self.decision_history.append(decision_data)
+        if len(self.decision_history) > self.MAX_DETAILED_DECISIONS:
+            self.decision_history.pop(0)  # Remove oldest entry
 ```
 
 Add methods to update and retrieve learning statistics, plus serialization support for storage.
 
-### 2. Update StatisticsManager (1 day)
+### 2. Update StatisticsManager with Storage Lifecycle Management
 
 Add methods to:
 - Create/retrieve LearningStatistics
-- Store decision comparisons
+- Store decision comparisons with session context
 - Calculate improvement metrics
 - Link with existing PlayerStatistics
+- Manage storage lifecycle
 
-### 3. Game Engine Integration Points (3 days)
+```python
+class StatisticsManager:
+    # Add to existing class
+    
+    MAX_SESSIONS = 5  # Only keep detailed data for last 5 sessions
+    
+    def get_learning_statistics(self, player_id: str) -> LearningStatistics:
+        """Retrieves learning statistics for a player, creating if needed."""
+        # Implementation
+    
+    def record_decision(self, player_id: str, decision_data: Dict[str, Any]):
+        """Records a player's decision with context and classification."""
+        learning_stats = self.get_learning_statistics(player_id)
+        decision_data["timestamp"] = time.time()
+        decision_data["session_id"] = self.current_session_id
+        learning_stats.add_decision(decision_data)
+        self.save_learning_statistics(player_id)
+    
+    def start_session(self, session_id: str):
+        """Starts a new session for tracking purposes."""
+        self.current_session_id = session_id
+    
+    def end_session(self, session_id: str):
+        """
+        Ends a session, aggregating data and cleaning up.
+        This is where we'd implement pruning of old session data.
+        """
+        # Aggregate session data into player statistics
+        # Prune detailed data beyond retention policy
+        self.prune_old_sessions()
+    
+    def prune_old_sessions(self):
+        """
+        Removes detailed decision data for sessions beyond our retention policy.
+        Keeps aggregate statistics for all sessions.
+        """
+        # Implementation to remove detailed data for old sessions
+        # while preserving the aggregate statistics
+```
+
+### 3. Game Engine Integration Points
 
 #### 3.1 Add Decision Classification Method
 
@@ -175,6 +238,27 @@ Store decision contexts with:
 - Matched strategy
 - Optimal strategy
 - Outcome (if applicable)
+- Session ID (to track and prune by session)
+- Timestamp (for chronological analysis)
+
+Example decision data structure:
+```python
+decision_data = {
+    "hand_id": "hand_123",
+    "session_id": "session_456",
+    "timestamp": 1678234567,
+    "hole_cards": ["Ah", "Kh"],
+    "community_cards": ["7s", "8d", "Qc"],
+    "game_state": "flop",
+    "pot_size": 120,
+    "spr": 4.5,
+    "player_decision": "raise",
+    "matching_strategy": "Risk Taker",
+    "optimal_strategy": "Probability-Based",
+    "was_optimal": False,
+    "explanation": "With top pair and a strong kicker, a call would be more appropriate given the medium SPR."
+}
+```
 
 ### Classification Methodology
 
@@ -184,11 +268,27 @@ Use the same thresholds and logic from AI strategies:
 - Probability-Based: Uses hand strength thresholds
 - Bluffer: Makes unpredictable bets
 
-### Storage Efficiency
+### Storage Lifecycle Management
 
-- Keep a limited history of recent decisions (e.g., last 100)
-- Store aggregated statistics for long-term trends
-- Use incremental updates for efficiency
+1. **Limited Decision History:**
+   - Keep only the MAX_DETAILED_DECISIONS most recent decisions (e.g., 100)
+   - Implement as a rolling buffer in the LearningStatistics class
+   - Older decisions are discarded when new ones are added
+
+2. **Session-Based Retention:**
+   - Track decisions by session_id
+   - Keep detailed data for only MAX_SESSIONS most recent sessions (e.g., 5)
+   - Automatically prune older session data during application startup
+
+3. **Aggregation Strategy:**
+   - After each session, aggregate detailed data into summary statistics
+   - Update trend data based on these aggregates
+   - Keep aggregate statistics indefinitely, but prune detailed data
+
+4. **Storage Format:**
+   - Use JSON for compatibility with existing statistics system
+   - Separate files for current session vs. historical aggregates
+   - Store in the same game-data directory structure
 
 ## Potential Future Enhancements
 
