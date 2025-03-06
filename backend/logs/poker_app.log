@@ -1144,3 +1144,31 @@
 2025-03-06 11:32:52 - statistics_manager - INFO - Statistics manager initialized
 2025-03-06 11:32:52 - statistics_manager - INFO - Started new session: test_session_456
 2025-03-06 11:32:52 - statistics_manager - INFO - Started new session: f6e98e0d-bc02-4b78-b03f-e9bd44e21d4c
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Ended tracking for hand with winners: {'player1': 100, 'player2': 50}
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Ended learning session: test_session_456
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 13:14:14 - game.learning_tracker - WARNING - Learning statistics components not available
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Started tracking hand: test_hand_789
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Started learning session: test_session_456
+2025-03-06 13:14:14 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Ended tracking for hand with winners: {'player1': 100, 'player2': 50}
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 13:15:40 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 13:15:40 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Started tracking hand: test_hand_789
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Started tracking hand: custom_hand_id
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 13:15:40 - hooks.game_engine - INFO - Tracked decision for player test_player_123: call
