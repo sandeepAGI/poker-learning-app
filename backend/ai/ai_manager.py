@@ -4,7 +4,7 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from logger import get_logger
+from utils.logger import get_logger
 from ai.ai_protocol import AIStrategyProtocol
 from ai.strategies.conservative import ConservativeStrategy
 from ai.strategies.risk_taker import RiskTakerStrategy

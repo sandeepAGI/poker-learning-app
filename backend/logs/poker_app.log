@@ -28,3 +28,733 @@
 2025-03-03 15:15:49,701 [ERROR] game_engine: Error dealing cards: Not enough cards to deal 2 cards
 2025-03-03 15:15:49,701 [ERROR] game_engine: Error dealing cards: Not enough cards to deal 2 cards
 2025-03-03 15:15:49,701 [ERROR] game_engine: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:26:42,097 [INFO] statistics_manager: Statistics manager initialized
+2025-03-06 10:26:42 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 10:26:42,097 [INFO] hooks.game_engine: Game engine hooks initialized
+2025-03-06 10:26:42 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 10:26:42,097 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,097 [INFO] statistics_manager: Started new session: bcb59154-7a4f-4ae5-94c5-95a052ffe773
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: bcb59154-7a4f-4ae5-94c5-95a052ffe773
+2025-03-06 10:26:42,097 [INFO] game.learning_tracker: Started learning session: bcb59154-7a4f-4ae5-94c5-95a052ffe773
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: bcb59154-7a4f-4ae5-94c5-95a052ffe773
+2025-03-06 10:26:42,100 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,101 [INFO] statistics_manager: Started new session: 52f49a5c-478f-407a-8d09-54e17f2919b8
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: 52f49a5c-478f-407a-8d09-54e17f2919b8
+2025-03-06 10:26:42,101 [INFO] game.learning_tracker: Started learning session: 52f49a5c-478f-407a-8d09-54e17f2919b8
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: 52f49a5c-478f-407a-8d09-54e17f2919b8
+2025-03-06 10:26:42,103 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,103 [INFO] statistics_manager: Started new session: 7a6e5159-76ad-4cc1-9b74-c92aca908bb9
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: 7a6e5159-76ad-4cc1-9b74-c92aca908bb9
+2025-03-06 10:26:42,103 [INFO] game.learning_tracker: Started learning session: 7a6e5159-76ad-4cc1-9b74-c92aca908bb9
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: 7a6e5159-76ad-4cc1-9b74-c92aca908bb9
+2025-03-06 10:26:42,106 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,106 [INFO] statistics_manager: Started new session: 0a2e5382-e928-4041-ad01-e2b9e01b871a
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: 0a2e5382-e928-4041-ad01-e2b9e01b871a
+2025-03-06 10:26:42,106 [INFO] game.learning_tracker: Started learning session: 0a2e5382-e928-4041-ad01-e2b9e01b871a
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: 0a2e5382-e928-4041-ad01-e2b9e01b871a
+2025-03-06 10:26:42,108 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,108 [INFO] statistics_manager: Started new session: cfcb3f70-fb8f-4d5b-ae54-339bf8475142
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: cfcb3f70-fb8f-4d5b-ae54-339bf8475142
+2025-03-06 10:26:42,108 [INFO] game.learning_tracker: Started learning session: cfcb3f70-fb8f-4d5b-ae54-339bf8475142
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: cfcb3f70-fb8f-4d5b-ae54-339bf8475142
+2025-03-06 10:26:42,111 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,111 [INFO] statistics_manager: Started new session: 77839d38-5947-469a-842e-0bc1b3654470
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: 77839d38-5947-469a-842e-0bc1b3654470
+2025-03-06 10:26:42,111 [INFO] game.learning_tracker: Started learning session: 77839d38-5947-469a-842e-0bc1b3654470
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: 77839d38-5947-469a-842e-0bc1b3654470
+2025-03-06 10:26:42,113 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,113 [INFO] statistics_manager: Started new session: 4e88b594-19dd-417a-ad59-86bf8064ff79
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: 4e88b594-19dd-417a-ad59-86bf8064ff79
+2025-03-06 10:26:42,113 [INFO] game.learning_tracker: Started learning session: 4e88b594-19dd-417a-ad59-86bf8064ff79
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: 4e88b594-19dd-417a-ad59-86bf8064ff79
+2025-03-06 10:26:42,116 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,116 [INFO] statistics_manager: Started new session: 998fbd9d-3899-4748-9cfb-579812659408
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: 998fbd9d-3899-4748-9cfb-579812659408
+2025-03-06 10:26:42,116 [INFO] game.learning_tracker: Started learning session: 998fbd9d-3899-4748-9cfb-579812659408
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: 998fbd9d-3899-4748-9cfb-579812659408
+2025-03-06 10:26:42,118 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,118 [INFO] statistics_manager: Started new session: 7a26f6c1-536e-4ab0-bb22-39bcfa1393b1
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: 7a26f6c1-536e-4ab0-bb22-39bcfa1393b1
+2025-03-06 10:26:42,118 [INFO] game.learning_tracker: Started learning session: 7a26f6c1-536e-4ab0-bb22-39bcfa1393b1
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: 7a26f6c1-536e-4ab0-bb22-39bcfa1393b1
+2025-03-06 10:26:42,121 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,121 [INFO] statistics_manager: Started new session: 7a5c7197-7fc6-4b67-b48d-6de3657e83ce
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: 7a5c7197-7fc6-4b67-b48d-6de3657e83ce
+2025-03-06 10:26:42,121 [INFO] game.learning_tracker: Started learning session: 7a5c7197-7fc6-4b67-b48d-6de3657e83ce
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: 7a5c7197-7fc6-4b67-b48d-6de3657e83ce
+2025-03-06 10:26:42,123 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,123 [INFO] statistics_manager: Started new session: ff7f583a-b6ae-4c55-82df-ea9c14c6164b
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: ff7f583a-b6ae-4c55-82df-ea9c14c6164b
+2025-03-06 10:26:42,123 [INFO] game.learning_tracker: Started learning session: ff7f583a-b6ae-4c55-82df-ea9c14c6164b
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: ff7f583a-b6ae-4c55-82df-ea9c14c6164b
+2025-03-06 10:26:42,126 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:42,126 [INFO] statistics_manager: Started new session: 733d377a-e4a5-4220-8a3b-a08d261672c7
+2025-03-06 10:26:42 - statistics_manager - INFO - Started new session: 733d377a-e4a5-4220-8a3b-a08d261672c7
+2025-03-06 10:26:42,126 [INFO] game.learning_tracker: Started learning session: 733d377a-e4a5-4220-8a3b-a08d261672c7
+2025-03-06 10:26:42 - game.learning_tracker - INFO - Started learning session: 733d377a-e4a5-4220-8a3b-a08d261672c7
+2025-03-06 10:26:54,426 [INFO] statistics_manager: Statistics manager initialized
+2025-03-06 10:26:54 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 10:26:54,426 [INFO] hooks.game_engine: Game engine hooks initialized
+2025-03-06 10:26:54 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 10:26:54,426 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:54 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:54,426 [INFO] statistics_manager: Started new session: 0796425d-305d-4d2d-9ec3-93bb95acc882
+2025-03-06 10:26:54 - statistics_manager - INFO - Started new session: 0796425d-305d-4d2d-9ec3-93bb95acc882
+2025-03-06 10:26:54,426 [INFO] game.learning_tracker: Started learning session: 0796425d-305d-4d2d-9ec3-93bb95acc882
+2025-03-06 10:26:54 - game.learning_tracker - INFO - Started learning session: 0796425d-305d-4d2d-9ec3-93bb95acc882
+2025-03-06 10:26:54,429 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:54 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:54,429 [INFO] statistics_manager: Started new session: 09ac5460-2172-45a6-8eb7-1d3f56e37d65
+2025-03-06 10:26:54 - statistics_manager - INFO - Started new session: 09ac5460-2172-45a6-8eb7-1d3f56e37d65
+2025-03-06 10:26:54,430 [INFO] game.learning_tracker: Started learning session: 09ac5460-2172-45a6-8eb7-1d3f56e37d65
+2025-03-06 10:26:54 - game.learning_tracker - INFO - Started learning session: 09ac5460-2172-45a6-8eb7-1d3f56e37d65
+2025-03-06 10:26:54,432 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:26:54 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:26:54,432 [INFO] statistics_manager: Started new session: 69ab81e3-247c-4230-a85b-96156ef31892
+2025-03-06 10:26:54 - statistics_manager - INFO - Started new session: 69ab81e3-247c-4230-a85b-96156ef31892
+2025-03-06 10:26:54,432 [INFO] game.learning_tracker: Started learning session: 69ab81e3-247c-4230-a85b-96156ef31892
+2025-03-06 10:26:54 - game.learning_tracker - INFO - Started learning session: 69ab81e3-247c-4230-a85b-96156ef31892
+2025-03-06 10:27:46,370 [INFO] statistics_manager: Statistics manager initialized
+2025-03-06 10:27:46 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 10:27:46,370 [INFO] hooks.game_engine: Game engine hooks initialized
+2025-03-06 10:27:46 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 10:27:46,370 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,370 [INFO] statistics_manager: Started new session: 0da9ed5e-9160-4870-85d3-f96488d26173
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 0da9ed5e-9160-4870-85d3-f96488d26173
+2025-03-06 10:27:46,370 [INFO] game.learning_tracker: Started learning session: 0da9ed5e-9160-4870-85d3-f96488d26173
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 0da9ed5e-9160-4870-85d3-f96488d26173
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,370 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,373 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,373 [INFO] statistics_manager: Started new session: 2841420b-d155-421d-a61f-2128792adf01
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 2841420b-d155-421d-a61f-2128792adf01
+2025-03-06 10:27:46,373 [INFO] game.learning_tracker: Started learning session: 2841420b-d155-421d-a61f-2128792adf01
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 2841420b-d155-421d-a61f-2128792adf01
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,373 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,375 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,375 [INFO] statistics_manager: Started new session: 06205f16-5ee6-4b3c-8ae9-23b4a2214108
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 06205f16-5ee6-4b3c-8ae9-23b4a2214108
+2025-03-06 10:27:46,375 [INFO] game.learning_tracker: Started learning session: 06205f16-5ee6-4b3c-8ae9-23b4a2214108
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 06205f16-5ee6-4b3c-8ae9-23b4a2214108
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,375 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt hole cards to players, 46 cards remaining
+2025-03-06 10:27:46,378 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,378 [INFO] statistics_manager: Started new session: 295dc865-5b62-4d95-aecc-37ec29419b79
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 295dc865-5b62-4d95-aecc-37ec29419b79
+2025-03-06 10:27:46,378 [INFO] game.learning_tracker: Started learning session: 295dc865-5b62-4d95-aecc-37ec29419b79
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 295dc865-5b62-4d95-aecc-37ec29419b79
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,378 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt flop: 2d, 3h, Td
+2025-03-06 10:27:46,380 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,380 [INFO] statistics_manager: Started new session: 430a082e-f96f-494e-96a2-ed676e19fbbc
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 430a082e-f96f-494e-96a2-ed676e19fbbc
+2025-03-06 10:27:46,380 [INFO] game.learning_tracker: Started learning session: 430a082e-f96f-494e-96a2-ed676e19fbbc
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 430a082e-f96f-494e-96a2-ed676e19fbbc
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,380 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt flop: Jc, 2h, 9d
+2025-03-06 10:27:46,383 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,383 [INFO] statistics_manager: Started new session: 878fd93a-cf71-4d86-b47e-16856b43d42b
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 878fd93a-cf71-4d86-b47e-16856b43d42b
+2025-03-06 10:27:46,383 [INFO] game.learning_tracker: Started learning session: 878fd93a-cf71-4d86-b47e-16856b43d42b
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 878fd93a-cf71-4d86-b47e-16856b43d42b
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,383 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt flop: 5d, 9s, 2s
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt turn: 6d
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt river: 4s
+2025-03-06 10:27:46,385 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,385 [INFO] statistics_manager: Started new session: cef1cf8d-77f6-403d-98fa-61b89795bb3e
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: cef1cf8d-77f6-403d-98fa-61b89795bb3e
+2025-03-06 10:27:46,385 [INFO] game.learning_tracker: Started learning session: cef1cf8d-77f6-403d-98fa-61b89795bb3e
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: cef1cf8d-77f6-403d-98fa-61b89795bb3e
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,385 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt flop: 4h, As, Td
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt turn: Ks
+2025-03-06 10:27:46,388 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,388 [INFO] statistics_manager: Started new session: 18dee22e-6f21-4e63-8141-c31c4ce97ab9
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 18dee22e-6f21-4e63-8141-c31c4ce97ab9
+2025-03-06 10:27:46,388 [INFO] game.learning_tracker: Started learning session: 18dee22e-6f21-4e63-8141-c31c4ce97ab9
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 18dee22e-6f21-4e63-8141-c31c4ce97ab9
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,388 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,390 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,390 [INFO] statistics_manager: Started new session: a58ba14c-932a-4a24-8685-47b41374b8f4
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: a58ba14c-932a-4a24-8685-47b41374b8f4
+2025-03-06 10:27:46,390 [INFO] game.learning_tracker: Started learning session: a58ba14c-932a-4a24-8685-47b41374b8f4
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: a58ba14c-932a-4a24-8685-47b41374b8f4
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,390 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46,393 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,393 [INFO] statistics_manager: Started new session: 478b945a-1e52-4b31-8269-3c620573ad2d
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 478b945a-1e52-4b31-8269-3c620573ad2d
+2025-03-06 10:27:46,393 [INFO] game.learning_tracker: Started learning session: 478b945a-1e52-4b31-8269-3c620573ad2d
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 478b945a-1e52-4b31-8269-3c620573ad2d
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,393 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt flop: 8d, 9d, Qd
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt turn: 6h
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Dealt river: As
+2025-03-06 10:27:46,396 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,396 [INFO] statistics_manager: Started new session: a88450d4-2f7b-41f3-9543-bde1b8c37271
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: a88450d4-2f7b-41f3-9543-bde1b8c37271
+2025-03-06 10:27:46,396 [INFO] game.learning_tracker: Started learning session: a88450d4-2f7b-41f3-9543-bde1b8c37271
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: a88450d4-2f7b-41f3-9543-bde1b8c37271
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,396 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,399 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,399 [INFO] statistics_manager: Started new session: 4155db11-95b9-41fe-a59f-6e196ccf9a3e
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 4155db11-95b9-41fe-a59f-6e196ccf9a3e
+2025-03-06 10:27:46,399 [INFO] game.learning_tracker: Started learning session: 4155db11-95b9-41fe-a59f-6e196ccf9a3e
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 4155db11-95b9-41fe-a59f-6e196ccf9a3e
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,399 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,401 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,401 [INFO] statistics_manager: Started new session: 11014c7e-1b8f-4d9f-a6a3-8787e56ced18
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 11014c7e-1b8f-4d9f-a6a3-8787e56ced18
+2025-03-06 10:27:46,401 [INFO] game.learning_tracker: Started learning session: 11014c7e-1b8f-4d9f-a6a3-8787e56ced18
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 11014c7e-1b8f-4d9f-a6a3-8787e56ced18
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,401 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,403 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,403 [INFO] statistics_manager: Started new session: 9f9e045e-8d8a-47f6-812f-225776e6c388
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 9f9e045e-8d8a-47f6-812f-225776e6c388
+2025-03-06 10:27:46,403 [INFO] game.learning_tracker: Started learning session: 9f9e045e-8d8a-47f6-812f-225776e6c388
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 9f9e045e-8d8a-47f6-812f-225776e6c388
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,404 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46,406 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,406 [INFO] statistics_manager: Started new session: acbb7929-d8bf-4a32-aaa0-f69567f8e3c8
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: acbb7929-d8bf-4a32-aaa0-f69567f8e3c8
+2025-03-06 10:27:46,406 [INFO] game.learning_tracker: Started learning session: acbb7929-d8bf-4a32-aaa0-f69567f8e3c8
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: acbb7929-d8bf-4a32-aaa0-f69567f8e3c8
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,406 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,408 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:27:46,408 [INFO] statistics_manager: Started new session: 17b43544-208c-414f-8c11-456c3a17fc8b
+2025-03-06 10:27:46 - statistics_manager - INFO - Started new session: 17b43544-208c-414f-8c11-456c3a17fc8b
+2025-03-06 10:27:46,408 [INFO] game.learning_tracker: Started learning session: 17b43544-208c-414f-8c11-456c3a17fc8b
+2025-03-06 10:27:46 - game.learning_tracker - INFO - Started learning session: 17b43544-208c-414f-8c11-456c3a17fc8b
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:27:46 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:27:46,408 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:27:46 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26,870 [INFO] statistics_manager: Statistics manager initialized
+2025-03-06 10:28:26 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 10:28:26,870 [INFO] hooks.game_engine: Game engine hooks initialized
+2025-03-06 10:28:26 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 10:28:26,870 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,871 [INFO] statistics_manager: Started new session: 2989aa49-4ec7-4f43-8dc8-24e58f07c623
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: 2989aa49-4ec7-4f43-8dc8-24e58f07c623
+2025-03-06 10:28:26,871 [INFO] game.learning_tracker: Started learning session: 2989aa49-4ec7-4f43-8dc8-24e58f07c623
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: 2989aa49-4ec7-4f43-8dc8-24e58f07c623
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,871 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,873 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,873 [INFO] statistics_manager: Started new session: 99083f5a-a3e9-497f-b7bd-84db318de385
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: 99083f5a-a3e9-497f-b7bd-84db318de385
+2025-03-06 10:28:26,873 [INFO] game.learning_tracker: Started learning session: 99083f5a-a3e9-497f-b7bd-84db318de385
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: 99083f5a-a3e9-497f-b7bd-84db318de385
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,873 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,876 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,876 [INFO] statistics_manager: Started new session: 20cefe5b-a19a-4b9f-b67c-1f27090be6ee
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: 20cefe5b-a19a-4b9f-b67c-1f27090be6ee
+2025-03-06 10:28:26,876 [INFO] game.learning_tracker: Started learning session: 20cefe5b-a19a-4b9f-b67c-1f27090be6ee
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: 20cefe5b-a19a-4b9f-b67c-1f27090be6ee
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,876 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt hole cards to players, 46 cards remaining
+2025-03-06 10:28:26,878 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,878 [INFO] statistics_manager: Started new session: 09a41e3f-204c-4624-92c4-2b7a1dbf850d
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: 09a41e3f-204c-4624-92c4-2b7a1dbf850d
+2025-03-06 10:28:26,878 [INFO] game.learning_tracker: Started learning session: 09a41e3f-204c-4624-92c4-2b7a1dbf850d
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: 09a41e3f-204c-4624-92c4-2b7a1dbf850d
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,878 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt flop: 5d, Ah, 5s
+2025-03-06 10:28:26,881 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,881 [INFO] statistics_manager: Started new session: e8e56a28-d6f0-4b56-9a41-ccab9504361b
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: e8e56a28-d6f0-4b56-9a41-ccab9504361b
+2025-03-06 10:28:26,881 [INFO] game.learning_tracker: Started learning session: e8e56a28-d6f0-4b56-9a41-ccab9504361b
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: e8e56a28-d6f0-4b56-9a41-ccab9504361b
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,881 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt flop: 9c, 2c, 3s
+2025-03-06 10:28:26,883 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,883 [INFO] statistics_manager: Started new session: ef3a4117-de64-4263-99f8-4d034660a4e3
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: ef3a4117-de64-4263-99f8-4d034660a4e3
+2025-03-06 10:28:26,883 [INFO] game.learning_tracker: Started learning session: ef3a4117-de64-4263-99f8-4d034660a4e3
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: ef3a4117-de64-4263-99f8-4d034660a4e3
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,883 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt flop: 7h, 7d, Jd
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt turn: 9c
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt river: Kh
+2025-03-06 10:28:26,886 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,886 [INFO] statistics_manager: Started new session: ad80dd6a-325b-42e2-a47e-c49c34993c12
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: ad80dd6a-325b-42e2-a47e-c49c34993c12
+2025-03-06 10:28:26,886 [INFO] game.learning_tracker: Started learning session: ad80dd6a-325b-42e2-a47e-c49c34993c12
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: ad80dd6a-325b-42e2-a47e-c49c34993c12
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,886 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt flop: 6s, Ts, Kd
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt turn: 5h
+2025-03-06 10:28:26,888 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,888 [INFO] statistics_manager: Started new session: 0fca9fcb-758d-4661-ba54-dc553e5e2a59
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: 0fca9fcb-758d-4661-ba54-dc553e5e2a59
+2025-03-06 10:28:26,888 [INFO] game.learning_tracker: Started learning session: 0fca9fcb-758d-4661-ba54-dc553e5e2a59
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: 0fca9fcb-758d-4661-ba54-dc553e5e2a59
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,888 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,890 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,890 [INFO] statistics_manager: Started new session: 8fa59507-1467-4143-8a07-4a1224f18ca3
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: 8fa59507-1467-4143-8a07-4a1224f18ca3
+2025-03-06 10:28:26,891 [INFO] game.learning_tracker: Started learning session: 8fa59507-1467-4143-8a07-4a1224f18ca3
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: 8fa59507-1467-4143-8a07-4a1224f18ca3
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,891 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26,893 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,893 [INFO] statistics_manager: Started new session: 2f705711-02ff-4921-96a3-0daccb5c3eab
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: 2f705711-02ff-4921-96a3-0daccb5c3eab
+2025-03-06 10:28:26,893 [INFO] game.learning_tracker: Started learning session: 2f705711-02ff-4921-96a3-0daccb5c3eab
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: 2f705711-02ff-4921-96a3-0daccb5c3eab
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,893 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt flop: 7s, 9d, 5c
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt turn: Ad
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Dealt river: Qd
+2025-03-06 10:28:26,896 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,896 [INFO] statistics_manager: Started new session: a727bd99-1cb2-4950-8425-9e5ed43b458d
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: a727bd99-1cb2-4950-8425-9e5ed43b458d
+2025-03-06 10:28:26,896 [INFO] game.learning_tracker: Started learning session: a727bd99-1cb2-4950-8425-9e5ed43b458d
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: a727bd99-1cb2-4950-8425-9e5ed43b458d
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,896 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,896 [INFO] game.poker_game: Pot distributed to winners: {}
+2025-03-06 10:28:26 - game.poker_game - INFO - Pot distributed to winners: {}
+2025-03-06 10:28:26,899 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,899 [INFO] statistics_manager: Started new session: fd636200-7df6-4ff2-ae4a-2b4f455c5971
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: fd636200-7df6-4ff2-ae4a-2b4f455c5971
+2025-03-06 10:28:26,899 [INFO] game.learning_tracker: Started learning session: fd636200-7df6-4ff2-ae4a-2b4f455c5971
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: fd636200-7df6-4ff2-ae4a-2b4f455c5971
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,899 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,901 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,901 [INFO] statistics_manager: Started new session: e72bb803-e7c0-40b0-b57f-53bca60c7830
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: e72bb803-e7c0-40b0-b57f-53bca60c7830
+2025-03-06 10:28:26,901 [INFO] game.learning_tracker: Started learning session: e72bb803-e7c0-40b0-b57f-53bca60c7830
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: e72bb803-e7c0-40b0-b57f-53bca60c7830
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,901 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,904 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,904 [INFO] statistics_manager: Started new session: 818b1806-28d9-428d-890e-54048e9438f5
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: 818b1806-28d9-428d-890e-54048e9438f5
+2025-03-06 10:28:26,904 [INFO] game.learning_tracker: Started learning session: 818b1806-28d9-428d-890e-54048e9438f5
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: 818b1806-28d9-428d-890e-54048e9438f5
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,904 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26,906 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,906 [INFO] statistics_manager: Started new session: 4e55833c-f3e2-4e91-acef-a4ecb812e3cd
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: 4e55833c-f3e2-4e91-acef-a4ecb812e3cd
+2025-03-06 10:28:26,906 [INFO] game.learning_tracker: Started learning session: 4e55833c-f3e2-4e91-acef-a4ecb812e3cd
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: 4e55833c-f3e2-4e91-acef-a4ecb812e3cd
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,906 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,909 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:26,909 [INFO] statistics_manager: Started new session: 8878ae9c-7d00-4ca7-a26c-c262b3b34e42
+2025-03-06 10:28:26 - statistics_manager - INFO - Started new session: 8878ae9c-7d00-4ca7-a26c-c262b3b34e42
+2025-03-06 10:28:26,909 [INFO] game.learning_tracker: Started learning session: 8878ae9c-7d00-4ca7-a26c-c262b3b34e42
+2025-03-06 10:28:26 - game.learning_tracker - INFO - Started learning session: 8878ae9c-7d00-4ca7-a26c-c262b3b34e42
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:26 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:26,909 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:26 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:38,677 [INFO] statistics_manager: Statistics manager initialized
+2025-03-06 10:28:38 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 10:28:38,678 [INFO] hooks.game_engine: Game engine hooks initialized
+2025-03-06 10:28:38 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 10:28:38,678 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:38 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:38,678 [INFO] statistics_manager: Started new session: 47b10a8e-1394-4e36-a419-12322f8273fe
+2025-03-06 10:28:38 - statistics_manager - INFO - Started new session: 47b10a8e-1394-4e36-a419-12322f8273fe
+2025-03-06 10:28:38,678 [INFO] game.learning_tracker: Started learning session: 47b10a8e-1394-4e36-a419-12322f8273fe
+2025-03-06 10:28:38 - game.learning_tracker - INFO - Started learning session: 47b10a8e-1394-4e36-a419-12322f8273fe
+2025-03-06 10:28:38 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:38 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:38,678 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:38 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:38 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,678 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38,679 [ERROR] game.poker_game: Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:28:38 - game.poker_game - DEBUG - Dealt hole cards to players, 0 cards remaining
+2025-03-06 10:28:38,682 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:38 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:38,682 [INFO] statistics_manager: Started new session: 984010b5-325a-4489-92fd-084cdd6f990a
+2025-03-06 10:28:38 - statistics_manager - INFO - Started new session: 984010b5-325a-4489-92fd-084cdd6f990a
+2025-03-06 10:28:38,682 [INFO] game.learning_tracker: Started learning session: 984010b5-325a-4489-92fd-084cdd6f990a
+2025-03-06 10:28:38 - game.learning_tracker - INFO - Started learning session: 984010b5-325a-4489-92fd-084cdd6f990a
+2025-03-06 10:28:38 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:38 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:38,682 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:38 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:28:38,684 [INFO] game.learning_tracker: Learning tracker initialized
+2025-03-06 10:28:38 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:28:38,684 [INFO] statistics_manager: Started new session: 7f3dc6cb-5989-4831-a4c2-b644212736b9
+2025-03-06 10:28:38 - statistics_manager - INFO - Started new session: 7f3dc6cb-5989-4831-a4c2-b644212736b9
+2025-03-06 10:28:38,684 [INFO] game.learning_tracker: Started learning session: 7f3dc6cb-5989-4831-a4c2-b644212736b9
+2025-03-06 10:28:38 - game.learning_tracker - INFO - Started learning session: 7f3dc6cb-5989-4831-a4c2-b644212736b9
+2025-03-06 10:28:38 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:28:38 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:28:38,684 [INFO] game.poker_game: PokerGame initialized
+2025-03-06 10:28:38 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 10:35:37 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 10:35:37 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 97405268-0af1-4bac-b3e0-765394f7b16b
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 97405268-0af1-4bac-b3e0-765394f7b16b
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 40515d06-7eea-46cc-a490-22911a749a98
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 40515d06-7eea-46cc-a490-22911a749a98
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 48bb1049-09b7-4966-8699-5d7015a1c123
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 48bb1049-09b7-4966-8699-5d7015a1c123
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt hole cards to players, 46 cards remaining
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 0eb9ffba-3be1-4ad3-be62-eb8f09057cc9
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 0eb9ffba-3be1-4ad3-be62-eb8f09057cc9
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt flop: 2d, 9d, Jc
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 33ddf826-8421-4cab-a220-dd7e6c8b5152
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 33ddf826-8421-4cab-a220-dd7e6c8b5152
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt flop: 5d, 4c, 9s
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 86d8ed98-7bba-4e89-946c-99df60ea92c4
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 86d8ed98-7bba-4e89-946c-99df60ea92c4
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt flop: Js, Qd, 4c
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt turn: 2h
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt river: 5c
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 7f842bd1-ade5-44b9-bd53-91b09fb126e7
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 7f842bd1-ade5-44b9-bd53-91b09fb126e7
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt flop: 4h, Kd, 9h
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt turn: 4s
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: e0dbed32-83d0-4b85-ad86-3d4caf98a6c0
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: e0dbed32-83d0-4b85-ad86-3d4caf98a6c0
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 90fb6dec-a419-4a4a-865a-ebd7f43b1a58
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 90fb6dec-a419-4a4a-865a-ebd7f43b1a58
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 6b646063-9f9a-4b7e-9c77-bc90f7eb0055
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 6b646063-9f9a-4b7e-9c77-bc90f7eb0055
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt flop: Js, Ac, 7s
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt turn: Kd
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Dealt river: Qh
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 827be656-602d-49e4-bb04-e81b81bc800d
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 827be656-602d-49e4-bb04-e81b81bc800d
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - Pot distributed to winners: {}
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: acfd385b-290e-4568-9663-c5564c85667a
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: acfd385b-290e-4568-9663-c5564c85667a
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 0e6d9872-50e9-43ae-bf00-3813fa28cac7
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 0e6d9872-50e9-43ae-bf00-3813fa28cac7
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 67c580a4-43ea-46c3-8eee-7fbe606d5bf1
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 67c580a4-43ea-46c3-8eee-7fbe606d5bf1
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: f1a285d7-434a-4de2-b75e-911296de57c9
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: f1a285d7-434a-4de2-b75e-911296de57c9
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:35:37 - statistics_manager - INFO - Started new session: 40b8dfe1-3ed0-4504-83f8-10fc4b684c95
+2025-03-06 10:35:37 - game.learning_tracker - INFO - Started learning session: 40b8dfe1-3ed0-4504-83f8-10fc4b684c95
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:35:37 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:35:37 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:36:07 - statistics_manager - INFO - Statistics manager initialized
+2025-03-06 10:36:07 - ai.decision_analyzer - INFO - AI decision analyzer initialized
+2025-03-06 10:36:07 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-06 10:36:07 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:36:07 - statistics_manager - INFO - Started new session: c5c35f8e-2310-4435-ba76-5a28eff3dd6b
+2025-03-06 10:36:07 - game.learning_tracker - INFO - Started learning session: c5c35f8e-2310-4435-ba76-5a28eff3dd6b
+2025-03-06 10:36:07 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:36:07 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:36:07 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:36:07 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-06 10:36:07 - game.poker_game - DEBUG - Dealt hole cards to players, 0 cards remaining
+2025-03-06 10:36:07 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:36:07 - statistics_manager - INFO - Started new session: 723a9e23-bb25-4970-9ea8-13e3577dfc6d
+2025-03-06 10:36:07 - game.learning_tracker - INFO - Started learning session: 723a9e23-bb25-4970-9ea8-13e3577dfc6d
+2025-03-06 10:36:07 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:36:07 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:36:07 - game.poker_game - INFO - PokerGame initialized
+2025-03-06 10:36:07 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-06 10:36:07 - statistics_manager - INFO - Started new session: 58ad64ac-5559-44e5-b589-ebec97b46326
+2025-03-06 10:36:07 - game.learning_tracker - INFO - Started learning session: 58ad64ac-5559-44e5-b589-ebec97b46326
+2025-03-06 10:36:07 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-06 10:36:07 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-06 10:36:07 - game.poker_game - INFO - PokerGame initialized

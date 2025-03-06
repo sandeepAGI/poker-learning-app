@@ -9,7 +9,7 @@ backend_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(backend_path)
 
 from game_engine import Player, AIPlayer, PotInfo, PokerGame, GameState
-from deck_manager import DeckManager
+from game.deck_manager import DeckManager
 from ai.hand_evaluator import HandEvaluator
 
 
