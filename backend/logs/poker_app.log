@@ -3281,3 +3281,151 @@
 2025-03-06 18:41:02 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
 2025-03-06 18:41:02 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
 2025-03-06 18:41:02 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 13:23:16 - config - INFO - Running in development environment
+2025-03-07 13:23:22 - config - INFO - Running in development environment
+2025-03-07 13:23:26 - config - INFO - Running in development environment
+2025-03-07 13:23:30 - config - INFO - Running in development environment
+2025-03-07 13:40:02 - config - INFO - Running in development environment
+2025-03-07 15:09:29 - config - INFO - Running in development environment
+2025-03-07 15:13:45 - config - INFO - Running in development environment
+2025-03-07 15:14:16 - config - INFO - Running in development environment
+2025-03-07 15:14:32 - config - INFO - Running in development environment
+2025-03-07 15:14:32 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:14:32 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:14:32 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:14:32 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:14:32 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:14:32 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:14:32 - api - INFO - Starting the Poker Learning App API
+2025-03-07 15:14:32 - api - INFO - Initialized WebSocket manager
+2025-03-07 15:14:32 - api - INFO - Scheduled inactive game cleanup
+2025-03-07 15:16:32 - api - INFO - Shutting down the Poker Learning App API
+2025-03-07 15:19:15 - config - INFO - Running in development environment
+2025-03-07 15:19:15 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:19:15 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:19:15 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:19:15 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:19:15 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:19:15 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:19:15 - api - INFO - Starting the Poker Learning App API
+2025-03-07 15:19:15 - api - INFO - Initialized WebSocket manager
+2025-03-07 15:19:15 - api - INFO - Scheduled inactive game cleanup
+2025-03-07 15:21:14 - api - INFO - Shutting down the Poker Learning App API
+2025-03-07 15:22:07 - config - INFO - Running in development environment
+2025-03-07 15:22:07 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:22:07 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:22:07 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:22:07 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:22:07 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:22:07 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:22:07 - api - INFO - Starting the Poker Learning App API
+2025-03-07 15:22:07 - api - INFO - Initialized WebSocket manager
+2025-03-07 15:22:07 - api - INFO - Scheduled inactive game cleanup
+2025-03-07 15:22:28 - api - INFO - Shutting down the Poker Learning App API
+2025-03-07 15:23:45 - config - INFO - Running in development environment
+2025-03-07 15:23:45 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:23:45 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:23:45 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:23:45 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:23:45 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:23:45 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:23:45 - config - INFO - Running in development environment
+2025-03-07 15:23:45 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:23:45 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:23:45 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:23:45 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:23:45 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:23:45 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:23:45 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-07 15:23:45 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:23:45 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:23:45 - api - INFO - Starting the Poker Learning App API
+2025-03-07 15:23:45 - api - INFO - Initialized WebSocket manager
+2025-03-07 15:23:45 - api - INFO - Scheduled inactive game cleanup
+2025-03-07 15:28:45 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-03-07 15:29:23 - api - INFO - Shutting down the Poker Learning App API
+2025-03-07 15:29:42 - config - INFO - Running in development environment
+2025-03-07 15:29:42 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:29:42 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:29:42 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:29:42 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:29:42 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:29:42 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:29:42 - api - INFO - Starting the Poker Learning App API
+2025-03-07 15:29:42 - api - INFO - Initialized WebSocket manager
+2025-03-07 15:29:42 - api - INFO - Scheduled inactive game cleanup
+2025-03-07 15:31:42 - api - INFO - Shutting down the Poker Learning App API
+2025-03-07 15:32:32 - config - INFO - Running in development environment
+2025-03-07 15:32:32 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:32:32 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:32:32 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:32:32 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:32:32 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:32:32 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:32:32 - api - INFO - Starting the Poker Learning App API
+2025-03-07 15:32:32 - api - INFO - Initialized WebSocket manager
+2025-03-07 15:32:32 - api - INFO - Scheduled inactive game cleanup
+2025-03-07 15:34:32 - api - INFO - Shutting down the Poker Learning App API
+2025-03-07 15:36:36 - config - INFO - Running in development environment
+2025-03-07 15:36:36 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:36:36 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:36:36 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:36:36 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:36:36 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:36:36 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:36:36 - config - INFO - Running in development environment
+2025-03-07 15:36:36 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:36:36 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:36:36 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:36:36 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:36:36 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:36:36 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:36:36 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-07 15:36:36 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:36:36 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:36:36 - api - INFO - Starting the Poker Learning App API
+2025-03-07 15:36:36 - api - INFO - Initialized WebSocket manager
+2025-03-07 15:36:36 - api - INFO - Scheduled inactive game cleanup
+2025-03-07 15:38:36 - api - INFO - Shutting down the Poker Learning App API
+2025-03-07 15:39:53 - config - INFO - Running in development environment
+2025-03-07 15:39:53 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:39:53 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:39:53 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:39:53 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:39:53 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:39:53 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:39:53 - config - INFO - Running in development environment
+2025-03-07 15:39:53 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:39:53 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:39:53 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:39:53 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:39:53 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:39:53 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:39:53 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-07 15:39:53 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:39:53 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:39:53 - api - INFO - Starting the Poker Learning App API
+2025-03-07 15:39:53 - api - INFO - Initialized WebSocket manager
+2025-03-07 15:39:53 - api - INFO - Scheduled inactive game cleanup
+2025-03-07 15:41:53 - api - INFO - Shutting down the Poker Learning App API
+2025-03-07 15:43:07 - config - INFO - Running in development environment
+2025-03-07 15:43:07 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:43:07 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:43:07 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:43:07 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:43:07 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:43:07 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:43:07 - config - INFO - Running in development environment
+2025-03-07 15:43:07 - statistics_manager - INFO - Statistics manager initialized
+2025-03-07 15:43:07 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-07 15:43:07 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-07 15:43:07 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-07 15:43:07 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:43:07 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:43:07 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-07 15:43:07 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-07 15:43:07 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-07 15:43:07 - api - INFO - Starting the Poker Learning App API
+2025-03-07 15:43:07 - api - INFO - Initialized WebSocket manager
+2025-03-07 15:43:07 - api - INFO - Scheduled inactive game cleanup
+2025-03-07 15:44:29 - api - INFO - Shutting down the Poker Learning App API

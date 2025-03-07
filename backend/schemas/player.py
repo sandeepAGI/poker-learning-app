@@ -14,6 +14,7 @@ class PlayerResponse(BaseModel):
     username: str
     created_at: datetime
     statistics: Dict[str, Any]
+    access_token: Optional[str] = None  # Only included when creating a new player
 
 # Player statistics response
 class PlayerStatistics(BaseModel):
