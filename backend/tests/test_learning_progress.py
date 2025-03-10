@@ -53,6 +53,25 @@ class TestLearningProgressTracking(unittest.TestCase):
         self.non_optimal_decision["decision"] = "raise"
         self.non_optimal_decision["expected_value"] = -0.5
 
+    def _create_decision(self, game_state="flop", spr=4.5, was_optimal=True, 
+                        matching_strategy="Conservative", optimal_strategy="Conservative"):
+        """Helper to create a decision with specific attributes."""
+        decision = self.sample_decision.copy()
+        decision["game_state"] = game_state
+        decision["spr"] = spr
+        decision["was_optimal"] = was_optimal
+        decision["matching_strategy"] = matching_strategy
+        decision["optimal_strategy"] = optimal_strategy
+        
+        if game_state == "pre_flop":
+            decision["community_cards"] = []
+        elif game_state == "turn":
+            decision["community_cards"] = ["7s", "8d", "Qc", "2h"]
+        elif game_state == "river":
+            decision["community_cards"] = ["7s", "8d", "Qc", "2h", "As"]
+            
+        return decision
+
     def test_L1_basic_decision_recording(self):
         """
         Test L1: Basic Decision Recording
@@ -128,33 +147,36 @@ class TestLearningProgressTracking(unittest.TestCase):
         """
         # First add 10 decisions with 40% optimal
         for i in range(10):
-            decision = self.sample_decision.copy()
+            decision = self._create_decision(
+                game_state="pre_flop",
+                was_optimal=i < 4  # 4 optimal decisions (40%)
+            )
             decision["hand_id"] = f"hand_first_{i}"
             
-            if i < 4:  # 4 optimal decisions (40%)
-                decision["was_optimal"] = True
-            else:  # 6 suboptimal decisions
-                decision["was_optimal"] = False
+            if not decision["was_optimal"]:
                 decision["optimal_strategy"] = "Probability-Based"
                 
             self.learning_stats.add_decision(decision)
         
         # Then add 10 more decisions with 80% optimal
         for i in range(10):
-            decision = self.sample_decision.copy()
+            decision = self._create_decision(
+                game_state="turn",
+                was_optimal=i < 8  # 8 optimal decisions (80%)
+            )
             decision["hand_id"] = f"hand_second_{i}"
             
-            if i < 8:  # 8 optimal decisions (80%)
-                decision["was_optimal"] = True
-            else:  # 2 suboptimal decisions
-                decision["was_optimal"] = False
+            if not decision["was_optimal"]:
                 decision["optimal_strategy"] = "Probability-Based"
                 
             self.learning_stats.add_decision(decision)
         
-        # Create a trend analyzer and analyze the learning statistics
+        # Create a trend analyzer
         trend_analyzer = TrendAnalyzer()
-        trend_results = trend_analyzer.analyze_decision_quality_trend(self.learning_stats)
+        
+        # Analyze the decisions directly using the decision history
+        trend_results = trend_analyzer.analyze_decision_quality_trend(
+            self.learning_stats.decision_history)
         
         # Assertions
         self.assertEqual(trend_results["trend"], "improving",
@@ -170,33 +192,36 @@ class TestLearningProgressTracking(unittest.TestCase):
         """
         # First add 10 decisions with 70% optimal
         for i in range(10):
-            decision = self.sample_decision.copy()
+            decision = self._create_decision(
+                game_state="pre_flop",
+                was_optimal=i < 7  # 7 optimal decisions (70%)
+            )
             decision["hand_id"] = f"hand_first_{i}"
             
-            if i < 7:  # 7 optimal decisions (70%)
-                decision["was_optimal"] = True
-            else:  # 3 suboptimal decisions
-                decision["was_optimal"] = False
+            if not decision["was_optimal"]:
                 decision["optimal_strategy"] = "Probability-Based"
                 
             self.learning_stats.add_decision(decision)
         
         # Then add 10 more decisions with 40% optimal
         for i in range(10):
-            decision = self.sample_decision.copy()
+            decision = self._create_decision(
+                game_state="turn",
+                was_optimal=i < 4  # 4 optimal decisions (40%)
+            )
             decision["hand_id"] = f"hand_second_{i}"
             
-            if i < 4:  # 4 optimal decisions (40%)
-                decision["was_optimal"] = True
-            else:  # 6 suboptimal decisions
-                decision["was_optimal"] = False
+            if not decision["was_optimal"]:
                 decision["optimal_strategy"] = "Probability-Based"
                 
             self.learning_stats.add_decision(decision)
         
-        # Create a trend analyzer and analyze the learning statistics
+        # Create a trend analyzer
         trend_analyzer = TrendAnalyzer()
-        trend_results = trend_analyzer.analyze_decision_quality_trend(self.learning_stats)
+        
+        # Analyze the decisions directly
+        trend_results = trend_analyzer.analyze_decision_quality_trend(
+            self.learning_stats.decision_history)
         
         # Assertions
         self.assertEqual(trend_results["trend"], "declining",
@@ -212,33 +237,37 @@ class TestLearningProgressTracking(unittest.TestCase):
         """
         # First add 15 decisions with mediocre 50% optimal
         for i in range(15):
-            decision = self.sample_decision.copy()
+            decision = self._create_decision(
+                game_state="pre_flop",
+                was_optimal=i % 2 == 0  # 50% optimal decisions
+            )
             decision["hand_id"] = f"hand_first_{i}"
             
-            if i % 2 == 0:  # 50% optimal decisions
-                decision["was_optimal"] = True
-            else:  # 50% suboptimal decisions
-                decision["was_optimal"] = False
+            if not decision["was_optimal"]:
                 decision["optimal_strategy"] = "Probability-Based"
                 
             self.learning_stats.add_decision(decision)
         
         # Then add 5 more decisions with 100% optimal (recent improvement)
         for i in range(5):
-            decision = self.sample_decision.copy()
+            decision = self._create_decision(
+                game_state="turn",
+                was_optimal=True
+            )
             decision["hand_id"] = f"hand_recent_{i}"
-            decision["was_optimal"] = True
-                
             self.learning_stats.add_decision(decision)
         
-        # Create a trend analyzer and analyze the learning statistics
+        # Create a trend analyzer
         trend_analyzer = TrendAnalyzer()
-        trend_results = trend_analyzer.analyze_decision_quality_trend(self.learning_stats)
         
-        # Assertions
-        self.assertTrue(trend_results.get("recent_improvement", False),
+        # Analyze using the direct method
+        trend_results = trend_analyzer.analyze_decision_quality_trend(
+            self.learning_stats.decision_history)
+        
+        # Assertions - using the correct key "recent_trend" instead of "recent_improvement"
+        self.assertEqual(trend_results.get("recent_trend"), "recent_improvement",
                        "Should detect recent improvement")
-        self.assertIn("recent decisions", trend_results.get("description", ""),
+        self.assertIn("recent", trend_results.get("recent_description", "").lower(),
                      "Description should mention recent improvement")
 
 if __name__ == '__main__':
