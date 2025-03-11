@@ -172,3 +172,6 @@
 2025-03-06 18:32:40 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
 2025-03-06 18:32:40 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
 2025-03-06 18:32:40 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-10 15:35:45 - game_service - ERROR - Error processing action: Raise amount must be at least 20
+2025-03-11 11:01:35 - ai.manager - ERROR - Unknown personality type: RiskTaker
+2025-03-11 11:01:35 - game_service - ERROR - Error processing action: Unknown personality type: RiskTaker

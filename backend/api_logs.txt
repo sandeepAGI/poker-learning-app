@@ -1,0 +1,342 @@
+2025-03-11 11:08:50 - config - INFO - Running in development environment
+2025-03-11 11:08:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:08:50 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:08:50 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:08:50 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:08:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:08:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+/Users/sandeepmangaraj/myworkspace/Utilities/Games/poker-learning-app/backend/api.py:241: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+/Users/sandeepmangaraj/myworkspace/Utilities/Games/poker-learning-app/backend/api.py:254: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("shutdown")
+INFO:     Will watch for changes in these directories: ['/Users/sandeepmangaraj/myworkspace/Utilities/Games/poker-learning-app/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     Started reloader process [37507] using StatReload
+2025-03-11 11:08:50 - config - INFO - Running in development environment
+2025-03-11 11:08:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:08:50 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:08:50 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:08:50 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:08:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:08:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:08:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:08:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+INFO:     Started server process [37511]
+INFO:     Waiting for application startup.
+2025-03-11 11:08:50 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:08:50 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:08:50 - api - INFO - Scheduled inactive game cleanup
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'tests/e2e_poker_test.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-03-11 11:08:56 - api - INFO - Shutting down the Poker Learning App API
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37511]
+2025-03-11 11:08:56 - config - INFO - Running in development environment
+2025-03-11 11:08:56 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:08:56 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:08:56 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:08:56 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:08:56 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:08:56 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:08:56 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:08:56 - api - INFO - Added rate limiting middleware: 60 requests per minute
+INFO:     Started server process [37553]
+INFO:     Waiting for application startup.
+2025-03-11 11:08:56 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:08:56 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:08:56 - api - INFO - Scheduled inactive game cleanup
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'tests/e2e_poker_test.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-03-11 11:09:27 - api - INFO - Shutting down the Poker Learning App API
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37553]
+2025-03-11 11:09:27 - config - INFO - Running in development environment
+2025-03-11 11:09:27 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:09:27 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:09:27 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:09:27 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:09:27 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:27 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:09:27 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:27 - api - INFO - Added rate limiting middleware: 60 requests per minute
+INFO:     Started server process [37630]
+INFO:     Waiting for application startup.
+2025-03-11 11:09:27 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:09:27 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:09:27 - api - INFO - Scheduled inactive game cleanup
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'tests/e2e_poker_test.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-03-11 11:09:34 - api - INFO - Shutting down the Poker Learning App API
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37630]
+2025-03-11 11:09:34 - config - INFO - Running in development environment
+2025-03-11 11:09:34 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:09:34 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:09:34 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:09:34 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:09:34 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:34 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:09:34 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:34 - api - INFO - Added rate limiting middleware: 60 requests per minute
+INFO:     Started server process [37645]
+INFO:     Waiting for application startup.
+2025-03-11 11:09:34 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:09:34 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:09:34 - api - INFO - Scheduled inactive game cleanup
+INFO:     Application startup complete.
+INFO:     127.0.0.1:58382 - "POST /api/v1/players HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Creating new game 866500d2-27a5-4ffd-b071-e60a5e987f9b for player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:09:36 - statistics_manager - INFO - Started new session: d7580aae-1a9e-4503-92fe-4a4f7b6cddfe
+2025-03-11 11:09:36 - game.learning_tracker - INFO - Started learning session: d7580aae-1a9e-4503-92fe-4a4f7b6cddfe
+2025-03-11 11:09:36 - game.poker_game - INFO - PokerGame initialized
+INFO:     127.0.0.1:58384 - "POST /api/v1/games HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58386 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58388 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58390 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58392 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58394 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58396 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58398 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58400 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58402 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58404 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58406 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58408 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58410 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58412 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58414 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58416 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58418 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58420 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58422 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58424 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58426 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58428 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58430 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58432 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58434 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58436 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58438 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58440 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58442 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58444 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58446 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+INFO:     127.0.0.1:58448 - "POST /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/actions HTTP/1.1" 200 OK
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+INFO:     127.0.0.1:58450 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b?show_all_cards=true HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58452 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/players/9ee2be1a-40e3-40fa-ba61-b556d668e968/hand HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58454 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/players/ai_0/hand HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58456 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/players/ai_1/hand HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58458 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/players/ai_2/hand HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58460 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/players/ai_3/hand HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58462 - "GET /api/v1/games/866500d2-27a5-4ffd-b071-e60a5e987f9b/outcome HTTP/1.1" 404 Not Found
+WARNING:  StatReload detected changes in 'tests/e2e_poker_test.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-03-11 11:09:55 - api - INFO - Shutting down the Poker Learning App API
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37645]
+2025-03-11 11:09:56 - config - INFO - Running in development environment
+2025-03-11 11:09:56 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:09:56 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:09:56 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:09:56 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:09:56 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:56 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:09:56 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:56 - api - INFO - Added rate limiting middleware: 60 requests per minute
+INFO:     Started server process [37702]
+INFO:     Waiting for application startup.
+2025-03-11 11:09:56 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:09:56 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:09:56 - api - INFO - Scheduled inactive game cleanup
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'tests/e2e_poker_test.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-03-11 11:10:09 - api - INFO - Shutting down the Poker Learning App API
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37702]
+2025-03-11 11:10:09 - config - INFO - Running in development environment
+2025-03-11 11:10:09 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:10:09 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:10:09 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:10:09 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:10:09 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:10:09 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:10:09 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:10:09 - api - INFO - Added rate limiting middleware: 60 requests per minute
+INFO:     Started server process [37734]
+INFO:     Waiting for application startup.
+2025-03-11 11:10:09 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:10:09 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:10:09 - api - INFO - Scheduled inactive game cleanup
+INFO:     Application startup complete.
+INFO:     127.0.0.1:58477 - "POST /api/v1/players HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Creating new game fd05f35d-2687-4afe-af27-c6d0803d891b for player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:10:12 - statistics_manager - INFO - Started new session: 7ed0019c-4dc4-480c-be26-3c4dcc9ae6d1
+2025-03-11 11:10:12 - game.learning_tracker - INFO - Started learning session: 7ed0019c-4dc4-480c-be26-3c4dcc9ae6d1
+2025-03-11 11:10:12 - game.poker_game - INFO - PokerGame initialized
+INFO:     127.0.0.1:58479 - "POST /api/v1/games HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58481 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58483 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58485 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58487 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58489 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58491 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58493 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58495 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58497 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58499 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58501 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58503 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58505 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58507 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58509 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58511 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58513 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58515 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58517 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58519 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58521 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58523 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58525 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+INFO:     127.0.0.1:58527 - "POST /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b/actions HTTP/1.1" 200 OK
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+INFO:     127.0.0.1:58529 - "GET /api/v1/games/fd05f35d-2687-4afe-af27-c6d0803d891b?show_all_cards=true HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-03-11 11:10:37 - api - INFO - Shutting down the Poker Learning App API
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37734]
+INFO:     Stopping reloader process [37507]

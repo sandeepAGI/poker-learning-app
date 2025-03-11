@@ -6723,3 +6723,1303 @@
 2025-03-10 14:34:54 - statistics_manager - DEBUG - Recorded decision for player test_learning_player: fold
 2025-03-10 14:34:54 - statistics_manager - DEBUG - Saved statistics for session: later_session
 2025-03-10 14:34:54 - statistics_manager - INFO - Ended session: later_session
+2025-03-10 15:22:20 - config - INFO - Running in development environment
+2025-03-10 15:22:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-10 15:22:20 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-10 15:22:20 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-10 15:22:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:22:20 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:22:20 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:22:20 - config - INFO - Running in development environment
+2025-03-10 15:22:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-10 15:22:20 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-10 15:22:20 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-10 15:22:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:22:20 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:22:20 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:22:20 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-10 15:22:20 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:22:20 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:22:20 - api - INFO - Starting the Poker Learning App API
+2025-03-10 15:22:20 - api - INFO - Initialized WebSocket manager
+2025-03-10 15:22:20 - api - INFO - Scheduled inactive game cleanup
+2025-03-10 15:24:06 - api - INFO - Shutting down the Poker Learning App API
+2025-03-10 15:24:06 - config - INFO - Running in development environment
+2025-03-10 15:24:06 - statistics_manager - INFO - Statistics manager initialized
+2025-03-10 15:24:06 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-10 15:24:06 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-10 15:24:06 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:24:06 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:24:06 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:24:07 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-10 15:24:07 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:24:07 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:24:07 - api - INFO - Starting the Poker Learning App API
+2025-03-10 15:24:07 - api - INFO - Initialized WebSocket manager
+2025-03-10 15:24:07 - api - INFO - Scheduled inactive game cleanup
+2025-03-10 15:25:50 - api - INFO - Shutting down the Poker Learning App API
+2025-03-10 15:25:50 - config - INFO - Running in development environment
+2025-03-10 15:25:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-10 15:25:50 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-10 15:25:50 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-10 15:25:50 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:25:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:25:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:25:50 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-10 15:25:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:25:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:25:50 - api - INFO - Starting the Poker Learning App API
+2025-03-10 15:25:50 - api - INFO - Initialized WebSocket manager
+2025-03-10 15:25:50 - api - INFO - Scheduled inactive game cleanup
+2025-03-10 15:25:59 - auth - DEBUG - Authenticated player: ed643109-6497-4c74-99cf-50f15489094f
+2025-03-10 15:25:59 - game_service - INFO - Creating new game e5caeac2-63ce-4dad-8fa0-886657604bc6 for player ed643109-6497-4c74-99cf-50f15489094f
+2025-03-10 15:25:59 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:25:59 - statistics_manager - INFO - Started new session: 578b04f0-6351-46fd-8a18-33eb46674f4d
+2025-03-10 15:25:59 - game.learning_tracker - INFO - Started learning session: 578b04f0-6351-46fd-8a18-33eb46674f4d
+2025-03-10 15:25:59 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-10 15:25:59 - game.poker_game - INFO - PokerGame initialized
+2025-03-10 15:25:59 - auth - DEBUG - Authenticated player: ed643109-6497-4c74-99cf-50f15489094f
+2025-03-10 15:25:59 - game_service - INFO - Retrieved game state for game e5caeac2-63ce-4dad-8fa0-886657604bc6, player ed643109-6497-4c74-99cf-50f15489094f
+2025-03-10 15:28:22 - api - INFO - Shutting down the Poker Learning App API
+2025-03-10 15:28:23 - config - INFO - Running in development environment
+2025-03-10 15:28:23 - statistics_manager - INFO - Statistics manager initialized
+2025-03-10 15:28:23 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-10 15:28:23 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-10 15:28:23 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:28:23 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:28:23 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:28:23 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-10 15:28:23 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:28:23 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:28:23 - api - INFO - Starting the Poker Learning App API
+2025-03-10 15:28:23 - api - INFO - Initialized WebSocket manager
+2025-03-10 15:28:23 - api - INFO - Scheduled inactive game cleanup
+2025-03-10 15:28:36 - auth - DEBUG - Authenticated player: 21d64c90-e6de-4803-a43b-68cb42490d7b
+2025-03-10 15:28:36 - game_service - INFO - Creating new game 767c809c-a748-47e2-b45b-1a0e48b37126 for player 21d64c90-e6de-4803-a43b-68cb42490d7b
+2025-03-10 15:28:36 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:28:36 - statistics_manager - INFO - Started new session: 0d4723a3-28fd-47b1-b594-ec0d73f2fb1a
+2025-03-10 15:28:36 - game.learning_tracker - INFO - Started learning session: 0d4723a3-28fd-47b1-b594-ec0d73f2fb1a
+2025-03-10 15:28:36 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-10 15:28:36 - game.poker_game - INFO - PokerGame initialized
+2025-03-10 15:28:36 - auth - DEBUG - Authenticated player: 21d64c90-e6de-4803-a43b-68cb42490d7b
+2025-03-10 15:28:36 - game_service - WARNING - Cannot advance game 767c809c-a748-47e2-b45b-1a0e48b37126 to next hand - not in showdown state
+2025-03-10 15:29:51 - api - INFO - Shutting down the Poker Learning App API
+2025-03-10 15:29:51 - config - INFO - Running in development environment
+2025-03-10 15:29:51 - statistics_manager - INFO - Statistics manager initialized
+2025-03-10 15:29:51 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-10 15:29:51 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-10 15:29:51 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:29:51 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:29:51 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:29:51 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-10 15:29:51 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:29:51 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:29:51 - api - INFO - Starting the Poker Learning App API
+2025-03-10 15:29:51 - api - INFO - Initialized WebSocket manager
+2025-03-10 15:29:51 - api - INFO - Scheduled inactive game cleanup
+2025-03-10 15:30:05 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:30:05 - game_service - INFO - Creating new game 44992539-b92e-493b-aa78-f81952047f36 for player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:30:05 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:30:05 - statistics_manager - INFO - Started new session: bc82f17b-760f-44a5-8a61-c2e3ec8dee3e
+2025-03-10 15:30:05 - game.learning_tracker - INFO - Started learning session: bc82f17b-760f-44a5-8a61-c2e3ec8dee3e
+2025-03-10 15:30:05 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-10 15:30:05 - game.poker_game - INFO - PokerGame initialized
+2025-03-10 15:30:05 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:30:05 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:30:05 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:30:05 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:09 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:09 - game_service - INFO - Processing fold action from player 99445f87-1744-4e87-b9fa-3885126b610c in game 44992539-b92e-493b-aa78-f81952047f36
+2025-03-10 15:31:09 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:31:09 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5713.91 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:31:09 - game.poker_game - DEBUG - Dealt flop: 2d, 6s, 7d
+2025-03-10 15:31:09 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:09 - game_service - INFO - Broadcast player_action event for game 44992539-b92e-493b-aa78-f81952047f36
+2025-03-10 15:31:09 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:09 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:14 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:14 - game_service - INFO - Processing fold action from player 99445f87-1744-4e87-b9fa-3885126b610c in game 44992539-b92e-493b-aa78-f81952047f36
+2025-03-10 15:31:14 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:31:14 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 2d, 6s, 7d | Hand Score: 6377.04 (High Card) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:31:14 - game.poker_game - DEBUG - Dealt turn: 8s
+2025-03-10 15:31:14 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:14 - game_service - INFO - Broadcast player_action event for game 44992539-b92e-493b-aa78-f81952047f36
+2025-03-10 15:31:14 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:14 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:17 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:17 - game_service - INFO - Processing fold action from player 99445f87-1744-4e87-b9fa-3885126b610c in game 44992539-b92e-493b-aa78-f81952047f36
+2025-03-10 15:31:17 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:31:17 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 2d, 6s, 7d, 8s | Hand Score: 6883.02 (High Card) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:31:17 - game.poker_game - DEBUG - Dealt river: 2h
+2025-03-10 15:31:17 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:17 - game_service - INFO - Broadcast player_action event for game 44992539-b92e-493b-aa78-f81952047f36
+2025-03-10 15:31:17 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:17 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:19 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:19 - game_service - INFO - Processing call action from player 99445f87-1744-4e87-b9fa-3885126b610c in game 44992539-b92e-493b-aa78-f81952047f36
+2025-03-10 15:31:19 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:31:19 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 2d, 6s, 7d, 8s, 2h | Hand Score: 6166 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:31:19 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:19 - game_service - INFO - Broadcast player_action event for game 44992539-b92e-493b-aa78-f81952047f36
+2025-03-10 15:31:19 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:19 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:19 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:19 - game_service - INFO - Advancing game 44992539-b92e-493b-aa78-f81952047f36 to next hand
+2025-03-10 15:31:19 - game.poker_game - DEBUG - Deck reset with 44 cards
+2025-03-10 15:31:19 - game.poker_game - DEBUG - Dealt hole cards to players, 42 cards remaining
+2025-03-10 15:31:19 - game_service - INFO - Retrieved game state for game 44992539-b92e-493b-aa78-f81952047f36, player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:19 - game_service - INFO - Broadcast new_hand event for game 44992539-b92e-493b-aa78-f81952047f36
+2025-03-10 15:31:19 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:19 - auth - DEBUG - Authenticated player: 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:19 - game_service - INFO - Ending game 44992539-b92e-493b-aa78-f81952047f36 for player 99445f87-1744-4e87-b9fa-3885126b610c
+2025-03-10 15:31:19 - statistics_manager - DEBUG - Saved statistics for session: bc82f17b-760f-44a5-8a61-c2e3ec8dee3e
+2025-03-10 15:31:19 - statistics_manager - INFO - Ended session: bc82f17b-760f-44a5-8a61-c2e3ec8dee3e
+2025-03-10 15:31:19 - game.learning_tracker - INFO - Ended learning session: bc82f17b-760f-44a5-8a61-c2e3ec8dee3e
+2025-03-10 15:31:19 - game_service - INFO - Game 44992539-b92e-493b-aa78-f81952047f36 ended. Duration: 74s, Hands: 1, Winner: ai_0
+2025-03-10 15:31:19 - game_service - INFO - Broadcast game_end event for game 44992539-b92e-493b-aa78-f81952047f36
+2025-03-10 15:34:51 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-03-10 15:35:34 - auth - DEBUG - Authenticated player: 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:34 - game_service - INFO - Creating new game 39337fbf-5404-4e8d-beb3-5234a012ab82 for player 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:34 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:35:34 - statistics_manager - INFO - Started new session: b480e875-8659-4f46-9212-8bb6e82ad767
+2025-03-10 15:35:34 - game.learning_tracker - INFO - Started learning session: b480e875-8659-4f46-9212-8bb6e82ad767
+2025-03-10 15:35:34 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-10 15:35:34 - game.poker_game - INFO - PokerGame initialized
+2025-03-10 15:35:34 - auth - DEBUG - Authenticated player: 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:34 - game_service - INFO - Retrieved game state for game 39337fbf-5404-4e8d-beb3-5234a012ab82, player 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:34 - auth - DEBUG - Authenticated player: 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:34 - game_service - INFO - Retrieved game state for game 39337fbf-5404-4e8d-beb3-5234a012ab82, player 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:39 - auth - DEBUG - Authenticated player: 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:39 - game_service - INFO - Processing fold action from player 21d43a83-0286-4ef6-9b70-57d77c869b70 in game 39337fbf-5404-4e8d-beb3-5234a012ab82
+2025-03-10 15:35:39 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:35:39 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5766.69 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:35:39 - game.poker_game - DEBUG - Dealt flop: Qc, Tc, 2c
+2025-03-10 15:35:39 - game_service - INFO - Retrieved game state for game 39337fbf-5404-4e8d-beb3-5234a012ab82, player 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:39 - game_service - INFO - Broadcast player_action event for game 39337fbf-5404-4e8d-beb3-5234a012ab82
+2025-03-10 15:35:39 - auth - DEBUG - Authenticated player: 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:39 - game_service - INFO - Retrieved game state for game 39337fbf-5404-4e8d-beb3-5234a012ab82, player 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:40 - auth - DEBUG - Authenticated player: 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:40 - game_service - INFO - Processing call action from player 21d43a83-0286-4ef6-9b70-57d77c869b70 in game 39337fbf-5404-4e8d-beb3-5234a012ab82
+2025-03-10 15:35:40 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:35:40 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: Qc, Tc, 2c | Hand Score: 5678.31 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:35:40 - game.poker_game - DEBUG - Dealt turn: Jd
+2025-03-10 15:35:40 - game_service - INFO - Retrieved game state for game 39337fbf-5404-4e8d-beb3-5234a012ab82, player 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:40 - game_service - INFO - Broadcast player_action event for game 39337fbf-5404-4e8d-beb3-5234a012ab82
+2025-03-10 15:35:40 - auth - DEBUG - Authenticated player: 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:40 - game_service - INFO - Retrieved game state for game 39337fbf-5404-4e8d-beb3-5234a012ab82, player 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:45 - auth - DEBUG - Authenticated player: 21d43a83-0286-4ef6-9b70-57d77c869b70
+2025-03-10 15:35:45 - game_service - INFO - Processing raise action from player 21d43a83-0286-4ef6-9b70-57d77c869b70 in game 39337fbf-5404-4e8d-beb3-5234a012ab82
+2025-03-10 15:35:45 - game_service - WARNING - Raise amount must be at least 20
+2025-03-10 15:35:45 - game_service - ERROR - Error processing action: Raise amount must be at least 20
+2025-03-10 15:38:03 - api - INFO - Shutting down the Poker Learning App API
+2025-03-10 15:38:03 - config - INFO - Running in development environment
+2025-03-10 15:38:03 - statistics_manager - INFO - Statistics manager initialized
+2025-03-10 15:38:03 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-10 15:38:03 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-10 15:38:03 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:38:03 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:38:03 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:38:03 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-10 15:38:03 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:38:03 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:38:03 - api - INFO - Starting the Poker Learning App API
+2025-03-10 15:38:03 - api - INFO - Initialized WebSocket manager
+2025-03-10 15:38:03 - api - INFO - Scheduled inactive game cleanup
+2025-03-10 15:38:14 - auth - DEBUG - Authenticated player: 788f8834-827f-4cc2-b437-cce0ff6694f0
+2025-03-10 15:38:14 - game_service - INFO - Creating new game 7420f129-42fe-4214-854b-812c493882e3 for player 788f8834-827f-4cc2-b437-cce0ff6694f0
+2025-03-10 15:38:14 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:38:14 - statistics_manager - INFO - Started new session: 6ab20dfe-c951-4053-ac99-f5478fca964d
+2025-03-10 15:38:14 - game.learning_tracker - INFO - Started learning session: 6ab20dfe-c951-4053-ac99-f5478fca964d
+2025-03-10 15:38:14 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-10 15:38:14 - game.poker_game - INFO - PokerGame initialized
+2025-03-10 15:38:14 - auth - DEBUG - Authenticated player: 788f8834-827f-4cc2-b437-cce0ff6694f0
+2025-03-10 15:38:14 - game_service - INFO - Retrieved game state for game 7420f129-42fe-4214-854b-812c493882e3, player 788f8834-827f-4cc2-b437-cce0ff6694f0
+2025-03-10 15:38:14 - auth - DEBUG - Authenticated player: 788f8834-827f-4cc2-b437-cce0ff6694f0
+2025-03-10 15:38:14 - game_service - INFO - Processing call action from player 788f8834-827f-4cc2-b437-cce0ff6694f0 in game 7420f129-42fe-4214-854b-812c493882e3
+2025-03-10 15:38:14 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:38:14 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5539.65 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:38:14 - game.poker_game - DEBUG - Dealt flop: 4s, 7s, 3c
+2025-03-10 15:38:14 - game_service - INFO - Retrieved game state for game 7420f129-42fe-4214-854b-812c493882e3, player 788f8834-827f-4cc2-b437-cce0ff6694f0
+2025-03-10 15:38:14 - game_service - INFO - Broadcast player_action event for game 7420f129-42fe-4214-854b-812c493882e3
+2025-03-10 15:38:14 - auth - DEBUG - Authenticated player: 788f8834-827f-4cc2-b437-cce0ff6694f0
+2025-03-10 15:38:14 - game_service - WARNING - Cannot advance game 7420f129-42fe-4214-854b-812c493882e3 to next hand - not in showdown state
+2025-03-10 15:39:31 - api - INFO - Shutting down the Poker Learning App API
+2025-03-10 15:39:32 - config - INFO - Running in development environment
+2025-03-10 15:39:32 - statistics_manager - INFO - Statistics manager initialized
+2025-03-10 15:39:32 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-10 15:39:32 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-10 15:39:32 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:39:32 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:39:32 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:39:32 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-10 15:39:32 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-10 15:39:32 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-10 15:39:32 - api - INFO - Starting the Poker Learning App API
+2025-03-10 15:39:32 - api - INFO - Initialized WebSocket manager
+2025-03-10 15:39:32 - api - INFO - Scheduled inactive game cleanup
+2025-03-10 15:39:43 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:39:43 - game_service - INFO - Creating new game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246 for player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:39:43 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-10 15:39:43 - statistics_manager - INFO - Started new session: 3098d350-1057-44f6-a6eb-ba2b98311904
+2025-03-10 15:39:43 - game.learning_tracker - INFO - Started learning session: 3098d350-1057-44f6-a6eb-ba2b98311904
+2025-03-10 15:39:43 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-10 15:39:43 - game.poker_game - INFO - PokerGame initialized
+2025-03-10 15:39:43 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:39:43 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:14 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:14 - game_service - INFO - Processing call action from player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1 in game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246
+2025-03-10 15:40:14 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:40:14 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5545.71 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:40:14 - game.poker_game - DEBUG - Dealt flop: 8h, Kc, Qc
+2025-03-10 15:40:14 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:14 - game_service - INFO - Broadcast player_action event for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246
+2025-03-10 15:40:14 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:14 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:22 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:22 - game_service - INFO - Processing call action from player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1 in game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246
+2025-03-10 15:40:22 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:40:22 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Kc, Qc | Hand Score: 5647.98 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:40:22 - game.poker_game - DEBUG - Dealt turn: 3c
+2025-03-10 15:40:22 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:22 - game_service - INFO - Broadcast player_action event for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246
+2025-03-10 15:40:22 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:22 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:26 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:26 - game_service - INFO - Processing call action from player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1 in game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246
+2025-03-10 15:40:26 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:40:26 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Kc, Qc, 3c | Hand Score: 6075.28 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:40:26 - game.poker_game - DEBUG - Dealt river: Th
+2025-03-10 15:40:26 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:26 - game_service - INFO - Broadcast player_action event for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246
+2025-03-10 15:40:26 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:26 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:27 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:27 - game_service - INFO - Processing call action from player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1 in game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246
+2025-03-10 15:40:27 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-10 15:40:27 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Kc, Qc, 3c, Th | Hand Score: 6725 (High Card) | Pot: 0 | SPR: 1000.0
+2025-03-10 15:40:27 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:27 - game_service - INFO - Broadcast player_action event for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246
+2025-03-10 15:40:27 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:27 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:27 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:27 - game_service - INFO - Advancing game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246 to next hand
+2025-03-10 15:40:27 - game.poker_game - DEBUG - Deck reset with 44 cards
+2025-03-10 15:40:27 - game.poker_game - DEBUG - Dealt hole cards to players, 40 cards remaining
+2025-03-10 15:40:27 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:27 - game_service - INFO - Broadcast new_hand event for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246
+2025-03-10 15:40:27 - auth - DEBUG - Authenticated player: f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:40:27 - game_service - INFO - Retrieved game state for game 5b3cea3e-b3f8-4ff1-876f-871c4fcac246, player f99f1cd8-80b0-4f27-b0a0-443dfb33f5a1
+2025-03-10 15:44:32 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-03-10 15:49:32 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-03-10 15:54:32 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-03-10 15:59:32 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-03-10 16:02:19 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 10:35:49 - config - INFO - Running in development environment
+2025-03-11 10:35:49 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 10:35:49 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 10:35:49 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 10:35:49 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 10:35:49 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 10:35:49 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 10:35:49 - config - INFO - Running in development environment
+2025-03-11 10:35:49 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 10:35:49 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 10:35:49 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 10:35:49 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 10:35:49 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 10:35:49 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 10:35:49 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 10:35:49 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 10:35:49 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 10:35:49 - api - INFO - Starting the Poker Learning App API
+2025-03-11 10:35:49 - api - INFO - Initialized WebSocket manager
+2025-03-11 10:35:49 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 10:40:49 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-03-11 10:42:43 - auth - DEBUG - Authenticated player: f5a64b29-a63d-41b5-a3d2-1b13fc4469ba
+2025-03-11 10:42:43 - game_service - INFO - Creating new game 6aefba1d-dc83-4eae-928e-5f66474475aa for player f5a64b29-a63d-41b5-a3d2-1b13fc4469ba
+2025-03-11 10:42:43 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 10:42:43 - statistics_manager - INFO - Started new session: 04d3bc09-86ff-4ee9-8466-9ff39c2635c6
+2025-03-11 10:42:43 - game.learning_tracker - INFO - Started learning session: 04d3bc09-86ff-4ee9-8466-9ff39c2635c6
+2025-03-11 10:42:43 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-11 10:42:43 - game.poker_game - INFO - PokerGame initialized
+2025-03-11 10:44:11 - auth - DEBUG - Authenticated player: f5a64b29-a63d-41b5-a3d2-1b13fc4469ba
+2025-03-11 10:44:11 - game_service - INFO - Retrieved game state for game 6aefba1d-dc83-4eae-928e-5f66474475aa, player f5a64b29-a63d-41b5-a3d2-1b13fc4469ba
+2025-03-11 10:45:49 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-03-11 10:48:37 - auth - DEBUG - Authenticated player: f5a64b29-a63d-41b5-a3d2-1b13fc4469ba
+2025-03-11 10:48:37 - game_service - INFO - Ending game 6aefba1d-dc83-4eae-928e-5f66474475aa for player f5a64b29-a63d-41b5-a3d2-1b13fc4469ba
+2025-03-11 10:48:37 - statistics_manager - DEBUG - Saved statistics for session: 04d3bc09-86ff-4ee9-8466-9ff39c2635c6
+2025-03-11 10:48:37 - statistics_manager - INFO - Ended session: 04d3bc09-86ff-4ee9-8466-9ff39c2635c6
+2025-03-11 10:48:37 - game.learning_tracker - INFO - Ended learning session: 04d3bc09-86ff-4ee9-8466-9ff39c2635c6
+2025-03-11 10:48:37 - game_service - INFO - Game 6aefba1d-dc83-4eae-928e-5f66474475aa ended. Duration: 354s, Hands: 0, Winner: f5a64b29-a63d-41b5-a3d2-1b13fc4469ba
+2025-03-11 10:48:37 - game_service - INFO - Broadcast game_end event for game 6aefba1d-dc83-4eae-928e-5f66474475aa
+2025-03-11 10:50:49 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-03-11 10:51:18 - auth - DEBUG - Authenticated player: 0d3f3092-0dd2-431a-ab1c-e62caa2c62d0
+2025-03-11 10:51:18 - game_service - INFO - Creating new game 04bf9895-31d2-4698-8ef2-e38362b3d243 for player 0d3f3092-0dd2-431a-ab1c-e62caa2c62d0
+2025-03-11 10:51:18 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 10:51:18 - statistics_manager - INFO - Started new session: 2a01e090-594f-45e2-896c-6891627e51c6
+2025-03-11 10:51:18 - game.learning_tracker - INFO - Started learning session: 2a01e090-594f-45e2-896c-6891627e51c6
+2025-03-11 10:51:18 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-11 10:51:18 - game.poker_game - INFO - PokerGame initialized
+2025-03-11 10:52:58 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 10:58:52 - config - INFO - Running in development environment
+2025-03-11 10:58:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 10:58:52 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 10:58:52 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 10:58:52 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 10:58:52 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 10:58:52 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 10:58:52 - config - INFO - Running in development environment
+2025-03-11 10:58:52 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 10:58:52 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 10:58:52 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 10:58:52 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 10:58:52 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 10:58:52 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 10:58:52 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 10:58:52 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 10:58:52 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 10:58:52 - api - INFO - Starting the Poker Learning App API
+2025-03-11 10:58:52 - api - INFO - Initialized WebSocket manager
+2025-03-11 10:58:52 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 11:00:52 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 11:01:14 - config - INFO - Running in development environment
+2025-03-11 11:01:15 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:01:15 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:01:15 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:01:15 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:01:15 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:01:15 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:01:15 - config - INFO - Running in development environment
+2025-03-11 11:01:15 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:01:15 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:01:15 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:01:15 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:01:15 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:01:15 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:01:15 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 11:01:15 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:01:15 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:01:15 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:01:15 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:01:15 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 11:01:35 - auth - DEBUG - Authenticated player: 8a25c693-8392-4ad7-91fc-6e44489337f5
+2025-03-11 11:01:35 - game_service - INFO - Creating new game 2ff89773-3f8e-4040-aec3-b0d350e30d2e for player 8a25c693-8392-4ad7-91fc-6e44489337f5
+2025-03-11 11:01:35 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:01:35 - statistics_manager - INFO - Started new session: 1a132674-0493-4ff3-a038-631d8cbeab5d
+2025-03-11 11:01:35 - game.learning_tracker - INFO - Started learning session: 1a132674-0493-4ff3-a038-631d8cbeab5d
+2025-03-11 11:01:35 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-11 11:01:35 - game.poker_game - INFO - PokerGame initialized
+2025-03-11 11:01:35 - auth - DEBUG - Authenticated player: 8a25c693-8392-4ad7-91fc-6e44489337f5
+2025-03-11 11:01:35 - game_service - INFO - Retrieved game state for game 2ff89773-3f8e-4040-aec3-b0d350e30d2e, player 8a25c693-8392-4ad7-91fc-6e44489337f5
+2025-03-11 11:01:35 - auth - DEBUG - Authenticated player: 8a25c693-8392-4ad7-91fc-6e44489337f5
+2025-03-11 11:01:35 - game_service - INFO - Processing call action from player 8a25c693-8392-4ad7-91fc-6e44489337f5 in game 2ff89773-3f8e-4040-aec3-b0d350e30d2e
+2025-03-11 11:01:35 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-11 11:01:35 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5666.24 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:01:35 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1000.0
+2025-03-11 11:01:35 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5558.06 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:01:35 - ai.manager - DEBUG - Making decision for RiskTaker AI with SPR 1000.0
+2025-03-11 11:01:35 - ai.manager - ERROR - Unknown personality type: RiskTaker
+2025-03-11 11:01:35 - game_service - ERROR - Error processing action: Unknown personality type: RiskTaker
+2025-03-11 11:01:49 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 11:01:49 - config - INFO - Running in development environment
+2025-03-11 11:01:49 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:01:49 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:01:49 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:01:49 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:01:49 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:01:49 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:01:49 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 11:01:49 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:01:49 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:01:49 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:01:49 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:01:49 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Creating new game 88f585b6-1041-4b42-9f81-e9e5c0e02fed for player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:01:52 - statistics_manager - INFO - Started new session: 561e4113-68c8-453d-bc3b-0207f07f7a5e
+2025-03-11 11:01:52 - game.learning_tracker - INFO - Started learning session: 561e4113-68c8-453d-bc3b-0207f07f7a5e
+2025-03-11 11:01:52 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-11 11:01:52 - game.poker_game - INFO - PokerGame initialized
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5356.96 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1000.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5561.33 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1000.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5811.13 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 50.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5471.67 (Pair) | Pot: 20 | SPR: 50.0
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 16.666666666666668
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5622.65 (Pair) | Pot: 60 | SPR: 16.666666666666668
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 12.5
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5482.5 (Pair) | Pot: 80 | SPR: 12.5
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 9.8
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5573.72 (Pair) | Pot: 100 | SPR: 9.8
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 7.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5677.16 (Pair) | Pot: 140 | SPR: 7.0
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 4.454545454545454
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5745.11 (Pair) | Pot: 220 | SPR: 4.454545454545454
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 3.769230769230769
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5701.16 (Pair) | Pot: 260 | SPR: 3.769230769230769
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.1333333333333333
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community:  | Hand Score: 5703.74 (Pair) | Pot: 300 | SPR: 3.1333333333333333
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 3.1333333333333333
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: raise | Hand:  | Community:  | Hand Score: 5509.71 (Pair) | Pot: 300 | SPR: 3.1333333333333333
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 2.0434782608695654
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5732.78 (Pair) | Pot: 460 | SPR: 2.0434782608695654
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.7407407407407407
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5598.67 (Pair) | Pot: 540 | SPR: 1.7407407407407407
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.5161290322580645
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5641.04 (Pair) | Pot: 620 | SPR: 1.5161290322580645
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 1.1025641025641026
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5580.78 (Pair) | Pot: 780 | SPR: 1.1025641025641026
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.9148936170212766
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5880.96 (Pair) | Pot: 940 | SPR: 0.9148936170212766
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.8431372549019608
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5774.03 (Pair) | Pot: 1020 | SPR: 0.8431372549019608
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.7090909090909091
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5481.45 (Pair) | Pot: 1100 | SPR: 0.7090909090909091
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.582089552238806
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5676.59 (Pair) | Pot: 1340 | SPR: 0.582089552238806
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.42857142857142855
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5314.27 (Pair) | Pot: 1820 | SPR: 0.42857142857142855
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.3786407766990291
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5732.22 (Pair) | Pot: 2060 | SPR: 0.3786407766990291
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.23478260869565218
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5674.75 (Pair) | Pot: 2300 | SPR: 0.23478260869565218
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.19424460431654678
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5473.51 (Pair) | Pot: 2780 | SPR: 0.19424460431654678
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.1443850267379679
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5557.27 (Pair) | Pot: 3740 | SPR: 0.1443850267379679
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12796208530805686
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5555.58 (Pair) | Pot: 4220 | SPR: 0.12796208530805686
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.01276595744680851
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5681.7 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.01276595744680851
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5880.62 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:01:52 - game.poker_game - DEBUG - Dealt flop: Jc, 9s, Kc
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01276595744680851
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5565.91 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01276595744680851
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5378.83 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.01276595744680851
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5473.33 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.012711864406779662
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5779.81 (Pair) | Pot: 4720 | SPR: 0.012711864406779662
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.012605042016806723
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5469.34 (Pair) | Pot: 4760 | SPR: 0.012605042016806723
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.012552301255230125
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5605.25 (Pair) | Pot: 4780 | SPR: 0.012552301255230125
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.008333333333333333
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5496.19 (Pair) | Pot: 4800 | SPR: 0.008333333333333333
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.008264462809917356
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5653.04 (Pair) | Pot: 4840 | SPR: 0.008264462809917356
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.008130081300813009
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5530.97 (Pair) | Pot: 4920 | SPR: 0.008130081300813009
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.008064516129032258
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5604.45 (Pair) | Pot: 4960 | SPR: 0.008064516129032258
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5753.93 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: Jc, 9s, Kc | Hand Score: 5614.32 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:01:52 - game.poker_game - DEBUG - Dealt turn: Ah
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: Jc, 9s, Kc, Ah | Hand Score: 5688.64 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: Jc, 9s, Kc, Ah | Hand Score: 5570.38 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community: Jc, 9s, Kc, Ah | Hand Score: 5756.7 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: Jc, 9s, Kc, Ah | Hand Score: 5492.12 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:01:52 - game.poker_game - DEBUG - Dealt river: 2s
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Processing call action from player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4 in game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: Jc, 9s, Kc, Ah, 2s | Hand Score: 6244 (High Card) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: Jc, 9s, Kc, Ah, 2s | Hand Score: 6244 (High Card) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community: Jc, 9s, Kc, Ah, 2s | Hand Score: 6244 (High Card) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0
+2025-03-11 11:01:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: Jc, 9s, Kc, Ah, 2s | Hand Score: 6244 (High Card) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Broadcast player_action event for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed
+2025-03-11 11:01:52 - auth - DEBUG - Authenticated player: 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:01:52 - game_service - INFO - Retrieved game state for game 88f585b6-1041-4b42-9f81-e9e5c0e02fed, player 0d3bd820-2fb8-4d9b-bcb5-6a174102b1e4
+2025-03-11 11:03:24 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 11:05:50 - config - INFO - Running in development environment
+2025-03-11 11:05:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:05:50 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:05:50 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:05:50 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:05:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:05:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:05:50 - config - INFO - Running in development environment
+2025-03-11 11:05:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:05:50 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:05:50 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:05:50 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:05:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:05:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:05:50 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 11:05:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:05:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:05:50 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:05:50 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:05:50 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Creating new game 2f424850-d717-4461-bc1c-42ff0f454ff0 for player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:05:52 - statistics_manager - INFO - Started new session: f2a9da6a-f97a-448f-9a18-2e95adf22a06
+2025-03-11 11:05:52 - game.learning_tracker - INFO - Started learning session: f2a9da6a-f97a-448f-9a18-2e95adf22a06
+2025-03-11 11:05:52 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-11 11:05:52 - game.poker_game - INFO - PokerGame initialized
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5689.68 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1000.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5767.91 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1000.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5697.7 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 50.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5574.93 (Pair) | Pot: 20 | SPR: 50.0
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 16.666666666666668
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5677.29 (Pair) | Pot: 60 | SPR: 16.666666666666668
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 12.5
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5714.48 (Pair) | Pot: 80 | SPR: 12.5
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 9.8
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5864.72 (Pair) | Pot: 100 | SPR: 9.8
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 7.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5710.89 (Pair) | Pot: 140 | SPR: 7.0
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 4.454545454545454
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5575.84 (Pair) | Pot: 220 | SPR: 4.454545454545454
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 3.769230769230769
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5852.76 (Pair) | Pot: 260 | SPR: 3.769230769230769
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.1333333333333333
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community:  | Hand Score: 5623.9 (Pair) | Pot: 300 | SPR: 3.1333333333333333
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 3.1333333333333333
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: raise | Hand:  | Community:  | Hand Score: 5450.36 (Pair) | Pot: 300 | SPR: 3.1333333333333333
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 2.0434782608695654
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5844.94 (Pair) | Pot: 460 | SPR: 2.0434782608695654
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.7407407407407407
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5702.99 (Pair) | Pot: 540 | SPR: 1.7407407407407407
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.5161290322580645
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5656.49 (Pair) | Pot: 620 | SPR: 1.5161290322580645
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 1.1025641025641026
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5527.08 (Pair) | Pot: 780 | SPR: 1.1025641025641026
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.9148936170212766
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5775.5 (Pair) | Pot: 940 | SPR: 0.9148936170212766
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.8431372549019608
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5614.71 (Pair) | Pot: 1020 | SPR: 0.8431372549019608
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.7090909090909091
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5600.0 (Pair) | Pot: 1100 | SPR: 0.7090909090909091
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.582089552238806
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5653.05 (Pair) | Pot: 1340 | SPR: 0.582089552238806
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.42857142857142855
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5730.21 (Pair) | Pot: 1820 | SPR: 0.42857142857142855
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.3786407766990291
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5760.94 (Pair) | Pot: 2060 | SPR: 0.3786407766990291
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.23478260869565218
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5577.02 (Pair) | Pot: 2300 | SPR: 0.23478260869565218
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.19424460431654678
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5682.99 (Pair) | Pot: 2780 | SPR: 0.19424460431654678
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.1443850267379679
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5560.06 (Pair) | Pot: 3740 | SPR: 0.1443850267379679
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12796208530805686
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5650.96 (Pair) | Pot: 4220 | SPR: 0.12796208530805686
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.01276595744680851
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5702.71 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.01276595744680851
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5563.29 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:05:52 - game.poker_game - DEBUG - Dealt flop: 5d, 9c, Js
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01276595744680851
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 5d, 9c, Js | Hand Score: 6112.54 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01276595744680851
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 5d, 9c, Js | Hand Score: 6033.05 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.01276595744680851
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 5d, 9c, Js | Hand Score: 6001.2 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.012711864406779662
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 5d, 9c, Js | Hand Score: 6129.54 (Pair) | Pot: 4720 | SPR: 0.012711864406779662
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.012605042016806723
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 5d, 9c, Js | Hand Score: 5955.68 (Pair) | Pot: 4760 | SPR: 0.012605042016806723
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.012552301255230125
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 5d, 9c, Js | Hand Score: 6116.13 (Pair) | Pot: 4780 | SPR: 0.012552301255230125
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.008333333333333333
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 5d, 9c, Js | Hand Score: 6220.1 (High Card) | Pot: 4800 | SPR: 0.008333333333333333
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.008264462809917356
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 5d, 9c, Js | Hand Score: 5752.12 (Pair) | Pot: 4840 | SPR: 0.008264462809917356
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.008130081300813009
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 5d, 9c, Js | Hand Score: 5835.43 (Pair) | Pot: 4920 | SPR: 0.008130081300813009
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.008064516129032258
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 5d, 9c, Js | Hand Score: 6214.48 (High Card) | Pot: 4960 | SPR: 0.008064516129032258
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community: 5d, 9c, Js | Hand Score: 6084.82 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 5d, 9c, Js | Hand Score: 6027.12 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:05:52 - game.poker_game - DEBUG - Dealt turn: 2c
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 5d, 9c, Js, 2c | Hand Score: 6580.99 (High Card) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 5d, 9c, Js, 2c | Hand Score: 6632.52 (High Card) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community: 5d, 9c, Js, 2c | Hand Score: 6669.49 (High Card) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 5d, 9c, Js, 2c | Hand Score: 6707.04 (High Card) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:05:52 - game.poker_game - DEBUG - Dealt river: 2h
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Processing call action from player 4e4fc973-70e4-4396-bc4c-d537a558d7e4 in game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 5d, 9c, Js, 2c, 2h | Hand Score: 6112 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 5d, 9c, Js, 2c, 2h | Hand Score: 6112 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community: 5d, 9c, Js, 2c, 2h | Hand Score: 6112 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0
+2025-03-11 11:05:52 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 5d, 9c, Js, 2c, 2h | Hand Score: 6112 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Broadcast player_action event for game 2f424850-d717-4461-bc1c-42ff0f454ff0
+2025-03-11 11:05:52 - auth - DEBUG - Authenticated player: 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:05:52 - game_service - INFO - Retrieved game state for game 2f424850-d717-4461-bc1c-42ff0f454ff0, player 4e4fc973-70e4-4396-bc4c-d537a558d7e4
+2025-03-11 11:06:19 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 11:08:50 - config - INFO - Running in development environment
+2025-03-11 11:08:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:08:50 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:08:50 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:08:50 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:08:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:08:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:08:50 - config - INFO - Running in development environment
+2025-03-11 11:08:50 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:08:50 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:08:50 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:08:50 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:08:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:08:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:08:50 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 11:08:50 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:08:50 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:08:50 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:08:50 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:08:50 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 11:08:56 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 11:08:56 - config - INFO - Running in development environment
+2025-03-11 11:08:56 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:08:56 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:08:56 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:08:56 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:08:56 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:08:56 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:08:56 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 11:08:56 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:08:56 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:08:56 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:08:56 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:08:56 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 11:09:27 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 11:09:27 - config - INFO - Running in development environment
+2025-03-11 11:09:27 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:09:27 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:09:27 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:09:27 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:09:27 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:27 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:09:27 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 11:09:27 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:27 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:09:27 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:09:27 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:09:27 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 11:09:34 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 11:09:34 - config - INFO - Running in development environment
+2025-03-11 11:09:34 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:09:34 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:09:34 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:09:34 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:09:34 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:34 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:09:34 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 11:09:34 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:34 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:09:34 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:09:34 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:09:34 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Creating new game 866500d2-27a5-4ffd-b071-e60a5e987f9b for player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:09:36 - statistics_manager - INFO - Started new session: d7580aae-1a9e-4503-92fe-4a4f7b6cddfe
+2025-03-11 11:09:36 - game.learning_tracker - INFO - Started learning session: d7580aae-1a9e-4503-92fe-4a4f7b6cddfe
+2025-03-11 11:09:36 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-11 11:09:36 - game.poker_game - INFO - PokerGame initialized
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5829.92 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1000.0
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5848.96 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1000.0
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5715.32 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 50.0
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5732.8 (Pair) | Pot: 20 | SPR: 50.0
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 16.666666666666668
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5700.38 (Pair) | Pot: 60 | SPR: 16.666666666666668
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 12.5
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5482.64 (Pair) | Pot: 80 | SPR: 12.5
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 9.8
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5648.01 (Pair) | Pot: 100 | SPR: 9.8
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 7.0
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5493.08 (Pair) | Pot: 140 | SPR: 7.0
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 4.454545454545454
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5625.49 (Pair) | Pot: 220 | SPR: 4.454545454545454
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 3.769230769230769
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5307.25 (Pair) | Pot: 260 | SPR: 3.769230769230769
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.1333333333333333
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5262.4 (Pair) | Pot: 300 | SPR: 3.1333333333333333
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 2.473684210526316
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5795.55 (Pair) | Pot: 380 | SPR: 2.473684210526316
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1.7407407407407407
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5513.01 (Pair) | Pot: 540 | SPR: 1.7407407407407407
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.5161290322580645
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5849.01 (Pair) | Pot: 620 | SPR: 1.5161290322580645
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.2285714285714286
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5747.9 (Pair) | Pot: 700 | SPR: 1.2285714285714286
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 1.0
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5509.03 (Pair) | Pot: 860 | SPR: 1.0
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.7288135593220338
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5507.91 (Pair) | Pot: 1180 | SPR: 0.7288135593220338
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.6417910447761194
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5508.27 (Pair) | Pot: 1340 | SPR: 0.6417910447761194
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.4666666666666667
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5558.09 (Pair) | Pot: 1500 | SPR: 0.4666666666666667
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.38461538461538464
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5634.85 (Pair) | Pot: 1820 | SPR: 0.38461538461538464
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:36 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.2845528455284553
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5797.83 (Pair) | Pot: 2460 | SPR: 0.2845528455284553
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.2517985611510791
+2025-03-11 11:09:36 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5554.49 (Pair) | Pot: 2780 | SPR: 0.2517985611510791
+2025-03-11 11:09:36 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.12258064516129032
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5489.56 (Pair) | Pot: 3100 | SPR: 0.12258064516129032
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.12258064516129032
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5447.47 (Pair) | Pot: 3100 | SPR: 0.12258064516129032
+2025-03-11 11:09:37 - game.poker_game - DEBUG - Dealt flop: 8h, Qd, Ac
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.12258064516129032
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5438.12 (Pair) | Pot: 3100 | SPR: 0.12258064516129032
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12258064516129032
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5307.89 (Pair) | Pot: 3100 | SPR: 0.12258064516129032
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.12258064516129032
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5518.01 (Pair) | Pot: 3100 | SPR: 0.12258064516129032
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.12179487179487179
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5518.39 (Pair) | Pot: 3120 | SPR: 0.12179487179487179
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.12025316455696203
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5183.34 (Pair) | Pot: 3160 | SPR: 0.12025316455696203
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.11949685534591195
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5393.92 (Pair) | Pot: 3180 | SPR: 0.11949685534591195
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.1125
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5481.72 (Pair) | Pot: 3200 | SPR: 0.1125
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.1111111111111111
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5388.48 (Pair) | Pot: 3240 | SPR: 0.1111111111111111
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.10843373493975904
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5297.04 (Pair) | Pot: 3320 | SPR: 0.10843373493975904
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.10714285714285714
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5376.69 (Pair) | Pot: 3360 | SPR: 0.10714285714285714
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.09411764705882353
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5350.13 (Pair) | Pot: 3400 | SPR: 0.09411764705882353
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.09195402298850575
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5519.56 (Pair) | Pot: 3480 | SPR: 0.09195402298850575
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.08791208791208792
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5079.2 (Pair) | Pot: 3640 | SPR: 0.08791208791208792
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.08602150537634409
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5434.62 (Pair) | Pot: 3720 | SPR: 0.08602150537634409
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.06315789473684211
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5423.95 (Pair) | Pot: 3800 | SPR: 0.06315789473684211
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.06060606060606061
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5344.75 (Pair) | Pot: 3960 | SPR: 0.06060606060606061
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.056074766355140186
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5502.12 (Pair) | Pot: 4280 | SPR: 0.056074766355140186
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.05405405405405406
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5344.1 (Pair) | Pot: 4440 | SPR: 0.05405405405405406
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.017391304347826087
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5562.6 (Pair) | Pot: 4600 | SPR: 0.017391304347826087
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.017391304347826087
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8h, Qd, Ac | Hand Score: 5379.08 (Pair) | Pot: 4600 | SPR: 0.017391304347826087
+2025-03-11 11:09:37 - game.poker_game - DEBUG - Dealt turn: Kh
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.017391304347826087
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5600.96 (Pair) | Pot: 4600 | SPR: 0.017391304347826087
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.017391304347826087
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5773.99 (Pair) | Pot: 4600 | SPR: 0.017391304347826087
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.017391304347826087
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5653.71 (Pair) | Pot: 4600 | SPR: 0.017391304347826087
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.017316017316017316
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5527.71 (Pair) | Pot: 4620 | SPR: 0.017316017316017316
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.017167381974248927
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5623.85 (Pair) | Pot: 4660 | SPR: 0.017167381974248927
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.017094017094017096
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5754.71 (Pair) | Pot: 4680 | SPR: 0.017094017094017096
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.01276595744680851
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5682.23 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.012658227848101266
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5631.85 (Pair) | Pot: 4740 | SPR: 0.012658227848101266
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.012448132780082987
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5630.06 (Pair) | Pot: 4820 | SPR: 0.012448132780082987
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.012345679012345678
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5519.22 (Pair) | Pot: 4860 | SPR: 0.012345679012345678
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.004081632653061225
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5476.57 (Pair) | Pot: 4900 | SPR: 0.004081632653061225
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.004081632653061225
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh | Hand Score: 5632.06 (Pair) | Pot: 4900 | SPR: 0.004081632653061225
+2025-03-11 11:09:37 - game.poker_game - DEBUG - Dealt river: Ts
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.004081632653061225
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh, Ts | Hand Score: 6195 (High Card) | Pot: 4900 | SPR: 0.004081632653061225
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.004081632653061225
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh, Ts | Hand Score: 6195 (High Card) | Pot: 4900 | SPR: 0.004081632653061225
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.004081632653061225
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8h, Qd, Ac, Kh, Ts | Hand Score: 6195 (High Card) | Pot: 4900 | SPR: 0.004081632653061225
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0040650406504065045
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh, Ts | Hand Score: 6195 (High Card) | Pot: 4920 | SPR: 0.0040650406504065045
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Processing call action from player 9ee2be1a-40e3-40fa-ba61-b556d668e968 in game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.004032258064516129
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh, Ts | Hand Score: 6195 (High Card) | Pot: 4960 | SPR: 0.004032258064516129
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.004016064257028112
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh, Ts | Hand Score: 6195 (High Card) | Pot: 4980 | SPR: 0.004016064257028112
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh, Ts | Hand Score: 6195 (High Card) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:09:37 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0
+2025-03-11 11:09:37 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8h, Qd, Ac, Kh, Ts | Hand Score: 6195 (High Card) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Broadcast player_action event for game 866500d2-27a5-4ffd-b071-e60a5e987f9b
+2025-03-11 11:09:37 - auth - DEBUG - Authenticated player: 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:37 - game_service - INFO - Retrieved game state for game 866500d2-27a5-4ffd-b071-e60a5e987f9b, player 9ee2be1a-40e3-40fa-ba61-b556d668e968
+2025-03-11 11:09:55 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 11:09:56 - config - INFO - Running in development environment
+2025-03-11 11:09:56 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:09:56 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:09:56 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:09:56 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:09:56 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:56 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:09:56 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 11:09:56 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:09:56 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:09:56 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:09:56 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:09:56 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 11:10:09 - api - INFO - Shutting down the Poker Learning App API
+2025-03-11 11:10:09 - config - INFO - Running in development environment
+2025-03-11 11:10:09 - statistics_manager - INFO - Statistics manager initialized
+2025-03-11 11:10:09 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-11 11:10:09 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-11 11:10:09 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:10:09 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:10:09 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:10:09 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-11 11:10:09 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-11 11:10:09 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-11 11:10:09 - api - INFO - Starting the Poker Learning App API
+2025-03-11 11:10:09 - api - INFO - Initialized WebSocket manager
+2025-03-11 11:10:09 - api - INFO - Scheduled inactive game cleanup
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Creating new game fd05f35d-2687-4afe-af27-c6d0803d891b for player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-11 11:10:12 - statistics_manager - INFO - Started new session: 7ed0019c-4dc4-480c-be26-3c4dcc9ae6d1
+2025-03-11 11:10:12 - game.learning_tracker - INFO - Started learning session: 7ed0019c-4dc4-480c-be26-3c4dcc9ae6d1
+2025-03-11 11:10:12 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-11 11:10:12 - game.poker_game - INFO - PokerGame initialized
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1000.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5712.34 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1000.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5638.36 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1000.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5516.12 (Pair) | Pot: 0 | SPR: 1000.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 50.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5736.88 (Pair) | Pot: 20 | SPR: 50.0
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 16.666666666666668
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5529.51 (Pair) | Pot: 60 | SPR: 16.666666666666668
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 12.5
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5719.76 (Pair) | Pot: 80 | SPR: 12.5
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 9.8
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5431.68 (Pair) | Pot: 100 | SPR: 9.8
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 7.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5547.16 (Pair) | Pot: 140 | SPR: 7.0
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 4.454545454545454
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5478.18 (Pair) | Pot: 220 | SPR: 4.454545454545454
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 3.769230769230769
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5383.23 (Pair) | Pot: 260 | SPR: 3.769230769230769
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.1333333333333333
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community:  | Hand Score: 5589.13 (Pair) | Pot: 300 | SPR: 3.1333333333333333
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 3.1333333333333333
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: raise | Hand:  | Community:  | Hand Score: 5577.17 (Pair) | Pot: 300 | SPR: 3.1333333333333333
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 2.0434782608695654
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5612.68 (Pair) | Pot: 460 | SPR: 2.0434782608695654
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.7407407407407407
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5709.83 (Pair) | Pot: 540 | SPR: 1.7407407407407407
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.5161290322580645
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5716.69 (Pair) | Pot: 620 | SPR: 1.5161290322580645
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 1.1025641025641026
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5485.29 (Pair) | Pot: 780 | SPR: 1.1025641025641026
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.9148936170212766
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5496.4 (Pair) | Pot: 940 | SPR: 0.9148936170212766
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.8431372549019608
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5497.84 (Pair) | Pot: 1020 | SPR: 0.8431372549019608
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.7090909090909091
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5763.74 (Pair) | Pot: 1100 | SPR: 0.7090909090909091
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.582089552238806
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5591.54 (Pair) | Pot: 1340 | SPR: 0.582089552238806
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.42857142857142855
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5539.33 (Pair) | Pot: 1820 | SPR: 0.42857142857142855
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.3786407766990291
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5526.36 (Pair) | Pot: 2060 | SPR: 0.3786407766990291
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.23478260869565218
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5415.28 (Pair) | Pot: 2300 | SPR: 0.23478260869565218
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.19424460431654678
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5462.74 (Pair) | Pot: 2780 | SPR: 0.19424460431654678
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.1443850267379679
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community:  | Hand Score: 5419.51 (Pair) | Pot: 3740 | SPR: 0.1443850267379679
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12796208530805686
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community:  | Hand Score: 5567.06 (Pair) | Pot: 4220 | SPR: 0.12796208530805686
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.01276595744680851
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community:  | Hand Score: 5499.86 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.01276595744680851
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community:  | Hand Score: 5389.54 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:10:12 - game.poker_game - DEBUG - Dealt flop: 8s, 4h, 4s
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01276595744680851
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8s, 4h, 4s | Hand Score: 5028.99 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01276595744680851
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8s, 4h, 4s | Hand Score: 4760.8 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.01276595744680851
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8s, 4h, 4s | Hand Score: 4800.16 (Pair) | Pot: 4700 | SPR: 0.01276595744680851
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.012711864406779662
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8s, 4h, 4s | Hand Score: 4644.92 (Pair) | Pot: 4720 | SPR: 0.012711864406779662
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.012605042016806723
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8s, 4h, 4s | Hand Score: 4978.61 (Pair) | Pot: 4760 | SPR: 0.012605042016806723
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.012552301255230125
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8s, 4h, 4s | Hand Score: 4638.22 (Pair) | Pot: 4780 | SPR: 0.012552301255230125
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.008333333333333333
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand:  | Community: 8s, 4h, 4s | Hand Score: 5129.51 (Pair) | Pot: 4800 | SPR: 0.008333333333333333
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.008264462809917356
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8s, 4h, 4s | Hand Score: 4646.84 (Pair) | Pot: 4840 | SPR: 0.008264462809917356
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.008130081300813009
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8s, 4h, 4s | Hand Score: 4993.33 (Pair) | Pot: 4920 | SPR: 0.008130081300813009
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.008064516129032258
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8s, 4h, 4s | Hand Score: 4986.86 (Pair) | Pot: 4960 | SPR: 0.008064516129032258
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community: 8s, 4h, 4s | Hand Score: 4782.5 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8s, 4h, 4s | Hand Score: 4864.81 (Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:10:12 - game.poker_game - DEBUG - Dealt turn: 8h
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8s, 4h, 4s, 8h | Hand Score: 2989.59 (Two Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8s, 4h, 4s, 8h | Hand Score: 2789.7 (Two Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community: 8s, 4h, 4s, 8h | Hand Score: 3019.02 (Two Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8s, 4h, 4s, 8h | Hand Score: 2788.33 (Two Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:10:12 - game.poker_game - DEBUG - Dealt river: 9c
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Processing call action from player d286da31-75a3-4124-ae13-1c1dfcbf4e33 in game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Conservative Decision: call | Hand:  | Community: 8s, 4h, 4s, 8h, 9c | Hand Score: 3133 (Two Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand:  | Community: 8s, 4h, 4s, 8h, 9c | Hand Score: 3133 (Two Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand:  | Community: 8s, 4h, 4s, 8h, 9c | Hand Score: 3133 (Two Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 0.0
+2025-03-11 11:10:12 - ai.manager - DEBUG - AI Probability-Based Decision: call | Hand:  | Community: 8s, 4h, 4s, 8h, 9c | Hand Score: 3133 (Two Pair) | Pot: 5000 | SPR: 0.0
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Broadcast player_action event for game fd05f35d-2687-4afe-af27-c6d0803d891b
+2025-03-11 11:10:12 - auth - DEBUG - Authenticated player: d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:12 - game_service - INFO - Retrieved game state for game fd05f35d-2687-4afe-af27-c6d0803d891b, player d286da31-75a3-4124-ae13-1c1dfcbf4e33
+2025-03-11 11:10:37 - api - INFO - Shutting down the Poker Learning App API
