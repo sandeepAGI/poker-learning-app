@@ -1,4 +1,5 @@
 import random
+import itertools
 from typing import List, Tuple
 from treys import Evaluator, Card
 
@@ -57,3 +58,68 @@ class HandEvaluator:
         avg_rank_str = self.evaluator.class_to_string(avg_rank)
 
         return avg_score, avg_rank_str
+        
+    def get_best_hand(self, hole_cards: List[str], community_cards: List[str]) -> List[str]:
+        """
+        Determines the best 5-card poker hand from hole cards and community cards.
+        Used only when a showdown occurs between multiple players.
+        
+        Args:
+            hole_cards: Player's private cards (2 cards)
+            community_cards: Shared community cards
+            
+        Returns:
+            List of 5 card strings representing the best hand.
+            If not enough cards are available, returns the available cards.
+        """
+        # Handle edge cases: missing hole cards or community cards
+        if not hole_cards:
+            return []
+        
+        # Convert cards to treys format
+        hole = [Card.new(card.replace("10", "T")) for card in hole_cards]
+        
+        # If there are fewer than 3 community cards (e.g., everyone folded pre-flop),
+        # return just the hole cards - the winning condition was based on position not hand strength
+        if not community_cards or len(community_cards) < 3:
+            return hole_cards
+        
+        # Convert community cards
+        board = [Card.new(card.replace("10", "T")) for card in community_cards]
+        
+        # Get all cards (hole + community)
+        all_cards = hole + board
+        
+        # If we don't have 5 cards total, return all available cards
+        if len(all_cards) < 5:
+            result = []
+            for card in all_cards:
+                card_str = Card.int_to_str(card)
+                if card_str[0] == 'T':
+                    card_str = '10' + card_str[1]
+                result.append(card_str)
+            return result
+        
+        # Find the best 5-card hand among all possible combinations
+        best_score = float('inf')  # Lower is better in treys
+        best_hand_combo = None
+        
+        # Try all 5-card combinations from all available cards
+        for combo in itertools.combinations(all_cards, 5):
+            score = self.evaluator.evaluate([], list(combo))
+            if score < best_score:
+                best_score = score
+                best_hand_combo = combo
+        
+        # Convert the best hand back to string representation
+        if best_hand_combo:
+            best_hand = []
+            for card in best_hand_combo:
+                card_str = Card.int_to_str(card)
+                if card_str[0] == 'T':
+                    card_str = '10' + card_str[1]
+                best_hand.append(card_str)
+            return best_hand
+        
+        # Fallback: if no best hand found, return available cards
+        return hole_cards

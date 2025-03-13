@@ -10,8 +10,9 @@
 8) How is call or fold handeled when SPR =0 ... the decision maker says call but we need to make sure that the logic in game_engine will force a fold if someone else raises.
 9) Fixed errors in game_engine in how hands are dealt with to all players.  there were missing logic.
 10) Need thorough testing of a game sequence
-
 11) Effective stack and SPR calculation (by each player, before each round), was correct but variable to AIDecision maker was not in same order, mixing up calculations.  Fixed and also cleaned code to make sure the arguments being passes were correct using kwargs
+12) Learning Module Tested; now to finalize API tests
+
 
 
 

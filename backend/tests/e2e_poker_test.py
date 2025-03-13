@@ -149,12 +149,17 @@ def auto_call_decision(game_state):
             break
     
     if my_player_data:
+        # Get hole cards from game state directly
         hole_cards = my_player_data.get('hole_cards', [])
         stack = my_player_data.get('stack', 0)
         print(f"\nYOUR INFO:")
         print(f"  Hole cards: {hole_cards}")
         print(f"  Stack: {format_currency(stack)}")
         print(f"  Current bet: {format_currency(my_player_data.get('current_bet', 0))}")
+        
+        # Extra check to display a warning if hole cards are visible but empty
+        if not hole_cards and my_player_data.get('visible_to_client', False):
+            print(f"  WARNING: Hole cards are marked as visible but are empty!")
     
     # Get pot and current bet
     pot = game_state.get('pot', 0)

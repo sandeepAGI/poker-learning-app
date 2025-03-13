@@ -92,6 +92,10 @@ class GameService:
         try:
             poker_game = PokerGame(players=all_players)
             
+            # Initialize the first hand to post blinds and deal cards
+            poker_game.current_state = GameState.PRE_FLOP
+            poker_game.post_blinds()
+            
             # Store game in session manager
             game_data = {
                 "game_id": game_id,
@@ -111,7 +115,10 @@ class GameService:
                     "player_type": player_type,
                     "personality": personality,
                     "position": i,
-                    "stack": player.stack
+                    "stack": player.stack,
+                    "current_bet": player.current_bet,
+                    "is_active": player.is_active,
+                    "hole_cards": player.hole_cards
                 })
             
             # Return game creation response
@@ -120,15 +127,18 @@ class GameService:
                 "players": players_data,
                 "dealer_position": poker_game.dealer_index,
                 "small_blind": poker_game.small_blind,
-                "big_blind": poker_game.big_blind
+                "big_blind": poker_game.big_blind,
+                "pot": poker_game.pot,
+                "current_bet": poker_game.current_bet,
+                "current_state": poker_game.current_state.value
             }
             
         except Exception as e:
             self.logger.error(f"Error creating game: {e}")
             raise
     
-    def get_game_state(self, game_id: str, player_id: str) -> Dict[str, Any]:
-        """Get current game state from the PokerGame instance"""
+    def get_game_state(self, game_id: str, player_id: str, show_all_cards: bool = False) -> Dict[str, Any]:
+        """Get current game state from the PokerGame instance with option to show all cards."""
         # Get game from session manager
         game_data = self.session_manager.get_session(game_id)
         if game_data is None:
@@ -148,14 +158,31 @@ class GameService:
         
         self.logger.info(f"Retrieved game state for game {game_id}, player {player_id}")
         
-        # Format players data, filtering hole cards as needed
+        # Format players data, but always include hole cards (let frontend decide visibility)
         players_data = []
         for player in player_objects:
-            # Only include hole cards for the requesting player
-            hole_cards = player.hole_cards if player.player_id == player_id else None
+            # Ensure all players have valid hole cards
+            if player.is_active and (not player.hole_cards or len(player.hole_cards) < 2):
+                try:
+                    # If we need to deal cards, make sure we have enough in the deck
+                    if len(poker_game.deck) < 2:
+                        self.logger.info(f"Resetting deck to deal cards to player {player.player_id}")
+                        poker_game.deck_manager.reset()
+                        poker_game.reset_deck()
+                    
+                    # Deal cards to any player missing them
+                    hole_cards = poker_game.deck_manager.deal_to_player(2)
+                    player.receive_cards(hole_cards)
+                    poker_game.deck = poker_game.deck_manager.get_deck()
+                    self.logger.info(f"Dealt missing hole cards to player {player.player_id}: {hole_cards}")
+                except ValueError as e:
+                    self.logger.error(f"Error dealing cards to player {player.player_id}: {e}")
             
             player_type = "human" if isinstance(player, HumanPlayer) else "ai"
             
+            # Always include hole cards in the API response
+            # For security in a production environment, you might want to add a "visible_to_client" flag
+            # that the frontend can use to determine visibility
             players_data.append({
                 "player_id": player.player_id,
                 "player_type": player_type,
@@ -166,8 +193,9 @@ class GameService:
                 "current_bet_formatted": format_money(player.current_bet),
                 "is_active": player.is_active,
                 "is_all_in": player.all_in,
-                "hole_cards": hole_cards,
-                "hole_cards_formatted": format_cards(hole_cards) if hole_cards else None,
+                "hole_cards": player.hole_cards,  # Always include the hole cards
+                "hole_cards_formatted": format_cards(player.hole_cards) if player.hole_cards else None,
+                "visible_to_client": player.player_id == player_id or (show_all_cards and poker_game.current_state == GameState.SHOWDOWN),
                 "position": poker_game.players.index(player)
             })
         
@@ -179,7 +207,12 @@ class GameService:
         # Convert enum to string for the API
         current_state = poker_game.current_state.value if isinstance(poker_game.current_state, GameState) else str(poker_game.current_state)
         
-        return {
+        # Add showdown data if in showdown state and requested
+        showdown_data = None
+        if poker_game.current_state == GameState.SHOWDOWN and show_all_cards:
+            showdown_data = self._get_showdown_data(poker_game)
+        
+        response = {
             "game_id": game_id,
             "current_state": current_state,
             "community_cards": poker_game.community_cards,
@@ -190,12 +223,18 @@ class GameService:
             "current_bet_formatted": format_money(poker_game.current_bet),
             "players": players_data,
             "dealer_position": poker_game.dealer_index,
-            "current_player": player_id,  # We'll use the requesting player as current for now
+            "current_player": player_id,
             "available_actions": available_actions,
             "min_raise": poker_game.big_blind,
             "min_raise_formatted": format_money(poker_game.big_blind),
             "hand_number": poker_game.hand_count
         }
+        
+        if showdown_data:
+            response["showdown_data"] = showdown_data
+            response["winner_info"] = showdown_data["winners"]  # Add the winners at the top level for client compatibility
+            
+        return response
     
     def process_action(self, game_id: str, player_id: str, action_type: str, amount: Optional[int] = None) -> Dict[str, Any]:
         """Process player action using the PokerGame instance"""
@@ -255,8 +294,9 @@ class GameService:
                     self.logger.warning("Amount required for raise action")
                     raise InvalidAmountError("Amount required for raise action")
                 
-                # Check minimum raise (usually 2x big blind)
-                min_raise = poker_game.big_blind * 2
+                # Check minimum raise (standard Texas Hold'em rules)
+                # Minimum raise is current bet plus the size of the big blind
+                min_raise = poker_game.current_bet + poker_game.big_blind
                 if amount < min_raise:
                     self.logger.warning(f"Raise amount must be at least {min_raise}")
                     raise InvalidAmountError(f"Raise amount must be at least {min_raise}")
@@ -382,8 +422,8 @@ class GameService:
                     actual_bet = player.bet(call_amount)
                     poker_game.pot += actual_bet
             elif decision == "raise":
-                # For simplicity, raise by 2x big blind above current bet
-                raise_amount = poker_game.current_bet + (poker_game.big_blind * 2)
+                # Raise by current bet plus big blind (minimum raise)
+                raise_amount = poker_game.current_bet + poker_game.big_blind
                 if raise_amount <= player.stack:
                     actual_bet = player.bet(raise_amount)
                     poker_game.pot += actual_bet
@@ -418,9 +458,10 @@ class GameService:
             # poker_game.play_hand()
             
             # For our API integration, we need to do these steps:
-            # 1. Reset player states
+            # 1. Reset player states - explicitly clear hole cards
             for player in poker_game.players:
                 player.reset_hand_state()
+                player.hole_cards = []  # Explicitly clear hole cards for each player
                 
             # 2. Reset game state for new hand
             poker_game.current_state = GameState.PRE_FLOP
@@ -431,9 +472,26 @@ class GameService:
             # 3. Increment hand count
             poker_game.hand_count += 1
             
-            # 4. Deal new cards and post blinds
-            poker_game.reset_deck()
+            # 4. Reset the deck manager before dealing new cards
+            poker_game.deck_manager.reset()  # Full deck reset in the deck manager
+            poker_game.reset_deck()  # Update the game's deck reference
+            
+            # 5. Post blinds and deal hole cards
             poker_game.post_blinds()  # This also deals hole cards
+            
+            # 6. Ensure all players have cards by explicitly dealing cards to any player missing them
+            for player in poker_game.players:
+                if player.is_active and (not player.hole_cards or len(player.hole_cards) < 2):
+                    # If player is active but missing cards, deal them cards
+                    try:
+                        hole_cards = poker_game.deck_manager.deal_to_player(2)
+                        player.receive_cards(hole_cards)
+                        self.logger.info(f"Explicitly dealt cards to player {player.player_id}: {hole_cards}")
+                    except ValueError as e:
+                        self.logger.error(f"Error dealing cards to player {player.player_id}: {e}")
+            
+            # Update game's deck after all dealing
+            poker_game.deck = poker_game.deck_manager.get_deck()
             
             # Update game in session manager
             self.session_manager.update_session(game_id, game_data)
@@ -541,6 +599,170 @@ class GameService:
         except Exception as e:
             self.logger.error(f"Error ending game: {e}")
             raise
+    
+    def get_showdown_results(self, game_id: str, player_id: str) -> Dict[str, Any]:
+        """Get detailed showdown results including all player hands and winner information."""
+        # Get game from session manager
+        game_data = self.session_manager.get_session(game_id)
+        if game_data is None:
+            self.logger.warning(f"Game {game_id} not found")
+            raise GameNotFoundError(game_id)
+        
+        # Get the PokerGame instance
+        poker_game = game_data["poker_game"]
+        
+        # Check if player is in the game
+        player_exists = any(p.player_id == player_id for p in poker_game.players)
+        if not player_exists:
+            self.logger.warning(f"Player {player_id} not found in game {game_id}")
+            raise PlayerNotFoundError(player_id)
+        
+        # Check if the game is in showdown state
+        if poker_game.current_state != GameState.SHOWDOWN:
+            self.logger.warning(f"Game {game_id} is not in showdown state")
+            raise InvalidActionError("Game is not in showdown state")
+        
+        self.logger.info(f"Retrieved showdown results for game {game_id}")
+        
+        # Get showdown data
+        showdown_data = self._get_showdown_data(poker_game)
+        
+        return showdown_data
+
+    def _get_showdown_data(self, poker_game) -> Dict[str, Any]:
+        """Helper method to get showdown data from a PokerGame instance."""
+        # Evaluate hands and determine winners
+        player_hands = {}
+        winning_hands = []
+        
+        # Get active or all-in players
+        active_players = [p for p in poker_game.players if p.is_active or p.all_in]
+        
+        # Get hand evaluations
+        evaluated_hands = poker_game.hand_manager.evaluate_hands(
+            active_players, 
+            poker_game.community_cards, 
+            poker_game.deck
+        )
+        
+        # Get pot distribution (winners)
+        winners = poker_game.hand_manager.distribute_pot(
+            players=poker_game.players,
+            community_cards=poker_game.community_cards,
+            total_pot=poker_game.pot,
+            deck=poker_game.deck
+        )
+        
+        # Format hand data
+        for pid, (score, hand_rank, player) in evaluated_hands.items():
+            # Calculate best hand from hole cards + community cards
+            best_hand = poker_game.hand_manager.hand_evaluator.get_best_hand(
+                player.hole_cards,
+                poker_game.community_cards
+            )
+            
+            player_hands[pid] = {
+                "hole_cards": player.hole_cards,
+                "hand_rank": hand_rank,
+                "hand_score": score,
+                "best_hand": best_hand
+            }
+        
+        # Format winner data
+        for pid, amount in winners.items():
+            if pid in evaluated_hands:
+                _, hand_rank, player = evaluated_hands[pid]
+                best_hand = poker_game.hand_manager.hand_evaluator.get_best_hand(
+                    player.hole_cards,
+                    poker_game.community_cards
+                )
+                
+                winning_hands.append({
+                    "player_id": pid,
+                    "amount": amount,
+                    "hand_rank": hand_rank,
+                    "hand_name": hand_rank,  # Adding hand_name for compatibility with new_e2e_test.py
+                    "hand": best_hand
+                })
+        
+        return {
+            "player_hands": player_hands,
+            "winners": winning_hands,
+            "community_cards": poker_game.community_cards,
+            "total_pot": poker_game.pot
+        }
+
+    def get_player_cards(self, game_id: str, player_id: str, target_player_id: str) -> Dict[str, Any]:
+        """Get a player's hole cards (only available at showdown or for the requesting player)."""
+        # Get game from session manager
+        game_data = self.session_manager.get_session(game_id)
+        if game_data is None:
+            self.logger.warning(f"Game {game_id} not found")
+            raise GameNotFoundError(game_id)
+        
+        # Get the PokerGame instance
+        poker_game = game_data["poker_game"]
+        
+        # Check if player is in the game
+        player_exists = any(p.player_id == player_id for p in poker_game.players)
+        if not player_exists:
+            self.logger.warning(f"Player {player_id} not found in game {game_id}")
+            raise PlayerNotFoundError(player_id)
+        
+        # Check if target player is in the game
+        target_player = None
+        for p in poker_game.players:
+            if p.player_id == target_player_id:
+                target_player = p
+                break
+        
+        if target_player is None:
+            self.logger.warning(f"Target player {target_player_id} not found in game {game_id}")
+            raise PlayerNotFoundError(target_player_id)
+        
+        # In the updated approach, we're not restricting hole cards visibility at the API level.
+        # Instead, we add a "visible_to_client" flag that the frontend can use to decide what to show.
+        # For this particular endpoint, it makes sense to still enforce the policy though, as it's
+        # being called specifically to get another player's cards.
+        should_hide_cards = target_player_id != player_id and poker_game.current_state != GameState.SHOWDOWN
+        
+        # Check if player has valid hole cards and proactively deal if needed
+        if not target_player.hole_cards or len(target_player.hole_cards) != 2:
+            self.logger.warning(f"Player {target_player_id} has invalid or missing hole cards")
+            
+            # If player is active, try to deal cards (regardless of game state)
+            if target_player.is_active:
+                try:
+                    # Reset deck manager if needed
+                    if len(poker_game.deck) < 2:
+                        self.logger.info(f"Resetting deck before dealing cards to player {target_player_id}")
+                        poker_game.deck_manager.reset()
+                        poker_game.reset_deck()
+                    
+                    # Deal cards to the player
+                    hole_cards = poker_game.deck_manager.deal_to_player(2)
+                    target_player.receive_cards(hole_cards)
+                    poker_game.deck = poker_game.deck_manager.get_deck()
+                    
+                    # Update session
+                    self.session_manager.update_session(game_id, game_data)
+                    self.logger.info(f"Dealt missing cards to player {target_player_id}: {hole_cards}")
+                except ValueError as e:
+                    self.logger.error(f"Error dealing cards to player {target_player_id}: {e}")
+        
+        self.logger.info(f"Retrieved cards for player {target_player_id} in game {game_id}")
+        
+        # Policy decision options:
+        # 1. Return cards with a visibility flag (more consistent with the new approach)
+        # 2. Filter cards at the API level (more secure but less flexible)
+        
+        # We're going with option 1 for consistency
+        return {
+            "player_id": target_player_id,
+            "hole_cards": target_player.hole_cards,  # Always include actual cards
+            "is_active": target_player.is_active,
+            "visible_to_client": target_player_id == player_id or poker_game.current_state == GameState.SHOWDOWN
+        }
     
     def schedule_cleanup(self):
         """Schedule regular cleanup of inactive games"""

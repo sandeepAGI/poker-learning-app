@@ -4,7 +4,8 @@ from typing import Optional
 
 from schemas.game import (
     GameCreate, GameCreateResponse, GameState, PlayerAction, 
-    ActionResponse, NextHandRequest, NextHandResponse, GameSummary
+    ActionResponse, NextHandRequest, NextHandResponse, GameSummary,
+    PlayerCardsResponse, ShowdownResponse  # Add these new imports
 )
 from services.game_service import GameService
 from utils.auth import get_current_player
@@ -28,10 +29,11 @@ async def create_game(
 @router.get("/games/{game_id}", response_model=GameState)
 async def get_game_state(
     game_id: str = Path(..., description="The ID of the game"),
-    player_id: str = Depends(get_current_player)
+    player_id: str = Depends(get_current_player),
+    show_all_cards: bool = Query(False, description="Whether to show all players' cards (for showdown)")
 ):
-    """Get current game state"""
-    return game_service.get_game_state(game_id, player_id)
+    """Get current game state with option to show all cards at showdown"""
+    return game_service.get_game_state(game_id, player_id, show_all_cards)
 
 @router.post("/games/{game_id}/actions", response_model=ActionResponse)
 async def player_action(
@@ -77,3 +79,20 @@ async def end_game(
 ):
     """End a game session"""
     return game_service.end_game(game_id, player_id)
+
+@router.get("/games/{game_id}/showdown", response_model=ShowdownResponse)
+async def get_showdown_results(
+    game_id: str = Path(..., description="The ID of the game"),
+    player_id: str = Depends(get_current_player)
+):
+    """Get detailed showdown results including all player hands and winner information"""
+    return game_service.get_showdown_results(game_id, player_id)
+
+@router.get("/games/{game_id}/players/{target_player_id}/cards", response_model=PlayerCardsResponse)
+async def get_player_cards(
+    game_id: str = Path(..., description="The ID of the game"),
+    target_player_id: str = Path(..., description="The ID of the player whose cards to fetch"),
+    player_id: str = Depends(get_current_player)
+):
+    """Get a player's hole cards (only available at showdown or for the requesting player)"""
+    return game_service.get_player_cards(game_id, player_id, target_player_id)

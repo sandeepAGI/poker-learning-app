@@ -90,11 +90,18 @@ class PokerGame:
         """Deals 2 hole cards to each active player."""
         self.deck_manager._deck = self.deck.copy()  # Initialize with current deck
         
+        # First clear all hole cards to ensure everyone gets new cards
         for player in self.players:
-            if player.is_active and not player.hole_cards:
+            if player.is_active:
+                player.hole_cards = []  # Explicitly clear existing hole cards
+        
+        # Then deal new cards to each active player        
+        for player in self.players:
+            if player.is_active:
                 try:
                     hole_cards = self.deck_manager.deal_to_player(2)
                     player.receive_cards(hole_cards)
+                    logger.debug(f"Dealt hole cards to {player.player_id}: {hole_cards}")
                 except ValueError as e:
                     logger.error(f"Error dealing cards: {e}")
                     
@@ -159,7 +166,8 @@ class PokerGame:
         self.pot += self.small_blind + self.big_blind
         self.current_bet = self.big_blind
 
-        if self.hand_count % 2 == 0:
+        # Only increase blinds after the first hand, and every N hands as defined in config
+        if self.hand_count > 0 and self.hand_count % config.BLIND_INCREASE_HANDS == 0:
             self.small_blind += config.BLIND_INCREASE
             self.big_blind = self.small_blind * 2
 
