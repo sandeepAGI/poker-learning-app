@@ -1,6 +1,9 @@
 # backend/schemas/game.py
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, ForwardRef
+
+# Using ForwardRef to handle circular references
+WinnerInfoRef = ForwardRef('WinnerInfo')
 
 # Player in a game
 class PlayerInfo(BaseModel):
@@ -46,6 +49,8 @@ class GameState(BaseModel):
     available_actions: List[str]
     min_raise: Optional[int] = None
     hand_number: int
+    winner_info: Optional[List[WinnerInfoRef]] = None  # Add winner info field using ForwardRef
+    showdown_data: Optional[Dict[str, Any]] = None  # Add showdown data field
 
 # Player action request
 class PlayerAction(BaseModel):
@@ -59,6 +64,7 @@ class ActionResponse(BaseModel):
     updated_game_state: GameState
     next_player: Optional[str] = None
     pot_update: int
+    is_showdown: Optional[bool] = False
 
 # Next hand request
 class NextHandRequest(BaseModel):
@@ -92,6 +98,7 @@ class WinnerInfo(BaseModel):
     hand_rank: str
     hand_name: Optional[str] = None  # Added for compatibility with new_e2e_test.py
     hand: List[str]
+    final_stack: Optional[int] = None  # Add the final stack field
 
 # Information about a player's hand in showdown
 class PlayerHandInfo(BaseModel):
@@ -106,3 +113,6 @@ class ShowdownResponse(BaseModel):
     winners: List[WinnerInfo]
     community_cards: List[str]
     total_pot: int
+
+# Update forward references
+GameState.update_forward_refs()

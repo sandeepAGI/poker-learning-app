@@ -160,6 +160,11 @@ class GameService:
         
         # Format players data, but always include hole cards (let frontend decide visibility)
         players_data = []
+        
+        # Log all players' stacks for debugging
+        for player in player_objects:
+            self.logger.info(f"GET GAME STATE: Player {player.player_id} has stack {player.stack}")
+        
         for player in player_objects:
             # Ensure all players have valid hole cards
             if player.is_active and (not player.hole_cards or len(player.hole_cards) < 2):
@@ -179,16 +184,17 @@ class GameService:
                     self.logger.error(f"Error dealing cards to player {player.player_id}: {e}")
             
             player_type = "human" if isinstance(player, HumanPlayer) else "ai"
+            current_stack = player.stack  # Get current stack value
             
             # Always include hole cards in the API response
             # For security in a production environment, you might want to add a "visible_to_client" flag
             # that the frontend can use to determine visibility
-            players_data.append({
+            player_data = {
                 "player_id": player.player_id,
                 "player_type": player_type,
                 "personality": getattr(player, "personality", None) if player_type == "ai" else None,
-                "stack": player.stack,
-                "stack_formatted": format_money(player.stack),
+                "stack": current_stack,
+                "stack_formatted": format_money(current_stack),
                 "current_bet": player.current_bet,
                 "current_bet_formatted": format_money(player.current_bet),
                 "is_active": player.is_active,
@@ -197,12 +203,26 @@ class GameService:
                 "hole_cards_formatted": format_cards(player.hole_cards) if player.hole_cards else None,
                 "visible_to_client": player.player_id == player_id or (show_all_cards and poker_game.current_state == GameState.SHOWDOWN),
                 "position": poker_game.players.index(player)
-            })
+            }
+            
+            players_data.append(player_data)
         
         # Determine available actions for current player
         available_actions = []
+        # Only provide actions if game is not in showdown state and player is active
         if poker_game.current_state != GameState.SHOWDOWN:
-            available_actions = ["fold", "call", "raise"]
+            # Find the player to check if they're active
+            player_obj = None
+            for p in poker_game.players:
+                if p.player_id == player_id:
+                    player_obj = p
+                    break
+                    
+            if player_obj and player_obj.is_active:
+                available_actions = ["fold", "call", "raise"]
+            else:
+                self.logger.info(f"Player {player_id} is not active, no actions available")
+                # Player is not active (folded), no actions available
         
         # Convert enum to string for the API
         current_state = poker_game.current_state.value if isinstance(poker_game.current_state, GameState) else str(poker_game.current_state)
@@ -317,12 +337,19 @@ class GameService:
             # Progress game state if round is complete
             current_state = poker_game.current_state
             
-            # Check if all players have acted (simplified logic)
+            # Check if all players have acted (improved logic)
             all_acted = True
-            for p in poker_game.players:
-                if p.is_active and p.current_bet != poker_game.current_bet and not p.all_in:
-                    all_acted = False
-                    break
+            # Check if only one active player remains
+            active_player_count = sum(1 for p in poker_game.players if p.is_active)
+            if active_player_count <= 1:
+                all_acted = True
+                self.logger.info("Only one player remains active, all actions complete.")
+            else:
+                # Check if all active players have matched the current bet or are all-in
+                for p in poker_game.players:
+                    if p.is_active and p.current_bet != poker_game.current_bet and not p.all_in:
+                        all_acted = False
+                        break
             
             # If all players have acted, advance to next game state
             if all_acted:
@@ -340,10 +367,28 @@ class GameService:
             
             # Find next player to act
             next_player = None
-            for p in poker_game.players:
-                if p.is_active and p.player_id != player_id:
-                    next_player = p.player_id
-                    break
+            # Check the number of active players first
+            active_players = [p for p in poker_game.players if p.is_active]
+            
+            # If only one active player remains, advance to showdown
+            if len(active_players) == 1:
+                self.logger.info(f"Only one active player remains. Moving to showdown.")
+                poker_game.current_state = GameState.SHOWDOWN
+                # Distribute pot to the last remaining player
+                winners = poker_game.hand_manager.distribute_pot(
+                    players=poker_game.players,
+                    community_cards=poker_game.community_cards,
+                    total_pot=poker_game.pot,
+                    deck=poker_game.deck
+                )
+                self.logger.info(f"Pot distributed to last remaining player: {winners}")
+                poker_game.pot = 0
+            else:
+                # Find next active player
+                for p in poker_game.players:
+                    if p.is_active and p.player_id != player_id:
+                        next_player = p.player_id
+                        break
             
             # Get updated game state
             updated_game_state = self.get_game_state(game_id, player_id)
@@ -379,7 +424,8 @@ class GameService:
                 "action_result": "success",
                 "updated_game_state": updated_game_state,
                 "next_player": next_player or player_id,  # If no next player, keep current
-                "pot_update": poker_game.pot
+                "pot_update": poker_game.pot,
+                "is_showdown": poker_game.current_state == GameState.SHOWDOWN
             }
             
         except Exception as e:
@@ -453,15 +499,23 @@ class GameService:
         
         self.logger.info(f"Advancing game {game_id} to next hand")
         
+        # Log player stacks at the start of the new hand
+        for player in poker_game.players:
+            self.logger.info(f"NEXT HAND: Player {player.player_id} starting with stack {player.stack}")
+        
         try:
             # In the actual PokerGame implementation, this would be handled by calling:
             # poker_game.play_hand()
             
             # For our API integration, we need to do these steps:
-            # 1. Reset player states - explicitly clear hole cards
+            # 1. Reset player states - explicitly clear hole cards while preserving stacks
             for player in poker_game.players:
+                current_stack = player.stack  # Store the stack
+                active_status = player.is_active  # Store active status
                 player.reset_hand_state()
                 player.hole_cards = []  # Explicitly clear hole cards for each player
+                player.stack = current_stack  # Restore stack after reset
+                player.is_active = active_status  # Restore active status
                 
             # 2. Reset game state for new hand
             poker_game.current_state = GameState.PRE_FLOP
@@ -492,6 +546,10 @@ class GameService:
             
             # Update game's deck after all dealing
             poker_game.deck = poker_game.deck_manager.get_deck()
+            
+            # Log stacks after posting blinds to verify they've been properly updated
+            for player in poker_game.players:
+                self.logger.info(f"NEXT HAND (after blinds): Player {player.player_id} stack {player.stack}")
             
             # Update game in session manager
             self.session_manager.update_session(game_id, game_data)
@@ -627,6 +685,9 @@ class GameService:
         # Get showdown data
         showdown_data = self._get_showdown_data(poker_game)
         
+        # Update the session after getting showdown data to ensure stack changes are persisted
+        self.session_manager.update_session(game_id, game_data)
+        
         return showdown_data
 
     def _get_showdown_data(self, poker_game) -> Dict[str, Any]:
@@ -637,6 +698,11 @@ class GameService:
         
         # Get active or all-in players
         active_players = [p for p in poker_game.players if p.is_active or p.all_in]
+        self.logger.info(f"SHOWDOWN: Active players: {[p.player_id for p in active_players]}")
+        
+        # Log current stacks before distribution
+        for player in poker_game.players:
+            self.logger.info(f"BEFORE SHOWDOWN: Player {player.player_id} has stack {player.stack}")
         
         # Get hand evaluations
         evaluated_hands = poker_game.hand_manager.evaluate_hands(
@@ -645,13 +711,39 @@ class GameService:
             poker_game.deck
         )
         
+        # Store the original pot amount
+        total_pot = poker_game.pot
+        self.logger.info(f"SHOWDOWN: Total pot to distribute: {total_pot}")
+        
         # Get pot distribution (winners)
         winners = poker_game.hand_manager.distribute_pot(
             players=poker_game.players,
             community_cards=poker_game.community_cards,
-            total_pot=poker_game.pot,
+            total_pot=total_pot,  # Pass the stored pot amount
             deck=poker_game.deck
         )
+        
+        # Manually update winners' stacks for extra safety
+        win_amounts = {}
+        for pid, amount in winners.items():
+            win_amounts[pid] = amount
+            for player in poker_game.players:
+                if player.player_id == pid:
+                    # Get original stack before adding winnings
+                    original_stack = player.stack - amount
+                    self.logger.info(f"UPDATING WINNER: Player {pid} - Original stack {original_stack}, Adding {amount}, New stack should be {original_stack + amount}")
+                    
+                    # Set the stack explicitly to ensure it's updated correctly
+                    player.stack = original_stack + amount
+                    self.logger.info(f"WINNER STACK UPDATED: Player {pid} stack is now {player.stack}")
+                    break
+        
+        # Log all stacks after distribution
+        for player in poker_game.players:
+            self.logger.info(f"AFTER SHOWDOWN: Player {player.player_id} has stack {player.stack}")
+        
+        # Reset pot after distribution
+        poker_game.pot = 0
         
         # Format hand data
         for pid, (score, hand_rank, player) in evaluated_hands.items():
@@ -677,12 +769,23 @@ class GameService:
                     poker_game.community_cards
                 )
                 
+                # Find the player again to get the most up-to-date stack
+                current_player = None
+                for p in poker_game.players:
+                    if p.player_id == pid:
+                        current_player = p
+                        break
+                
+                # Use player's current stack if we found them
+                current_stack = current_player.stack if current_player else player.stack
+                
                 winning_hands.append({
                     "player_id": pid,
                     "amount": amount,
                     "hand_rank": hand_rank,
                     "hand_name": hand_rank,  # Adding hand_name for compatibility with new_e2e_test.py
-                    "hand": best_hand
+                    "hand": best_hand,
+                    "final_stack": current_stack  # Include the winner's final stack
                 })
         
         return {

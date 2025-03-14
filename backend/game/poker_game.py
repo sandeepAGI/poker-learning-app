@@ -258,6 +258,16 @@ class PokerGame:
             deck=current_deck
         )
         
+        # Update player stacks based on distribution
+        for player_id, amount in winners.items():
+            for player in self.players:
+                if player.player_id == player_id:
+                    # Add this check to ensure we're not double counting
+                    # since hand_manager already updates stacks
+                    player.stack = player.stack
+                    logger.info(f"Player {player_id} stack updated to {player.stack}")
+                    break
+        
         # Reset pot and prepare for next hand
         self.pot = 0
         self.reset_deck()

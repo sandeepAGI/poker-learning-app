@@ -26,7 +26,7 @@ root_logger.setLevel(logging.DEBUG)
 
 # Add a console handler for the root logger
 console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setLevel(logging.INFO)
+console_handler.setLevel(logging.DEBUG)  # Changed to DEBUG for more detailed logs
 console_handler.setFormatter(logging.Formatter(LOG_FORMAT, LOG_DATE_FORMAT))
 root_logger.addHandler(console_handler)
 

@@ -39,12 +39,27 @@ class Player:
         Returns:
             int: Actual amount bet (may be less if stack is insufficient)
         """
+        if amount <= 0:
+            logger.warning(f"Player {self.player_id} attempted to bet {amount}, which is <= 0")
+            return 0
+            
+        old_stack = self.stack  # For logging
+        
         if amount > self.stack:
             amount = self.stack
             self.all_in = True
+            logger.info(f"Player {self.player_id} going all-in with {amount}")
+            
         self.stack -= amount
         self.current_bet += amount
         self.total_bet += amount  # Update total contribution to the pot
+        
+        logger.debug(f"Player {self.player_id} bet {amount}, stack: {old_stack} -> {self.stack}")
+        
+        # Verify consistency
+        if self.stack != old_stack - amount:
+            logger.error(f"STACK ERROR: Player {self.player_id} stack ({self.stack}) does not match expected value ({old_stack - amount})")
+            
         return amount
 
     def receive_cards(self, cards: List[str]) -> None:
@@ -68,10 +83,21 @@ class Player:
         
     def reset_hand_state(self) -> None:
         """Resets player state for a new hand."""
+        # Store current stack to preserve it
+        current_stack = self.stack
+        is_active = self.is_active
+        
+        # Reset betting state
         self.current_bet = 0
         self.total_bet = 0
         self.all_in = False
         self.hole_cards = []
+        
+        # Restore stack and active status
+        self.stack = current_stack
+        self.is_active = is_active
+        
+        logger.debug(f"Reset hand state for player {self.player_id}, stack: {self.stack}, active: {self.is_active}")
         
     def make_decision(self, game_state: Dict[str, Any], deck: List[str], 
                      spr: float, pot_size: int) -> str:

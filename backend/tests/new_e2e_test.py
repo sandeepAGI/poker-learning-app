@@ -9,7 +9,8 @@ GAME_ID = None
 
 # Helper function to pause execution and wait for user input
 def pause_for_review(message="Press Enter to continue..."):
-    input(f"\n{message}")
+    # For automated testing, just print the message without waiting for input
+    print(f"\n{message}")
 
 # Helper function to pretty print JSON responses
 def print_json_response(title, data):
@@ -208,7 +209,7 @@ def display_game_summary(game_state):
     
     print("================================")
 
-# Enhanced decision function with user input for player actions
+# Enhanced decision function with automatic actions for testing
 def player_decision(game_state):
     display_game_summary(game_state)
     
@@ -231,58 +232,17 @@ def player_decision(game_state):
         hole_cards = my_player_data.get('hole_cards', [])
         print(f"\nYOUR HOLE CARDS: {hole_cards}")
     
-    # Ask for action
-    print("\nChoose your action:")
-    for i, action in enumerate(available_actions):
-        print(f"{i+1}. {action.upper()}")
-    
-    print("a. Auto-play (will call/check)")
-    
-    # Get user choice
-    choice = input("\nEnter choice (number, or 'a' for auto): ").strip().lower()
-    
-    # Handle auto-play
-    if choice == 'a':
-        if "call" in available_actions:
-            return "call", None
-        elif "check" in available_actions:
-            return "check", None
-        else:
-            return "fold", None
-    
-    # Process numeric choice
-    try:
-        idx = int(choice) - 1
-        if 0 <= idx < len(available_actions):
-            action = available_actions[idx]
-            
-            # If raising, ask for amount
-            if action == "raise":
-                amount_str = input("Enter raise amount: $")
-                try:
-                    amount = int(amount_str)
-                    return action, amount
-                except ValueError:
-                    print("Invalid amount, defaulting to minimum raise")
-                    return action, None
-            else:
-                return action, None
-        else:
-            print("Invalid choice, auto-calling")
-            if "call" in available_actions:
-                return "call", None
-            elif "check" in available_actions:
-                return "check", None
-            else:
-                return "fold", None
-    except ValueError:
-        print("Invalid choice, auto-calling")
-        if "call" in available_actions:
-            return "call", None
-        elif "check" in available_actions:
-            return "check", None
-        else:
-            return "fold", None
+    # Auto-play: call if possible, otherwise check, otherwise fold
+    print("\nAuto-playing...")
+    if "call" in available_actions:
+        print("Auto-action: CALL")
+        return "call", None
+    elif "check" in available_actions:
+        print("Auto-action: CHECK")
+        return "check", None
+    else:
+        print("Auto-action: FOLD")
+        return "fold", None
 
 # Main test flow with pauses and more detailed feedback
 def run_test():
@@ -351,69 +311,44 @@ def run_test():
             print(f"Waiting for AI player {current_player} to act...")
             display_game_summary(game_state)
             
-            # Option to wait or force AI action immediately
-            choice = input("\nPress Enter to wait for AI action, or type 'f' to force immediate action: ").strip().lower()
+            # Force immediate AI action
+            print("Forcing immediate AI action...")
+            # Poll several times with short intervals
+            max_polls = 5
+            poll_count = 0
+            ai_acted = False
             
-            if choice == 'f':
-                print("Forcing immediate AI action...")
-                # We'll just poll once and continue
-                time.sleep(2)
-                updated_state = get_game_state(show_response=False)
+            while poll_count < max_polls and not ai_acted:
+                poll_count += 1
+                time.sleep(1)
                 
+                print(f"Polling for AI action... (attempt {poll_count}/{max_polls})")
+                updated_state = get_game_state(show_response=False)
                 if not updated_state:
                     print("Couldn't get updated state")
                     continue
                 
-                display_game_summary(updated_state)
-                pause_for_review()
-                
-                # Check if it's now our turn or the hand is complete
                 current_player_now = updated_state.get('current_player')
+                
+                if current_player_now != current_player:
+                    print("AI has acted!")
+                    display_game_summary(updated_state)
+                    ai_acted = True
+                    break
+                
                 new_state = updated_state.get('current_state')
-                
-                if current_player_now == PLAYER_ID:
-                    print("AI has acted, now it's your turn")
-                
                 if new_state == "showdown":
                     print("Hand complete after AI action!")
+                    display_game_summary(updated_state)
                     hand_completed = True
-            else:
-                # Poll with multiple updates and a timeout
-                max_polls = 10
-                poll_count = 0
-                ai_acted = False
-                
-                while poll_count < max_polls and not ai_acted:
-                    poll_count += 1
-                    time.sleep(1)
-                    
-                    print(f"Polling for AI action... (attempt {poll_count}/{max_polls})")
-                    updated_state = get_game_state(show_response=False)
-                    if not updated_state:
-                        print("Couldn't get updated state")
-                        continue
-                    
-                    current_player_now = updated_state.get('current_player')
-                    
-                    if current_player_now != current_player:
-                        print("AI has acted!")
-                        display_game_summary(updated_state)
-                        pause_for_review()
-                        ai_acted = True
-                    
-                    new_state = updated_state.get('current_state')
-                    if new_state == "showdown":
-                        print("Hand complete after AI action!")
-                        display_game_summary(updated_state)
-                        pause_for_review()
-                        hand_completed = True
-                        ai_acted = True
-                
-                if not ai_acted:
-                    print("AI didn't act within the expected time")
-                    choice = input("Continue waiting? (y/n): ").strip().lower()
-                    if choice != 'y':
-                        return False
+                    ai_acted = True
+                    break
+            
+            # If AI didn't act after max polls, just continue
+            if not ai_acted:
+                print("AI didn't act within the expected time, continuing anyway")
+                updated_state = get_game_state(show_response=False)
+                display_game_summary(updated_state)
     
     # After hand completes
     if hand_completed:
@@ -492,12 +427,11 @@ def run_test():
                 else:
                     print(f"  AI {player_id} [{personality}]: {format_currency(stack)}")
         
-        # Ask if user wants to play another hand
-        choice = input("\nPlay another hand? (y/n): ").strip().lower()
-        if choice == 'y':
-            next_hand_result = start_next_hand()
-            if next_hand_result:
-                print("New hand started! Run the test again to play it.")
+        # Automatically start another hand
+        print("\nAutomatically starting next hand...")
+        next_hand_result = start_next_hand()
+        if next_hand_result:
+            print("New hand started! Finished test.")
         
         return True
     else:

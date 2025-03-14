@@ -69,8 +69,15 @@ class HandManager:
         # Early return if only one player is active (everyone else folded)
         if len(active_players) == 1:
             winner = active_players[0]
+            old_stack = winner.stack  # Log the old stack for debugging
             winner.stack += total_pot
             winners[winner.player_id] = total_pot
+            logger.info(f"STACK UPDATE: Single winner {winner.player_id} stack changed from {old_stack} to {winner.stack} (+{total_pot})")
+            
+            # Extra verification
+            if winner.stack != old_stack + total_pot:
+                logger.error(f"STACK ERROR: Winner {winner.player_id} stack ({winner.stack}) does not match expected value ({old_stack + total_pot})")
+            
             return winners
         
         # Calculate main pot and side pots
@@ -113,13 +120,21 @@ class HandManager:
                 remainder = pot.amount % len(pot_winners)
                 
                 for winner in pot_winners:
+                    old_stack = winner.stack  # Log old stack
                     winner.stack += split_amount
                     winners[winner.player_id] = winners.get(winner.player_id, 0) + split_amount
+                    logger.info(f"STACK UPDATE: Winner {winner.player_id} stack changed from {old_stack} to {winner.stack} (+{split_amount})")
+                    
+                    # Verify stack update
+                    if winner.stack != old_stack + split_amount:
+                        logger.error(f"STACK ERROR: Winner {winner.player_id} stack ({winner.stack}) does not match expected value ({old_stack + split_amount})")
                     
                 # Distribute remainder (1 chip per player until gone)
                 for i in range(remainder):
-                    pot_winners[i % len(pot_winners)].stack += 1
-                    winners[pot_winners[i % len(pot_winners)].player_id] = winners.get(
-                        pot_winners[i % len(pot_winners)].player_id, 0) + 1
+                    winner = pot_winners[i % len(pot_winners)]
+                    old_stack = winner.stack  # Log old stack before adding chip
+                    winner.stack += 1
+                    winners[winner.player_id] = winners.get(winner.player_id, 0) + 1
+                    logger.info(f"STACK UPDATE: Winner {winner.player_id} gets +1 remainder chip, stack now {winner.stack}")
         
         return winners
