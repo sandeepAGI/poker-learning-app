@@ -1,4 +1,4 @@
-# 03/13/25 Poker App Backend Updates
+# 03/13/25 - 03/17/25 Poker App Backend Updates
 
 ## Summary of Changes
 This document summarizes changes made to fix issues with:
@@ -7,6 +7,7 @@ This document summarizes changes made to fix issues with:
 3. Excessive minimum raise requirements that didn't follow standard Texas Hold'em rules
 4. Missing best hand determination causing server errors at showdown
 5. Winner information not being correctly returned in the API response
+6. AI players who folded in a hand were not being reactivated for the next hand
 
 ## Problems Identified
 Through testing with the e2e_poker_test.py and new_e2e_test.py scripts, we identified several issues:
@@ -188,6 +189,11 @@ The test eventually hit the API rate limit, but the essential functionality was 
    - Previously: Only dealt cards to players without any cards
    - Now: Proactively deals cards to any active player without valid cards
    - Rationale: Ensures all players always have the correct cards at each stage
+
+4. **Player Active Status Management**
+   - Previously: Player active status was preserved between hands, causing folded players to remain inactive in the next hand
+   - Now: All players with sufficient chips (≥ 5) are automatically reactivated at the start of each new hand
+   - Rationale: Players who fold should only be inactive for the current hand, not subsequent hands
 
 ## Additional Code Changes for Blinds and Raise Issues
 
@@ -626,6 +632,106 @@ In the new hand that was started, the winner's stack was correctly preserved:
 "is_active": true,
 ```
 
+## Additional Fix for AI Player Reactivation (03/17/25)
+
+### Problem
+When testing the application with e2e_poker_test.py, we discovered that AI players who folded during a hand were not being reactivated for the next hand. This resulted in fewer and fewer active players as the game progressed, which is incorrect behavior for poker.
+
+### Analysis
+The issue was in how player state was being managed between hands:
+
+1. When a player folded during a hand, their `is_active` property was correctly set to `false`
+2. However, at the start of a new hand, the code was preserving this inactive status rather than resetting it
+3. This affected AI players who had folded in previous hands, preventing them from participating in future hands even if they had sufficient chips
+
+### Code Changes
+
+#### 1. `models/player.py`
+Updated the `reset_hand_state()` method to automatically reactivate players based on chip count, not previous active status:
+
+```python
+def reset_hand_state(self) -> None:
+    """Resets player state for a new hand."""
+    # Store current stack to preserve it
+    current_stack = self.stack
+    
+    # Reset betting state
+    self.current_bet = 0
+    self.total_bet = 0
+    self.all_in = False
+    self.hole_cards = []
+    
+    # Restore stack
+    self.stack = current_stack
+    
+    # IMPORTANT: Always set players to active at the start of a new hand
+    # unless they were eliminated due to insufficient chips
+    self.is_active = current_stack >= 5
+    
+    logger.debug(f"Reset hand state for player {self.player_id}, stack: {self.stack}, active: {self.is_active}")
+```
+
+Previous implementation:
+```python
+def reset_hand_state(self) -> None:
+    """Resets player state for a new hand."""
+    # Store current stack to preserve it
+    current_stack = self.stack
+    is_active = self.is_active  # This was the problem - preserving inactive status
+    
+    # Reset betting state
+    self.current_bet = 0
+    self.total_bet = 0
+    self.all_in = False
+    self.hole_cards = []
+    
+    # Restore stack and active status
+    self.stack = current_stack
+    self.is_active = is_active  # This was preserving folded status into the next hand
+    
+    logger.debug(f"Reset hand state for player {self.player_id}, stack: {self.stack}, active: {self.is_active}")
+```
+
+#### 2. `services/game_service.py`
+Updated the `next_hand()` method to rely on the fixed `reset_hand_state()` implementation:
+
+```python
+# 1. Reset player states and reactivate players for the next hand
+for player in poker_game.players:
+    # The reset_hand_state method now handles reactivating players correctly
+    # based on their chip count, not their previous active status
+    player.reset_hand_state()
+    
+    # Double check that hole cards are cleared
+    player.hole_cards = []
+    
+    # Log reactivation status
+    self.logger.info(f"Player {player.player_id} active status for new hand: {player.is_active} (stack: {player.stack})")
+```
+
+Previous implementation:
+```python
+# 1. Reset player states - explicitly clear hole cards while preserving stacks
+for player in poker_game.players:
+    current_stack = player.stack  # Store the stack
+    active_status = player.is_active  # Store active status
+    player.reset_hand_state()
+    player.hole_cards = []  # Explicitly clear hole cards for each player
+    player.stack = current_stack  # Restore stack after reset
+    player.is_active = active_status  # Restore active status
+```
+
+### Test Results
+The fix was tested by running the comprehensive test suite and the new_e2e_test.py script:
+
+1. All non-API unit tests passed successfully (12 tests in test_comprehensive.py, 10 tests in test_edge_cases.py)
+2. The new_e2e_test.py was able to:
+   - Play through a complete hand
+   - Handle folding correctly
+   - Verify that players who folded in the first hand (ai_0 and ai_3) were properly reactivated in the second hand
+
+The logs and API responses showed correct handling of player active status between hands.
+
 ## Conclusion
 
 These changes provide:
@@ -643,3 +749,4 @@ These changes provide:
 12. Adds detailed logging for troubleshooting stack-related issues
 13. Improves folding logic to correctly advance the game when only one player remains
 14. Enhances action handling to properly detect when all players have acted
+15. Fixes player reactivation between hands so AI players who fold in one hand correctly participate in the next hand

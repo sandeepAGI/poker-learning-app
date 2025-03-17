@@ -508,14 +508,17 @@ class GameService:
             # poker_game.play_hand()
             
             # For our API integration, we need to do these steps:
-            # 1. Reset player states - explicitly clear hole cards while preserving stacks
+            # 1. Reset player states and reactivate players for the next hand
             for player in poker_game.players:
-                current_stack = player.stack  # Store the stack
-                active_status = player.is_active  # Store active status
+                # The reset_hand_state method now handles reactivating players correctly
+                # based on their chip count, not their previous active status
                 player.reset_hand_state()
-                player.hole_cards = []  # Explicitly clear hole cards for each player
-                player.stack = current_stack  # Restore stack after reset
-                player.is_active = active_status  # Restore active status
+                
+                # Double check that hole cards are cleared
+                player.hole_cards = []
+                
+                # Log reactivation status
+                self.logger.info(f"Player {player.player_id} active status for new hand: {player.is_active} (stack: {player.stack})")
                 
             # 2. Reset game state for new hand
             poker_game.current_state = GameState.PRE_FLOP

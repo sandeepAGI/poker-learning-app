@@ -16784,3 +16784,1249 @@
 2025-03-14 13:20:34 - game_service - WARNING - Player d08500c9-8000-4e86-ab3c-3a79167ab85e has insufficient funds for call
 2025-03-14 13:20:34 - game_service - ERROR - Error processing action: Player d08500c9-8000-4e86-ab3c-3a79167ab85e has insufficient funds
 2025-03-14 13:20:34 - api - INFO - Shutting down the Poker Learning App API
+2025-03-17 15:58:41 - config - INFO - Running in development environment
+2025-03-17 15:58:41 - statistics_manager - INFO - Statistics manager initialized
+2025-03-17 15:58:41 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-17 15:58:41 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-17 15:58:41 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 15:58:41 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-17 15:58:41 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-17 15:58:41 - config - INFO - Running in development environment
+2025-03-17 15:58:41 - statistics_manager - INFO - Statistics manager initialized
+2025-03-17 15:58:41 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-17 15:58:41 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-17 15:58:41 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 15:58:41 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-17 15:58:41 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-17 15:58:41 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-17 15:58:41 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-17 15:58:41 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-17 15:58:41 - api - INFO - Starting the Poker Learning App API
+2025-03-17 15:58:41 - api - INFO - Initialized WebSocket manager
+2025-03-17 15:58:41 - api - INFO - Scheduled inactive game cleanup
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Creating new game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56 for player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 15:59:08 - statistics_manager - INFO - Started new session: 36458660-442c-4aab-adc2-c32661667e14
+2025-03-17 15:59:08 - game.learning_tracker - INFO - Started learning session: 36458660-442c-4aab-adc2-c32661667e14
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 15:59:08 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 15:59:08 - models.player - DEBUG - Player ai_0 bet 5, stack: 1000 -> 995
+2025-03-17 15:59:08 - models.player - DEBUG - Player ai_1 bet 10, stack: 1000 -> 990
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt hole cards to 9baee5f5-f3b3-4efb-995e-37784efa0161: ['Jc', 'Ad']
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt hole cards to ai_0: ['5s', 'Kd']
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt hole cards to ai_1: ['8h', 'Jh']
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt hole cards to ai_2: ['Kh', '9h']
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt hole cards to ai_3: ['3d', '6d']
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt hole cards to players, 42 cards remaining
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Retrieved game state for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56, player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 1000
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 1000
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Processing call action from player 9baee5f5-f3b3-4efb-995e-37784efa0161 in game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56
+2025-03-17 15:59:08 - models.player - DEBUG - Player 9baee5f5-f3b3-4efb-995e-37784efa0161 bet 10, stack: 1000 -> 990
+2025-03-17 15:59:08 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 39.8
+2025-03-17 15:59:08 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 5s, Kd | Community:  | Hand Score: 4581.33 (Pair) | Pot: 25 | SPR: 39.8
+2025-03-17 15:59:08 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-17 15:59:08 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8h, Jh | Community:  | Hand Score: 3966.88 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-17 15:59:08 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 40.0
+2025-03-17 15:59:08 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Kh, 9h | Community:  | Hand Score: 3541.66 (Pair) | Pot: 25 | SPR: 40.0
+2025-03-17 15:59:08 - models.player - DEBUG - Player ai_2 bet 10, stack: 1000 -> 990
+2025-03-17 15:59:08 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 28.571428571428573
+2025-03-17 15:59:08 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: 3d, 6d | Community:  | Hand Score: 4156.17 (Pair) | Pot: 35 | SPR: 28.571428571428573
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt flop: 2h, 9s, 2d
+2025-03-17 15:59:08 - game_service - INFO - Retrieved game state for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56, player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - game_service - INFO - Broadcast player_action event for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Retrieved game state for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56, player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Processing call action from player 9baee5f5-f3b3-4efb-995e-37784efa0161 in game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56
+2025-03-17 15:59:08 - models.player - WARNING - Player 9baee5f5-f3b3-4efb-995e-37784efa0161 attempted to bet 0, which is <= 0
+2025-03-17 15:59:08 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 28.285714285714285
+2025-03-17 15:59:08 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8h, Jh | Community: 2h, 9s, 2d | Hand Score: 6109 (Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 15:59:08 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 28.285714285714285
+2025-03-17 15:59:08 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Kh, 9h | Community: 2h, 9s, 2d | Hand Score: 3085 (Two Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt turn: 4h
+2025-03-17 15:59:08 - game_service - INFO - Retrieved game state for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56, player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - game_service - INFO - Broadcast player_action event for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Retrieved game state for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56, player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Processing call action from player 9baee5f5-f3b3-4efb-995e-37784efa0161 in game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56
+2025-03-17 15:59:08 - models.player - WARNING - Player 9baee5f5-f3b3-4efb-995e-37784efa0161 attempted to bet 0, which is <= 0
+2025-03-17 15:59:08 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 28.285714285714285
+2025-03-17 15:59:08 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8h, Jh | Community: 2h, 9s, 2d, 4h | Hand Score: 6109 (Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 15:59:08 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 28.285714285714285
+2025-03-17 15:59:08 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Kh, 9h | Community: 2h, 9s, 2d, 4h | Hand Score: 3085 (Two Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt river: 3s
+2025-03-17 15:59:08 - game_service - INFO - Retrieved game state for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56, player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - game_service - INFO - Broadcast player_action event for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Retrieved game state for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56, player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Processing call action from player 9baee5f5-f3b3-4efb-995e-37784efa0161 in game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56
+2025-03-17 15:59:08 - models.player - WARNING - Player 9baee5f5-f3b3-4efb-995e-37784efa0161 attempted to bet 0, which is <= 0
+2025-03-17 15:59:08 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 28.285714285714285
+2025-03-17 15:59:08 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8h, Jh | Community: 2h, 9s, 2d, 4h, 3s | Hand Score: 6109 (Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 15:59:08 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 28.285714285714285
+2025-03-17 15:59:08 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Kh, 9h | Community: 2h, 9s, 2d, 4h, 3s | Hand Score: 3085 (Two Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 15:59:08 - game_service - INFO - Retrieved game state for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56, player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - game_service - INFO - Broadcast player_action event for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Retrieved game state for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56, player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - game_service - INFO - SHOWDOWN: Active players: ['9baee5f5-f3b3-4efb-995e-37784efa0161', 'ai_1', 'ai_2']
+2025-03-17 15:59:08 - game_service - INFO - BEFORE SHOWDOWN: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - BEFORE SHOWDOWN: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - BEFORE SHOWDOWN: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - BEFORE SHOWDOWN: Player ai_2 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - BEFORE SHOWDOWN: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - game.hand_manager - INFO - Player 9baee5f5-f3b3-4efb-995e-37784efa0161 hand: Jc, Ad - Pair (5986)
+2025-03-17 15:59:08 - game.hand_manager - INFO - Player ai_1 hand: 8h, Jh - Pair (6109)
+2025-03-17 15:59:08 - game.hand_manager - INFO - Player ai_2 hand: Kh, 9h - Two Pair (3085)
+2025-03-17 15:59:08 - game_service - INFO - SHOWDOWN: Total pot to distribute: 35
+2025-03-17 15:59:08 - game.hand_manager - INFO - Player 9baee5f5-f3b3-4efb-995e-37784efa0161 hand: Jc, Ad - Pair (5986)
+2025-03-17 15:59:08 - game.hand_manager - INFO - Player ai_1 hand: 8h, Jh - Pair (6109)
+2025-03-17 15:59:08 - game.hand_manager - INFO - Player ai_2 hand: Kh, 9h - Two Pair (3085)
+2025-03-17 15:59:08 - game.hand_manager - INFO - STACK UPDATE: Winner ai_2 stack changed from 990 to 1025 (+35)
+2025-03-17 15:59:08 - game_service - INFO - UPDATING WINNER: Player ai_2 - Original stack 990, Adding 35, New stack should be 1025
+2025-03-17 15:59:08 - game_service - INFO - WINNER STACK UPDATED: Player ai_2 stack is now 1025
+2025-03-17 15:59:08 - game_service - INFO - AFTER SHOWDOWN: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - AFTER SHOWDOWN: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - AFTER SHOWDOWN: Player ai_1 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - AFTER SHOWDOWN: Player ai_2 has stack 1025
+2025-03-17 15:59:08 - game_service - INFO - AFTER SHOWDOWN: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - auth - DEBUG - Authenticated player: 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - Advancing game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56 to next hand
+2025-03-17 15:59:08 - game_service - INFO - NEXT HAND: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 starting with stack 990
+2025-03-17 15:59:08 - game_service - INFO - NEXT HAND: Player ai_0 starting with stack 995
+2025-03-17 15:59:08 - game_service - INFO - NEXT HAND: Player ai_1 starting with stack 990
+2025-03-17 15:59:08 - game_service - INFO - NEXT HAND: Player ai_2 starting with stack 1025
+2025-03-17 15:59:08 - game_service - INFO - NEXT HAND: Player ai_3 starting with stack 1000
+2025-03-17 15:59:08 - models.player - DEBUG - Reset hand state for player 9baee5f5-f3b3-4efb-995e-37784efa0161, stack: 990, active: True
+2025-03-17 15:59:08 - models.player - DEBUG - Reset hand state for player ai_0, stack: 995, active: False
+2025-03-17 15:59:08 - models.player - DEBUG - Reset hand state for player ai_1, stack: 990, active: True
+2025-03-17 15:59:08 - models.player - DEBUG - Reset hand state for player ai_2, stack: 1025, active: True
+2025-03-17 15:59:08 - models.player - DEBUG - Reset hand state for player ai_3, stack: 1000, active: False
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 15:59:08 - models.player - DEBUG - Player ai_1 bet 5, stack: 990 -> 985
+2025-03-17 15:59:08 - models.player - DEBUG - Player ai_2 bet 10, stack: 1025 -> 1015
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt hole cards to 9baee5f5-f3b3-4efb-995e-37784efa0161: ['9d', 'Qc']
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt hole cards to ai_1: ['Ah', 'As']
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt hole cards to ai_2: ['2h', '3s']
+2025-03-17 15:59:08 - game.poker_game - DEBUG - Dealt hole cards to players, 46 cards remaining
+2025-03-17 15:59:08 - game_service - INFO - NEXT HAND (after blinds): Player 9baee5f5-f3b3-4efb-995e-37784efa0161 stack 990
+2025-03-17 15:59:08 - game_service - INFO - NEXT HAND (after blinds): Player ai_0 stack 995
+2025-03-17 15:59:08 - game_service - INFO - NEXT HAND (after blinds): Player ai_1 stack 985
+2025-03-17 15:59:08 - game_service - INFO - NEXT HAND (after blinds): Player ai_2 stack 1015
+2025-03-17 15:59:08 - game_service - INFO - NEXT HAND (after blinds): Player ai_3 stack 1000
+2025-03-17 15:59:08 - game_service - INFO - Retrieved game state for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56, player 9baee5f5-f3b3-4efb-995e-37784efa0161
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player 9baee5f5-f3b3-4efb-995e-37784efa0161 has stack 990
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 985
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 1015
+2025-03-17 15:59:08 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 15:59:08 - game_service - INFO - Broadcast new_hand event for game fdd8c3d7-d0ad-44d2-ac37-a9ff4f170e56
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Creating new game 48634262-2e52-4c9d-99fa-a1619f761bf0 for player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:00:18 - statistics_manager - INFO - Started new session: dcbdc315-5166-468c-8191-c085d4c97c3b
+2025-03-17 16:00:18 - game.learning_tracker - INFO - Started learning session: dcbdc315-5166-468c-8191-c085d4c97c3b
+2025-03-17 16:00:18 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:00:18 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_0 bet 5, stack: 1000 -> 995
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 10, stack: 1000 -> 990
+2025-03-17 16:00:18 - game.poker_game - DEBUG - Dealt hole cards to 68f76250-111e-4f10-9483-a7e5bcda44f8: ['Tc', 'Jd']
+2025-03-17 16:00:18 - game.poker_game - DEBUG - Dealt hole cards to ai_0: ['Jc', '3h']
+2025-03-17 16:00:18 - game.poker_game - DEBUG - Dealt hole cards to ai_1: ['4c', '2h']
+2025-03-17 16:00:18 - game.poker_game - DEBUG - Dealt hole cards to ai_2: ['4d', 'Qd']
+2025-03-17 16:00:18 - game.poker_game - DEBUG - Dealt hole cards to ai_3: ['6h', '2c']
+2025-03-17 16:00:18 - game.poker_game - DEBUG - Dealt hole cards to players, 42 cards remaining
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 10, stack: 1000 -> 990
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 39.8
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: Jc, 3h | Community:  | Hand Score: 4294.2 (Pair) | Pot: 25 | SPR: 39.8
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community:  | Hand Score: 4401.67 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 40.0
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 4d, Qd | Community:  | Hand Score: 4035.2 (Pair) | Pot: 25 | SPR: 40.0
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 10, stack: 1000 -> 990
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 28.571428571428573
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: 6h, 2c | Community:  | Hand Score: 3973.98 (Pair) | Pot: 35 | SPR: 28.571428571428573
+2025-03-17 16:00:18 - game.poker_game - DEBUG - Dealt flop: 2s, Ac, Js
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 28.285714285714285
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js | Hand Score: 5991 (Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 28.285714285714285
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js | Hand Score: 6384 (High Card) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 10, stack: 990 -> 980
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 980
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 980
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 10, stack: 990 -> 980
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 18.0
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js | Hand Score: 5991 (Pair) | Pot: 55 | SPR: 18.0
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 10, stack: 990 -> 980
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 15.076923076923077
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js | Hand Score: 6384 (High Card) | Pot: 65 | SPR: 15.076923076923077
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 20, stack: 980 -> 960
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 980
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 980
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 960
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 980
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 980
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 960
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 20, stack: 980 -> 960
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 9.333333333333334
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js | Hand Score: 5991 (Pair) | Pot: 105 | SPR: 9.333333333333334
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 20, stack: 980 -> 960
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 7.68
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js | Hand Score: 6384 (High Card) | Pot: 125 | SPR: 7.68
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 40, stack: 960 -> 920
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 960
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 960
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 920
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 960
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 960
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 920
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 40, stack: 960 -> 920
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 4.682926829268292
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js | Hand Score: 5991 (Pair) | Pot: 205 | SPR: 4.682926829268292
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 40, stack: 960 -> 920
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.7551020408163267
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js | Hand Score: 6384 (High Card) | Pot: 245 | SPR: 3.7551020408163267
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 80, stack: 920 -> 840
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 920
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 920
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 840
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 920
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 920
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 840
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 80, stack: 920 -> 840
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 2.271604938271605
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js | Hand Score: 5991 (Pair) | Pot: 405 | SPR: 2.271604938271605
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 80, stack: 920 -> 840
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.731958762886598
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js | Hand Score: 6384 (High Card) | Pot: 485 | SPR: 1.731958762886598
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 160, stack: 840 -> 680
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 840
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 840
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 680
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 840
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 840
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 680
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 160, stack: 840 -> 680
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.0434782608695652
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js | Hand Score: 5991 (Pair) | Pot: 805 | SPR: 1.0434782608695652
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 160, stack: 840 -> 680
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.7046632124352331
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js | Hand Score: 6384 (High Card) | Pot: 965 | SPR: 0.7046632124352331
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 320, stack: 680 -> 360
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 680
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 680
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 680
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 680
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 320, stack: 680 -> 360
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.4236760124610592
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js | Hand Score: 5991 (Pair) | Pot: 1605 | SPR: 0.4236760124610592
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 320, stack: 680 -> 360
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.18701298701298702
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js | Hand Score: 6384 (High Card) | Pot: 1925 | SPR: 0.18701298701298702
+2025-03-17 16:00:18 - game.poker_game - DEBUG - Dealt turn: 8d
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.18701298701298702
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d | Hand Score: 5987 (Pair) | Pot: 1925 | SPR: 0.18701298701298702
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.18701298701298702
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d | Hand Score: 6368 (High Card) | Pot: 1925 | SPR: 0.18701298701298702
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 10, stack: 360 -> 350
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 350
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 360
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 350
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 10, stack: 360 -> 350
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.18508997429305912
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d | Hand Score: 5987 (Pair) | Pot: 1945 | SPR: 0.18508997429305912
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 10, stack: 360 -> 350
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.17902813299232737
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d | Hand Score: 6368 (High Card) | Pot: 1955 | SPR: 0.17902813299232737
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 20, stack: 350 -> 330
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 350
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 350
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 330
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 350
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 350
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 330
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 20, stack: 350 -> 330
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.17543859649122806
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d | Hand Score: 5987 (Pair) | Pot: 1995 | SPR: 0.17543859649122806
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 20, stack: 350 -> 330
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.16377171215880892
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d | Hand Score: 6368 (High Card) | Pot: 2015 | SPR: 0.16377171215880892
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 40, stack: 330 -> 290
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 330
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 330
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 290
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 330
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 330
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 290
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 40, stack: 330 -> 290
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.1575178997613365
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d | Hand Score: 5987 (Pair) | Pot: 2095 | SPR: 0.1575178997613365
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 40, stack: 330 -> 290
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.1358313817330211
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d | Hand Score: 6368 (High Card) | Pot: 2135 | SPR: 0.1358313817330211
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 80, stack: 290 -> 210
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 290
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 290
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 210
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 290
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 290
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 210
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 80, stack: 290 -> 210
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12636165577342048
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d | Hand Score: 5987 (Pair) | Pot: 2295 | SPR: 0.12636165577342048
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 80, stack: 290 -> 210
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.08842105263157894
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d | Hand Score: 6368 (High Card) | Pot: 2375 | SPR: 0.08842105263157894
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 160, stack: 210 -> 50
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 210
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 210
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 210
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 210
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 160, stack: 210 -> 50
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.07792207792207792
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d | Hand Score: 5987 (Pair) | Pot: 2695 | SPR: 0.07792207792207792
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 160, stack: 210 -> 50
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.017513134851138354
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d | Hand Score: 6368 (High Card) | Pot: 2855 | SPR: 0.017513134851138354
+2025-03-17 16:00:18 - game.poker_game - DEBUG - Dealt river: 8c
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.017513134851138354
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2855 | SPR: 0.017513134851138354
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.017513134851138354
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2855 | SPR: 0.017513134851138354
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 10, stack: 50 -> 40
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 40
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 50
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 40
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 10, stack: 50 -> 40
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.017391304347826087
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2875 | SPR: 0.017391304347826087
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_1 bet 20, stack: 50 -> 30
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.013816925734024179
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2895 | SPR: 0.013816925734024179
+2025-03-17 16:00:18 - models.player - DEBUG - Player ai_2 bet 30, stack: 40 -> 10
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 40
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 40
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - DEBUG - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 bet 30, stack: 40 -> 10
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:18 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:18 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:18 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:18 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - auth - DEBUG - Authenticated player: 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - Processing call action from player 68f76250-111e-4f10-9483-a7e5bcda44f8 in game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - models.player - WARNING - Player 68f76250-111e-4f10-9483-a7e5bcda44f8 attempted to bet 0, which is <= 0
+2025-03-17 16:00:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01015228426395939
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 4c, 2h | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 3150 (Two Pair) | Pot: 2955 | SPR: 0.01015228426395939
+2025-03-17 16:00:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.00338409475465313
+2025-03-17 16:00:19 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4d, Qd | Community: 2s, Ac, Js, 8d, 8c | Hand Score: 4656 (Pair) | Pot: 2955 | SPR: 0.00338409475465313
+2025-03-17 16:00:19 - game_service - INFO - Retrieved game state for game 48634262-2e52-4c9d-99fa-a1619f761bf0, player 68f76250-111e-4f10-9483-a7e5bcda44f8
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player 68f76250-111e-4f10-9483-a7e5bcda44f8 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 30
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 10
+2025-03-17 16:00:19 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:00:19 - game_service - INFO - Broadcast player_action event for game 48634262-2e52-4c9d-99fa-a1619f761bf0
+2025-03-17 16:00:19 - rate_limiter - WARNING - Rate limit exceeded for client 127.0.0.1
+2025-03-17 16:03:41 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-03-17 16:12:20 - config - INFO - Running in development environment
+2025-03-17 16:12:20 - statistics_manager - INFO - Statistics manager initialized
+2025-03-17 16:12:20 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-17 16:12:20 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: a19dae58-2072-4b41-9841-27e28d7ec709
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: a19dae58-2072-4b41-9841-27e28d7ec709
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: dadce7ab-fa42-4e5c-b566-00b4b15514cd
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: dadce7ab-fa42-4e5c-b566-00b4b15514cd
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: 80f28671-d34c-475e-a90b-8489bf5aaf0f
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: 80f28671-d34c-475e-a90b-8489bf5aaf0f
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - models.player - DEBUG - Player p2 bet 5, stack: 1000 -> 995
+2025-03-17 16:12:20 - models.player - DEBUG - Player p3 bet 10, stack: 1000 -> 990
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt hole cards to p1: ['Tc', '4s']
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt hole cards to p2: ['Ah', '7c']
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt hole cards to p3: ['Ad', 'Th']
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt hole cards to players, 46 cards remaining
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: ee7b45c3-bbec-40e5-90d6-54c8138115f0
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: ee7b45c3-bbec-40e5-90d6-54c8138115f0
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt flop: 3h, 2s, Qd
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: 3f24260e-e4ff-4e91-a21b-3e83392ef1aa
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: 3f24260e-e4ff-4e91-a21b-3e83392ef1aa
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt flop: Tc, Js, Qc
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: a42720a2-74ae-4c26-be31-c17b6abb80b4
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: a42720a2-74ae-4c26-be31-c17b6abb80b4
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt flop: 7s, Th, 2h
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt turn: Qh
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt river: 5c
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: 70163816-b2d5-44ec-9fa6-65c754466537
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: 70163816-b2d5-44ec-9fa6-65c754466537
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt flop: 5s, Ks, Ac
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt turn: 2d
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: c8c94a71-a3c1-4bed-b3f0-889881adda64
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: c8c94a71-a3c1-4bed-b3f0-889881adda64
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: 9617bf41-7905-4215-b8ce-e3d65e13866a
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: 9617bf41-7905-4215-b8ce-e3d65e13866a
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - models.player - DEBUG - Reset hand state for player p1, stack: 1000, active: True
+2025-03-17 16:12:20 - models.player - DEBUG - Reset hand state for player p2, stack: 1000, active: True
+2025-03-17 16:12:20 - models.player - DEBUG - Reset hand state for player p3, stack: 1000, active: True
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: 1d15630b-7fb4-4925-9c5c-c4ce77fad891
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: 1d15630b-7fb4-4925-9c5c-c4ce77fad891
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt flop: 6h, Ts, Kd
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt turn: 6c
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Dealt river: 7h
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: f0fa40fd-aae3-4997-ba79-a2e5c89af510
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: f0fa40fd-aae3-4997-ba79-a2e5c89af510
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - Pot distributed to winners: {}
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: 1984630a-cde9-44ae-b289-ef227be38378
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: 1984630a-cde9-44ae-b289-ef227be38378
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: 75d594ae-991a-437f-9913-e6444f3555e6
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: 75d594ae-991a-437f-9913-e6444f3555e6
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: 837de678-bf76-4a9e-b39f-7efc9dfe22fa
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: 837de678-bf76-4a9e-b39f-7efc9dfe22fa
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: 29a4fcc2-64ed-4c32-9448-8ba8f2133e46
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: 29a4fcc2-64ed-4c32-9448-8ba8f2133e46
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:20 - statistics_manager - INFO - Started new session: 152b8fef-064f-450a-992f-3343f6ecb885
+2025-03-17 16:12:20 - game.learning_tracker - INFO - Started learning session: 152b8fef-064f-450a-992f-3343f6ecb885
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:20 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:20 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:25 - config - INFO - Running in development environment
+2025-03-17 16:12:25 - statistics_manager - INFO - Statistics manager initialized
+2025-03-17 16:12:25 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-17 16:12:25 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-17 16:12:25 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:25 - statistics_manager - INFO - Started new session: 02106618-b374-45c1-aa97-4d81d804ab4f
+2025-03-17 16:12:25 - game.learning_tracker - INFO - Started learning session: 02106618-b374-45c1-aa97-4d81d804ab4f
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:25 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p1: ['9c', 'Ks']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p2: ['9h', '5h']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p3: ['Qs', '3h']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p4: ['3s', 'Jh']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p5: ['2h', '8s']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p6: ['9s', '2s']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p7: ['As', 'Ac']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p8: ['Kh', 'Jd']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p9: ['7s', 'Jc']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p10: ['6c', '4s']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p11: ['8d', '8c']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p12: ['Th', 'Td']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p13: ['4h', '6d']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p14: ['8h', 'Kc']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p15: ['7h', '3c']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p16: ['Ts', '2c']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p17: ['5s', 'Qc']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p18: ['Kd', 'Tc']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p19: ['Qd', '4c']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p20: ['2d', '3d']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p21: ['Ad', '6h']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p22: ['7c', 'Ah']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p23: ['Js', '5d']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p24: ['9d', '4d']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p25: ['Qh', '7d']
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to p26: ['5c', '6s']
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Dealt hole cards to players, 0 cards remaining
+2025-03-17 16:12:25 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:25 - statistics_manager - INFO - Started new session: 9ed1f062-5181-412b-8b56-5f56ca9e1ead
+2025-03-17 16:12:25 - game.learning_tracker - INFO - Started learning session: 9ed1f062-5181-412b-8b56-5f56ca9e1ead
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:25 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:25 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:25 - statistics_manager - INFO - Started new session: 58cfd3da-84cd-4647-b85e-792ef4d49ce7
+2025-03-17 16:12:25 - game.learning_tracker - INFO - Started learning session: 58cfd3da-84cd-4647-b85e-792ef4d49ce7
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Running in test mode with alternate player configuration
+2025-03-17 16:12:25 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:25 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:45 - config - INFO - Running in development environment
+2025-03-17 16:12:45 - statistics_manager - INFO - Statistics manager initialized
+2025-03-17 16:12:45 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-17 16:12:45 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-17 16:12:45 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:45 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-17 16:12:45 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-17 16:12:45 - config - INFO - Running in development environment
+2025-03-17 16:12:45 - statistics_manager - INFO - Statistics manager initialized
+2025-03-17 16:12:45 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-17 16:12:45 - hooks.game_engine - INFO - Game engine hooks initialized
+2025-03-17 16:12:45 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:45 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-17 16:12:45 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-17 16:12:45 - asyncio - DEBUG - Using selector: KqueueSelector
+2025-03-17 16:12:45 - api - INFO - Configuring CORS with origins: ['*']
+2025-03-17 16:12:45 - api - INFO - Added rate limiting middleware: 60 requests per minute
+2025-03-17 16:12:45 - api - INFO - Starting the Poker Learning App API
+2025-03-17 16:12:45 - api - INFO - Initialized WebSocket manager
+2025-03-17 16:12:45 - api - INFO - Scheduled inactive game cleanup
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Creating new game aafd4a38-9d63-41cd-8bfc-31323829b2dd for player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game.learning_tracker - INFO - Learning tracker initialized
+2025-03-17 16:12:50 - statistics_manager - INFO - Started new session: a1fa5db5-a7ee-49cf-bee4-5ee3830f46de
+2025-03-17 16:12:50 - game.learning_tracker - INFO - Started learning session: a1fa5db5-a7ee-49cf-bee4-5ee3830f46de
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:50 - game.poker_game - INFO - PokerGame initialized
+2025-03-17 16:12:50 - models.player - DEBUG - Player ai_0 bet 5, stack: 1000 -> 995
+2025-03-17 16:12:50 - models.player - DEBUG - Player ai_1 bet 10, stack: 1000 -> 990
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to c0d27fb4-fba6-41a9-81e6-746bd17b87f9: ['5h', '6h']
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to ai_0: ['2s', '9d']
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to ai_1: ['8d', 'Js']
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to ai_2: ['Ac', '2h']
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to ai_3: ['Kh', '3s']
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to players, 42 cards remaining
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Retrieved game state for game aafd4a38-9d63-41cd-8bfc-31323829b2dd, player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 1000
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 1000
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Processing call action from player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 in game aafd4a38-9d63-41cd-8bfc-31323829b2dd
+2025-03-17 16:12:50 - models.player - DEBUG - Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 bet 10, stack: 1000 -> 990
+2025-03-17 16:12:50 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 39.8
+2025-03-17 16:12:50 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 2s, 9d | Community:  | Hand Score: 4622.14 (Pair) | Pot: 25 | SPR: 39.8
+2025-03-17 16:12:50 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-17 16:12:50 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8d, Js | Community:  | Hand Score: 4010.36 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-17 16:12:50 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 40.0
+2025-03-17 16:12:50 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ac, 2h | Community:  | Hand Score: 4048.17 (Pair) | Pot: 25 | SPR: 40.0
+2025-03-17 16:12:50 - models.player - DEBUG - Player ai_2 bet 10, stack: 1000 -> 990
+2025-03-17 16:12:50 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 28.571428571428573
+2025-03-17 16:12:50 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: Kh, 3s | Community:  | Hand Score: 4159.47 (Pair) | Pot: 35 | SPR: 28.571428571428573
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt flop: Ah, 9c, 3d
+2025-03-17 16:12:50 - game_service - INFO - Retrieved game state for game aafd4a38-9d63-41cd-8bfc-31323829b2dd, player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - game_service - INFO - Broadcast player_action event for game aafd4a38-9d63-41cd-8bfc-31323829b2dd
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Retrieved game state for game aafd4a38-9d63-41cd-8bfc-31323829b2dd, player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Processing call action from player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 in game aafd4a38-9d63-41cd-8bfc-31323829b2dd
+2025-03-17 16:12:50 - models.player - WARNING - Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 attempted to bet 0, which is <= 0
+2025-03-17 16:12:50 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 28.285714285714285
+2025-03-17 16:12:50 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8d, Js | Community: Ah, 9c, 3d | Hand Score: 6502 (High Card) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 16:12:50 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 28.285714285714285
+2025-03-17 16:12:50 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ac, 2h | Community: Ah, 9c, 3d | Hand Score: 3510 (Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt turn: 9h
+2025-03-17 16:12:50 - game_service - INFO - Retrieved game state for game aafd4a38-9d63-41cd-8bfc-31323829b2dd, player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - game_service - INFO - Broadcast player_action event for game aafd4a38-9d63-41cd-8bfc-31323829b2dd
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Retrieved game state for game aafd4a38-9d63-41cd-8bfc-31323829b2dd, player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Processing call action from player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 in game aafd4a38-9d63-41cd-8bfc-31323829b2dd
+2025-03-17 16:12:50 - models.player - WARNING - Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 attempted to bet 0, which is <= 0
+2025-03-17 16:12:50 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 28.285714285714285
+2025-03-17 16:12:50 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8d, Js | Community: Ah, 9c, 3d, 9h | Hand Score: 4446 (Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 16:12:50 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 28.285714285714285
+2025-03-17 16:12:50 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ac, 2h | Community: Ah, 9c, 3d, 9h | Hand Score: 2521 (Two Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt river: Ks
+2025-03-17 16:12:50 - game_service - INFO - Retrieved game state for game aafd4a38-9d63-41cd-8bfc-31323829b2dd, player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - game_service - INFO - Broadcast player_action event for game aafd4a38-9d63-41cd-8bfc-31323829b2dd
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Retrieved game state for game aafd4a38-9d63-41cd-8bfc-31323829b2dd, player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Processing call action from player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 in game aafd4a38-9d63-41cd-8bfc-31323829b2dd
+2025-03-17 16:12:50 - models.player - WARNING - Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 attempted to bet 0, which is <= 0
+2025-03-17 16:12:50 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 28.285714285714285
+2025-03-17 16:12:50 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8d, Js | Community: Ah, 9c, 3d, 9h, Ks | Hand Score: 4427 (Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 16:12:50 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 28.285714285714285
+2025-03-17 16:12:50 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ac, 2h | Community: Ah, 9c, 3d, 9h, Ks | Hand Score: 2512 (Two Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-17 16:12:50 - game_service - INFO - Retrieved game state for game aafd4a38-9d63-41cd-8bfc-31323829b2dd, player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - game_service - INFO - Broadcast player_action event for game aafd4a38-9d63-41cd-8bfc-31323829b2dd
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Retrieved game state for game aafd4a38-9d63-41cd-8bfc-31323829b2dd, player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - game_service - INFO - SHOWDOWN: Active players: ['c0d27fb4-fba6-41a9-81e6-746bd17b87f9', 'ai_1', 'ai_2']
+2025-03-17 16:12:50 - game_service - INFO - BEFORE SHOWDOWN: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - BEFORE SHOWDOWN: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - BEFORE SHOWDOWN: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - BEFORE SHOWDOWN: Player ai_2 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - BEFORE SHOWDOWN: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - game.hand_manager - INFO - Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 hand: 5h, 6h - Pair (4431)
+2025-03-17 16:12:50 - game.hand_manager - INFO - Player ai_1 hand: 8d, Js - Pair (4427)
+2025-03-17 16:12:50 - game.hand_manager - INFO - Player ai_2 hand: Ac, 2h - Two Pair (2512)
+2025-03-17 16:12:50 - game_service - INFO - SHOWDOWN: Total pot to distribute: 35
+2025-03-17 16:12:50 - game.hand_manager - INFO - Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 hand: 5h, 6h - Pair (4431)
+2025-03-17 16:12:50 - game.hand_manager - INFO - Player ai_1 hand: 8d, Js - Pair (4427)
+2025-03-17 16:12:50 - game.hand_manager - INFO - Player ai_2 hand: Ac, 2h - Two Pair (2512)
+2025-03-17 16:12:50 - game.hand_manager - INFO - STACK UPDATE: Winner ai_2 stack changed from 990 to 1025 (+35)
+2025-03-17 16:12:50 - game_service - INFO - UPDATING WINNER: Player ai_2 - Original stack 990, Adding 35, New stack should be 1025
+2025-03-17 16:12:50 - game_service - INFO - WINNER STACK UPDATED: Player ai_2 stack is now 1025
+2025-03-17 16:12:50 - game_service - INFO - AFTER SHOWDOWN: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - AFTER SHOWDOWN: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - AFTER SHOWDOWN: Player ai_1 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - AFTER SHOWDOWN: Player ai_2 has stack 1025
+2025-03-17 16:12:50 - game_service - INFO - AFTER SHOWDOWN: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - auth - DEBUG - Authenticated player: c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - Advancing game aafd4a38-9d63-41cd-8bfc-31323829b2dd to next hand
+2025-03-17 16:12:50 - game_service - INFO - NEXT HAND: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 starting with stack 990
+2025-03-17 16:12:50 - game_service - INFO - NEXT HAND: Player ai_0 starting with stack 995
+2025-03-17 16:12:50 - game_service - INFO - NEXT HAND: Player ai_1 starting with stack 990
+2025-03-17 16:12:50 - game_service - INFO - NEXT HAND: Player ai_2 starting with stack 1025
+2025-03-17 16:12:50 - game_service - INFO - NEXT HAND: Player ai_3 starting with stack 1000
+2025-03-17 16:12:50 - models.player - DEBUG - Reset hand state for player c0d27fb4-fba6-41a9-81e6-746bd17b87f9, stack: 990, active: True
+2025-03-17 16:12:50 - game_service - INFO - Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 active status for new hand: True (stack: 990)
+2025-03-17 16:12:50 - models.player - DEBUG - Reset hand state for player ai_0, stack: 995, active: True
+2025-03-17 16:12:50 - game_service - INFO - Player ai_0 active status for new hand: True (stack: 995)
+2025-03-17 16:12:50 - models.player - DEBUG - Reset hand state for player ai_1, stack: 990, active: True
+2025-03-17 16:12:50 - game_service - INFO - Player ai_1 active status for new hand: True (stack: 990)
+2025-03-17 16:12:50 - models.player - DEBUG - Reset hand state for player ai_2, stack: 1025, active: True
+2025-03-17 16:12:50 - game_service - INFO - Player ai_2 active status for new hand: True (stack: 1025)
+2025-03-17 16:12:50 - models.player - DEBUG - Reset hand state for player ai_3, stack: 1000, active: True
+2025-03-17 16:12:50 - game_service - INFO - Player ai_3 active status for new hand: True (stack: 1000)
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Deck reset with 52 cards
+2025-03-17 16:12:50 - models.player - DEBUG - Player ai_1 bet 5, stack: 990 -> 985
+2025-03-17 16:12:50 - models.player - DEBUG - Player ai_2 bet 10, stack: 1025 -> 1015
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to c0d27fb4-fba6-41a9-81e6-746bd17b87f9: ['Jc', 'Ah']
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to ai_0: ['Kd', '9s']
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to ai_1: ['Ts', 'Qd']
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to ai_2: ['2c', 'Qh']
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to ai_3: ['4d', '5h']
+2025-03-17 16:12:50 - game.poker_game - DEBUG - Dealt hole cards to players, 42 cards remaining
+2025-03-17 16:12:50 - game_service - INFO - NEXT HAND (after blinds): Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 stack 990
+2025-03-17 16:12:50 - game_service - INFO - NEXT HAND (after blinds): Player ai_0 stack 995
+2025-03-17 16:12:50 - game_service - INFO - NEXT HAND (after blinds): Player ai_1 stack 985
+2025-03-17 16:12:50 - game_service - INFO - NEXT HAND (after blinds): Player ai_2 stack 1015
+2025-03-17 16:12:50 - game_service - INFO - NEXT HAND (after blinds): Player ai_3 stack 1000
+2025-03-17 16:12:50 - game_service - INFO - Retrieved game state for game aafd4a38-9d63-41cd-8bfc-31323829b2dd, player c0d27fb4-fba6-41a9-81e6-746bd17b87f9
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player c0d27fb4-fba6-41a9-81e6-746bd17b87f9 has stack 990
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_0 has stack 995
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_1 has stack 985
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_2 has stack 1015
+2025-03-17 16:12:50 - game_service - INFO - GET GAME STATE: Player ai_3 has stack 1000
+2025-03-17 16:12:50 - game_service - INFO - Broadcast new_hand event for game aafd4a38-9d63-41cd-8bfc-31323829b2dd
+2025-03-17 16:12:58 - api - INFO - Shutting down the Poker Learning App API

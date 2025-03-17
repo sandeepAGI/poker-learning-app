@@ -85,7 +85,6 @@ class Player:
         """Resets player state for a new hand."""
         # Store current stack to preserve it
         current_stack = self.stack
-        is_active = self.is_active
         
         # Reset betting state
         self.current_bet = 0
@@ -93,9 +92,12 @@ class Player:
         self.all_in = False
         self.hole_cards = []
         
-        # Restore stack and active status
+        # Restore stack
         self.stack = current_stack
-        self.is_active = is_active
+        
+        # IMPORTANT: Always set players to active at the start of a new hand
+        # unless they were eliminated due to insufficient chips
+        self.is_active = current_stack >= 5
         
         logger.debug(f"Reset hand state for player {self.player_id}, stack: {self.stack}, active: {self.is_active}")
         
