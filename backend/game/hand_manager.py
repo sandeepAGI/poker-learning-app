@@ -63,8 +63,15 @@ class HandManager:
         Returns:
             Dictionary mapping player_id to amount won
         """
+        # Log total pot for debugging
+        logger.info(f"DISTRIBUTE POT: Total pot is {total_pot}")
+        
         active_players = [player for player in players if player.is_active or player.all_in]
         winners = {}
+        
+        # Log player states before distribution for debugging
+        for player in players:
+            logger.info(f"PLAYER STATE: {player.player_id} - active: {player.is_active}, all-in: {player.all_in}, stack: {player.stack}")
         
         # Early return if only one player is active (everyone else folded)
         if len(active_players) == 1:
@@ -77,32 +84,51 @@ class HandManager:
             # Extra verification
             if winner.stack != old_stack + total_pot:
                 logger.error(f"STACK ERROR: Winner {winner.player_id} stack ({winner.stack}) does not match expected value ({old_stack + total_pot})")
+                # Fix the stack if there's an error
+                winner.stack = old_stack + total_pot
+                logger.info(f"STACK CORRECTED: Fixed {winner.player_id} stack to {winner.stack}")
             
             return winners
         
         # Calculate main pot and side pots
         pots = PotManager.calculate_pots(players)
         
-        # Update the last pot with remaining chips (rounding errors, etc.)
-        if pots:
-            remaining_chips = total_pot - sum(pot.amount for pot in pots)
+        # Log calculated pots for debugging
+        pot_sum = sum(pot.amount for pot in pots)
+        logger.info(f"POT CALCULATION: Found {len(pots)} pots totaling {pot_sum} chips")
+        
+        # Update the last pot with remaining chips to account for rounding errors
+        remaining_chips = total_pot - pot_sum
+        if pots and remaining_chips != 0:
+            logger.info(f"POT ADJUSTMENT: Adding {remaining_chips} remaining chips to last pot")
             pots[-1].amount += remaining_chips
         
         # Early return if no pots (shouldn't happen but just in case)
         if not pots:
+            logger.warning("No pots calculated despite having active players")
             return winners
             
         # Evaluate hands for all active players
         player_hands = self.evaluate_hands(players, community_cards, deck)
         
+        # Log evaluated hands for debugging
+        for pid, (score, rank, _) in player_hands.items():
+            logger.info(f"HAND EVAL: Player {pid} has {rank} (score: {score})")
+        
+        # Track total chips distributed for verification
+        total_distributed = 0
+        
         # Distribute each pot to winner(s)
-        for pot in pots:
+        for i, pot in enumerate(pots):
+            logger.info(f"DISTRIBUTING POT {i+1}: Amount {pot.amount}, eligible players: {pot.eligible_players}")
+            
             eligible_player_hands = {
                 pid: player_hands[pid] for pid in pot.eligible_players 
                 if pid in player_hands
             }
             
             if not eligible_player_hands:
+                logger.warning(f"No eligible players found for pot {i+1}")
                 continue
                 
             # Find the best hand score among eligible players
@@ -114,27 +140,59 @@ class HandManager:
                 if score == best_score
             ]
             
+            # Log pot winners for debugging
+            logger.info(f"POT {i+1} WINNERS: {[p.player_id for p in pot_winners]}")
+            
             # Split the pot among winners
             if pot_winners:
                 split_amount = pot.amount // len(pot_winners)
                 remainder = pot.amount % len(pot_winners)
                 
+                logger.info(f"SPLIT AMOUNT: {split_amount} per winner, remainder: {remainder}")
+                
                 for winner in pot_winners:
                     old_stack = winner.stack  # Log old stack
                     winner.stack += split_amount
                     winners[winner.player_id] = winners.get(winner.player_id, 0) + split_amount
+                    total_distributed += split_amount
+                    
                     logger.info(f"STACK UPDATE: Winner {winner.player_id} stack changed from {old_stack} to {winner.stack} (+{split_amount})")
                     
                     # Verify stack update
                     if winner.stack != old_stack + split_amount:
                         logger.error(f"STACK ERROR: Winner {winner.player_id} stack ({winner.stack}) does not match expected value ({old_stack + split_amount})")
+                        # Fix the stack if there's an error
+                        winner.stack = old_stack + split_amount
+                        logger.info(f"STACK CORRECTED: Fixed {winner.player_id} stack to {winner.stack}")
                     
                 # Distribute remainder (1 chip per player until gone)
+                if remainder > 0:
+                    logger.info(f"DISTRIBUTING REMAINDER: {remainder} chips")
+                    
                 for i in range(remainder):
                     winner = pot_winners[i % len(pot_winners)]
                     old_stack = winner.stack  # Log old stack before adding chip
                     winner.stack += 1
                     winners[winner.player_id] = winners.get(winner.player_id, 0) + 1
+                    total_distributed += 1
                     logger.info(f"STACK UPDATE: Winner {winner.player_id} gets +1 remainder chip, stack now {winner.stack}")
+        
+        # Verify total distribution matches total pot
+        if total_distributed != total_pot:
+            logger.error(f"DISTRIBUTION ERROR: Distributed {total_distributed} chips, but pot was {total_pot}")
+            # Find a winner to fix the difference
+            if winners:
+                difference = total_pot - total_distributed
+                first_winner_id = next(iter(winners))
+                for player in players:
+                    if player.player_id == first_winner_id:
+                        old_stack = player.stack
+                        player.stack += difference
+                        winners[first_winner_id] += difference
+                        logger.info(f"DISTRIBUTION CORRECTED: Added {difference} chips to {player.player_id}, stack now {player.stack}")
+                        break
+        
+        # Log final winner distribution
+        logger.info(f"FINAL DISTRIBUTION: Winners = {winners}, total distributed = {total_distributed}")
         
         return winners

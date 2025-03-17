@@ -1,0 +1,13 @@
+2025-03-17 16:33:13,595 - INFO - Starting test to verify fix for folded AI players issue
+2025-03-17 16:33:13,596 - INFO - Creating new game with 5 AI players
+2025-03-17 16:33:13,602 - ERROR - API request failed: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/games (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x102f3b5f0>: Failed to establish a new connection: [Errno 61] Connection refused'))
+2025-03-17 17:16:13,996 - INFO - Starting test to verify fix for folded AI players issue
+2025-03-17 17:16:13,997 - INFO - Creating test player
+2025-03-17 17:16:14,002 - ERROR - Failed to create player: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/players (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x101b72b70>: Failed to establish a new connection: [Errno 61] Connection refused'))
+2025-03-17 17:16:14,002 - ERROR - Failed to create test player
+2025-03-17 17:16:14,002 - ERROR - Test failed!
+2025-03-17 17:26:13,741 - INFO - Starting test to verify fix for folded AI players issue
+2025-03-17 17:26:13,741 - INFO - Creating test player
+2025-03-17 17:26:13,745 - ERROR - Failed to create player: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/players (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x1018b0d70>: Failed to establish a new connection: [Errno 61] Connection refused'))
+2025-03-17 17:26:13,745 - ERROR - Failed to create test player
+2025-03-17 17:26:13,745 - ERROR - Test failed!

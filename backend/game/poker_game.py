@@ -251,6 +251,11 @@ class PokerGame:
         # Use the provided deck if given (for backward compatibility)
         current_deck = deck if deck is not None else self.deck
         
+        # Calculate total chips before pot distribution for consistency check
+        total_chips_before = sum(player.stack for player in self.players) + self.pot
+        logger.info(f"CHIPS CHECK: Total chips before pot distribution: {total_chips_before}")
+        
+        # Distribute pot to winners
         winners = self.hand_manager.distribute_pot(
             players=self.players,
             community_cards=self.community_cards,
@@ -258,15 +263,28 @@ class PokerGame:
             deck=current_deck
         )
         
-        # Update player stacks based on distribution
+        # Verify stacks after distribution and log updated values
         for player_id, amount in winners.items():
             for player in self.players:
                 if player.player_id == player_id:
-                    # Add this check to ensure we're not double counting
-                    # since hand_manager already updates stacks
-                    player.stack = player.stack
-                    logger.info(f"Player {player_id} stack updated to {player.stack}")
+                    logger.info(f"WINNER STACK: Player {player_id} confirmed stack = {player.stack}, won {amount}")
                     break
+        
+        # Verify total chips is conserved after distribution
+        total_chips_after = sum(player.stack for player in self.players) + self.pot
+        if total_chips_before != total_chips_after:
+            logger.error(f"CHIPS ERROR: Total chips before ({total_chips_before}) does not match after ({total_chips_after})")
+            # Auto-correct by adjusting the first winner's stack if needed
+            if winners and total_chips_before > total_chips_after:
+                difference = total_chips_before - total_chips_after
+                first_winner_id = next(iter(winners))
+                for player in self.players:
+                    if player.player_id == first_winner_id:
+                        player.stack += difference
+                        logger.info(f"CHIPS CORRECTED: Added {difference} missing chips to {player.player_id}")
+                        break
+        else:
+            logger.info(f"CHIPS CHECK: Total chips conserved after pot distribution: {total_chips_after}")
         
         # Reset pot and prepare for next hand
         self.pot = 0

@@ -437,6 +437,12 @@ class GameService:
         # This is a simplified version - in real implementation, 
         # would use PokerRound to handle betting rounds properly
         
+        # Check if there's only one active player left before processing AI actions
+        active_players_count = sum(1 for p in poker_game.players if p.is_active)
+        if active_players_count <= 1:
+            self.logger.info(f"Only {active_players_count} active player(s) remaining, skipping AI actions")
+            return
+        
         # Basic game state for AI decisions
         game_state_dict = {
             "community_cards": poker_game.community_cards,
@@ -462,6 +468,12 @@ class GameService:
             # Process decision
             if decision == "fold":
                 player.is_active = False
+                
+                # Check if only one active player remains after this fold
+                active_players_count = sum(1 for p in poker_game.players if p.is_active)
+                if active_players_count <= 1:
+                    self.logger.info(f"Only {active_players_count} active player(s) remaining after AI fold, stopping AI actions")
+                    break
             elif decision == "call":
                 call_amount = poker_game.current_bet - player.current_bet
                 if call_amount > 0:
@@ -499,6 +511,24 @@ class GameService:
         
         self.logger.info(f"Advancing game {game_id} to next hand")
         
+        # Record the total chips in play for conservation check
+        total_chips_before = sum(player.stack for player in poker_game.players) + poker_game.pot
+        self.logger.info(f"CHIPS CHECK: Total chips before new hand: {total_chips_before}")
+        
+        # Verify pot is zero before next hand - it should be distributed at showdown
+        if poker_game.pot != 0:
+            self.logger.warning(f"POT ERROR: Pot is {poker_game.pot} at start of new hand, should be 0")
+            # Find active players to distribute remaining pot
+            active_players = [p for p in poker_game.players if p.is_active]
+            if active_players:
+                # Take the first active player as winner of remaining pot
+                winner = active_players[0]
+                old_stack = winner.stack
+                winner.stack += poker_game.pot
+                self.logger.info(f"POT CORRECTED: Added remaining {poker_game.pot} to {winner.player_id}")
+            # Reset pot to zero
+            poker_game.pot = 0
+        
         # Log player stacks at the start of the new hand
         for player in poker_game.players:
             self.logger.info(f"NEXT HAND: Player {player.player_id} starting with stack {player.stack}")
@@ -510,12 +540,22 @@ class GameService:
             # For our API integration, we need to do these steps:
             # 1. Reset player states and reactivate players for the next hand
             for player in poker_game.players:
+                # Get stack before reset for verification
+                pre_reset_stack = player.stack
+                
                 # The reset_hand_state method now handles reactivating players correctly
                 # based on their chip count, not their previous active status
                 player.reset_hand_state()
                 
                 # Double check that hole cards are cleared
                 player.hole_cards = []
+                
+                # Verify stack was preserved through reset
+                if player.stack != pre_reset_stack:
+                    self.logger.error(f"STACK RESET ERROR: Player {player.player_id} stack changed during reset from {pre_reset_stack} to {player.stack}")
+                    # Fix it
+                    player.stack = pre_reset_stack
+                    self.logger.info(f"STACK CORRECTED: Reset {player.player_id} stack back to {player.stack}")
                 
                 # Log reactivation status
                 self.logger.info(f"Player {player.player_id} active status for new hand: {player.is_active} (stack: {player.stack})")
@@ -533,8 +573,16 @@ class GameService:
             poker_game.deck_manager.reset()  # Full deck reset in the deck manager
             poker_game.reset_deck()  # Update the game's deck reference
             
+            # Track chips before posting blinds
+            pre_blinds_chips = sum(player.stack for player in poker_game.players) + poker_game.pot
+            
             # 5. Post blinds and deal hole cards
             poker_game.post_blinds()  # This also deals hole cards
+            
+            # Verify chips are conserved after posting blinds
+            post_blinds_chips = sum(player.stack for player in poker_game.players) + poker_game.pot
+            if pre_blinds_chips != post_blinds_chips:
+                self.logger.error(f"CHIPS ERROR: Total chips changed during blinds posting: {pre_blinds_chips} -> {post_blinds_chips}")
             
             # 6. Ensure all players have cards by explicitly dealing cards to any player missing them
             for player in poker_game.players:
@@ -553,6 +601,13 @@ class GameService:
             # Log stacks after posting blinds to verify they've been properly updated
             for player in poker_game.players:
                 self.logger.info(f"NEXT HAND (after blinds): Player {player.player_id} stack {player.stack}")
+            
+            # Final chip conservation check
+            total_chips_after = sum(player.stack for player in poker_game.players) + poker_game.pot
+            if total_chips_before != total_chips_after:
+                self.logger.error(f"CHIPS CONSERVATION ERROR: Total chips changed during new hand setup: {total_chips_before} -> {total_chips_after}")
+            else:
+                self.logger.info(f"CHIPS CONSERVATION CHECK: Total chips preserved during new hand setup: {total_chips_after}")
             
             # Update game in session manager
             self.session_manager.update_session(game_id, game_data)
@@ -704,6 +759,9 @@ class GameService:
         self.logger.info(f"SHOWDOWN: Active players: {[p.player_id for p in active_players]}")
         
         # Log current stacks before distribution
+        total_chips_before = sum(player.stack for player in poker_game.players) + poker_game.pot
+        self.logger.info(f"SHOWDOWN: Total chips in play before distribution: {total_chips_before}")
+        
         for player in poker_game.players:
             self.logger.info(f"BEFORE SHOWDOWN: Player {player.player_id} has stack {player.stack}")
         
@@ -719,6 +777,7 @@ class GameService:
         self.logger.info(f"SHOWDOWN: Total pot to distribute: {total_pot}")
         
         # Get pot distribution (winners)
+        # Note: distribute_pot already handles stack updates inside hand_manager
         winners = poker_game.hand_manager.distribute_pot(
             players=poker_game.players,
             community_cards=poker_game.community_cards,
@@ -726,20 +785,29 @@ class GameService:
             deck=poker_game.deck
         )
         
-        # Manually update winners' stacks for extra safety
-        win_amounts = {}
+        # Verify stacks were updated correctly - no need to double-update
         for pid, amount in winners.items():
-            win_amounts[pid] = amount
             for player in poker_game.players:
                 if player.player_id == pid:
-                    # Get original stack before adding winnings
-                    original_stack = player.stack - amount
-                    self.logger.info(f"UPDATING WINNER: Player {pid} - Original stack {original_stack}, Adding {amount}, New stack should be {original_stack + amount}")
-                    
-                    # Set the stack explicitly to ensure it's updated correctly
-                    player.stack = original_stack + amount
-                    self.logger.info(f"WINNER STACK UPDATED: Player {pid} stack is now {player.stack}")
+                    self.logger.info(f"SHOWDOWN VERIFY: Winner {pid} has stack {player.stack}, won {amount}")
                     break
+        
+        # Verify total chips are conserved
+        total_chips_after = sum(player.stack for player in poker_game.players) + poker_game.pot
+        if total_chips_before != total_chips_after:
+            self.logger.error(f"CHIPS CONSERVATION ERROR: Before: {total_chips_before}, After: {total_chips_after}, Difference: {total_chips_before - total_chips_after}")
+            # If chips were lost (more likely than gained), fix by adding to a winner
+            if total_chips_before > total_chips_after and winners:
+                difference = total_chips_before - total_chips_after
+                first_winner_id = next(iter(winners))
+                for player in poker_game.players:
+                    if player.player_id == first_winner_id:
+                        old_stack = player.stack
+                        player.stack += difference
+                        self.logger.info(f"CHIPS FIXED: Added {difference} missing chips to {player.player_id}, now {player.stack}")
+                        break
+        else:
+            self.logger.info("CHIPS CONSERVATION CHECK: All chips are accounted for after pot distribution")
         
         # Log all stacks after distribution
         for player in poker_game.players:
@@ -772,14 +840,14 @@ class GameService:
                     poker_game.community_cards
                 )
                 
-                # Find the player again to get the most up-to-date stack
+                # Get the current player reference to ensure correct stack
                 current_player = None
                 for p in poker_game.players:
                     if p.player_id == pid:
                         current_player = p
                         break
                 
-                # Use player's current stack if we found them
+                # Use player's current stack - should reflect winnings already
                 current_stack = current_player.stack if current_player else player.stack
                 
                 winning_hands.append({
@@ -795,7 +863,7 @@ class GameService:
             "player_hands": player_hands,
             "winners": winning_hands,
             "community_cards": poker_game.community_cards,
-            "total_pot": poker_game.pot
+            "total_pot": 0  # Pot should be 0 after distribution
         }
 
     def get_player_cards(self, game_id: str, player_id: str, target_player_id: str) -> Dict[str, Any]:

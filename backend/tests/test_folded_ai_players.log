@@ -1,0 +1,1234 @@
+2025-03-17 16:49:56,823 - INFO - Starting test to verify fix for folded AI players issue
+2025-03-17 16:49:56,823 - INFO - Creating new game with 5 AI players
+2025-03-17 16:49:56,827 - ERROR - API request failed: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/games (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x101ba4590>: Failed to establish a new connection: [Errno 61] Connection refused'))
+2025-03-17 16:51:38,820 - INFO - Starting test to verify fix for folded AI players issue
+2025-03-17 16:51:38,821 - INFO - Creating new game with 5 AI players
+2025-03-17 16:51:38,828 - ERROR - API request failed: 401 Client Error: Unauthorized for url: http://localhost:8080/api/v1/games
+2025-03-17 16:51:38,829 - ERROR - Response: {"detail":"API key required"}
+2025-03-17 16:58:06,593 - INFO - Starting test to verify fix for folded AI players issue
+2025-03-17 16:58:06,594 - INFO - Creating test player
+2025-03-17 16:58:06,602 - INFO - Player created with ID: 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f
+2025-03-17 16:58:06,602 - INFO - Creating new game with 5 AI players
+2025-03-17 16:58:06,619 - INFO - Game created with ID: 07ce4a63-a970-4126-8a7b-a7aed725be67
+2025-03-17 16:58:07,625 - INFO - 
+==================================================
+Starting hand #1
+==================================================
+2025-03-17 16:58:07,628 - INFO - Current game state: pre_flop
+2025-03-17 16:58:07,628 - INFO - Pot size: 15
+2025-03-17 16:58:07,628 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 1000
+2025-03-17 16:58:07,628 - INFO - Player ai_0 is ACTIVE with stack 995
+2025-03-17 16:58:07,628 - INFO - Player ai_1 is ACTIVE with stack 990
+2025-03-17 16:58:07,628 - INFO - Player ai_2 is ACTIVE with stack 1000
+2025-03-17 16:58:07,628 - INFO - Player ai_3 is ACTIVE with stack 1000
+2025-03-17 16:58:07,628 - INFO - Player ai_4 is ACTIVE with stack 1000
+2025-03-17 16:58:07,628 - INFO - Total active players: 6, folded players: 0
+2025-03-17 16:58:07,628 - INFO - Current betting round: pre_flop
+2025-03-17 16:58:07,628 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:08,676 - INFO - Current game state: flop
+2025-03-17 16:58:08,677 - INFO - Pot size: 45
+2025-03-17 16:58:08,677 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 990
+2025-03-17 16:58:08,677 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:08,677 - INFO - Player ai_1 is ACTIVE with stack 990
+2025-03-17 16:58:08,677 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:08,677 - INFO - Player ai_3 is ACTIVE with stack 990
+2025-03-17 16:58:08,677 - INFO - Player ai_4 is ACTIVE with stack 990
+2025-03-17 16:58:08,677 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:09,682 - INFO - Current betting round: flop
+2025-03-17 16:58:09,683 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:10,725 - INFO - Current game state: flop
+2025-03-17 16:58:10,725 - INFO - Pot size: 75
+2025-03-17 16:58:10,725 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 990
+2025-03-17 16:58:10,725 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:10,725 - INFO - Player ai_1 is ACTIVE with stack 980
+2025-03-17 16:58:10,725 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:10,725 - INFO - Player ai_3 is ACTIVE with stack 980
+2025-03-17 16:58:10,725 - INFO - Player ai_4 is ACTIVE with stack 980
+2025-03-17 16:58:10,725 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:11,730 - INFO - Current betting round: flop
+2025-03-17 16:58:11,730 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:12,751 - INFO - Current game state: flop
+2025-03-17 16:58:12,751 - INFO - Pot size: 145
+2025-03-17 16:58:12,751 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 980
+2025-03-17 16:58:12,751 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:12,751 - INFO - Player ai_1 is ACTIVE with stack 960
+2025-03-17 16:58:12,751 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:12,751 - INFO - Player ai_3 is ACTIVE with stack 960
+2025-03-17 16:58:12,751 - INFO - Player ai_4 is ACTIVE with stack 960
+2025-03-17 16:58:12,751 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:13,757 - INFO - Current betting round: flop
+2025-03-17 16:58:13,757 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:14,784 - INFO - Current game state: flop
+2025-03-17 16:58:14,784 - INFO - Pot size: 285
+2025-03-17 16:58:14,784 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 960
+2025-03-17 16:58:14,784 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:14,784 - INFO - Player ai_1 is ACTIVE with stack 920
+2025-03-17 16:58:14,784 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:14,784 - INFO - Player ai_3 is ACTIVE with stack 920
+2025-03-17 16:58:14,784 - INFO - Player ai_4 is ACTIVE with stack 920
+2025-03-17 16:58:14,784 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:15,790 - INFO - Current betting round: flop
+2025-03-17 16:58:15,790 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:16,836 - INFO - Current game state: flop
+2025-03-17 16:58:16,836 - INFO - Pot size: 565
+2025-03-17 16:58:16,836 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 920
+2025-03-17 16:58:16,836 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:16,836 - INFO - Player ai_1 is ACTIVE with stack 840
+2025-03-17 16:58:16,836 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:16,836 - INFO - Player ai_3 is ACTIVE with stack 840
+2025-03-17 16:58:16,836 - INFO - Player ai_4 is ACTIVE with stack 840
+2025-03-17 16:58:16,836 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:17,840 - INFO - Current betting round: flop
+2025-03-17 16:58:17,840 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:18,874 - INFO - Current game state: flop
+2025-03-17 16:58:18,874 - INFO - Pot size: 1125
+2025-03-17 16:58:18,874 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 840
+2025-03-17 16:58:18,874 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:18,874 - INFO - Player ai_1 is ACTIVE with stack 680
+2025-03-17 16:58:18,874 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:18,874 - INFO - Player ai_3 is ACTIVE with stack 680
+2025-03-17 16:58:18,874 - INFO - Player ai_4 is ACTIVE with stack 680
+2025-03-17 16:58:18,874 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:19,879 - INFO - Current betting round: flop
+2025-03-17 16:58:19,879 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:20,900 - INFO - Current game state: flop
+2025-03-17 16:58:20,900 - INFO - Pot size: 2245
+2025-03-17 16:58:20,900 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 680
+2025-03-17 16:58:20,900 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:20,900 - INFO - Player ai_1 is ACTIVE with stack 360
+2025-03-17 16:58:20,900 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:20,900 - INFO - Player ai_3 is ACTIVE with stack 360
+2025-03-17 16:58:20,900 - INFO - Player ai_4 is ACTIVE with stack 360
+2025-03-17 16:58:20,900 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:21,904 - INFO - Current betting round: flop
+2025-03-17 16:58:21,904 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:22,928 - INFO - Current game state: turn
+2025-03-17 16:58:22,928 - INFO - Pot size: 2565
+2025-03-17 16:58:22,928 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 360
+2025-03-17 16:58:22,928 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:22,928 - INFO - Player ai_1 is ACTIVE with stack 360
+2025-03-17 16:58:22,928 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:22,928 - INFO - Player ai_3 is ACTIVE with stack 360
+2025-03-17 16:58:22,928 - INFO - Player ai_4 is ACTIVE with stack 360
+2025-03-17 16:58:22,928 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:23,933 - INFO - Current betting round: turn
+2025-03-17 16:58:23,934 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:24,977 - INFO - Current game state: turn
+2025-03-17 16:58:24,977 - INFO - Pot size: 2595
+2025-03-17 16:58:24,977 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 360
+2025-03-17 16:58:24,977 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:24,978 - INFO - Player ai_1 is ACTIVE with stack 350
+2025-03-17 16:58:24,978 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:24,978 - INFO - Player ai_3 is ACTIVE with stack 350
+2025-03-17 16:58:24,978 - INFO - Player ai_4 is ACTIVE with stack 350
+2025-03-17 16:58:24,978 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:25,983 - INFO - Current betting round: turn
+2025-03-17 16:58:25,984 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:27,026 - INFO - Current game state: turn
+2025-03-17 16:58:27,026 - INFO - Pot size: 2665
+2025-03-17 16:58:27,026 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 350
+2025-03-17 16:58:27,026 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:27,026 - INFO - Player ai_1 is ACTIVE with stack 330
+2025-03-17 16:58:27,026 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:27,026 - INFO - Player ai_3 is ACTIVE with stack 330
+2025-03-17 16:58:27,026 - INFO - Player ai_4 is ACTIVE with stack 330
+2025-03-17 16:58:27,026 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:28,027 - INFO - Current betting round: turn
+2025-03-17 16:58:28,027 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:29,047 - INFO - Current game state: turn
+2025-03-17 16:58:29,047 - INFO - Pot size: 2805
+2025-03-17 16:58:29,047 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 330
+2025-03-17 16:58:29,047 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:29,047 - INFO - Player ai_1 is ACTIVE with stack 290
+2025-03-17 16:58:29,047 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:29,047 - INFO - Player ai_3 is ACTIVE with stack 290
+2025-03-17 16:58:29,047 - INFO - Player ai_4 is ACTIVE with stack 290
+2025-03-17 16:58:29,047 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:30,052 - INFO - Current betting round: turn
+2025-03-17 16:58:30,052 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:31,079 - INFO - Current game state: turn
+2025-03-17 16:58:31,079 - INFO - Pot size: 3085
+2025-03-17 16:58:31,079 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 290
+2025-03-17 16:58:31,079 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:31,079 - INFO - Player ai_1 is ACTIVE with stack 210
+2025-03-17 16:58:31,079 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:31,079 - INFO - Player ai_3 is ACTIVE with stack 210
+2025-03-17 16:58:31,079 - INFO - Player ai_4 is ACTIVE with stack 210
+2025-03-17 16:58:31,079 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:32,084 - INFO - Current betting round: turn
+2025-03-17 16:58:32,085 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:33,132 - INFO - Current game state: turn
+2025-03-17 16:58:33,132 - INFO - Pot size: 3645
+2025-03-17 16:58:33,132 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 210
+2025-03-17 16:58:33,132 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:33,133 - INFO - Player ai_1 is ACTIVE with stack 50
+2025-03-17 16:58:33,133 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:33,133 - INFO - Player ai_3 is ACTIVE with stack 50
+2025-03-17 16:58:33,133 - INFO - Player ai_4 is ACTIVE with stack 50
+2025-03-17 16:58:33,133 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:34,136 - INFO - Current betting round: turn
+2025-03-17 16:58:34,137 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:35,180 - INFO - Current game state: river
+2025-03-17 16:58:35,181 - INFO - Pot size: 3805
+2025-03-17 16:58:35,181 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 50
+2025-03-17 16:58:35,181 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:35,181 - INFO - Player ai_1 is ACTIVE with stack 50
+2025-03-17 16:58:35,181 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:35,181 - INFO - Player ai_3 is ACTIVE with stack 50
+2025-03-17 16:58:35,181 - INFO - Player ai_4 is ACTIVE with stack 50
+2025-03-17 16:58:35,181 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:36,186 - INFO - Current betting round: river
+2025-03-17 16:58:36,186 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:37,213 - INFO - Current game state: river
+2025-03-17 16:58:37,213 - INFO - Pot size: 3835
+2025-03-17 16:58:37,213 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 50
+2025-03-17 16:58:37,213 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:37,213 - INFO - Player ai_1 is ACTIVE with stack 40
+2025-03-17 16:58:37,213 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:37,213 - INFO - Player ai_3 is ACTIVE with stack 40
+2025-03-17 16:58:37,213 - INFO - Player ai_4 is ACTIVE with stack 40
+2025-03-17 16:58:37,213 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:38,219 - INFO - Current betting round: river
+2025-03-17 16:58:38,219 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:39,267 - INFO - Current game state: river
+2025-03-17 16:58:39,268 - INFO - Pot size: 3905
+2025-03-17 16:58:39,268 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 40
+2025-03-17 16:58:39,268 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:39,268 - INFO - Player ai_1 is ACTIVE with stack 20
+2025-03-17 16:58:39,268 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:39,268 - INFO - Player ai_3 is ACTIVE with stack 20
+2025-03-17 16:58:39,269 - INFO - Player ai_4 is ACTIVE with stack 20
+2025-03-17 16:58:39,269 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:40,274 - INFO - Current betting round: river
+2025-03-17 16:58:40,274 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:41,299 - INFO - Current game state: showdown
+2025-03-17 16:58:41,299 - INFO - Pot size: 3925
+2025-03-17 16:58:41,299 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 20
+2025-03-17 16:58:41,299 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:41,300 - INFO - Player ai_1 is ACTIVE with stack 20
+2025-03-17 16:58:41,300 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 16:58:41,300 - INFO - Player ai_3 is ACTIVE with stack 20
+2025-03-17 16:58:41,300 - INFO - Player ai_4 is ACTIVE with stack 20
+2025-03-17 16:58:41,300 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:42,305 - INFO - Hand complete, getting showdown results
+2025-03-17 16:58:42,308 - INFO - Winner: 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f won 3925 chips with Three of a Kind
+2025-03-17 16:58:42,308 - INFO - Advancing to next hand
+2025-03-17 16:58:45,322 - INFO - 
+==================================================
+Starting hand #2
+==================================================
+2025-03-17 16:58:45,327 - INFO - Current game state: pre_flop
+2025-03-17 16:58:45,328 - INFO - Pot size: 15
+2025-03-17 16:58:45,328 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3945
+2025-03-17 16:58:45,328 - INFO - Player ai_0 is ACTIVE with stack 995
+2025-03-17 16:58:45,328 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:58:45,328 - INFO - Player ai_2 is ACTIVE with stack 990
+2025-03-17 16:58:45,328 - INFO - Player ai_3 is ACTIVE with stack 20
+2025-03-17 16:58:45,328 - INFO - Player ai_4 is ACTIVE with stack 20
+2025-03-17 16:58:45,328 - INFO - Total active players: 6, folded players: 0
+2025-03-17 16:58:45,328 - INFO - Current betting round: pre_flop
+2025-03-17 16:58:45,328 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:46,382 - INFO - Current game state: pre_flop
+2025-03-17 16:58:46,382 - INFO - Pot size: 45
+2025-03-17 16:58:46,382 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3935
+2025-03-17 16:58:46,382 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:46,382 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:58:46,382 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 16:58:46,383 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 16:58:46,383 - INFO - Player ai_4 is ACTIVE with stack 10
+2025-03-17 16:58:46,383 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:47,384 - INFO - Current betting round: pre_flop
+2025-03-17 16:58:47,384 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:48,437 - INFO - Current game state: pre_flop
+2025-03-17 16:58:48,437 - INFO - Pot size: 45
+2025-03-17 16:58:48,437 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3935
+2025-03-17 16:58:48,437 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:48,437 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:58:48,437 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 16:58:48,437 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 16:58:48,437 - INFO - Player ai_4 is ACTIVE with stack 10
+2025-03-17 16:58:48,437 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:49,442 - INFO - Current betting round: pre_flop
+2025-03-17 16:58:49,442 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:50,474 - INFO - Current game state: pre_flop
+2025-03-17 16:58:50,474 - INFO - Pot size: 45
+2025-03-17 16:58:50,474 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3935
+2025-03-17 16:58:50,474 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:50,474 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:58:50,474 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 16:58:50,474 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 16:58:50,474 - INFO - Player ai_4 is ACTIVE with stack 10
+2025-03-17 16:58:50,474 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:51,479 - INFO - Current betting round: pre_flop
+2025-03-17 16:58:51,479 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:52,521 - INFO - Current game state: pre_flop
+2025-03-17 16:58:52,521 - INFO - Pot size: 45
+2025-03-17 16:58:52,521 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3935
+2025-03-17 16:58:52,521 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:52,521 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:58:52,521 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 16:58:52,521 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 16:58:52,521 - INFO - Player ai_4 is ACTIVE with stack 10
+2025-03-17 16:58:52,521 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:53,526 - INFO - Current betting round: pre_flop
+2025-03-17 16:58:53,527 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:54,563 - INFO - Current game state: pre_flop
+2025-03-17 16:58:54,563 - INFO - Pot size: 45
+2025-03-17 16:58:54,563 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3935
+2025-03-17 16:58:54,563 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:54,563 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:58:54,563 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 16:58:54,563 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 16:58:54,563 - INFO - Player ai_4 is ACTIVE with stack 10
+2025-03-17 16:58:54,563 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:55,568 - INFO - Current betting round: pre_flop
+2025-03-17 16:58:55,568 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:56,597 - INFO - Current game state: pre_flop
+2025-03-17 16:58:56,597 - INFO - Pot size: 45
+2025-03-17 16:58:56,597 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3935
+2025-03-17 16:58:56,597 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:56,597 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:58:56,597 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 16:58:56,597 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 16:58:56,597 - INFO - Player ai_4 is ACTIVE with stack 10
+2025-03-17 16:58:56,597 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:57,603 - INFO - Current betting round: pre_flop
+2025-03-17 16:58:57,603 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:58:58,649 - INFO - Current game state: pre_flop
+2025-03-17 16:58:58,649 - INFO - Pot size: 45
+2025-03-17 16:58:58,649 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3935
+2025-03-17 16:58:58,649 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:58:58,649 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:58:58,650 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 16:58:58,650 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 16:58:58,650 - INFO - Player ai_4 is ACTIVE with stack 10
+2025-03-17 16:58:58,650 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:58:59,655 - INFO - Current betting round: pre_flop
+2025-03-17 16:58:59,655 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:59:00,702 - INFO - Current game state: pre_flop
+2025-03-17 16:59:00,702 - INFO - Pot size: 45
+2025-03-17 16:59:00,702 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3935
+2025-03-17 16:59:00,702 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:59:00,702 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:59:00,702 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 16:59:00,702 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 16:59:00,702 - INFO - Player ai_4 is ACTIVE with stack 10
+2025-03-17 16:59:00,702 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:59:01,702 - INFO - Current betting round: pre_flop
+2025-03-17 16:59:01,702 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:59:02,729 - INFO - Current game state: pre_flop
+2025-03-17 16:59:02,729 - INFO - Pot size: 45
+2025-03-17 16:59:02,729 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3935
+2025-03-17 16:59:02,729 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:59:02,729 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:59:02,729 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 16:59:02,729 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 16:59:02,729 - INFO - Player ai_4 is ACTIVE with stack 10
+2025-03-17 16:59:02,729 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:59:03,734 - INFO - Current betting round: pre_flop
+2025-03-17 16:59:03,734 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:59:04,768 - INFO - Current game state: pre_flop
+2025-03-17 16:59:04,768 - INFO - Pot size: 45
+2025-03-17 16:59:04,768 - INFO - Player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f is ACTIVE with stack 3935
+2025-03-17 16:59:04,768 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 16:59:04,768 - INFO - Player ai_1 is ACTIVE with stack 15
+2025-03-17 16:59:04,768 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 16:59:04,769 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 16:59:04,769 - INFO - Player ai_4 is ACTIVE with stack 10
+2025-03-17 16:59:04,769 - INFO - Total active players: 4, folded players: 2
+2025-03-17 16:59:05,774 - INFO - Current betting round: pre_flop
+2025-03-17 16:59:05,774 - INFO - Test player 6ada03dc-fefe-49a9-8ef1-ee64bfc5f53f calls
+2025-03-17 16:59:05,780 - ERROR - API request failed: 429 Client Error: Too Many Requests for url: http://localhost:8080/api/v1/games/07ce4a63-a970-4126-8a7b-a7aed725be67/actions
+2025-03-17 16:59:05,780 - ERROR - Response: {"error":true,"code":"RATE_LIMIT_EXCEEDED","message":"Too many requests","details":{"retry_after":0}}
+2025-03-17 17:03:56,314 - INFO - Starting test to verify fix for folded AI players issue
+2025-03-17 17:03:56,314 - INFO - Creating test player
+2025-03-17 17:03:56,322 - INFO - Player created with ID: ee49ef33-0614-4ad4-be03-03dc8f418348
+2025-03-17 17:03:56,322 - INFO - Creating new game with 5 AI players
+2025-03-17 17:03:57,336 - INFO - Game created with ID: a78b6a9f-486f-42cf-94f9-ffdaa5ccb46e
+2025-03-17 17:03:58,341 - INFO - 
+==================================================
+Starting hand #1
+==================================================
+2025-03-17 17:03:59,361 - INFO - Current game state: pre_flop
+2025-03-17 17:03:59,361 - INFO - Pot size: 15
+2025-03-17 17:03:59,361 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 1000
+2025-03-17 17:03:59,361 - INFO - Player ai_0 is ACTIVE with stack 995
+2025-03-17 17:03:59,361 - INFO - Player ai_1 is ACTIVE with stack 990
+2025-03-17 17:03:59,361 - INFO - Player ai_2 is ACTIVE with stack 1000
+2025-03-17 17:03:59,362 - INFO - Player ai_3 is ACTIVE with stack 1000
+2025-03-17 17:03:59,362 - INFO - Player ai_4 is ACTIVE with stack 1000
+2025-03-17 17:03:59,362 - INFO - Total active players: 6, folded players: 0
+2025-03-17 17:03:59,362 - INFO - Current betting round: pre_flop
+2025-03-17 17:03:59,362 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 1000)
+2025-03-17 17:04:00,418 - INFO - Stack updated: 1000 -> 990 (change: -10)
+2025-03-17 17:04:01,427 - INFO - Current game state: pre_flop
+2025-03-17 17:04:01,427 - INFO - Pot size: 45
+2025-03-17 17:04:01,427 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 990
+2025-03-17 17:04:01,427 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:01,427 - INFO - Player ai_1 is ACTIVE with stack 990
+2025-03-17 17:04:01,427 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:01,427 - INFO - Player ai_3 is ACTIVE with stack 980
+2025-03-17 17:04:01,427 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:01,427 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:01,427 - INFO - Current betting round: pre_flop
+2025-03-17 17:04:01,427 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 990)
+2025-03-17 17:04:02,443 - INFO - Stack updated: 990 -> 980 (change: -10)
+2025-03-17 17:04:03,452 - INFO - Current game state: flop
+2025-03-17 17:04:03,452 - INFO - Pot size: 65
+2025-03-17 17:04:03,452 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 980
+2025-03-17 17:04:03,452 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:03,452 - INFO - Player ai_1 is ACTIVE with stack 980
+2025-03-17 17:04:03,452 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:03,452 - INFO - Player ai_3 is ACTIVE with stack 980
+2025-03-17 17:04:03,452 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:03,452 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:03,452 - INFO - Current betting round: flop
+2025-03-17 17:04:03,452 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 980)
+2025-03-17 17:04:04,470 - WARNING - Stack not updated properly after call! Before: 980, After: 980
+2025-03-17 17:04:05,480 - INFO - Current game state: flop
+2025-03-17 17:04:05,480 - INFO - Pot size: 85
+2025-03-17 17:04:05,480 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 980
+2025-03-17 17:04:05,480 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:05,481 - INFO - Player ai_1 is ACTIVE with stack 970
+2025-03-17 17:04:05,481 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:05,481 - INFO - Player ai_3 is ACTIVE with stack 970
+2025-03-17 17:04:05,481 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:05,481 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:05,481 - INFO - Current betting round: flop
+2025-03-17 17:04:05,481 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 980)
+2025-03-17 17:04:06,510 - INFO - Stack updated: 980 -> 970 (change: -10)
+2025-03-17 17:04:07,524 - INFO - Current game state: flop
+2025-03-17 17:04:07,524 - INFO - Pot size: 135
+2025-03-17 17:04:07,524 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 970
+2025-03-17 17:04:07,524 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:07,524 - INFO - Player ai_1 is ACTIVE with stack 950
+2025-03-17 17:04:07,524 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:07,524 - INFO - Player ai_3 is ACTIVE with stack 950
+2025-03-17 17:04:07,524 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:07,524 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:07,524 - INFO - Current betting round: flop
+2025-03-17 17:04:07,524 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 970)
+2025-03-17 17:04:08,555 - INFO - Stack updated: 970 -> 950 (change: -20)
+2025-03-17 17:04:09,563 - INFO - Current game state: flop
+2025-03-17 17:04:09,563 - INFO - Pot size: 235
+2025-03-17 17:04:09,563 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 950
+2025-03-17 17:04:09,563 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:09,563 - INFO - Player ai_1 is ACTIVE with stack 910
+2025-03-17 17:04:09,563 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:09,563 - INFO - Player ai_3 is ACTIVE with stack 910
+2025-03-17 17:04:09,563 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:09,563 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:09,563 - INFO - Current betting round: flop
+2025-03-17 17:04:09,563 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 950)
+2025-03-17 17:04:10,578 - INFO - Stack updated: 950 -> 910 (change: -40)
+2025-03-17 17:04:11,587 - INFO - Current game state: flop
+2025-03-17 17:04:11,587 - INFO - Pot size: 435
+2025-03-17 17:04:11,587 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 910
+2025-03-17 17:04:11,587 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:11,587 - INFO - Player ai_1 is ACTIVE with stack 830
+2025-03-17 17:04:11,587 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:11,587 - INFO - Player ai_3 is ACTIVE with stack 830
+2025-03-17 17:04:11,587 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:11,587 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:11,587 - INFO - Current betting round: flop
+2025-03-17 17:04:11,587 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 910)
+2025-03-17 17:04:12,605 - INFO - Stack updated: 910 -> 830 (change: -80)
+2025-03-17 17:04:13,622 - INFO - Current game state: flop
+2025-03-17 17:04:13,622 - INFO - Pot size: 835
+2025-03-17 17:04:13,622 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 830
+2025-03-17 17:04:13,622 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:13,622 - INFO - Player ai_1 is ACTIVE with stack 670
+2025-03-17 17:04:13,622 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:13,622 - INFO - Player ai_3 is ACTIVE with stack 670
+2025-03-17 17:04:13,622 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:13,622 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:13,622 - INFO - Current betting round: flop
+2025-03-17 17:04:13,622 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 830)
+2025-03-17 17:04:14,651 - INFO - Stack updated: 830 -> 670 (change: -160)
+2025-03-17 17:04:15,661 - INFO - Current game state: flop
+2025-03-17 17:04:15,661 - INFO - Pot size: 1635
+2025-03-17 17:04:15,661 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 670
+2025-03-17 17:04:15,661 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:15,661 - INFO - Player ai_1 is ACTIVE with stack 350
+2025-03-17 17:04:15,661 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:15,661 - INFO - Player ai_3 is ACTIVE with stack 350
+2025-03-17 17:04:15,661 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:15,661 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:15,661 - INFO - Current betting round: flop
+2025-03-17 17:04:15,661 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 670)
+2025-03-17 17:04:16,674 - INFO - Stack updated: 670 -> 350 (change: -320)
+2025-03-17 17:04:17,683 - INFO - Current game state: turn
+2025-03-17 17:04:17,683 - INFO - Pot size: 1955
+2025-03-17 17:04:17,683 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 350
+2025-03-17 17:04:17,683 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:17,683 - INFO - Player ai_1 is ACTIVE with stack 350
+2025-03-17 17:04:17,683 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:17,683 - INFO - Player ai_3 is ACTIVE with stack 350
+2025-03-17 17:04:17,683 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:17,683 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:17,683 - INFO - Current betting round: turn
+2025-03-17 17:04:17,683 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 350)
+2025-03-17 17:04:18,699 - WARNING - Stack not updated properly after call! Before: 350, After: 350
+2025-03-17 17:04:19,709 - INFO - Current game state: turn
+2025-03-17 17:04:19,709 - INFO - Pot size: 1975
+2025-03-17 17:04:19,709 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 350
+2025-03-17 17:04:19,709 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:19,709 - INFO - Player ai_1 is ACTIVE with stack 340
+2025-03-17 17:04:19,709 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:19,709 - INFO - Player ai_3 is ACTIVE with stack 340
+2025-03-17 17:04:19,709 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:19,709 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:19,709 - INFO - Current betting round: turn
+2025-03-17 17:04:19,709 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 350)
+2025-03-17 17:04:20,731 - INFO - Stack updated: 350 -> 340 (change: -10)
+2025-03-17 17:04:21,749 - INFO - Current game state: turn
+2025-03-17 17:04:21,750 - INFO - Pot size: 2025
+2025-03-17 17:04:21,750 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 340
+2025-03-17 17:04:21,750 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:21,750 - INFO - Player ai_1 is ACTIVE with stack 320
+2025-03-17 17:04:21,750 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:21,750 - INFO - Player ai_3 is ACTIVE with stack 320
+2025-03-17 17:04:21,750 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:21,750 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:21,750 - INFO - Current betting round: turn
+2025-03-17 17:04:21,750 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 340)
+2025-03-17 17:04:22,767 - INFO - Stack updated: 340 -> 320 (change: -20)
+2025-03-17 17:04:23,779 - INFO - Current game state: turn
+2025-03-17 17:04:23,779 - INFO - Pot size: 2125
+2025-03-17 17:04:23,779 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 320
+2025-03-17 17:04:23,779 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:23,780 - INFO - Player ai_1 is ACTIVE with stack 280
+2025-03-17 17:04:23,780 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:23,780 - INFO - Player ai_3 is ACTIVE with stack 280
+2025-03-17 17:04:23,780 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:23,780 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:23,780 - INFO - Current betting round: turn
+2025-03-17 17:04:23,780 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 320)
+2025-03-17 17:04:24,800 - INFO - Stack updated: 320 -> 280 (change: -40)
+2025-03-17 17:04:25,807 - INFO - Current game state: turn
+2025-03-17 17:04:25,807 - INFO - Pot size: 2325
+2025-03-17 17:04:25,807 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 280
+2025-03-17 17:04:25,807 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:25,807 - INFO - Player ai_1 is ACTIVE with stack 200
+2025-03-17 17:04:25,807 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:25,807 - INFO - Player ai_3 is ACTIVE with stack 200
+2025-03-17 17:04:25,807 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:25,807 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:25,807 - INFO - Current betting round: turn
+2025-03-17 17:04:25,808 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 280)
+2025-03-17 17:04:26,821 - INFO - Stack updated: 280 -> 200 (change: -80)
+2025-03-17 17:04:27,831 - INFO - Current game state: turn
+2025-03-17 17:04:27,831 - INFO - Pot size: 2725
+2025-03-17 17:04:27,831 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 200
+2025-03-17 17:04:27,831 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:27,831 - INFO - Player ai_1 is ACTIVE with stack 40
+2025-03-17 17:04:27,831 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:27,831 - INFO - Player ai_3 is ACTIVE with stack 40
+2025-03-17 17:04:27,831 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:27,831 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:27,831 - INFO - Current betting round: turn
+2025-03-17 17:04:27,831 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 200)
+2025-03-17 17:04:28,850 - INFO - Stack updated: 200 -> 40 (change: -160)
+2025-03-17 17:04:29,861 - INFO - Current game state: river
+2025-03-17 17:04:29,861 - INFO - Pot size: 2885
+2025-03-17 17:04:29,861 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 40
+2025-03-17 17:04:29,861 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:29,861 - INFO - Player ai_1 is ACTIVE with stack 40
+2025-03-17 17:04:29,861 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:29,861 - INFO - Player ai_3 is ACTIVE with stack 40
+2025-03-17 17:04:29,861 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:29,861 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:29,861 - INFO - Current betting round: river
+2025-03-17 17:04:29,861 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 40)
+2025-03-17 17:04:30,893 - WARNING - Stack not updated properly after call! Before: 40, After: 40
+2025-03-17 17:04:31,910 - INFO - Current game state: river
+2025-03-17 17:04:31,910 - INFO - Pot size: 2905
+2025-03-17 17:04:31,910 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 40
+2025-03-17 17:04:31,911 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:31,911 - INFO - Player ai_1 is ACTIVE with stack 30
+2025-03-17 17:04:31,911 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:31,911 - INFO - Player ai_3 is ACTIVE with stack 30
+2025-03-17 17:04:31,911 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:31,911 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:31,911 - INFO - Current betting round: river
+2025-03-17 17:04:31,911 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 40)
+2025-03-17 17:04:32,940 - INFO - Stack updated: 40 -> 30 (change: -10)
+2025-03-17 17:04:33,948 - INFO - Current game state: river
+2025-03-17 17:04:33,948 - INFO - Pot size: 2955
+2025-03-17 17:04:33,948 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 30
+2025-03-17 17:04:33,948 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:33,948 - INFO - Player ai_1 is ACTIVE with stack 10
+2025-03-17 17:04:33,948 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:33,948 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 17:04:33,948 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:33,948 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:33,948 - INFO - Current betting round: river
+2025-03-17 17:04:33,948 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 30)
+2025-03-17 17:04:34,961 - INFO - Stack updated: 30 -> 10 (change: -20)
+2025-03-17 17:04:35,970 - INFO - Current game state: showdown
+2025-03-17 17:04:35,970 - INFO - Pot size: 2975
+2025-03-17 17:04:35,970 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 10
+2025-03-17 17:04:35,970 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:35,970 - INFO - Player ai_1 is ACTIVE with stack 10
+2025-03-17 17:04:35,970 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:04:35,970 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 17:04:35,970 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:35,970 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:35,970 - INFO - Hand complete, getting showdown results
+2025-03-17 17:04:36,980 - INFO - Winner: ee49ef33-0614-4ad4-be03-03dc8f418348 won 2975 chips with Two Pair
+2025-03-17 17:04:36,980 - INFO - Advancing to next hand
+2025-03-17 17:04:40,998 - INFO - 
+==================================================
+Starting hand #2
+==================================================
+2025-03-17 17:04:42,014 - INFO - Current game state: pre_flop
+2025-03-17 17:04:42,015 - INFO - Pot size: 15
+2025-03-17 17:04:42,015 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2985
+2025-03-17 17:04:42,015 - INFO - Player ai_0 is ACTIVE with stack 995
+2025-03-17 17:04:42,015 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:04:42,015 - INFO - Player ai_2 is ACTIVE with stack 990
+2025-03-17 17:04:42,015 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 17:04:42,015 - INFO - Player ai_4 is ACTIVE with stack 1000
+2025-03-17 17:04:42,015 - INFO - Total active players: 6, folded players: 0
+2025-03-17 17:04:42,015 - INFO - Current betting round: pre_flop
+2025-03-17 17:04:42,015 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2985)
+2025-03-17 17:04:43,064 - INFO - Stack updated: 2985 -> 2975 (change: -10)
+2025-03-17 17:04:44,072 - INFO - Current game state: pre_flop
+2025-03-17 17:04:44,072 - INFO - Pot size: 35
+2025-03-17 17:04:44,072 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:04:44,072 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:44,072 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:04:44,072 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:04:44,072 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:04:44,072 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:44,072 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:44,072 - INFO - Current betting round: pre_flop
+2025-03-17 17:04:44,073 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:04:45,093 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:04:46,103 - INFO - Current game state: pre_flop
+2025-03-17 17:04:46,103 - INFO - Pot size: 35
+2025-03-17 17:04:46,103 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:04:46,103 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:46,103 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:04:46,103 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:04:46,103 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:04:46,103 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:46,103 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:46,103 - INFO - Current betting round: pre_flop
+2025-03-17 17:04:46,103 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:04:47,129 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:04:48,146 - INFO - Current game state: pre_flop
+2025-03-17 17:04:48,146 - INFO - Pot size: 35
+2025-03-17 17:04:48,146 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:04:48,146 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:48,146 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:04:48,146 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:04:48,146 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:04:48,146 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:48,146 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:48,146 - INFO - Current betting round: pre_flop
+2025-03-17 17:04:48,146 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:04:49,188 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:04:50,196 - INFO - Current game state: pre_flop
+2025-03-17 17:04:50,196 - INFO - Pot size: 35
+2025-03-17 17:04:50,196 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:04:50,196 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:50,196 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:04:50,196 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:04:50,196 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:04:50,196 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:50,196 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:50,196 - INFO - Current betting round: pre_flop
+2025-03-17 17:04:50,196 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:04:51,214 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:04:52,223 - INFO - Current game state: pre_flop
+2025-03-17 17:04:52,223 - INFO - Pot size: 35
+2025-03-17 17:04:52,223 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:04:52,223 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:52,223 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:04:52,223 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:04:52,223 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:04:52,223 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:52,223 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:52,223 - INFO - Current betting round: pre_flop
+2025-03-17 17:04:52,223 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:04:53,250 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:04:54,267 - INFO - Current game state: pre_flop
+2025-03-17 17:04:54,268 - INFO - Pot size: 35
+2025-03-17 17:04:54,268 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:04:54,268 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:54,268 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:04:54,268 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:04:54,268 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:04:54,268 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:54,268 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:54,268 - INFO - Current betting round: pre_flop
+2025-03-17 17:04:54,269 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:04:55,310 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:04:56,320 - INFO - Current game state: pre_flop
+2025-03-17 17:04:56,320 - INFO - Pot size: 35
+2025-03-17 17:04:56,321 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:04:56,321 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:56,321 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:04:56,321 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:04:56,321 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:04:56,321 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:56,321 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:56,321 - INFO - Current betting round: pre_flop
+2025-03-17 17:04:56,321 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:04:57,341 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:04:58,350 - INFO - Current game state: pre_flop
+2025-03-17 17:04:58,350 - INFO - Pot size: 35
+2025-03-17 17:04:58,351 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:04:58,351 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:04:58,351 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:04:58,351 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:04:58,351 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:04:58,351 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:04:58,351 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:04:58,351 - INFO - Current betting round: pre_flop
+2025-03-17 17:04:58,351 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:04:59,371 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:00,380 - INFO - Current game state: pre_flop
+2025-03-17 17:05:00,380 - INFO - Pot size: 35
+2025-03-17 17:05:00,380 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:00,381 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:00,381 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:00,381 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:00,381 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:00,381 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:00,381 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:00,381 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:00,381 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:01,409 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:02,413 - INFO - Current game state: pre_flop
+2025-03-17 17:05:02,413 - INFO - Pot size: 35
+2025-03-17 17:05:02,413 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:02,413 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:02,413 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:02,413 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:02,413 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:02,413 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:02,413 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:02,413 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:02,413 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:03,455 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:04,463 - INFO - Current game state: pre_flop
+2025-03-17 17:05:04,463 - INFO - Pot size: 35
+2025-03-17 17:05:04,463 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:04,463 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:04,463 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:04,463 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:04,463 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:04,463 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:04,463 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:04,463 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:04,463 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:05,483 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:06,491 - INFO - Current game state: pre_flop
+2025-03-17 17:05:06,491 - INFO - Pot size: 35
+2025-03-17 17:05:06,491 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:06,491 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:06,491 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:06,491 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:06,491 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:06,491 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:06,491 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:06,491 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:06,491 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:07,514 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:08,525 - INFO - Current game state: pre_flop
+2025-03-17 17:05:08,525 - INFO - Pot size: 35
+2025-03-17 17:05:08,525 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:08,525 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:08,525 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:08,526 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:08,526 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:08,526 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:08,526 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:08,526 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:08,526 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:09,561 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:10,579 - INFO - Current game state: pre_flop
+2025-03-17 17:05:10,579 - INFO - Pot size: 35
+2025-03-17 17:05:10,579 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:10,579 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:10,579 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:10,579 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:10,580 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:10,580 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:10,580 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:10,580 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:10,580 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:11,613 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:12,620 - INFO - Current game state: pre_flop
+2025-03-17 17:05:12,621 - INFO - Pot size: 35
+2025-03-17 17:05:12,621 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:12,621 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:12,621 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:12,621 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:12,621 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:12,621 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:12,621 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:12,621 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:12,621 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:13,644 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:14,655 - INFO - Current game state: pre_flop
+2025-03-17 17:05:14,655 - INFO - Pot size: 35
+2025-03-17 17:05:14,655 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:14,655 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:14,655 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:14,655 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:14,655 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:14,655 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:14,655 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:14,655 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:14,655 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:15,689 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:16,704 - INFO - Current game state: pre_flop
+2025-03-17 17:05:16,704 - INFO - Pot size: 35
+2025-03-17 17:05:16,704 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:16,704 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:16,705 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:16,705 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:16,705 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:16,705 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:16,705 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:16,705 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:16,705 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:17,746 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:18,755 - INFO - Current game state: pre_flop
+2025-03-17 17:05:18,755 - INFO - Pot size: 35
+2025-03-17 17:05:18,755 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:18,755 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:18,755 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:18,755 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:18,755 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:18,755 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:18,755 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:18,755 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:18,755 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:19,774 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:20,784 - INFO - Current game state: pre_flop
+2025-03-17 17:05:20,784 - INFO - Pot size: 35
+2025-03-17 17:05:20,784 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:20,784 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:20,784 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:20,784 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:20,784 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:20,784 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:20,784 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:20,784 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:20,784 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:21,810 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:22,815 - INFO - Current game state: pre_flop
+2025-03-17 17:05:22,816 - INFO - Pot size: 35
+2025-03-17 17:05:22,816 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:22,816 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:22,816 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:22,816 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:22,816 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:22,816 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:22,816 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:22,816 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:22,816 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:23,849 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:24,866 - INFO - Current game state: pre_flop
+2025-03-17 17:05:24,866 - INFO - Pot size: 35
+2025-03-17 17:05:24,866 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:24,866 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:24,867 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:24,867 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:24,867 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:24,867 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:24,867 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:24,867 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:24,867 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:25,903 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:26,911 - INFO - Current game state: pre_flop
+2025-03-17 17:05:26,911 - INFO - Pot size: 35
+2025-03-17 17:05:26,911 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:26,912 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:26,912 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:26,912 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:26,912 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:26,912 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:26,912 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:26,912 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:26,912 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:27,934 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:28,944 - INFO - Current game state: pre_flop
+2025-03-17 17:05:28,944 - INFO - Pot size: 35
+2025-03-17 17:05:28,944 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:28,944 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:28,944 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:28,944 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:28,944 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:28,944 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:28,944 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:28,944 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:28,944 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:29,976 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:30,994 - INFO - Current game state: pre_flop
+2025-03-17 17:05:30,995 - INFO - Pot size: 35
+2025-03-17 17:05:30,995 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:30,995 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:30,995 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:30,995 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:30,995 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:30,995 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:30,996 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:30,996 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:30,996 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:32,038 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:33,046 - INFO - Current game state: pre_flop
+2025-03-17 17:05:33,046 - INFO - Pot size: 35
+2025-03-17 17:05:33,046 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:33,046 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:33,046 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:33,046 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:33,046 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:33,046 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:33,046 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:33,046 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:33,046 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:34,064 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:35,073 - INFO - Current game state: pre_flop
+2025-03-17 17:05:35,073 - INFO - Pot size: 35
+2025-03-17 17:05:35,073 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:35,073 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:35,073 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:35,073 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:35,073 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:35,073 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:35,073 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:35,073 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:35,073 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:36,098 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:37,110 - INFO - Current game state: pre_flop
+2025-03-17 17:05:37,111 - INFO - Pot size: 35
+2025-03-17 17:05:37,111 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:37,111 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:37,111 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:37,111 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:37,111 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:37,111 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:37,111 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:37,111 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:37,111 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:38,141 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:39,152 - INFO - Current game state: pre_flop
+2025-03-17 17:05:39,152 - INFO - Pot size: 35
+2025-03-17 17:05:39,152 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:39,152 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:39,152 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:39,152 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:39,152 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:39,152 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:39,152 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:39,152 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:39,152 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:40,174 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:41,182 - INFO - Current game state: pre_flop
+2025-03-17 17:05:41,182 - INFO - Pot size: 35
+2025-03-17 17:05:41,183 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:41,183 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:41,183 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:41,183 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:41,183 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:41,183 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:41,183 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:41,183 - INFO - Current betting round: pre_flop
+2025-03-17 17:05:41,183 - INFO - Test player ee49ef33-0614-4ad4-be03-03dc8f418348 calls (stack before: 2975)
+2025-03-17 17:05:42,201 - WARNING - Stack not updated properly after call! Before: 2975, After: 2975
+2025-03-17 17:05:43,212 - INFO - Current game state: pre_flop
+2025-03-17 17:05:43,212 - INFO - Pot size: 35
+2025-03-17 17:05:43,212 - INFO - Player ee49ef33-0614-4ad4-be03-03dc8f418348 is ACTIVE with stack 2975
+2025-03-17 17:05:43,212 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:05:43,212 - INFO - Player ai_1 is ACTIVE with stack 5
+2025-03-17 17:05:43,212 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:05:43,212 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:05:43,212 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:05:43,212 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:05:43,212 - WARNING - Hit maximum actions per hand (30). Game might be stuck.
+2025-03-17 17:05:43,212 - INFO - Advancing to next hand
+2025-03-17 17:05:44,222 - ERROR - API request failed: 400 Client Error: Bad Request for url: http://localhost:8080/api/v1/games/a78b6a9f-486f-42cf-94f9-ffdaa5ccb46e/next-hand
+2025-03-17 17:05:44,222 - ERROR - Response: {"error":true,"code":"INVALID_ACTION","message":"Cannot advance to next hand before showdown","details":null}
+2025-03-17 17:20:34,804 - INFO - Starting test to verify fix for folded AI players issue
+2025-03-17 17:20:34,804 - INFO - Creating test player
+2025-03-17 17:20:34,812 - INFO - Player created with ID: 35609698-6d99-4fad-ae9e-67edcfcb57e6
+2025-03-17 17:20:34,812 - INFO - Creating new game with 5 AI players
+2025-03-17 17:20:35,826 - INFO - Game created with ID: b6028353-4a7a-48a7-b12e-892663fba965
+2025-03-17 17:20:36,831 - INFO - 
+==================================================
+Starting hand #1
+==================================================
+2025-03-17 17:20:37,848 - INFO - Current game state: pre_flop
+2025-03-17 17:20:37,849 - INFO - Pot size: 15
+2025-03-17 17:20:37,849 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 1000
+2025-03-17 17:20:37,849 - INFO - Player ai_0 is ACTIVE with stack 995
+2025-03-17 17:20:37,849 - INFO - Player ai_1 is ACTIVE with stack 990
+2025-03-17 17:20:37,849 - INFO - Player ai_2 is ACTIVE with stack 1000
+2025-03-17 17:20:37,849 - INFO - Player ai_3 is ACTIVE with stack 1000
+2025-03-17 17:20:37,849 - INFO - Player ai_4 is ACTIVE with stack 1000
+2025-03-17 17:20:37,849 - INFO - Total active players: 6, folded players: 0
+2025-03-17 17:20:37,849 - INFO - Current betting round: pre_flop
+2025-03-17 17:20:37,849 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 1000)
+2025-03-17 17:20:38,891 - INFO - Stack updated: 1000 -> 990 (change: -10)
+2025-03-17 17:20:39,900 - INFO - Current game state: flop
+2025-03-17 17:20:39,900 - INFO - Pot size: 35
+2025-03-17 17:20:39,900 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 990
+2025-03-17 17:20:39,900 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:20:39,900 - INFO - Player ai_1 is ACTIVE with stack 990
+2025-03-17 17:20:39,900 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:20:39,900 - INFO - Player ai_3 is ACTIVE with stack 990
+2025-03-17 17:20:39,900 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:20:39,900 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:20:39,900 - INFO - Current betting round: flop
+2025-03-17 17:20:39,900 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 990)
+2025-03-17 17:20:40,911 - WARNING - Stack not updated properly after call! Before: 990, After: 990
+2025-03-17 17:20:41,921 - INFO - Current game state: flop
+2025-03-17 17:20:41,921 - INFO - Pot size: 55
+2025-03-17 17:20:41,921 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 990
+2025-03-17 17:20:41,921 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:20:41,921 - INFO - Player ai_1 is ACTIVE with stack 980
+2025-03-17 17:20:41,921 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:20:41,921 - INFO - Player ai_3 is ACTIVE with stack 980
+2025-03-17 17:20:41,921 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:20:41,921 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:20:41,921 - INFO - Current betting round: flop
+2025-03-17 17:20:41,922 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 990)
+2025-03-17 17:20:42,945 - INFO - Stack updated: 990 -> 980 (change: -10)
+2025-03-17 17:20:43,962 - INFO - Current game state: flop
+2025-03-17 17:20:43,962 - INFO - Pot size: 105
+2025-03-17 17:20:43,962 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 980
+2025-03-17 17:20:43,962 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:20:43,962 - INFO - Player ai_1 is ACTIVE with stack 960
+2025-03-17 17:20:43,962 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:20:43,962 - INFO - Player ai_3 is ACTIVE with stack 960
+2025-03-17 17:20:43,963 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:20:43,963 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:20:43,963 - INFO - Current betting round: flop
+2025-03-17 17:20:43,963 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 980)
+2025-03-17 17:20:44,991 - INFO - Stack updated: 980 -> 960 (change: -20)
+2025-03-17 17:20:45,999 - INFO - Current game state: flop
+2025-03-17 17:20:45,999 - INFO - Pot size: 205
+2025-03-17 17:20:45,999 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 960
+2025-03-17 17:20:45,999 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:20:45,999 - INFO - Player ai_1 is ACTIVE with stack 920
+2025-03-17 17:20:45,999 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:20:45,999 - INFO - Player ai_3 is ACTIVE with stack 920
+2025-03-17 17:20:45,999 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:20:45,999 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:20:45,999 - INFO - Current betting round: flop
+2025-03-17 17:20:45,999 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 960)
+2025-03-17 17:20:47,014 - INFO - Stack updated: 960 -> 920 (change: -40)
+2025-03-17 17:20:48,023 - INFO - Current game state: flop
+2025-03-17 17:20:48,023 - INFO - Pot size: 405
+2025-03-17 17:20:48,023 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 920
+2025-03-17 17:20:48,023 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:20:48,023 - INFO - Player ai_1 is ACTIVE with stack 840
+2025-03-17 17:20:48,023 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:20:48,023 - INFO - Player ai_3 is ACTIVE with stack 840
+2025-03-17 17:20:48,023 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:20:48,023 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:20:48,023 - INFO - Current betting round: flop
+2025-03-17 17:20:48,023 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 920)
+2025-03-17 17:20:49,038 - INFO - Stack updated: 920 -> 840 (change: -80)
+2025-03-17 17:20:50,052 - INFO - Current game state: flop
+2025-03-17 17:20:50,052 - INFO - Pot size: 805
+2025-03-17 17:20:50,052 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 840
+2025-03-17 17:20:50,052 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:20:50,052 - INFO - Player ai_1 is ACTIVE with stack 680
+2025-03-17 17:20:50,052 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:20:50,052 - INFO - Player ai_3 is ACTIVE with stack 680
+2025-03-17 17:20:50,052 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:20:50,052 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:20:50,052 - INFO - Current betting round: flop
+2025-03-17 17:20:50,052 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 840)
+2025-03-17 17:20:51,084 - INFO - Stack updated: 840 -> 680 (change: -160)
+2025-03-17 17:20:52,094 - INFO - Current game state: flop
+2025-03-17 17:20:52,094 - INFO - Pot size: 1605
+2025-03-17 17:20:52,094 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 680
+2025-03-17 17:20:52,094 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:20:52,094 - INFO - Player ai_1 is ACTIVE with stack 360
+2025-03-17 17:20:52,094 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:20:52,094 - INFO - Player ai_3 is ACTIVE with stack 360
+2025-03-17 17:20:52,094 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:20:52,094 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:20:52,095 - INFO - Current betting round: flop
+2025-03-17 17:20:52,095 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 680)
+2025-03-17 17:20:53,114 - INFO - Stack updated: 680 -> 360 (change: -320)
+2025-03-17 17:20:54,122 - INFO - Current game state: turn
+2025-03-17 17:20:54,123 - INFO - Pot size: 1925
+2025-03-17 17:20:54,123 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 360
+2025-03-17 17:20:54,123 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:20:54,123 - INFO - Player ai_1 is ACTIVE with stack 360
+2025-03-17 17:20:54,123 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:20:54,123 - INFO - Player ai_3 is ACTIVE with stack 360
+2025-03-17 17:20:54,123 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:20:54,123 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:20:54,123 - INFO - Current betting round: turn
+2025-03-17 17:20:54,123 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 360)
+2025-03-17 17:20:55,135 - WARNING - Stack not updated properly after call! Before: 360, After: 360
+2025-03-17 17:20:56,145 - INFO - Current game state: turn
+2025-03-17 17:20:56,145 - INFO - Pot size: 1945
+2025-03-17 17:20:56,145 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 360
+2025-03-17 17:20:56,145 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:20:56,145 - INFO - Player ai_1 is ACTIVE with stack 350
+2025-03-17 17:20:56,145 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:20:56,145 - INFO - Player ai_3 is ACTIVE with stack 350
+2025-03-17 17:20:56,145 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:20:56,145 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:20:56,145 - INFO - Current betting round: turn
+2025-03-17 17:20:56,145 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 360)
+2025-03-17 17:20:57,167 - INFO - Stack updated: 360 -> 350 (change: -10)
+2025-03-17 17:20:58,178 - INFO - Current game state: turn
+2025-03-17 17:20:58,178 - INFO - Pot size: 1995
+2025-03-17 17:20:58,179 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 350
+2025-03-17 17:20:58,179 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:20:58,179 - INFO - Player ai_1 is ACTIVE with stack 330
+2025-03-17 17:20:58,179 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:20:58,179 - INFO - Player ai_3 is ACTIVE with stack 330
+2025-03-17 17:20:58,179 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:20:58,179 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:20:58,179 - INFO - Current betting round: turn
+2025-03-17 17:20:58,179 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 350)
+2025-03-17 17:20:59,209 - INFO - Stack updated: 350 -> 330 (change: -20)
+2025-03-17 17:21:00,228 - INFO - Current game state: turn
+2025-03-17 17:21:00,228 - INFO - Pot size: 2095
+2025-03-17 17:21:00,228 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 330
+2025-03-17 17:21:00,228 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:21:00,229 - INFO - Player ai_1 is ACTIVE with stack 290
+2025-03-17 17:21:00,229 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:21:00,229 - INFO - Player ai_3 is ACTIVE with stack 290
+2025-03-17 17:21:00,229 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:21:00,229 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:21:00,229 - INFO - Current betting round: turn
+2025-03-17 17:21:00,229 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 330)
+2025-03-17 17:21:01,243 - INFO - Stack updated: 330 -> 290 (change: -40)
+2025-03-17 17:21:02,251 - INFO - Current game state: turn
+2025-03-17 17:21:02,251 - INFO - Pot size: 2295
+2025-03-17 17:21:02,252 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 290
+2025-03-17 17:21:02,252 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:21:02,252 - INFO - Player ai_1 is ACTIVE with stack 210
+2025-03-17 17:21:02,252 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:21:02,252 - INFO - Player ai_3 is ACTIVE with stack 210
+2025-03-17 17:21:02,252 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:21:02,252 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:21:02,252 - INFO - Current betting round: turn
+2025-03-17 17:21:02,252 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 290)
+2025-03-17 17:21:03,267 - INFO - Stack updated: 290 -> 210 (change: -80)
+2025-03-17 17:21:04,282 - INFO - Current game state: turn
+2025-03-17 17:21:04,282 - INFO - Pot size: 2695
+2025-03-17 17:21:04,282 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 210
+2025-03-17 17:21:04,282 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:21:04,282 - INFO - Player ai_1 is ACTIVE with stack 50
+2025-03-17 17:21:04,282 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:21:04,282 - INFO - Player ai_3 is ACTIVE with stack 50
+2025-03-17 17:21:04,282 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:21:04,282 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:21:04,282 - INFO - Current betting round: turn
+2025-03-17 17:21:04,282 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 210)
+2025-03-17 17:21:05,313 - INFO - Stack updated: 210 -> 50 (change: -160)
+2025-03-17 17:21:06,321 - INFO - Current game state: river
+2025-03-17 17:21:06,321 - INFO - Pot size: 2855
+2025-03-17 17:21:06,322 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 50
+2025-03-17 17:21:06,322 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:21:06,322 - INFO - Player ai_1 is ACTIVE with stack 50
+2025-03-17 17:21:06,322 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:21:06,322 - INFO - Player ai_3 is ACTIVE with stack 50
+2025-03-17 17:21:06,322 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:21:06,322 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:21:06,322 - INFO - Current betting round: river
+2025-03-17 17:21:06,322 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 50)
+2025-03-17 17:21:07,336 - WARNING - Stack not updated properly after call! Before: 50, After: 50
+2025-03-17 17:21:08,345 - INFO - Current game state: river
+2025-03-17 17:21:08,345 - INFO - Pot size: 2875
+2025-03-17 17:21:08,345 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 50
+2025-03-17 17:21:08,345 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:21:08,345 - INFO - Player ai_1 is ACTIVE with stack 40
+2025-03-17 17:21:08,345 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:21:08,345 - INFO - Player ai_3 is ACTIVE with stack 40
+2025-03-17 17:21:08,345 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:21:08,345 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:21:08,345 - INFO - Current betting round: river
+2025-03-17 17:21:08,345 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 50)
+2025-03-17 17:21:09,362 - INFO - Stack updated: 50 -> 40 (change: -10)
+2025-03-17 17:21:10,374 - INFO - Current game state: river
+2025-03-17 17:21:10,374 - INFO - Pot size: 2925
+2025-03-17 17:21:10,374 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 40
+2025-03-17 17:21:10,374 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:21:10,374 - INFO - Player ai_1 is ACTIVE with stack 20
+2025-03-17 17:21:10,374 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:21:10,374 - INFO - Player ai_3 is ACTIVE with stack 20
+2025-03-17 17:21:10,374 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:21:10,374 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:21:10,374 - INFO - Current betting round: river
+2025-03-17 17:21:10,374 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 40)
+2025-03-17 17:21:11,403 - INFO - Stack updated: 40 -> 20 (change: -20)
+2025-03-17 17:21:12,422 - INFO - Current game state: showdown
+2025-03-17 17:21:12,422 - INFO - Pot size: 2945
+2025-03-17 17:21:12,422 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 20
+2025-03-17 17:21:12,422 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:21:12,422 - INFO - Player ai_1 is ACTIVE with stack 20
+2025-03-17 17:21:12,422 - INFO - Player ai_2 is FOLDED with stack 1000
+2025-03-17 17:21:12,422 - INFO - Player ai_3 is ACTIVE with stack 20
+2025-03-17 17:21:12,423 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:21:12,423 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:21:12,423 - INFO - Hand complete, getting showdown results
+2025-03-17 17:21:13,438 - INFO - Winner: ai_1 won 2945 chips with Pair
+2025-03-17 17:21:13,438 - INFO - Advancing to next hand
+2025-03-17 17:21:17,453 - INFO - 
+==================================================
+Starting hand #2
+==================================================
+2025-03-17 17:21:18,461 - INFO - Current game state: pre_flop
+2025-03-17 17:21:18,461 - INFO - Pot size: 15
+2025-03-17 17:21:18,462 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 20
+2025-03-17 17:21:18,462 - INFO - Player ai_0 is ACTIVE with stack 995
+2025-03-17 17:21:18,462 - INFO - Player ai_1 is ACTIVE with stack 2960
+2025-03-17 17:21:18,462 - INFO - Player ai_2 is ACTIVE with stack 990
+2025-03-17 17:21:18,462 - INFO - Player ai_3 is ACTIVE with stack 20
+2025-03-17 17:21:18,462 - INFO - Player ai_4 is ACTIVE with stack 1000
+2025-03-17 17:21:18,462 - INFO - Total active players: 6, folded players: 0
+2025-03-17 17:21:18,462 - INFO - Current betting round: pre_flop
+2025-03-17 17:21:18,462 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 20)
+2025-03-17 17:21:19,509 - INFO - Stack updated: 20 -> 10 (change: -10)
+2025-03-17 17:21:20,524 - INFO - Current game state: flop
+2025-03-17 17:21:20,524 - INFO - Pot size: 40
+2025-03-17 17:21:20,524 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 10
+2025-03-17 17:21:20,524 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:21:20,524 - INFO - Player ai_1 is ACTIVE with stack 2955
+2025-03-17 17:21:20,524 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:21:20,524 - INFO - Player ai_3 is ACTIVE with stack 10
+2025-03-17 17:21:20,524 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:21:20,524 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:21:20,525 - INFO - Current betting round: flop
+2025-03-17 17:21:20,525 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 10)
+2025-03-17 17:21:21,548 - WARNING - Stack not updated properly after call! Before: 10, After: 10
+2025-03-17 17:21:22,556 - INFO - Current game state: flop
+2025-03-17 17:21:22,556 - INFO - Pot size: 60
+2025-03-17 17:21:22,556 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 10
+2025-03-17 17:21:22,556 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:21:22,556 - INFO - Player ai_1 is ACTIVE with stack 2945
+2025-03-17 17:21:22,556 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:21:22,556 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:21:22,556 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:21:22,556 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:21:22,556 - INFO - Current betting round: flop
+2025-03-17 17:21:22,556 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 10)
+2025-03-17 17:21:23,569 - INFO - Stack updated: 10 -> 0 (change: -10)
+2025-03-17 17:21:24,578 - INFO - Current game state: flop
+2025-03-17 17:21:24,578 - INFO - Pot size: 90
+2025-03-17 17:21:24,578 - INFO - Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 is ACTIVE with stack 0
+2025-03-17 17:21:24,578 - INFO - Player ai_0 is FOLDED with stack 995
+2025-03-17 17:21:24,579 - INFO - Player ai_1 is ACTIVE with stack 2925
+2025-03-17 17:21:24,579 - INFO - Player ai_2 is FOLDED with stack 990
+2025-03-17 17:21:24,579 - INFO - Player ai_3 is ACTIVE with stack 0
+2025-03-17 17:21:24,579 - INFO - Player ai_4 is FOLDED with stack 1000
+2025-03-17 17:21:24,579 - INFO - Total active players: 3, folded players: 3
+2025-03-17 17:21:24,579 - INFO - Current betting round: flop
+2025-03-17 17:21:24,579 - INFO - Test player 35609698-6d99-4fad-ae9e-67edcfcb57e6 calls (stack before: 0)
+2025-03-17 17:21:25,588 - ERROR - API request failed: 400 Client Error: Bad Request for url: http://localhost:8080/api/v1/games/b6028353-4a7a-48a7-b12e-892663fba965/actions
+2025-03-17 17:21:25,588 - ERROR - Response: {"error":true,"code":"INSUFFICIENT_FUNDS","message":"Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 has insufficient funds","details":{"required":20,"available":0}}

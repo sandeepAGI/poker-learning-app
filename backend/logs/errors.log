@@ -322,3 +322,30 @@
 2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
 2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
 2025-03-17 16:12:25 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:06 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-17 17:16:46 - game.poker_game - ERROR - CHIPS ERROR: Total chips before (4000) does not match after (4040)
+2025-03-17 17:21:13 - game_service - ERROR - CHIPS CONSERVATION ERROR: Before: 6000, After: 8945, Difference: -2945
+2025-03-17 17:21:25 - game_service - ERROR - Error processing action: Player 35609698-6d99-4fad-ae9e-67edcfcb57e6 has insufficient funds

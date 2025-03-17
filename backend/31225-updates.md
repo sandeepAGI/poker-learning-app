@@ -632,10 +632,13 @@ In the new hand that was started, the winner's stack was correctly preserved:
 "is_active": true,
 ```
 
-## Additional Fix for AI Player Reactivation (03/17/25)
+## Additional Fixes for AI Player Behavior (03/17/25)
 
-### Problem
+### Problem 1: AI Player Reactivation
 When testing the application with e2e_poker_test.py, we discovered that AI players who folded during a hand were not being reactivated for the next hand. This resulted in fewer and fewer active players as the game progressed, which is incorrect behavior for poker.
+
+### Problem 2: AI Players Continuing After Folding
+During API testing, we found that AI players were still participating in betting rounds even after they had folded. This issue occurred because the betting round logic didn't properly terminate when only one active player remained, and didn't check for player active status consistently.
 
 ### Analysis
 The issue was in how player state was being managed between hands:
@@ -644,7 +647,7 @@ The issue was in how player state was being managed between hands:
 2. However, at the start of a new hand, the code was preserving this inactive status rather than resetting it
 3. This affected AI players who had folded in previous hands, preventing them from participating in future hands even if they had sufficient chips
 
-### Code Changes
+### Code Changes for Problem 1
 
 #### 1. `models/player.py`
 Updated the `reset_hand_state()` method to automatically reactivate players based on chip count, not previous active status:
@@ -732,6 +735,72 @@ The fix was tested by running the comprehensive test suite and the new_e2e_test.
 
 The logs and API responses showed correct handling of player active status between hands.
 
+### Code Changes for Problem 2
+
+To fix the issue of AI players continuing to make decisions after folding, we made changes to the betting round logic to properly handle folded players:
+
+#### 1. `game/poker_round.py`
+Updated the betting round execution to check the number of active players before and during the round:
+
+```python
+# Check if there's only one active player left before starting the round
+active_players = sum(1 for p in self.players if p.is_active)
+if active_players <= 1:
+    logger.info(f"Only {active_players} active player(s) remaining, ending betting round")
+    break
+
+# ... existing code for player decisions ...
+
+# When a player folds, check if they're the last active player
+else:  # fold
+    bet_amount = 0
+    player.is_active = False
+    logger.debug(f"Player {player.player_id} folds")
+    
+    # Check if only one active player remains after this fold
+    active_players_count = sum(1 for p in self.players if p.is_active)
+    if active_players_count <= 1:
+        logger.info(f"Only {active_players_count} active player(s) remaining after fold, ending betting round")
+        betting_done = True
+        break
+```
+
+#### 2. `services/game_service.py`
+Updated the `_process_ai_actions` method to check for active players before processing AI actions:
+
+```python
+# Check if there's only one active player left before processing AI actions
+active_players_count = sum(1 for p in poker_game.players if p.is_active)
+if active_players_count <= 1:
+    self.logger.info(f"Only {active_players_count} active player(s) remaining, skipping AI actions")
+    return
+
+# ... existing AI action processing code ...
+
+# When an AI player folds, check if they're the last active player
+if decision == "fold":
+    player.is_active = False
+    
+    # Check if only one active player remains after this fold
+    active_players_count = sum(1 for p in poker_game.players if p.is_active)
+    if active_players_count <= 1:
+        self.logger.info(f"Only {active_players_count} active player(s) remaining after AI fold, stopping AI actions")
+        break
+```
+
+### Test Results for Problem 2
+The fix was tested using an API test script that:
+1. Created a game and played multiple hands
+2. Had the test player fold deliberately
+3. Verified that folded players remained inactive throughout the hand
+4. Checked that folded players were properly reactivated in the next hand
+
+The tests confirmed that:
+- Folded players are properly marked as inactive
+- They remain inactive for the rest of the hand
+- Once a player folds, they don't make any more decisions in that hand
+- When the next hand starts, all players with sufficient chips are reactivated
+
 ## Conclusion
 
 These changes provide:
@@ -750,3 +819,5 @@ These changes provide:
 13. Improves folding logic to correctly advance the game when only one player remains
 14. Enhances action handling to properly detect when all players have acted
 15. Fixes player reactivation between hands so AI players who fold in one hand correctly participate in the next hand
+16. Improves betting round logic to immediately terminate when only one active player remains
+17. Prevents folded AI players from making decisions in subsequent betting rounds
