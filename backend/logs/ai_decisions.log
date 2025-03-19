@@ -11030,3 +11030,1025 @@
 2025-03-17 17:21:23 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4c, 2c | Community: 5c, 3h, 9s | Hand Score: 7444 (High Card) | Pot: 90 | SPR: 0.0
 2025-03-17 17:24:08 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
 2025-03-17 17:24:09 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:06:13 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:06:14 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:06:47 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 39.8
+2025-03-18 10:06:47 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 9s, 9d | Community:  | Hand Score: 2756.33 (Two Pair) | Pot: 25 | SPR: 39.8
+2025-03-18 10:06:47 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 10:06:47 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 5d, Jd | Community:  | Hand Score: 3934.09 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 10:06:47 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 22.22222222222222
+2025-03-18 10:06:47 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 3h, 5h | Community:  | Hand Score: 4499.69 (Pair) | Pot: 45 | SPR: 22.22222222222222
+2025-03-18 10:06:47 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 13.333333333333334
+2025-03-18 10:06:47 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: Kh, Qh | Community:  | Hand Score: 4048.3 (Pair) | Pot: 75 | SPR: 13.333333333333334
+2025-03-18 10:06:47 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 10.210526315789474
+2025-03-18 10:06:47 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 5d, Jd | Community:  | Hand Score: 3891.77 (Pair) | Pot: 95 | SPR: 10.210526315789474
+2025-03-18 10:06:47 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 7.185185185185185
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 3h, 5h | Community:  | Hand Score: 3928.47 (Pair) | Pot: 135 | SPR: 7.185185185185185
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 4.325581395348837
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 5d, Jd | Community:  | Hand Score: 4068.23 (Pair) | Pot: 215 | SPR: 4.325581395348837
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.152542372881356
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 3h, 5h | Community:  | Hand Score: 4284.43 (Pair) | Pot: 295 | SPR: 3.152542372881356
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.8681318681318682
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community:  | Hand Score: 4065.73 (Pair) | Pot: 455 | SPR: 1.8681318681318682
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.8681318681318682
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community:  | Hand Score: 3947.91 (Pair) | Pot: 455 | SPR: 1.8681318681318682
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.096774193548387
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community:  | Hand Score: 4067.56 (Pair) | Pot: 775 | SPR: 1.096774193548387
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.7379679144385026
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community:  | Hand Score: 4083.34 (Pair) | Pot: 935 | SPR: 0.7379679144385026
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.4380952380952381
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community:  | Hand Score: 3728.35 (Pair) | Pot: 1575 | SPR: 0.4380952380952381
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.19525065963060687
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community:  | Hand Score: 4145.11 (Pair) | Pot: 1895 | SPR: 0.19525065963060687
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.19525065963060687
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d | Hand Score: 7252 (High Card) | Pot: 1895 | SPR: 0.19525065963060687
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.19525065963060687
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d | Hand Score: 7397 (High Card) | Pot: 1895 | SPR: 0.19525065963060687
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.19321148825065274
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d | Hand Score: 7252 (High Card) | Pot: 1915 | SPR: 0.19321148825065274
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.18701298701298702
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d | Hand Score: 7397 (High Card) | Pot: 1925 | SPR: 0.18701298701298702
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.183206106870229
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d | Hand Score: 7252 (High Card) | Pot: 1965 | SPR: 0.183206106870229
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.1712846347607053
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d | Hand Score: 7397 (High Card) | Pot: 1985 | SPR: 0.1712846347607053
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.16464891041162227
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d | Hand Score: 7252 (High Card) | Pot: 2065 | SPR: 0.16464891041162227
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.14251781472684086
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d | Hand Score: 7397 (High Card) | Pot: 2105 | SPR: 0.14251781472684086
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.13245033112582782
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d | Hand Score: 7252 (High Card) | Pot: 2265 | SPR: 0.13245033112582782
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.09381663113006397
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d | Hand Score: 7397 (High Card) | Pot: 2345 | SPR: 0.09381663113006397
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.0825515947467167
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d | Hand Score: 7252 (High Card) | Pot: 2665 | SPR: 0.0825515947467167
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.021238938053097345
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d | Hand Score: 7397 (High Card) | Pot: 2825 | SPR: 0.021238938053097345
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.021238938053097345
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d, 8c | Hand Score: 7237 (High Card) | Pot: 2825 | SPR: 0.021238938053097345
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.021238938053097345
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d, 8c | Hand Score: 7376 (High Card) | Pot: 2825 | SPR: 0.021238938053097345
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.0210896309314587
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d, 8c | Hand Score: 7237 (High Card) | Pot: 2845 | SPR: 0.0210896309314587
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.017513134851138354
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d, 8c | Hand Score: 7376 (High Card) | Pot: 2855 | SPR: 0.017513134851138354
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.017271157167530225
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d, 8c | Hand Score: 7237 (High Card) | Pot: 2895 | SPR: 0.017271157167530225
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.010291595197255575
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d, 8c | Hand Score: 7376 (High Card) | Pot: 2915 | SPR: 0.010291595197255575
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.010291595197255575
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d, 8c, 6s | Hand Score: 5223 (Pair) | Pot: 2915 | SPR: 0.010291595197255575
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.010291595197255575
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d, 8c, 6s | Hand Score: 5256 (Pair) | Pot: 2915 | SPR: 0.010291595197255575
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.010221465076660987
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d, 8c, 6s | Hand Score: 5223 (Pair) | Pot: 2935 | SPR: 0.010221465076660987
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.006791171477079796
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 3h, 5h | Community: Ts, 7c, 6d, 8c, 6s | Hand Score: 5256 (Pair) | Pot: 2945 | SPR: 0.006791171477079796
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.006700167504187605
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 5d, Jd | Community: Ts, 7c, 6d, 8c, 6s | Hand Score: 5223 (Pair) | Pot: 2985 | SPR: 0.006700167504187605
+2025-03-18 10:06:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0
+2025-03-18 10:06:48 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 3h, 5h | Community: Ts, 7c, 6d, 8c, 6s | Hand Score: 5256 (Pair) | Pot: 3005 | SPR: 0.0
+2025-03-18 10:07:05 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:07:05 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:07:05 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:07:05 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:07:05 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:07:05 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:07:05 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:07:05 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:07:05 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:18:34 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:20:09 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:20:44 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:25:04 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:26:05 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:26:12 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:34:34 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:34:45 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:37:16 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 10:37:28 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:03:56 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:04:08 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:05:29 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:05:39 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:12:01 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:12:32 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:13:37 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:14:06 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:15:48 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:16:07 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 66.33333333333333
+2025-03-18 21:16:07 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 4d, Js | Community:  | Hand Score: 4376.59 (Pair) | Pot: 15 | SPR: 66.33333333333333
+2025-03-18 21:16:07 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 66.0
+2025-03-18 21:16:07 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 3s | Community:  | Hand Score: 4218.68 (Pair) | Pot: 15 | SPR: 66.0
+2025-03-18 21:16:07 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 66.66666666666667
+2025-03-18 21:16:07 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: 5h, Ac | Community:  | Hand Score: 4171.18 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:16:07 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 66.66666666666667
+2025-03-18 21:16:07 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 8c | Community:  | Hand Score: 3905.15 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:16:10 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:16:10 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 3s | Community: 7c, As, Jh | Hand Score: 4891 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:16:10 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:16:10 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 8c | Community: 7c, As, Jh | Hand Score: 6365 (High Card) | Pot: 25 | SPR: 39.6
+2025-03-18 21:16:13 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:16:13 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 3s | Community: 7c, As, Jh, 4h | Hand Score: 4890 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:16:13 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:16:13 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 8c | Community: 7c, As, Jh, 4h | Hand Score: 6365 (High Card) | Pot: 25 | SPR: 39.6
+2025-03-18 21:16:16 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:16:16 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 3s | Community: 7c, As, Jh, 4h, Ad | Hand Score: 2536 (Two Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:16:16 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:16:16 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 8c | Community: 7c, As, Jh, 4h, Ad | Hand Score: 3383 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:16:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:16:19 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 3s | Community: 7c, As, Jh, 4h, Ad | Hand Score: 2536 (Two Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:16:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:16:19 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Qh, 8c | Community: 7c, As, Jh, 4h, Ad | Hand Score: 3383 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:16:23 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 39.8
+2025-03-18 21:16:23 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 2h, Qs | Community:  | Hand Score: 4519.35 (Pair) | Pot: 25 | SPR: 39.8
+2025-03-18 21:16:23 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 40.8
+2025-03-18 21:16:23 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 9h, Kc | Community:  | Hand Score: 3706.39 (Pair) | Pot: 25 | SPR: 40.8
+2025-03-18 21:16:23 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 33.0
+2025-03-18 21:16:23 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: 3d, 5c | Community:  | Hand Score: 4229.35 (Pair) | Pot: 30 | SPR: 33.0
+2025-03-18 21:16:23 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 32.666666666666664
+2025-03-18 21:16:23 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community:  | Hand Score: 4262.3 (Pair) | Pot: 30 | SPR: 32.666666666666664
+2025-03-18 21:16:24 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 25.375
+2025-03-18 21:16:24 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc | Hand Score: 6896 (High Card) | Pot: 40 | SPR: 25.375
+2025-03-18 21:16:24 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 19.4
+2025-03-18 21:16:24 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc | Hand Score: 7400 (High Card) | Pot: 50 | SPR: 19.4
+2025-03-18 21:16:25 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 14.357142857142858
+2025-03-18 21:16:25 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc | Hand Score: 6896 (High Card) | Pot: 70 | SPR: 14.357142857142858
+2025-03-18 21:16:25 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 10.666666666666666
+2025-03-18 21:16:25 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc | Hand Score: 7400 (High Card) | Pot: 90 | SPR: 10.666666666666666
+2025-03-18 21:16:26 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 7.576923076923077
+2025-03-18 21:16:26 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc | Hand Score: 6896 (High Card) | Pot: 130 | SPR: 7.576923076923077
+2025-03-18 21:16:26 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 5.529411764705882
+2025-03-18 21:16:26 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc | Hand Score: 7400 (High Card) | Pot: 170 | SPR: 5.529411764705882
+2025-03-18 21:16:27 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.78
+2025-03-18 21:16:27 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc | Hand Score: 6896 (High Card) | Pot: 250 | SPR: 3.78
+2025-03-18 21:16:27 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 2.727272727272727
+2025-03-18 21:16:27 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc | Hand Score: 7400 (High Card) | Pot: 330 | SPR: 2.727272727272727
+2025-03-18 21:16:28 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.7653061224489797
+2025-03-18 21:16:28 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc | Hand Score: 6896 (High Card) | Pot: 490 | SPR: 1.7653061224489797
+2025-03-18 21:16:28 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.2615384615384615
+2025-03-18 21:16:28 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc | Hand Score: 7400 (High Card) | Pot: 650 | SPR: 1.2615384615384615
+2025-03-18 21:16:29 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.7268041237113402
+2025-03-18 21:16:29 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc | Hand Score: 6896 (High Card) | Pot: 970 | SPR: 0.7268041237113402
+2025-03-18 21:16:29 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.5116279069767442
+2025-03-18 21:16:29 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc | Hand Score: 7400 (High Card) | Pot: 1290 | SPR: 0.5116279069767442
+2025-03-18 21:16:30 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.19948186528497408
+2025-03-18 21:16:30 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc | Hand Score: 6896 (High Card) | Pot: 1930 | SPR: 0.19948186528497408
+2025-03-18 21:16:30 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.17616580310880828
+2025-03-18 21:16:30 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc | Hand Score: 7400 (High Card) | Pot: 1930 | SPR: 0.17616580310880828
+2025-03-18 21:16:31 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.19948186528497408
+2025-03-18 21:16:31 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc, Ts | Hand Score: 4280 (Pair) | Pot: 1930 | SPR: 0.19948186528497408
+2025-03-18 21:16:31 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.17525773195876287
+2025-03-18 21:16:31 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc, Ts | Hand Score: 4407 (Pair) | Pot: 1940 | SPR: 0.17525773195876287
+2025-03-18 21:16:32 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.1913265306122449
+2025-03-18 21:16:32 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc, Ts | Hand Score: 4280 (Pair) | Pot: 1960 | SPR: 0.1913265306122449
+2025-03-18 21:16:32 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.16666666666666666
+2025-03-18 21:16:32 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc, Ts | Hand Score: 4407 (Pair) | Pot: 1980 | SPR: 0.16666666666666666
+2025-03-18 21:16:33 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.17574257425742573
+2025-03-18 21:16:33 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc, Ts | Hand Score: 4280 (Pair) | Pot: 2020 | SPR: 0.17574257425742573
+2025-03-18 21:16:33 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.15048543689320387
+2025-03-18 21:16:33 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc, Ts | Hand Score: 4407 (Pair) | Pot: 2060 | SPR: 0.15048543689320387
+2025-03-18 21:16:34 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.14719626168224298
+2025-03-18 21:16:34 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc, Ts | Hand Score: 4280 (Pair) | Pot: 2140 | SPR: 0.14719626168224298
+2025-03-18 21:16:34 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12162162162162163
+2025-03-18 21:16:34 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc, Ts | Hand Score: 4407 (Pair) | Pot: 2220 | SPR: 0.12162162162162163
+2025-03-18 21:16:35 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.09873949579831932
+2025-03-18 21:16:35 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc, Ts | Hand Score: 4280 (Pair) | Pot: 2380 | SPR: 0.09873949579831932
+2025-03-18 21:16:35 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.07480314960629922
+2025-03-18 21:16:35 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc, Ts | Hand Score: 4407 (Pair) | Pot: 2540 | SPR: 0.07480314960629922
+2025-03-18 21:16:36 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.026223776223776224
+2025-03-18 21:16:36 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc, Ts | Hand Score: 4280 (Pair) | Pot: 2860 | SPR: 0.026223776223776224
+2025-03-18 21:16:36 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01048951048951049
+2025-03-18 21:16:36 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc, Ts | Hand Score: 4407 (Pair) | Pot: 2860 | SPR: 0.01048951048951049
+2025-03-18 21:16:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.026223776223776224
+2025-03-18 21:16:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc, Ts, 9d | Hand Score: 2931 (Two Pair) | Pot: 2860 | SPR: 0.026223776223776224
+2025-03-18 21:16:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.010452961672473868
+2025-03-18 21:16:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc, Ts, 9d | Hand Score: 4376 (Pair) | Pot: 2870 | SPR: 0.010452961672473868
+2025-03-18 21:16:38 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.02249134948096886
+2025-03-18 21:16:38 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc, Ts, 9d | Hand Score: 2931 (Two Pair) | Pot: 2890 | SPR: 0.02249134948096886
+2025-03-18 21:16:38 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.006872852233676976
+2025-03-18 21:16:38 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc, Ts, 9d | Hand Score: 4376 (Pair) | Pot: 2910 | SPR: 0.006872852233676976
+2025-03-18 21:16:39 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.015254237288135594
+2025-03-18 21:16:39 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 9h, Kc | Community: 6h, 2d, Tc, Ts, 9d | Hand Score: 2931 (Two Pair) | Pot: 2950 | SPR: 0.015254237288135594
+2025-03-18 21:16:39 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.0
+2025-03-18 21:16:39 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 4s, 7s | Community: 6h, 2d, Tc, Ts, 9d | Hand Score: 4376 (Pair) | Pot: 2990 | SPR: 0.0
+2025-03-18 21:22:30 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:22:47 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 66.33333333333333
+2025-03-18 21:22:47 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: Ts, 5c | Community:  | Hand Score: 4488.04 (Pair) | Pot: 15 | SPR: 66.33333333333333
+2025-03-18 21:22:47 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 66.0
+2025-03-18 21:22:47 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ks, Kh | Community:  | Hand Score: 2589.15 (Two Pair) | Pot: 15 | SPR: 66.0
+2025-03-18 21:22:47 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 66.66666666666667
+2025-03-18 21:22:47 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: 7c, 6s | Community:  | Hand Score: 4239.75 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:22:47 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 66.66666666666667
+2025-03-18 21:22:47 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 9c, 5h | Community:  | Hand Score: 4419.3 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:22:50 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:22:50 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ks, Kh | Community: Jd, 8d, 5d | Hand Score: 3663 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:22:50 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:22:50 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 9c, 5h | Community: Jd, 8d, 5d | Hand Score: 5449 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:22:53 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:22:53 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ks, Kh | Community: Jd, 8d, 5d, 2s | Hand Score: 3663 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:22:53 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:22:53 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 9c, 5h | Community: Jd, 8d, 5d, 2s | Hand Score: 5449 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:22:56 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:22:56 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ks, Kh | Community: Jd, 8d, 5d, 2s, 6d | Hand Score: 3662 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:22:56 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:22:56 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 9c, 5h | Community: Jd, 8d, 5d, 2s, 6d | Hand Score: 5449 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:22:59 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:22:59 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ks, Kh | Community: Jd, 8d, 5d, 2s, 6d | Hand Score: 3662 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:22:59 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:22:59 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 9c, 5h | Community: Jd, 8d, 5d, 2s, 6d | Hand Score: 5449 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:23:03 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 39.8
+2025-03-18 21:23:03 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 8d, Jh | Community:  | Hand Score: 4284.51 (Pair) | Pot: 25 | SPR: 39.8
+2025-03-18 21:23:03 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 40.4
+2025-03-18 21:23:03 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 3s, As | Community:  | Hand Score: 3756.6 (Pair) | Pot: 25 | SPR: 40.4
+2025-03-18 21:23:03 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 33.0
+2025-03-18 21:23:03 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: 5d, 3d | Community:  | Hand Score: 4269.97 (Pair) | Pot: 30 | SPR: 33.0
+2025-03-18 21:23:03 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 33.0
+2025-03-18 21:23:03 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 2h, Kd | Community:  | Hand Score: 4342.73 (Pair) | Pot: 30 | SPR: 33.0
+2025-03-18 21:23:04 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 16.75
+2025-03-18 21:23:04 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 3s, As | Community:  | Hand Score: 3697.12 (Pair) | Pot: 60 | SPR: 16.75
+2025-03-18 21:23:04 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 13.857142857142858
+2025-03-18 21:23:04 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2h, Kd | Community:  | Hand Score: 4113.06 (Pair) | Pot: 70 | SPR: 13.857142857142858
+2025-03-18 21:23:05 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 14.214285714285714
+2025-03-18 21:23:05 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 3s, As | Community: Kc, Ad, 7s | Hand Score: 3369 (Pair) | Pot: 70 | SPR: 14.214285714285714
+2025-03-18 21:23:05 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 13.857142857142858
+2025-03-18 21:23:05 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2h, Kd | Community: Kc, Ad, 7s | Hand Score: 3590 (Pair) | Pot: 70 | SPR: 13.857142857142858
+2025-03-18 21:23:06 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 14.214285714285714
+2025-03-18 21:23:06 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 3s, As | Community: Kc, Ad, 7s, 5s | Hand Score: 3367 (Pair) | Pot: 70 | SPR: 14.214285714285714
+2025-03-18 21:23:06 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 13.857142857142858
+2025-03-18 21:23:06 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 2h, Kd | Community: Kc, Ad, 7s, 5s | Hand Score: 3587 (Pair) | Pot: 70 | SPR: 13.857142857142858
+2025-03-18 21:23:07 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 11.055555555555555
+2025-03-18 21:23:07 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 3s, As | Community: Kc, Ad, 7s, 5s | Hand Score: 3367 (Pair) | Pot: 90 | SPR: 11.055555555555555
+2025-03-18 21:23:07 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 9.6
+2025-03-18 21:23:07 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2h, Kd | Community: Kc, Ad, 7s, 5s | Hand Score: 3587 (Pair) | Pot: 100 | SPR: 9.6
+2025-03-18 21:23:08 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 9.85
+2025-03-18 21:23:08 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 3s, As | Community: Kc, Ad, 7s, 5s, 9d | Hand Score: 3354 (Pair) | Pot: 100 | SPR: 9.85
+2025-03-18 21:23:08 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 9.6
+2025-03-18 21:23:08 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2h, Kd | Community: Kc, Ad, 7s, 5s, 9d | Hand Score: 3574 (Pair) | Pot: 100 | SPR: 9.6
+2025-03-18 21:29:35 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:29:54 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 66.33333333333333
+2025-03-18 21:29:54 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: Kc, 8h | Community:  | Hand Score: 4311.52 (Pair) | Pot: 15 | SPR: 66.33333333333333
+2025-03-18 21:29:54 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 66.0
+2025-03-18 21:29:54 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 8c, Ac | Community:  | Hand Score: 3715.74 (Pair) | Pot: 15 | SPR: 66.0
+2025-03-18 21:29:54 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 66.66666666666667
+2025-03-18 21:29:54 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: 4d, 2h | Community:  | Hand Score: 4373.92 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:29:54 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 66.66666666666667
+2025-03-18 21:29:54 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qd, Kh | Community:  | Hand Score: 4107.74 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:29:57 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:29:57 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 8c, Ac | Community: Tc, 5c, Qc | Hand Score: 532 (Flush) | Pot: 25 | SPR: 39.6
+2025-03-18 21:29:57 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:29:57 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Qd, Kh | Community: Tc, 5c, Qc | Hand Score: 3834 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:30:00 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 28.285714285714285
+2025-03-18 21:30:00 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 8c, Ac | Community: Tc, 5c, Qc | Hand Score: 532 (Flush) | Pot: 35 | SPR: 28.285714285714285
+2025-03-18 21:30:00 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 21.77777777777778
+2025-03-18 21:30:00 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qd, Kh | Community: Tc, 5c, Qc | Hand Score: 3834 (Pair) | Pot: 45 | SPR: 21.77777777777778
+2025-03-18 21:30:03 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 21.77777777777778
+2025-03-18 21:30:03 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 8c, Ac | Community: Tc, 5c, Qc, 9h | Hand Score: 532 (Flush) | Pot: 45 | SPR: 21.77777777777778
+2025-03-18 21:30:03 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 21.77777777777778
+2025-03-18 21:30:03 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Qd, Kh | Community: Tc, 5c, Qc, 9h | Hand Score: 3830 (Pair) | Pot: 45 | SPR: 21.77777777777778
+2025-03-18 21:30:06 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 17.818181818181817
+2025-03-18 21:30:06 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 8c, Ac | Community: Tc, 5c, Qc, 9h | Hand Score: 532 (Flush) | Pot: 55 | SPR: 17.818181818181817
+2025-03-18 21:30:06 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 14.923076923076923
+2025-03-18 21:30:06 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qd, Kh | Community: Tc, 5c, Qc, 9h | Hand Score: 3830 (Pair) | Pot: 65 | SPR: 14.923076923076923
+2025-03-18 21:30:09 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 14.923076923076923
+2025-03-18 21:30:09 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 8c, Ac | Community: Tc, 5c, Qc, 9h, 7s | Hand Score: 532 (Flush) | Pot: 65 | SPR: 14.923076923076923
+2025-03-18 21:30:09 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 14.923076923076923
+2025-03-18 21:30:09 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qd, Kh | Community: Tc, 5c, Qc, 9h, 7s | Hand Score: 3830 (Pair) | Pot: 65 | SPR: 14.923076923076923
+2025-03-18 21:30:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 14.923076923076923
+2025-03-18 21:30:12 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 8c, Ac | Community: Tc, 5c, Qc, 9h, 7s | Hand Score: 532 (Flush) | Pot: 65 | SPR: 14.923076923076923
+2025-03-18 21:30:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 14.923076923076923
+2025-03-18 21:30:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qd, Kh | Community: Tc, 5c, Qc, 9h, 7s | Hand Score: 3830 (Pair) | Pot: 65 | SPR: 14.923076923076923
+2025-03-18 21:30:17 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 39.8
+2025-03-18 21:30:17 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 5c, Ad | Community:  | Hand Score: 4015.82 (Pair) | Pot: 25 | SPR: 39.8
+2025-03-18 21:30:17 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 41.2
+2025-03-18 21:30:17 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ts, As | Community:  | Hand Score: 4040.62 (Pair) | Pot: 25 | SPR: 41.2
+2025-03-18 21:30:17 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 33.0
+2025-03-18 21:30:17 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: Qs, 3s | Community:  | Hand Score: 4257.36 (Pair) | Pot: 30 | SPR: 33.0
+2025-03-18 21:30:17 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 32.333333333333336
+2025-03-18 21:30:17 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4h | Community:  | Hand Score: 3997.03 (Pair) | Pot: 30 | SPR: 32.333333333333336
+2025-03-18 21:30:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 25.625
+2025-03-18 21:30:18 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ts, As | Community: Th, 7h, 6c | Hand Score: 4246 (Pair) | Pot: 40 | SPR: 25.625
+2025-03-18 21:30:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 24.0
+2025-03-18 21:30:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4h | Community: Th, 7h, 6c | Hand Score: 7128 (High Card) | Pot: 40 | SPR: 24.0
+2025-03-18 21:30:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 25.625
+2025-03-18 21:30:19 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ts, As | Community: Th, 7h, 6c, 6d | Hand Score: 2963 (Two Pair) | Pot: 40 | SPR: 25.625
+2025-03-18 21:30:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 24.0
+2025-03-18 21:30:19 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4h | Community: Th, 7h, 6c, 6d | Hand Score: 5196 (Pair) | Pot: 40 | SPR: 24.0
+2025-03-18 21:30:20 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 25.625
+2025-03-18 21:30:20 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: Ts, As | Community: Th, 7h, 6c, 6d, Qd | Hand Score: 2963 (Two Pair) | Pot: 40 | SPR: 25.625
+2025-03-18 21:30:20 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 24.0
+2025-03-18 21:30:20 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4h | Community: Th, 7h, 6c, 6d, Qd | Hand Score: 2779 (Two Pair) | Pot: 40 | SPR: 24.0
+2025-03-18 21:32:24 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:32:42 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 66.33333333333333
+2025-03-18 21:32:42 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 6d, 8d | Community:  | Hand Score: 3998.24 (Pair) | Pot: 15 | SPR: 66.33333333333333
+2025-03-18 21:32:42 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 66.0
+2025-03-18 21:32:42 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 2s | Community:  | Hand Score: 4453.52 (Pair) | Pot: 15 | SPR: 66.0
+2025-03-18 21:32:42 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 66.66666666666667
+2025-03-18 21:32:42 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: Ts, Jd | Community:  | Hand Score: 3891.35 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:32:42 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 66.66666666666667
+2025-03-18 21:32:42 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2c, Qd | Community:  | Hand Score: 4557.94 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:32:45 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:32:45 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 2s | Community: Kd, 3s, Kh | Hand Score: 3755 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:32:45 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:32:45 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2c, Qd | Community: Kd, 3s, Kh | Hand Score: 3645 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:32:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:32:48 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 2s | Community: Kd, 3s, Kh, Qc | Hand Score: 3634 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:32:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:32:48 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 2c, Qd | Community: Kd, 3s, Kh, Qc | Hand Score: 2609 (Two Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:32:51 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 28.285714285714285
+2025-03-18 21:32:51 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 2s | Community: Kd, 3s, Kh, Qc | Hand Score: 3634 (Pair) | Pot: 35 | SPR: 28.285714285714285
+2025-03-18 21:32:51 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 21.77777777777778
+2025-03-18 21:32:51 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 2c, Qd | Community: Kd, 3s, Kh, Qc | Hand Score: 2609 (Two Pair) | Pot: 45 | SPR: 21.77777777777778
+2025-03-18 21:32:54 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 15.076923076923077
+2025-03-18 21:32:54 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 2s | Community: Kd, 3s, Kh, Qc | Hand Score: 3634 (Pair) | Pot: 65 | SPR: 15.076923076923077
+2025-03-18 21:32:54 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 11.294117647058824
+2025-03-18 21:32:54 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2c, Qd | Community: Kd, 3s, Kh, Qc | Hand Score: 2609 (Two Pair) | Pot: 85 | SPR: 11.294117647058824
+2025-03-18 21:32:57 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 11.294117647058824
+2025-03-18 21:32:57 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 2s | Community: Kd, 3s, Kh, Qc, 2h | Hand Score: 2711 (Two Pair) | Pot: 85 | SPR: 11.294117647058824
+2025-03-18 21:32:57 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 11.294117647058824
+2025-03-18 21:32:57 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 2c, Qd | Community: Kd, 3s, Kh, Qc, 2h | Hand Score: 2609 (Two Pair) | Pot: 85 | SPR: 11.294117647058824
+2025-03-18 21:33:00 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 10.105263157894736
+2025-03-18 21:33:00 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 2s | Community: Kd, 3s, Kh, Qc, 2h | Hand Score: 2711 (Two Pair) | Pot: 95 | SPR: 10.105263157894736
+2025-03-18 21:33:00 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 9.047619047619047
+2025-03-18 21:33:00 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 2c, Qd | Community: Kd, 3s, Kh, Qc, 2h | Hand Score: 2609 (Two Pair) | Pot: 105 | SPR: 9.047619047619047
+2025-03-18 21:33:03 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 7.6
+2025-03-18 21:33:03 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 2s | Community: Kd, 3s, Kh, Qc, 2h | Hand Score: 2711 (Two Pair) | Pot: 125 | SPR: 7.6
+2025-03-18 21:33:03 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 6.413793103448276
+2025-03-18 21:33:03 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: 2c, Qd | Community: Kd, 3s, Kh, Qc, 2h | Hand Score: 2609 (Two Pair) | Pot: 145 | SPR: 6.413793103448276
+2025-03-18 21:33:06 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 5.027027027027027
+2025-03-18 21:33:06 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 2s | Community: Kd, 3s, Kh, Qc, 2h | Hand Score: 2711 (Two Pair) | Pot: 185 | SPR: 5.027027027027027
+2025-03-18 21:33:06 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 3.9555555555555557
+2025-03-18 21:33:06 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2c, Qd | Community: Kd, 3s, Kh, Qc, 2h | Hand Score: 2609 (Two Pair) | Pot: 225 | SPR: 3.9555555555555557
+2025-03-18 21:33:09 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.9555555555555557
+2025-03-18 21:33:09 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7s, 2s | Community: Kd, 3s, Kh, Qc, 2h | Hand Score: 2711 (Two Pair) | Pot: 225 | SPR: 3.9555555555555557
+2025-03-18 21:33:09 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 3.9555555555555557
+2025-03-18 21:33:09 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2c, Qd | Community: Kd, 3s, Kh, Qc, 2h | Hand Score: 2609 (Two Pair) | Pot: 225 | SPR: 3.9555555555555557
+2025-03-18 21:33:13 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 39.8
+2025-03-18 21:33:13 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 2s, Td | Community:  | Hand Score: 4294.74 (Pair) | Pot: 25 | SPR: 39.8
+2025-03-18 21:33:13 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 44.4
+2025-03-18 21:33:13 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 4c, 4s | Community:  | Hand Score: 3651.77 (Pair) | Pot: 25 | SPR: 44.4
+2025-03-18 21:33:13 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 33.0
+2025-03-18 21:33:13 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: 7h, Qd | Community:  | Hand Score: 4214.13 (Pair) | Pot: 30 | SPR: 33.0
+2025-03-18 21:33:13 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 29.666666666666668
+2025-03-18 21:33:13 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community:  | Hand Score: 4577.66 (Pair) | Pot: 30 | SPR: 29.666666666666668
+2025-03-18 21:33:14 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 27.625
+2025-03-18 21:33:14 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd | Hand Score: 5670 (Pair) | Pot: 40 | SPR: 27.625
+2025-03-18 21:33:14 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 17.6
+2025-03-18 21:33:14 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd | Hand Score: 7043 (High Card) | Pot: 50 | SPR: 17.6
+2025-03-18 21:33:15 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 15.642857142857142
+2025-03-18 21:33:15 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd | Hand Score: 5670 (Pair) | Pot: 70 | SPR: 15.642857142857142
+2025-03-18 21:33:15 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 9.666666666666666
+2025-03-18 21:33:15 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd | Hand Score: 7043 (High Card) | Pot: 90 | SPR: 9.666666666666666
+2025-03-18 21:33:16 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 8.26923076923077
+2025-03-18 21:33:16 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd | Hand Score: 5670 (Pair) | Pot: 130 | SPR: 8.26923076923077
+2025-03-18 21:33:16 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 5.0
+2025-03-18 21:33:16 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd | Hand Score: 7043 (High Card) | Pot: 170 | SPR: 5.0
+2025-03-18 21:33:17 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 4.14
+2025-03-18 21:33:17 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd | Hand Score: 5670 (Pair) | Pot: 250 | SPR: 4.14
+2025-03-18 21:33:17 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 2.4545454545454546
+2025-03-18 21:33:17 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd | Hand Score: 7043 (High Card) | Pot: 330 | SPR: 2.4545454545454546
+2025-03-18 21:33:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.9489795918367347
+2025-03-18 21:33:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd | Hand Score: 5670 (Pair) | Pot: 490 | SPR: 1.9489795918367347
+2025-03-18 21:33:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.123076923076923
+2025-03-18 21:33:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd | Hand Score: 7043 (High Card) | Pot: 650 | SPR: 1.123076923076923
+2025-03-18 21:33:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.8195876288659794
+2025-03-18 21:33:19 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd | Hand Score: 5670 (Pair) | Pot: 970 | SPR: 0.8195876288659794
+2025-03-18 21:33:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.4418604651162791
+2025-03-18 21:33:19 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd | Hand Score: 7043 (High Card) | Pot: 1290 | SPR: 0.4418604651162791
+2025-03-18 21:33:20 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.24611398963730569
+2025-03-18 21:33:20 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd | Hand Score: 5670 (Pair) | Pot: 1930 | SPR: 0.24611398963730569
+2025-03-18 21:33:20 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12953367875647667
+2025-03-18 21:33:20 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd | Hand Score: 7043 (High Card) | Pot: 1930 | SPR: 0.12953367875647667
+2025-03-18 21:33:21 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.24611398963730569
+2025-03-18 21:33:21 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd, Kc | Hand Score: 5591 (Pair) | Pot: 1930 | SPR: 0.24611398963730569
+2025-03-18 21:33:21 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12886597938144329
+2025-03-18 21:33:21 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd, Kc | Hand Score: 6687 (High Card) | Pot: 1940 | SPR: 0.12886597938144329
+2025-03-18 21:33:22 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.2372448979591837
+2025-03-18 21:33:22 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd, Kc | Hand Score: 5591 (Pair) | Pot: 1960 | SPR: 0.2372448979591837
+2025-03-18 21:33:22 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12121212121212122
+2025-03-18 21:33:22 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd, Kc | Hand Score: 6687 (High Card) | Pot: 1980 | SPR: 0.12121212121212122
+2025-03-18 21:33:23 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.2202970297029703
+2025-03-18 21:33:23 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd, Kc | Hand Score: 5591 (Pair) | Pot: 2020 | SPR: 0.2202970297029703
+2025-03-18 21:33:23 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.10679611650485436
+2025-03-18 21:33:23 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd, Kc | Hand Score: 6687 (High Card) | Pot: 2060 | SPR: 0.10679611650485436
+2025-03-18 21:33:24 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.18925233644859812
+2025-03-18 21:33:24 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd, Kc | Hand Score: 5591 (Pair) | Pot: 2140 | SPR: 0.18925233644859812
+2025-03-18 21:33:24 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.08108108108108109
+2025-03-18 21:33:24 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd, Kc | Hand Score: 6687 (High Card) | Pot: 2220 | SPR: 0.08108108108108109
+2025-03-18 21:33:25 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.13655462184873948
+2025-03-18 21:33:25 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd, Kc | Hand Score: 5591 (Pair) | Pot: 2380 | SPR: 0.13655462184873948
+2025-03-18 21:33:25 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.03937007874015748
+2025-03-18 21:33:25 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qh, 4d | Community: 9d, 7s, Jd, Kc | Hand Score: 6687 (High Card) | Pot: 2540 | SPR: 0.03937007874015748
+2025-03-18 21:33:26 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05892857142857143
+2025-03-18 21:33:26 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd, Kc | Hand Score: 5591 (Pair) | Pot: 2800 | SPR: 0.05892857142857143
+2025-03-18 21:33:27 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05892857142857143
+2025-03-18 21:33:27 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd, Kc, Ad | Hand Score: 5527 (Pair) | Pot: 2800 | SPR: 0.05892857142857143
+2025-03-18 21:33:28 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0549645390070922
+2025-03-18 21:33:28 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd, Kc, Ad | Hand Score: 5527 (Pair) | Pot: 2820 | SPR: 0.0549645390070922
+2025-03-18 21:33:29 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.0472027972027972
+2025-03-18 21:33:29 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd, Kc, Ad | Hand Score: 5527 (Pair) | Pot: 2860 | SPR: 0.0472027972027972
+2025-03-18 21:33:30 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.032758620689655175
+2025-03-18 21:33:30 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 4s | Community: 9d, 7s, Jd, Kc, Ad | Hand Score: 5527 (Pair) | Pot: 2900 | SPR: 0.032758620689655175
+2025-03-18 21:39:22 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:39:48 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 66.33333333333333
+2025-03-18 21:39:48 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: As, 7h | Community:  | Hand Score: 3738.43 (Pair) | Pot: 15 | SPR: 66.33333333333333
+2025-03-18 21:39:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 66.0
+2025-03-18 21:39:48 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 9c, 9s | Community:  | Hand Score: 2848.2 (Two Pair) | Pot: 15 | SPR: 66.0
+2025-03-18 21:39:48 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 66.66666666666667
+2025-03-18 21:39:48 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: Jd, 5s | Community:  | Hand Score: 4608.76 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:39:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 66.66666666666667
+2025-03-18 21:39:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2c, 5d | Community:  | Hand Score: 4482.1 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:39:51 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:39:51 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 9c, 9s | Community: Kd, Js, Th | Hand Score: 4490 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:39:51 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:39:51 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2c, 5d | Community: Kd, Js, Th | Hand Score: 6822 (High Card) | Pot: 25 | SPR: 39.6
+2025-03-18 21:39:54 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:39:54 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 9c, 9s | Community: Kd, Js, Th, 4h | Hand Score: 4490 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:39:54 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:39:54 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2c, 5d | Community: Kd, Js, Th, 4h | Hand Score: 6820 (High Card) | Pot: 25 | SPR: 39.6
+2025-03-18 21:39:57 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:39:57 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 9c, 9s | Community: Kd, Js, Th, 4h, 6d | Hand Score: 4490 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:39:57 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:39:57 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2c, 5d | Community: Kd, Js, Th, 4h, 6d | Hand Score: 6816 (High Card) | Pot: 25 | SPR: 39.6
+2025-03-18 21:40:00 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:40:00 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 9c, 9s | Community: Kd, Js, Th, 4h, 6d | Hand Score: 4490 (Pair) | Pot: 25 | SPR: 39.6
+2025-03-18 21:40:00 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 39.6
+2025-03-18 21:40:00 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 2c, 5d | Community: Kd, Js, Th, 4h, 6d | Hand Score: 6816 (High Card) | Pot: 25 | SPR: 39.6
+2025-03-18 21:40:04 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 39.8
+2025-03-18 21:40:04 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 5h, 8h | Community:  | Hand Score: 4036.93 (Pair) | Pot: 25 | SPR: 39.8
+2025-03-18 21:40:04 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 40.4
+2025-03-18 21:40:04 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 5s, 3c | Community:  | Hand Score: 4405.99 (Pair) | Pot: 25 | SPR: 40.4
+2025-03-18 21:40:04 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 33.0
+2025-03-18 21:40:04 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: Jc, Kd | Community:  | Hand Score: 3771.64 (Pair) | Pot: 30 | SPR: 33.0
+2025-03-18 21:40:04 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 33.0
+2025-03-18 21:40:05 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community:  | Hand Score: 4621.64 (Pair) | Pot: 30 | SPR: 33.0
+2025-03-18 21:40:06 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 25.125
+2025-03-18 21:40:06 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s | Hand Score: 5519 (Pair) | Pot: 40 | SPR: 25.125
+2025-03-18 21:40:06 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 19.6
+2025-03-18 21:40:06 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s | Hand Score: 6999 (High Card) | Pot: 50 | SPR: 19.6
+2025-03-18 21:40:07 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 14.214285714285714
+2025-03-18 21:40:07 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s | Hand Score: 5519 (Pair) | Pot: 70 | SPR: 14.214285714285714
+2025-03-18 21:40:07 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 10.777777777777779
+2025-03-18 21:40:07 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s | Hand Score: 6999 (High Card) | Pot: 90 | SPR: 10.777777777777779
+2025-03-18 21:40:08 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 7.5
+2025-03-18 21:40:08 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s | Hand Score: 5519 (Pair) | Pot: 130 | SPR: 7.5
+2025-03-18 21:40:08 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 5.588235294117647
+2025-03-18 21:40:08 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s | Hand Score: 6999 (High Card) | Pot: 170 | SPR: 5.588235294117647
+2025-03-18 21:40:09 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.74
+2025-03-18 21:40:09 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s | Hand Score: 5519 (Pair) | Pot: 250 | SPR: 3.74
+2025-03-18 21:40:09 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 2.757575757575758
+2025-03-18 21:40:09 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s | Hand Score: 6999 (High Card) | Pot: 330 | SPR: 2.757575757575758
+2025-03-18 21:40:10 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.7448979591836735
+2025-03-18 21:40:10 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s | Hand Score: 5519 (Pair) | Pot: 490 | SPR: 1.7448979591836735
+2025-03-18 21:40:10 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.2769230769230768
+2025-03-18 21:40:10 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s | Hand Score: 6999 (High Card) | Pot: 650 | SPR: 1.2769230769230768
+2025-03-18 21:40:11 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.7164948453608248
+2025-03-18 21:40:11 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s | Hand Score: 5519 (Pair) | Pot: 970 | SPR: 0.7164948453608248
+2025-03-18 21:40:11 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.5193798449612403
+2025-03-18 21:40:11 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s | Hand Score: 6999 (High Card) | Pot: 1290 | SPR: 0.5193798449612403
+2025-03-18 21:40:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.19430051813471502
+2025-03-18 21:40:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s | Hand Score: 5519 (Pair) | Pot: 1930 | SPR: 0.19430051813471502
+2025-03-18 21:40:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.18134715025906736
+2025-03-18 21:40:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s | Hand Score: 6999 (High Card) | Pot: 1930 | SPR: 0.18134715025906736
+2025-03-18 21:40:13 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.19430051813471502
+2025-03-18 21:40:13 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s, As | Hand Score: 5352 (Pair) | Pot: 1930 | SPR: 0.19430051813471502
+2025-03-18 21:40:13 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.18041237113402062
+2025-03-18 21:40:13 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s, As | Hand Score: 6334 (High Card) | Pot: 1940 | SPR: 0.18041237113402062
+2025-03-18 21:40:14 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.18622448979591838
+2025-03-18 21:40:14 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s, As | Hand Score: 5352 (Pair) | Pot: 1960 | SPR: 0.18622448979591838
+2025-03-18 21:40:14 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.1717171717171717
+2025-03-18 21:40:14 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s, As | Hand Score: 6334 (High Card) | Pot: 1980 | SPR: 0.1717171717171717
+2025-03-18 21:40:15 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.1707920792079208
+2025-03-18 21:40:15 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s, As | Hand Score: 5352 (Pair) | Pot: 2020 | SPR: 0.1707920792079208
+2025-03-18 21:40:15 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.1553398058252427
+2025-03-18 21:40:15 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s, As | Hand Score: 6334 (High Card) | Pot: 2060 | SPR: 0.1553398058252427
+2025-03-18 21:40:16 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.1425233644859813
+2025-03-18 21:40:16 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s, As | Hand Score: 5352 (Pair) | Pot: 2140 | SPR: 0.1425233644859813
+2025-03-18 21:40:16 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12612612612612611
+2025-03-18 21:40:16 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s, As | Hand Score: 6334 (High Card) | Pot: 2220 | SPR: 0.12612612612612611
+2025-03-18 21:40:17 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.09453781512605042
+2025-03-18 21:40:17 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s, As | Hand Score: 5352 (Pair) | Pot: 2380 | SPR: 0.09453781512605042
+2025-03-18 21:40:17 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.07874015748031496
+2025-03-18 21:40:17 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s, As | Hand Score: 6334 (High Card) | Pot: 2540 | SPR: 0.07874015748031496
+2025-03-18 21:40:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.022727272727272728
+2025-03-18 21:40:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s, As | Hand Score: 5352 (Pair) | Pot: 2860 | SPR: 0.022727272727272728
+2025-03-18 21:40:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.013986013986013986
+2025-03-18 21:40:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s, As | Hand Score: 6334 (High Card) | Pot: 2860 | SPR: 0.013986013986013986
+2025-03-18 21:40:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.022727272727272728
+2025-03-18 21:40:19 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s, As, Td | Hand Score: 5335 (Pair) | Pot: 2860 | SPR: 0.022727272727272728
+2025-03-18 21:40:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.013937282229965157
+2025-03-18 21:40:19 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s, As, Td | Hand Score: 6280 (High Card) | Pot: 2870 | SPR: 0.013937282229965157
+2025-03-18 21:40:20 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.01903114186851211
+2025-03-18 21:40:20 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s, As, Td | Hand Score: 5335 (Pair) | Pot: 2890 | SPR: 0.01903114186851211
+2025-03-18 21:40:20 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.010309278350515464
+2025-03-18 21:40:20 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s, As, Td | Hand Score: 6280 (High Card) | Pot: 2910 | SPR: 0.010309278350515464
+2025-03-18 21:40:21 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.011864406779661017
+2025-03-18 21:40:21 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 5s, 3c | Community: 4h, 5d, 7s, As, Td | Hand Score: 5335 (Pair) | Pot: 2950 | SPR: 0.011864406779661017
+2025-03-18 21:40:21 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.003389830508474576
+2025-03-18 21:40:21 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 3s, Ks | Community: 4h, 5d, 7s, As, Td | Hand Score: 6280 (High Card) | Pot: 2950 | SPR: 0.003389830508474576
+2025-03-18 21:43:18 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:43:32 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 66.33333333333333
+2025-03-18 21:43:32 - ai.manager - DEBUG - AI Conservative Decision: call | Hand: 8h, 2s | Community:  | Hand Score: 4387.67 (Pair) | Pot: 15 | SPR: 66.33333333333333
+2025-03-18 21:43:32 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 49.5
+2025-03-18 21:43:32 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7d, 4d | Community:  | Hand Score: 4062.17 (Pair) | Pot: 20 | SPR: 49.5
+2025-03-18 21:43:32 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 50.0
+2025-03-18 21:43:32 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: Td, Ah | Community:  | Hand Score: 3884.5 (Pair) | Pot: 20 | SPR: 50.0
+2025-03-18 21:43:32 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 50.0
+2025-03-18 21:43:32 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community:  | Hand Score: 4501.13 (Pair) | Pot: 20 | SPR: 50.0
+2025-03-18 21:43:35 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 33.0
+2025-03-18 21:43:35 - ai.manager - DEBUG - AI Conservative Decision: call | Hand: 8h, 2s | Community: Kc, 2c, Js | Hand Score: 6032 (Pair) | Pot: 30 | SPR: 33.0
+2025-03-18 21:43:35 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 33.0
+2025-03-18 21:43:35 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js | Hand Score: 6870 (High Card) | Pot: 30 | SPR: 33.0
+2025-03-18 21:43:35 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 24.75
+2025-03-18 21:43:35 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js | Hand Score: 6698 (High Card) | Pot: 40 | SPR: 24.75
+2025-03-18 21:43:38 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 19.8
+2025-03-18 21:43:38 - ai.manager - DEBUG - AI Conservative Decision: call | Hand: 8h, 2s | Community: Kc, 2c, Js | Hand Score: 6032 (Pair) | Pot: 50 | SPR: 19.8
+2025-03-18 21:43:38 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 16.333333333333332
+2025-03-18 21:43:38 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js | Hand Score: 6870 (High Card) | Pot: 60 | SPR: 16.333333333333332
+2025-03-18 21:43:38 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 12.25
+2025-03-18 21:43:38 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js | Hand Score: 6698 (High Card) | Pot: 80 | SPR: 12.25
+2025-03-18 21:43:41 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 9.8
+2025-03-18 21:43:41 - ai.manager - DEBUG - AI Conservative Decision: call | Hand: 8h, 2s | Community: Kc, 2c, Js | Hand Score: 6032 (Pair) | Pot: 100 | SPR: 9.8
+2025-03-18 21:43:41 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 8.0
+2025-03-18 21:43:41 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js | Hand Score: 6870 (High Card) | Pot: 120 | SPR: 8.0
+2025-03-18 21:43:41 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 6.0
+2025-03-18 21:43:41 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js | Hand Score: 6698 (High Card) | Pot: 160 | SPR: 6.0
+2025-03-18 21:43:44 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 4.8
+2025-03-18 21:43:44 - ai.manager - DEBUG - AI Conservative Decision: call | Hand: 8h, 2s | Community: Kc, 2c, Js | Hand Score: 6032 (Pair) | Pot: 200 | SPR: 4.8
+2025-03-18 21:43:44 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.8333333333333335
+2025-03-18 21:43:44 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js | Hand Score: 6870 (High Card) | Pot: 240 | SPR: 3.8333333333333335
+2025-03-18 21:43:44 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 2.875
+2025-03-18 21:43:44 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js | Hand Score: 6698 (High Card) | Pot: 320 | SPR: 2.875
+2025-03-18 21:43:47 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 2.3
+2025-03-18 21:43:47 - ai.manager - DEBUG - AI Conservative Decision: call | Hand: 8h, 2s | Community: Kc, 2c, Js | Hand Score: 6032 (Pair) | Pot: 400 | SPR: 2.3
+2025-03-18 21:43:47 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.75
+2025-03-18 21:43:47 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js | Hand Score: 6870 (High Card) | Pot: 480 | SPR: 1.75
+2025-03-18 21:43:47 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.3125
+2025-03-18 21:43:47 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js | Hand Score: 6698 (High Card) | Pot: 640 | SPR: 1.3125
+2025-03-18 21:43:50 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 1.05
+2025-03-18 21:43:50 - ai.manager - DEBUG - AI Conservative Decision: call | Hand: 8h, 2s | Community: Kc, 2c, Js | Hand Score: 6032 (Pair) | Pot: 800 | SPR: 1.05
+2025-03-18 21:43:50 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.7083333333333334
+2025-03-18 21:43:50 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js | Hand Score: 6870 (High Card) | Pot: 960 | SPR: 0.7083333333333334
+2025-03-18 21:43:50 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.53125
+2025-03-18 21:43:50 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js | Hand Score: 6698 (High Card) | Pot: 1280 | SPR: 0.53125
+2025-03-18 21:43:53 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.425
+2025-03-18 21:43:53 - ai.manager - DEBUG - AI Conservative Decision: call | Hand: 8h, 2s | Community: Kc, 2c, Js | Hand Score: 6032 (Pair) | Pot: 1600 | SPR: 0.425
+2025-03-18 21:43:53 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.1875
+2025-03-18 21:43:53 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js | Hand Score: 6870 (High Card) | Pot: 1920 | SPR: 0.1875
+2025-03-18 21:43:53 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.1875
+2025-03-18 21:43:53 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js | Hand Score: 6698 (High Card) | Pot: 1920 | SPR: 0.1875
+2025-03-18 21:43:56 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.1875
+2025-03-18 21:43:56 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 1920 | SPR: 0.1875
+2025-03-18 21:43:56 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.18652849740932642
+2025-03-18 21:43:56 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 1930 | SPR: 0.18652849740932642
+2025-03-18 21:43:56 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.18461538461538463
+2025-03-18 21:43:56 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 1950 | SPR: 0.18461538461538463
+2025-03-18 21:43:59 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.17766497461928935
+2025-03-18 21:43:59 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 1970 | SPR: 0.17766497461928935
+2025-03-18 21:43:59 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.17
+2025-03-18 21:43:59 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2000 | SPR: 0.17
+2025-03-18 21:43:59 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.16585365853658537
+2025-03-18 21:43:59 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2050 | SPR: 0.16585365853658537
+2025-03-18 21:44:02 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.1523809523809524
+2025-03-18 21:44:02 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2100 | SPR: 0.1523809523809524
+2025-03-18 21:44:02 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.13302752293577982
+2025-03-18 21:44:02 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2180 | SPR: 0.13302752293577982
+2025-03-18 21:44:02 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12554112554112554
+2025-03-18 21:44:02 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2310 | SPR: 0.12554112554112554
+2025-03-18 21:44:05 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.09836065573770492
+2025-03-18 21:44:05 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2440 | SPR: 0.09836065573770492
+2025-03-18 21:44:05 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.06037735849056604
+2025-03-18 21:44:05 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2650 | SPR: 0.06037735849056604
+2025-03-18 21:44:05 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.06037735849056604
+2025-03-18 21:44:05 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2650 | SPR: 0.06037735849056604
+2025-03-18 21:44:08 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:08 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:08 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:08 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:08 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:08 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:12 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:15 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:15 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:15 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:15 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:15 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:15 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:18 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:18 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:21 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:21 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:21 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:21 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:21 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:21 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:24 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:24 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:24 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:24 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:24 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:24 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:27 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:27 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:27 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:27 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:27 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:27 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:30 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:30 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:30 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:30 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:30 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:30 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:33 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:33 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:33 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:33 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:33 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:33 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:36 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:36 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:36 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:36 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:36 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:36 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:39 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:39 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:39 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:39 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:39 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:39 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:42 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:42 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:42 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:42 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:42 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:42 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:45 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:45 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:45 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:45 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:45 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:45 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:48 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:48 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:48 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:51 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:51 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:51 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:51 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:51 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:51 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:54 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:54 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:54 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:54 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:54 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:54 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:57 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:44:57 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:44:57 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:44:57 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:44:57 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:44:57 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:00 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:00 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:00 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:00 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:00 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:00 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:03 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:03 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:03 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:03 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:03 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:03 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:06 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:06 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:06 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:06 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:06 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:06 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:09 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:09 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:09 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:09 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:09 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:09 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:12 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:12 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:12 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:12 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:12 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:12 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:15 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:15 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:15 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:15 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:15 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:15 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:18 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:18 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:18 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:18 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:18 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:18 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:21 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:21 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:21 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:21 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:21 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:21 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:24 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:24 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:24 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:24 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:24 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:24 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:27 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:27 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:27 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:27 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:27 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:27 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:31 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:31 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:31 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:31 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:31 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:31 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:34 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:34 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:34 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:34 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:34 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:34 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:37 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:40 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:40 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:40 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:40 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:40 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:40 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:43 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:43 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:43 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:43 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:43 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:43 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:46 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:46 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:46 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:46 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:46 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:46 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:49 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:49 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:49 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:49 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:49 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:49 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:52 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:52 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:52 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:55 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:55 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:55 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:55 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:55 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:55 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:58 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:45:58 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:45:58 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:45:58 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:45:58 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:45:58 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:01 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:01 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:01 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:01 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:01 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:01 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:04 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:04 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:04 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:04 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:04 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:04 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:07 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:07 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:07 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:07 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:07 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:07 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:10 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:10 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:10 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:10 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:10 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:10 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:13 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:13 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:13 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:13 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:13 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:13 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:16 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:16 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:16 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:16 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:16 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:16 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:19 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:19 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:19 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:19 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:22 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:22 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:22 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:22 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:22 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:22 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:25 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:25 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:25 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:25 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:25 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:25 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:28 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:28 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:28 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:28 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:28 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:28 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:31 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:31 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:31 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:31 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:31 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:31 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:34 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:34 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:34 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:34 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:34 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:34 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:37 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:37 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:40 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 0.01079136690647482
+2025-03-18 21:46:40 - ai.manager - DEBUG - AI Conservative Decision: raise | Hand: 8h, 2s | Community: Kc, 2c, Js, 2d | Hand Score: 2414 (Three of a Kind) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:46:40 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.05755395683453238
+2025-03-18 21:46:40 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7d, 4d | Community: Kc, 2c, Js, 2d | Hand Score: 6033 (Pair) | Pot: 2780 | SPR: 0.05755395683453238
+2025-03-18 21:46:40 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.01079136690647482
+2025-03-18 21:46:40 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Qc, 8s | Community: Kc, 2c, Js, 2d | Hand Score: 6021 (Pair) | Pot: 2780 | SPR: 0.01079136690647482
+2025-03-18 21:48:58 - ai.decision_analyzer - INFO - Using analyzer modules for enhanced feedback
+2025-03-18 21:49:16 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 66.33333333333333
+2025-03-18 21:49:16 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 6h, Ks | Community:  | Hand Score: 3935.76 (Pair) | Pot: 15 | SPR: 66.33333333333333
+2025-03-18 21:49:16 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 66.0
+2025-03-18 21:49:16 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 7c, 5s | Community:  | Hand Score: 4455.63 (Pair) | Pot: 15 | SPR: 66.0
+2025-03-18 21:49:16 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 66.66666666666667
+2025-03-18 21:49:16 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: 7s, 3c | Community:  | Hand Score: 4361.16 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:49:16 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 66.66666666666667
+2025-03-18 21:49:16 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8s, 6c | Community:  | Hand Score: 4352.11 (Pair) | Pot: 15 | SPR: 66.66666666666667
+2025-03-18 21:49:19 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 39.6
+2025-03-18 21:49:19 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7c, 5s | Community: Kd, Th, Ad | Hand Score: 6280 (High Card) | Pot: 25 | SPR: 39.6
+2025-03-18 21:49:19 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 28.285714285714285
+2025-03-18 21:49:19 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8s, 6c | Community: Kd, Th, Ad | Hand Score: 6274 (High Card) | Pot: 35 | SPR: 28.285714285714285
+2025-03-18 21:49:22 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 21.77777777777778
+2025-03-18 21:49:22 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7c, 5s | Community: Kd, Th, Ad, 2d | Hand Score: 6280 (High Card) | Pot: 45 | SPR: 21.77777777777778
+2025-03-18 21:49:22 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 17.818181818181817
+2025-03-18 21:49:22 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8s, 6c | Community: Kd, Th, Ad, 2d | Hand Score: 6274 (High Card) | Pot: 55 | SPR: 17.818181818181817
+2025-03-18 21:49:25 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 14.923076923076923
+2025-03-18 21:49:25 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7c, 5s | Community: Kd, Th, Ad, 2d, Jh | Hand Score: 6232 (High Card) | Pot: 65 | SPR: 14.923076923076923
+2025-03-18 21:49:25 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 12.933333333333334
+2025-03-18 21:49:25 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8s, 6c | Community: Kd, Th, Ad, 2d, Jh | Hand Score: 6231 (High Card) | Pot: 75 | SPR: 12.933333333333334
+2025-03-18 21:49:28 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 11.294117647058824
+2025-03-18 21:49:28 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 7c, 5s | Community: Kd, Th, Ad, 2d, Jh | Hand Score: 6232 (High Card) | Pot: 85 | SPR: 11.294117647058824
+2025-03-18 21:49:28 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 10.105263157894736
+2025-03-18 21:49:28 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: 8s, 6c | Community: Kd, Th, Ad, 2d, Jh | Hand Score: 6231 (High Card) | Pot: 95 | SPR: 10.105263157894736
+2025-03-18 21:49:32 - ai.manager - DEBUG - Making decision for Conservative AI with SPR 39.8
+2025-03-18 21:49:32 - ai.manager - DEBUG - AI Conservative Decision: fold | Hand: 3h, 4d | Community:  | Hand Score: 4448.41 (Pair) | Pot: 25 | SPR: 39.8
+2025-03-18 21:49:32 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 42.0
+2025-03-18 21:49:32 - ai.manager - DEBUG - AI Risk Taker Decision: call | Hand: 4c, 2s | Community:  | Hand Score: 4790.06 (Pair) | Pot: 25 | SPR: 42.0
+2025-03-18 21:49:32 - ai.manager - DEBUG - Making decision for Probability-Based AI with SPR 33.0
+2025-03-18 21:49:32 - ai.manager - DEBUG - AI Probability-Based Decision: fold | Hand: Kd, 5h | Community:  | Hand Score: 4476.43 (Pair) | Pot: 30 | SPR: 33.0
+2025-03-18 21:49:32 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 31.666666666666668
+2025-03-18 21:49:32 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community:  | Hand Score: 3896.38 (Pair) | Pot: 30 | SPR: 31.666666666666668
+2025-03-18 21:49:33 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 26.125
+2025-03-18 21:49:33 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc | Hand Score: 6573 (High Card) | Pot: 40 | SPR: 26.125
+2025-03-18 21:49:33 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 18.8
+2025-03-18 21:49:33 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc | Hand Score: 4208 (Pair) | Pot: 50 | SPR: 18.8
+2025-03-18 21:49:34 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 14.785714285714286
+2025-03-18 21:49:34 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc | Hand Score: 6573 (High Card) | Pot: 70 | SPR: 14.785714285714286
+2025-03-18 21:49:34 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 10.333333333333334
+2025-03-18 21:49:34 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc | Hand Score: 4208 (Pair) | Pot: 90 | SPR: 10.333333333333334
+2025-03-18 21:49:35 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 7.8076923076923075
+2025-03-18 21:49:35 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc | Hand Score: 6573 (High Card) | Pot: 130 | SPR: 7.8076923076923075
+2025-03-18 21:49:35 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 5.352941176470588
+2025-03-18 21:49:35 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc | Hand Score: 4208 (Pair) | Pot: 170 | SPR: 5.352941176470588
+2025-03-18 21:49:36 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 3.9
+2025-03-18 21:49:36 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc | Hand Score: 6573 (High Card) | Pot: 250 | SPR: 3.9
+2025-03-18 21:49:36 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 2.6363636363636362
+2025-03-18 21:49:36 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc | Hand Score: 4208 (Pair) | Pot: 330 | SPR: 2.6363636363636362
+2025-03-18 21:49:37 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 1.8265306122448979
+2025-03-18 21:49:37 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc | Hand Score: 6573 (High Card) | Pot: 490 | SPR: 1.8265306122448979
+2025-03-18 21:49:37 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 1.2153846153846153
+2025-03-18 21:49:37 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc | Hand Score: 4208 (Pair) | Pot: 650 | SPR: 1.2153846153846153
+2025-03-18 21:49:38 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.7577319587628866
+2025-03-18 21:49:38 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc | Hand Score: 6573 (High Card) | Pot: 970 | SPR: 0.7577319587628866
+2025-03-18 21:49:38 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.4883720930232558
+2025-03-18 21:49:38 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc | Hand Score: 4208 (Pair) | Pot: 1290 | SPR: 0.4883720930232558
+2025-03-18 21:49:39 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.21502590673575128
+2025-03-18 21:49:39 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc | Hand Score: 6573 (High Card) | Pot: 1930 | SPR: 0.21502590673575128
+2025-03-18 21:49:39 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.16062176165803108
+2025-03-18 21:49:39 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc | Hand Score: 4208 (Pair) | Pot: 1930 | SPR: 0.16062176165803108
+2025-03-18 21:49:40 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.21502590673575128
+2025-03-18 21:49:40 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th | Hand Score: 4237 (Pair) | Pot: 1930 | SPR: 0.21502590673575128
+2025-03-18 21:49:40 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.15979381443298968
+2025-03-18 21:49:40 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc, Th | Hand Score: 1874 (Three of a Kind) | Pot: 1940 | SPR: 0.15979381443298968
+2025-03-18 21:49:41 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.2066326530612245
+2025-03-18 21:49:41 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th | Hand Score: 4237 (Pair) | Pot: 1960 | SPR: 0.2066326530612245
+2025-03-18 21:49:41 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.15151515151515152
+2025-03-18 21:49:41 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th | Hand Score: 1874 (Three of a Kind) | Pot: 1980 | SPR: 0.15151515151515152
+2025-03-18 21:49:42 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.18689320388349515
+2025-03-18 21:49:42 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th | Hand Score: 4237 (Pair) | Pot: 2060 | SPR: 0.18689320388349515
+2025-03-18 21:49:42 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.12264150943396226
+2025-03-18 21:49:42 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th | Hand Score: 1874 (Three of a Kind) | Pot: 2120 | SPR: 0.12264150943396226
+2025-03-18 21:49:43 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.1400862068965517
+2025-03-18 21:49:43 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th | Hand Score: 4237 (Pair) | Pot: 2320 | SPR: 0.1400862068965517
+2025-03-18 21:49:43 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.06451612903225806
+2025-03-18 21:49:43 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc, Th | Hand Score: 1874 (Three of a Kind) | Pot: 2480 | SPR: 0.06451612903225806
+2025-03-18 21:49:44 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.061567164179104475
+2025-03-18 21:49:44 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th | Hand Score: 4237 (Pair) | Pot: 2680 | SPR: 0.061567164179104475
+2025-03-18 21:49:44 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.022388059701492536
+2025-03-18 21:49:44 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc, Th | Hand Score: 1874 (Three of a Kind) | Pot: 2680 | SPR: 0.022388059701492536
+2025-03-18 21:49:45 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.061567164179104475
+2025-03-18 21:49:45 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2680 | SPR: 0.061567164179104475
+2025-03-18 21:49:45 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.022304832713754646
+2025-03-18 21:49:45 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2690 | SPR: 0.022304832713754646
+2025-03-18 21:49:46 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.056776556776556776
+2025-03-18 21:49:46 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2730 | SPR: 0.056776556776556776
+2025-03-18 21:49:46 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.014492753623188406
+2025-03-18 21:49:46 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2760 | SPR: 0.014492753623188406
+2025-03-18 21:49:47 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.044964028776978415
+2025-03-18 21:49:47 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2780 | SPR: 0.044964028776978415
+2025-03-18 21:49:47 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.014134275618374558
+2025-03-18 21:49:47 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2830 | SPR: 0.014134275618374558
+2025-03-18 21:49:48 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.026041666666666668
+2025-03-18 21:49:48 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2880 | SPR: 0.026041666666666668
+2025-03-18 21:49:48 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.013888888888888888
+2025-03-18 21:49:48 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2880 | SPR: 0.013888888888888888
+2025-03-18 21:49:49 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.026041666666666668
+2025-03-18 21:49:49 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2880 | SPR: 0.026041666666666668
+2025-03-18 21:49:49 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.013888888888888888
+2025-03-18 21:49:49 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2880 | SPR: 0.013888888888888888
+2025-03-18 21:49:50 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.026041666666666668
+2025-03-18 21:49:50 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2880 | SPR: 0.026041666666666668
+2025-03-18 21:49:50 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.013888888888888888
+2025-03-18 21:49:50 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2880 | SPR: 0.013888888888888888
+2025-03-18 21:49:51 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.026041666666666668
+2025-03-18 21:49:51 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2880 | SPR: 0.026041666666666668
+2025-03-18 21:49:51 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.013888888888888888
+2025-03-18 21:49:51 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2880 | SPR: 0.013888888888888888
+2025-03-18 21:49:52 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.026041666666666668
+2025-03-18 21:49:52 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2880 | SPR: 0.026041666666666668
+2025-03-18 21:49:52 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.013888888888888888
+2025-03-18 21:49:52 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2880 | SPR: 0.013888888888888888
+2025-03-18 21:49:53 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.026041666666666668
+2025-03-18 21:49:53 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2880 | SPR: 0.026041666666666668
+2025-03-18 21:49:53 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.013888888888888888
+2025-03-18 21:49:53 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2880 | SPR: 0.013888888888888888
+2025-03-18 21:49:54 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.026041666666666668
+2025-03-18 21:49:54 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2880 | SPR: 0.026041666666666668
+2025-03-18 21:49:54 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.013888888888888888
+2025-03-18 21:49:54 - ai.manager - DEBUG - AI Bluffer Decision: raise | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2880 | SPR: 0.013888888888888888
+2025-03-18 21:49:55 - ai.manager - DEBUG - Making decision for Risk Taker AI with SPR 0.026041666666666668
+2025-03-18 21:49:55 - ai.manager - DEBUG - AI Risk Taker Decision: raise | Hand: 4c, 2s | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 4235 (Pair) | Pot: 2880 | SPR: 0.026041666666666668
+2025-03-18 21:49:55 - ai.manager - DEBUG - Making decision for Bluffer AI with SPR 0.013888888888888888
+2025-03-18 21:49:55 - ai.manager - DEBUG - AI Bluffer Decision: call | Hand: Td, Kc | Community: 9d, Ac, Tc, Th, 6h | Hand Score: 1874 (Three of a Kind) | Pot: 2880 | SPR: 0.013888888888888888

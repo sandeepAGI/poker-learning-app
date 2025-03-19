@@ -202,10 +202,19 @@ class PokerGame:
     
     def advance_game_state(self) -> None:
         """Advances the game to the next state and handles necessary actions."""
+        # Check if there's only one active player left
+        active_players = sum(1 for p in self.players if p.is_active)
+        if active_players <= 1:
+            # Skip directly to showdown if only one player remains
+            self.current_state = GameState.SHOWDOWN
+            return
+    
+        # Otherwise, proceed to the next state normally
         self.current_state = GameState.next_state(self.current_state)
-        
+    
         if self.current_state in [GameState.FLOP, GameState.TURN, GameState.RIVER]:
             self.deal_community_cards()
+
     
     def play_hand(self) -> None:
         """Manages the complete flow of a poker hand."""
@@ -263,6 +272,15 @@ class PokerGame:
             deck=current_deck
         )
         
+        # Update winners' stacks with their winnings
+        for player_id, amount in winners.items():
+            for player in self.players:
+                if player.player_id == player_id:
+                    old_stack = player.stack
+                    player.stack += amount
+                    logger.info(f"POT DISTRIBUTION: Player {player_id} stack updated {old_stack} → {player.stack} (+{amount})")
+                    break
+
         # Verify stacks after distribution and log updated values
         for player_id, amount in winners.items():
             for player in self.players:
