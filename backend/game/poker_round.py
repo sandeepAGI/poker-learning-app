@@ -35,15 +35,18 @@ class PokerRound:
         self.big_blind = big_blind
         self.hand_id = hand_id
     
-    def execute_betting_round(self) -> int:
+    def execute_betting_round(self) -> Dict[str, Any]:
         """
         Handles a complete betting round with position-based action order.
         
         Returns:
-            int: Updated pot amount after the betting round
+            Dict containing:
+                - pot: Updated pot amount after the betting round
+                - active_players: Number of active players at end of round
         """
         max_bet: int = self.big_blind if self.current_state == GameState.PRE_FLOP else 0
         betting_done: bool = False
+        active_players_count = sum(1 for p in self.players if p.is_active)
 
         # Determine starting position based on game state
         start_pos: int = (
@@ -52,14 +55,22 @@ class PokerRound:
             else (self.dealer_index + 1) % len(self.players)
         )
 
+        # Early exit if only one player is active
+        if active_players_count <= 1:
+            logger.info(f"Only {active_players_count} active player(s) at start of round, skipping betting")
+            return {
+                "pot": self.pot,
+                "active_players": active_players_count
+            }
+
         while not betting_done:
             betting_done = True
             current_pos = start_pos
             
-            # Check if there's only one active player left before starting the round
-            active_players = sum(1 for p in self.players if p.is_active)
-            if active_players <= 1:
-                logger.info(f"Only {active_players} active player(s) remaining, ending betting round")
+            # Check active players before each cycle
+            active_players_count = sum(1 for p in self.players if p.is_active)
+            if active_players_count <= 1:
+                logger.info(f"Only {active_players_count} active player(s) remaining, ending betting round")
                 break
 
             for _ in range(len(self.players)):
@@ -105,12 +116,11 @@ class PokerRound:
                         player.is_active = False
                         logger.debug(f"Player {player.player_id} folds")
                         
-                        # Check if only one active player remains after this fold
+                        # Check for remaining active players after fold
                         active_players_count = sum(1 for p in self.players if p.is_active)
                         if active_players_count <= 1:
-                            logger.info(f"Only {active_players_count} active player(s) remaining after fold, ending betting round")
-                            betting_done = True
-                            break
+                            logger.info(f"Only {active_players_count} active player(s) remaining after fold")
+                            # Don't break here - just track the count for PokerGame to handle
 
                     if bet_amount > 0:
                         player.bet(bet_amount)
@@ -122,5 +132,12 @@ class PokerRound:
         for player in self.players:
             player.reset_round_state()
             
-        logger.info(f"Betting round complete for {self.current_state.value}, pot: {self.pot}")
-        return self.pot
+        # Update active player count before returning
+        active_players_count = sum(1 for p in self.players if p.is_active)
+        
+        logger.info(f"Betting round complete for {self.current_state.value}, pot: {self.pot}, active players: {active_players_count}")
+        
+        return {
+            "pot": self.pot,
+            "active_players": active_players_count
+        }

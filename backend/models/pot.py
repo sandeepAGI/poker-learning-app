@@ -1,6 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Set, List, Dict, Any
 import copy
+import logging
+
+logger = logging.getLogger("pot_manager")
 
 @dataclass
 class PotInfo:
@@ -23,9 +26,6 @@ class PotManager:
         Returns:
             List of PotInfo objects representing main pot and side pots
         """
-        import logging
-        logger = logging.getLogger("pot_manager")
-        
         # Get all active or all-in players (players who haven't folded)
         active_players = [p for p in players if p.is_active or p.all_in]
         

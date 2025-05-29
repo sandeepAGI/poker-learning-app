@@ -198,7 +198,14 @@ class PokerGame:
             hand_id=self.current_hand_id
         )
         
-        self.pot = poker_round.execute_betting_round()
+        round_result = poker_round.execute_betting_round()
+        self.pot = round_result["pot"]
+        
+        # Check if we need to move to showdown
+        if round_result["active_players"] <= 1:
+            # Skip remaining states and go directly to showdown
+            self.current_state = GameState.SHOWDOWN
+            return
     
     def advance_game_state(self) -> None:
         """Advances the game to the next state and handles necessary actions."""
@@ -214,7 +221,6 @@ class PokerGame:
     
         if self.current_state in [GameState.FLOP, GameState.TURN, GameState.RIVER]:
             self.deal_community_cards()
-
     
     def play_hand(self) -> None:
         """Manages the complete flow of a poker hand."""
@@ -230,7 +236,8 @@ class PokerGame:
         while self.current_state != GameState.SHOWDOWN:
             active_players = sum(1 for p in self.players if p.is_active)
             if active_players <= 1:
-                self.distribute_pot(self.deck)
+                # Skip to showdown when only one active player remains
+                self.current_state = GameState.SHOWDOWN
                 break
 
             self.betting_round()
@@ -239,6 +246,11 @@ class PokerGame:
         # Handle showdown if reached
         if self.current_state == GameState.SHOWDOWN:
             self.distribute_pot(self.deck)
+            
+            # Add confirmation log right after distribution
+            logger.info("POST-DISTRIBUTION STACK CHECK:")
+            for player in self.players:
+                logger.info(f"Player {player.player_id}: stack={player.stack}, active={player.is_active}")
 
         # End hand tracking with winners
         winners = {p.player_id: p.stack for p in self.players if p.is_active}
@@ -264,8 +276,8 @@ class PokerGame:
         total_chips_before = sum(player.stack for player in self.players) + self.pot
         logger.info(f"CHIPS CHECK: Total chips before pot distribution: {total_chips_before}")
         
-        # Distribute pot to winners
-        winners = self.hand_manager.distribute_pot(
+        # Get winner distribution but don't modify player stacks yet
+        winners = self.hand_manager.determine_winners(
             players=self.players,
             community_cards=self.community_cards,
             total_pot=self.pot,
@@ -277,10 +289,10 @@ class PokerGame:
             for player in self.players:
                 if player.player_id == player_id:
                     old_stack = player.stack
-                    player.stack += amount
+                    player.add_to_stack(amount)
                     logger.info(f"POT DISTRIBUTION: Player {player_id} stack updated {old_stack} → {player.stack} (+{amount})")
                     break
-
+    
         # Verify stacks after distribution and log updated values
         for player_id, amount in winners.items():
             for player in self.players:
@@ -298,11 +310,16 @@ class PokerGame:
                 first_winner_id = next(iter(winners))
                 for player in self.players:
                     if player.player_id == first_winner_id:
-                        player.stack += difference
+                        player.add_to_stack(difference)
                         logger.info(f"CHIPS CORRECTED: Added {difference} missing chips to {player.player_id}")
                         break
         else:
             logger.info(f"CHIPS CHECK: Total chips conserved after pot distribution: {total_chips_after}")
+        
+        # Extra verification: Log all player stacks after distribution
+        logger.info("FINAL STACKS AFTER DISTRIBUTION:")
+        for player in self.players:
+            logger.info(f"Player {player.player_id}: stack={player.stack}, active={player.is_active}, all-in={player.all_in}")
         
         # Reset pot and prepare for next hand
         self.pot = 0

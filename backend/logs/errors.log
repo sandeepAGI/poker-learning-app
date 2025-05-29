@@ -382,3 +382,37 @@
 2025-03-18 21:33:31 - game_service - ERROR - CHIPS CONSERVATION ERROR: Before: 5000, After: 7980, Difference: -2980
 2025-03-18 21:40:22 - game_service - ERROR - CHIPS CONSERVATION ERROR: Before: 5000, After: 7950, Difference: -2950
 2025-03-18 21:49:56 - game_service - ERROR - CHIPS CONSERVATION ERROR: Before: 5000, After: 7920, Difference: -2920
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:07:01 - game.poker_game - ERROR - Error dealing cards: Not enough cards to deal 2 cards
+2025-03-19 18:51:07 - game_service - ERROR - CHIPS ERROR: Total chips changed during blinds posting: 2100 -> 2105
+2025-03-19 18:51:07 - game_service - ERROR - CHIPS CONSERVATION ERROR: Total chips changed during new hand setup: 2100 -> 2105
+2025-03-19 19:06:57 - game.poker_game - ERROR - CHIPS ERROR: Total chips before (5000) does not match after (7880)
+2025-03-19 19:25:42 - game.poker_game - ERROR - CHIPS ERROR: Total chips before (5000) does not match after (7980)
+2025-03-19 19:33:11 - game.poker_game - ERROR - CHIPS ERROR: Total chips before (5000) does not match after (5040)
+2025-03-19 19:58:52 - game.poker_game - ERROR - CHIPS ERROR: Total chips before (5000) does not match after (8000)
+2025-03-19 19:58:54 - game_service - ERROR - CHIPS ERROR: Total chips changed during blinds posting: 5000 -> 5005
+2025-03-19 19:58:54 - game_service - ERROR - CHIPS CONSERVATION ERROR: Total chips changed during new hand setup: 5000 -> 5005
+2025-03-19 20:00:33 - game.poker_game - ERROR - CHIPS ERROR: Total chips before (5000) does not match after (7960)
+2025-03-19 20:10:33 - game.poker_game - ERROR - CHIPS ERROR: Total chips before (5000) does not match after (7930)

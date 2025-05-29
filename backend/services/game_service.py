@@ -144,10 +144,10 @@ class GameService:
         if game_data is None:
             self.logger.warning(f"Game {game_id} not found")
             raise GameNotFoundError(game_id)
-        
+    
         # Get the PokerGame instance
         poker_game = game_data["poker_game"]
-        
+    
         # Check if player is in the game
         player_objects = poker_game.players
         player_exists = any(p.player_id == player_id for p in player_objects)
@@ -230,6 +230,11 @@ class GameService:
         # Add showdown data if in showdown state and requested
         showdown_data = None
         if poker_game.current_state == GameState.SHOWDOWN and show_all_cards:
+            # Make sure pot is distributed before getting showdown data
+            if poker_game.pot > 0:
+                self.logger.info(f"Distributing pot during get_game_state (show_all_cards=True)")
+                poker_game.distribute_pot(poker_game.deck)
+
             showdown_data = self._get_showdown_data(poker_game)
         
         response = {
@@ -738,7 +743,10 @@ class GameService:
             self.logger.warning(f"Game {game_id} is not in showdown state")
             raise InvalidActionError("Game is not in showdown state")
         
-        self.logger.info(f"Retrieved showdown results for game {game_id}")
+        # Make sure pot is distributed before getting showdown data
+        if poker_game.pot > 0:
+            self.logger.info(f"Distributing pot during get_showdown_results call")
+            poker_game.distribute_pot(poker_game.deck)
         
         # Get showdown data
         showdown_data = self._get_showdown_data(poker_game)
@@ -765,27 +773,37 @@ class GameService:
         for player in poker_game.players:
             self.logger.info(f"BEFORE SHOWDOWN: Player {player.player_id} has stack {player.stack}")
         
-        # Get hand evaluations
+        # Store the original pot amount
+        total_pot = poker_game.pot
+        self.logger.info(f"SHOWDOWN: Total pot to distribute: {total_pot}")
+        
+        # If pot is not yet distributed, do it now 
+        if poker_game.pot > 0:
+            self.logger.info("Distributing pot using poker_game.distribute_pot")
+            # Call the distribute_pot method from PokerGame
+            poker_game.distribute_pot(poker_game.deck)
+            
+            # Verify distribution occurred
+            self.logger.info("AFTER DISTRIBUTION:")
+            for player in poker_game.players:
+                self.logger.info(f"Player {player.player_id} now has stack {player.stack}")
+        
+        # Get hand evaluations AFTER pot distribution
         evaluated_hands = poker_game.hand_manager.evaluate_hands(
             active_players, 
             poker_game.community_cards, 
             poker_game.deck
         )
         
-        # Store the original pot amount
-        total_pot = poker_game.pot
-        self.logger.info(f"SHOWDOWN: Total pot to distribute: {total_pot}")
-        
-        # Get pot distribution (winners)
-        # Note: distribute_pot already handles stack updates inside hand_manager
-        winners = poker_game.hand_manager.distribute_pot(
+        # Get winners info for the response without modifying stacks again
+        winners = poker_game.hand_manager.determine_winners(
             players=poker_game.players,
             community_cards=poker_game.community_cards,
-            total_pot=total_pot,  # Pass the stored pot amount
+            total_pot=total_pot,  # Use stored original pot amount 
             deck=poker_game.deck
         )
         
-        # Verify stacks were updated correctly - no need to double-update
+        # Verify stacks were updated correctly
         for pid, amount in winners.items():
             for player in poker_game.players:
                 if player.player_id == pid:
@@ -808,13 +826,6 @@ class GameService:
                         break
         else:
             self.logger.info("CHIPS CONSERVATION CHECK: All chips are accounted for after pot distribution")
-        
-        # Log all stacks after distribution
-        for player in poker_game.players:
-            self.logger.info(f"AFTER SHOWDOWN: Player {player.player_id} has stack {player.stack}")
-        
-        # Reset pot after distribution
-        poker_game.pot = 0
         
         # Format hand data
         for pid, (score, hand_rank, player) in evaluated_hands.items():

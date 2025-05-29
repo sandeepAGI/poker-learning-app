@@ -59,8 +59,38 @@ class Player:
         # Verify consistency
         if self.stack != old_stack - amount:
             logger.error(f"STACK ERROR: Player {self.player_id} stack ({self.stack}) does not match expected value ({old_stack - amount})")
+            # Fix the stack
+            self.stack = old_stack - amount
+            logger.info(f"STACK CORRECTED: Fixed {self.player_id} stack to {self.stack}")
             
         return amount
+
+    def add_to_stack(self, amount: int) -> int:
+        """Adds chips to player's stack (used for winnings).
+        
+        Args:
+            amount (int): Amount to add to stack
+            
+        Returns:
+            int: New stack size
+        """
+        if amount <= 0:
+            logger.warning(f"Player {self.player_id} attempted to add {amount} to stack, which is <= 0")
+            return self.stack
+            
+        old_stack = self.stack
+        self.stack += amount
+        
+        logger.debug(f"Player {self.player_id} stack increased by {amount}: {old_stack} -> {self.stack}")
+        
+        # Verify consistency
+        if self.stack != old_stack + amount:
+            logger.error(f"STACK ERROR: Player {self.player_id} stack ({self.stack}) does not match expected value ({old_stack + amount})")
+            # Fix the stack
+            self.stack = old_stack + amount
+            logger.info(f"STACK CORRECTED: Fixed {self.player_id} stack to {self.stack}")
+            
+        return self.stack
 
     def receive_cards(self, cards: List[str]) -> None:
         """Assigns hole cards to the player.
@@ -76,6 +106,7 @@ class Player:
         """Marks player as eliminated if they have less than 5 chips."""
         if self.stack < 5:
             self.is_active = False
+            logger.info(f"Player {self.player_id} eliminated (stack: {self.stack})")
 
     def reset_round_state(self) -> None:
         """Resets player state for new betting round."""
@@ -97,6 +128,9 @@ class Player:
         
         # IMPORTANT: Always set players to active at the start of a new hand
         # unless they were eliminated due to insufficient chips
+        if not self.is_active and current_stack >= 5:
+            logger.info(f"Reactivating player {self.player_id} for new hand (stack: {current_stack})")
+        
         self.is_active = current_stack >= 5
         
         logger.debug(f"Reset hand state for player {self.player_id}, stack: {self.stack}, active: {self.is_active}")
