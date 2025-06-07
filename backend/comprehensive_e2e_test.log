@@ -1,0 +1,5 @@
+2025-05-29 15:06:08,701 - INFO - Starting comprehensive E2E test suite
+2025-05-29 15:06:08,701 - INFO - Creating test player
+2025-05-29 15:06:08,706 - ERROR - Failed to create player: HTTPConnectionPool(host='localhost', port=8080): Max retries exceeded with url: /api/v1/players (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x103b1c4a0>: Failed to establish a new connection: [Errno 61] Connection refused'))
+2025-05-29 15:06:08,706 - ERROR - Failed to create test player
+2025-05-29 15:06:08,706 - ERROR - Test suite failed!

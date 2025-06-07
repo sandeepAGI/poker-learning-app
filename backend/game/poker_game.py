@@ -16,6 +16,8 @@ from game.hand_manager import HandManager
 from game.poker_round import PokerRound
 from game.learning_tracker import LearningTracker
 from utils.logger import get_logger
+from utils.chip_ledger import ChipLedger, ChipConservationError
+from utils.state_manager import GameStateManager, StateTransactionError
 
 logger = get_logger("game.poker_game")
 
@@ -48,6 +50,13 @@ class PokerGame:
         self.deck_manager = DeckManager()
         self.learning_tracker = LearningTracker()
         
+        # Initialize chip ledger for tracking chip conservation
+        initial_chips = getattr(self.players[0], 'stack', 1000) if self.players else 1000
+        self.chip_ledger = ChipLedger(initial_chips, len(self.players))
+        
+        # Initialize state manager for atomic transactions
+        self.state_manager = GameStateManager(self)
+        
         # Start a learning session if learning is enabled
         self.session_id = self.learning_tracker.start_session()
         self.current_hand_id = None
@@ -58,7 +67,7 @@ class PokerGame:
             
         # Initialize the deck
         self.reset_deck()
-        logger.info("PokerGame initialized")
+        logger.info("PokerGame initialized with chip ledger")
     
     def _validate_players(self) -> bool:
         """Validate the player composition requirements.
@@ -88,32 +97,37 @@ class PokerGame:
     
     def deal_hole_cards(self) -> None:
         """Deals 2 hole cards to each active player."""
-        self.deck_manager._deck = self.deck.copy()  # Initialize with current deck
+        # Count active players first
+        active_players = [p for p in self.players if p.is_active]
+        cards_needed = len(active_players) * 2
+        
+        # Validate we have enough cards before dealing
+        if len(self.deck_manager.get_deck()) < cards_needed:
+            logger.error(f"Not enough cards to deal hole cards: need {cards_needed}, have {len(self.deck_manager.get_deck())}")
+            raise ValueError(f"Not enough cards to deal hole cards: need {cards_needed}, have {len(self.deck_manager.get_deck())}")
         
         # First clear all hole cards to ensure everyone gets new cards
-        for player in self.players:
-            if player.is_active:
-                player.hole_cards = []  # Explicitly clear existing hole cards
+        for player in active_players:
+            player.hole_cards = []  # Explicitly clear existing hole cards
         
         # Then deal new cards to each active player        
-        for player in self.players:
-            if player.is_active:
-                try:
-                    hole_cards = self.deck_manager.deal_to_player(2)
-                    player.receive_cards(hole_cards)
-                    logger.debug(f"Dealt hole cards to {player.player_id}: {hole_cards}")
-                except ValueError as e:
-                    logger.error(f"Error dealing cards: {e}")
+        for player in active_players:
+            try:
+                hole_cards = self.deck_manager.deal_to_player(2)
+                player.receive_cards(hole_cards)
+                logger.debug(f"Dealt hole cards to {player.player_id}: {hole_cards}")
+            except ValueError as e:
+                logger.error(f"Error dealing cards to {player.player_id}: {e}")
+                raise  # Re-raise to prevent partial deals
                     
-        # Update the game's deck
+        # Update the game's deck reference
         self.deck = self.deck_manager.get_deck()
         self.last_hand_dealt = self.hand_count
-        logger.debug(f"Dealt hole cards to players, {len(self.deck)} cards remaining")
+        logger.info(f"Dealt hole cards to {len(active_players)} active players, {len(self.deck)} cards remaining")
     
     def deal_community_cards(self) -> None:
         """Deals community cards based on current game state."""
         current_hand = self.hand_count
-        self.deck_manager._deck = self.deck.copy()  # Initialize with current deck
 
         try:
             if self.current_state == GameState.FLOP:
@@ -122,7 +136,7 @@ class PokerGame:
                 flop_cards = self.deck_manager.deal_flop()
                 self.community_cards.extend(flop_cards)
                 self.last_community_cards[GameState.FLOP] = current_hand
-                logger.debug(f"Dealt flop: {', '.join(flop_cards)}")
+                logger.info(f"Dealt flop: {', '.join(flop_cards)}")
 
             elif self.current_state == GameState.TURN:
                 if self.last_community_cards[GameState.TURN] == current_hand:
@@ -130,7 +144,7 @@ class PokerGame:
                 turn_card = self.deck_manager.deal_turn()
                 self.community_cards.append(turn_card)
                 self.last_community_cards[GameState.TURN] = current_hand
-                logger.debug(f"Dealt turn: {turn_card}")
+                logger.info(f"Dealt turn: {turn_card}")
 
             elif self.current_state == GameState.RIVER:
                 if self.last_community_cards[GameState.RIVER] == current_hand:
@@ -138,13 +152,14 @@ class PokerGame:
                 river_card = self.deck_manager.deal_river()
                 self.community_cards.append(river_card)
                 self.last_community_cards[GameState.RIVER] = current_hand
-                logger.debug(f"Dealt river: {river_card}")
+                logger.info(f"Dealt river: {river_card}")
                 
-            # Update the game's deck
+            # Update the game's deck reference
             self.deck = self.deck_manager.get_deck()
             
         except ValueError as e:
             logger.error(f"Error dealing community cards: {e}")
+            raise  # Re-raise to prevent inconsistent state
     
     def post_blinds(self) -> None:
         """Assigns small and big blinds at the start of each hand."""
@@ -208,19 +223,39 @@ class PokerGame:
             return
     
     def advance_game_state(self) -> None:
-        """Advances the game to the next state and handles necessary actions."""
-        # Check if there's only one active player left
-        active_players = sum(1 for p in self.players if p.is_active)
-        if active_players <= 1:
-            # Skip directly to showdown if only one player remains
-            self.current_state = GameState.SHOWDOWN
-            return
-    
-        # Otherwise, proceed to the next state normally
-        self.current_state = GameState.next_state(self.current_state)
-    
-        if self.current_state in [GameState.FLOP, GameState.TURN, GameState.RIVER]:
-            self.deal_community_cards()
+        """Advances the game to the next state using atomic state transitions."""
+        try:
+            # Check if there's only one active player left
+            active_players = sum(1 for p in self.players if p.is_active)
+            if active_players <= 1:
+                # Skip directly to showdown if only one player remains
+                def go_to_showdown():
+                    return None
+                
+                self.state_manager.transition_state(
+                    GameState.SHOWDOWN, 
+                    go_to_showdown, 
+                    "advance_to_showdown_single_player"
+                )
+                return
+        
+            # Otherwise, proceed to the next state normally
+            next_state = GameState.next_state(self.current_state)
+            
+            def advance_to_next():
+                if next_state in [GameState.FLOP, GameState.TURN, GameState.RIVER]:
+                    self.deal_community_cards()
+                return None
+            
+            self.state_manager.transition_state(
+                next_state, 
+                advance_to_next, 
+                f"advance_to_{next_state.value}"
+            )
+            
+        except StateTransactionError as e:
+            logger.error(f"Failed to advance game state: {e}")
+            raise
     
     def play_hand(self) -> None:
         """Manages the complete flow of a poker hand."""
@@ -264,7 +299,7 @@ class PokerGame:
     
     def distribute_pot(self, deck=None) -> None:
         """
-        Distributes the pot to the winner(s).
+        Distributes the pot to the winner(s) with atomic transaction and chip ledger validation.
         
         Args:
             deck: Optional deck parameter for backward compatibility
@@ -272,64 +307,93 @@ class PokerGame:
         # Use the provided deck if given (for backward compatibility)
         current_deck = deck if deck is not None else self.deck
         
-        # Calculate total chips before pot distribution for consistency check
-        total_chips_before = sum(player.stack for player in self.players) + self.pot
-        logger.info(f"CHIPS CHECK: Total chips before pot distribution: {total_chips_before}")
-        
-        # Get winner distribution but don't modify player stacks yet
-        winners = self.hand_manager.determine_winners(
-            players=self.players,
-            community_cards=self.community_cards,
-            total_pot=self.pot,
-            deck=current_deck
-        )
-        
-        # Update winners' stacks with their winnings
-        for player_id, amount in winners.items():
-            for player in self.players:
-                if player.player_id == player_id:
-                    old_stack = player.stack
-                    player.add_to_stack(amount)
-                    logger.info(f"POT DISTRIBUTION: Player {player_id} stack updated {old_stack} → {player.stack} (+{amount})")
-                    break
-    
-        # Verify stacks after distribution and log updated values
-        for player_id, amount in winners.items():
-            for player in self.players:
-                if player.player_id == player_id:
-                    logger.info(f"WINNER STACK: Player {player_id} confirmed stack = {player.stack}, won {amount}")
-                    break
-        
-        # Verify total chips is conserved after distribution
-        total_chips_after = sum(player.stack for player in self.players) + self.pot
-        if total_chips_before != total_chips_after:
-            logger.error(f"CHIPS ERROR: Total chips before ({total_chips_before}) does not match after ({total_chips_after})")
-            # Auto-correct by adjusting the first winner's stack if needed
-            if winners and total_chips_before > total_chips_after:
-                difference = total_chips_before - total_chips_after
-                first_winner_id = next(iter(winners))
+        def distribute_operation():
+            """Inner operation for atomic execution."""
+            checkpoint = self.chip_ledger.create_checkpoint(self.players, self.pot, "pot_distribution")
+            pot_before = self.pot
+            
+            # Get winner distribution but don't modify player stacks yet
+            winners = self.hand_manager.determine_winners(
+                players=self.players,
+                community_cards=self.community_cards,
+                total_pot=self.pot,
+                deck=current_deck
+            )
+            
+            # Update winners' stacks with their winnings
+            for player_id, amount in winners.items():
                 for player in self.players:
-                    if player.player_id == first_winner_id:
-                        player.add_to_stack(difference)
-                        logger.info(f"CHIPS CORRECTED: Added {difference} missing chips to {player.player_id}")
+                    if player.player_id == player_id:
+                        old_stack = player.stack
+                        player.add_to_stack(amount)
+                        # Record the chip movement
+                        self.chip_ledger.record_movement("pot", player_id, amount, "pot_distribution", 
+                                                       before_balance=old_stack, after_balance=player.stack)
+                        logger.info(f"POT DISTRIBUTION: Player {player_id} stack updated {old_stack} → {player.stack} (+{amount})")
                         break
-        else:
-            logger.info(f"CHIPS CHECK: Total chips conserved after pot distribution: {total_chips_after}")
+            
+            # Clear the pot (it has been distributed)
+            self.pot = 0
+            
+            # Audit the pot distribution
+            self.chip_ledger.audit_pot_distribution(pot_before, self.pot, winners)
+            
+            # Log final state
+            logger.info("FINAL STACKS AFTER DISTRIBUTION:")
+            for player in self.players:
+                logger.info(f"Player {player.player_id}: stack={player.stack}, active={player.is_active}, all-in={player.all_in}")
+            
+            return winners
         
-        # Extra verification: Log all player stacks after distribution
-        logger.info("FINAL STACKS AFTER DISTRIBUTION:")
-        for player in self.players:
-            logger.info(f"Player {player.player_id}: stack={player.stack}, active={player.is_active}, all-in={player.all_in}")
+        try:
+            # Execute pot distribution as atomic operation
+            self.state_manager.execute_atomic_operation(distribute_operation, "pot_distribution")
+        except (ChipConservationError, StateTransactionError) as e:
+            logger.error(f"Error during pot distribution: {e}")
+            raise
         
-        # Reset pot and prepare for next hand
-        self.pot = 0
+        # Prepare for next hand
         self.reset_deck()
         
         # Check for eliminations
         for player in self.players:
             player.eliminate()
+    
+    def process_bet(self, player: Player, amount: int, operation: str = "bet") -> int:
+        """
+        Process a bet with chip ledger tracking.
+        
+        Args:
+            player: Player making the bet
+            amount: Amount to bet
+            operation: Type of operation ("bet", "call", "raise", "blind")
             
-        logger.info(f"Pot distributed to winners: {winners}")
+        Returns:
+            int: Actual amount bet
+        """
+        try:
+            # Validate before bet
+            self.chip_ledger.validate_player_stacks(self.players)
+            
+            old_stack = player.stack
+            actual_amount = player.bet(amount)
+            
+            if actual_amount > 0:
+                # Record the chip movement
+                self.chip_ledger.record_movement(player.player_id, "pot", actual_amount, operation,
+                                               before_balance=old_stack, after_balance=player.stack)
+                
+                # Add to pot
+                self.pot += actual_amount
+                
+                # Validate after bet
+                self.chip_ledger.validate_game_state(self.players, self.pot)
+            
+            return actual_amount
+            
+        except ChipConservationError as e:
+            logger.error(f"Chip conservation error during bet by {player.player_id}: {e}")
+            raise
     
     def end_session(self) -> None:
         """End the current game session."""

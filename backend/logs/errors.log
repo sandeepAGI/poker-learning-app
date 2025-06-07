@@ -416,3 +416,17 @@
 2025-03-19 19:58:54 - game_service - ERROR - CHIPS CONSERVATION ERROR: Total chips changed during new hand setup: 5000 -> 5005
 2025-03-19 20:00:33 - game.poker_game - ERROR - CHIPS ERROR: Total chips before (5000) does not match after (7960)
 2025-03-19 20:10:33 - game.poker_game - ERROR - CHIPS ERROR: Total chips before (5000) does not match after (7930)
+2025-05-29 16:16:25 - utils.chip_ledger - ERROR - Chip conservation error: Expected 3000, found 2104 (players: 2004, pot: 100)
+2025-05-29 16:16:25 - utils.state_manager - ERROR - ATOMIC OPERATION FAILED: pot_distribution - Chip conservation error: Expected 3000, found 2104 (players: 2004, pot: 100)
+2025-05-29 16:16:25 - game.poker_game - ERROR - Error during pot distribution: Operation failed and was rolled back: Chip conservation error: Expected 3000, found 2104 (players: 2004, pot: 100)
+2025-05-29 16:16:26 - comprehensive_e2e_test - ERROR - API request failed: 401 Client Error: Unauthorized for url: http://localhost:8080/api/v1/games
+2025-05-29 16:16:26 - comprehensive_e2e_test - ERROR - Response: {"detail":"API key required"}
+2025-05-29 16:16:27 - comprehensive_e2e_test - ERROR - API request failed: 401 Client Error: Unauthorized for url: http://localhost:8080/api/v1/games
+2025-05-29 16:16:27 - comprehensive_e2e_test - ERROR - Response: {"detail":"API key required"}
+2025-05-29 16:16:27 - game.poker_game - ERROR - Not enough cards to deal hole cards: need 100, have 52
+2025-05-29 16:27:28 - utils.chip_ledger - ERROR - Chip conservation error: Expected 3000, found 2104 (players: 2004, pot: 100)
+2025-05-29 16:27:28 - utils.state_manager - ERROR - ATOMIC OPERATION FAILED: pot_distribution - Chip conservation error: Expected 3000, found 2104 (players: 2004, pot: 100)
+2025-05-29 16:27:28 - game.poker_game - ERROR - Error during pot distribution: Operation failed and was rolled back: Chip conservation error: Expected 3000, found 2104 (players: 2004, pot: 100)
+2025-05-29 16:27:39 - utils.chip_ledger - ERROR - Chip conservation error: Expected 3000, found 2104 (players: 2004, pot: 100)
+2025-05-29 16:27:39 - utils.state_manager - ERROR - ATOMIC OPERATION FAILED: pot_distribution - Chip conservation error: Expected 3000, found 2104 (players: 2004, pot: 100)
+2025-05-29 16:27:39 - game.poker_game - ERROR - Error during pot distribution: Operation failed and was rolled back: Chip conservation error: Expected 3000, found 2104 (players: 2004, pot: 100)

@@ -1,0 +1,15 @@
+{
+  "timestamp": 1748550199.563154,
+  "overall_success": true,
+  "test_results": {
+    "deck_management": true,
+    "chip_conservation": true,
+    "state_management": true,
+    "api_integration": true
+  },
+  "summary": {
+    "passed": 4,
+    "total": 4,
+    "success_rate": 1.0
+  }
+}

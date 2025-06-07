@@ -165,24 +165,12 @@ class GameService:
         for player in player_objects:
             self.logger.info(f"GET GAME STATE: Player {player.player_id} has stack {player.stack}")
         
+        # Validate that all active players have hole cards - if not, this is a state error
         for player in player_objects:
-            # Ensure all players have valid hole cards
             if player.is_active and (not player.hole_cards or len(player.hole_cards) < 2):
-                try:
-                    # If we need to deal cards, make sure we have enough in the deck
-                    if len(poker_game.deck) < 2:
-                        self.logger.info(f"Resetting deck to deal cards to player {player.player_id}")
-                        poker_game.deck_manager.reset()
-                        poker_game.reset_deck()
-                    
-                    # Deal cards to any player missing them
-                    hole_cards = poker_game.deck_manager.deal_to_player(2)
-                    player.receive_cards(hole_cards)
-                    poker_game.deck = poker_game.deck_manager.get_deck()
-                    self.logger.info(f"Dealt missing hole cards to player {player.player_id}: {hole_cards}")
-                except ValueError as e:
-                    self.logger.error(f"Error dealing cards to player {player.player_id}: {e}")
-            
+                self.logger.error(f"Player {player.player_id} is active but missing hole cards - game state inconsistency")
+                # Instead of emergency dealing, let the game engine handle this properly
+                # This should trigger a proper card dealing through the game engine
             player_type = "human" if isinstance(player, HumanPlayer) else "ai"
             current_stack = player.stack  # Get current stack value
             
@@ -380,14 +368,8 @@ class GameService:
                 self.logger.info(f"Only one active player remains. Moving to showdown.")
                 poker_game.current_state = GameState.SHOWDOWN
                 # Distribute pot to the last remaining player
-                winners = poker_game.hand_manager.distribute_pot(
-                    players=poker_game.players,
-                    community_cards=poker_game.community_cards,
-                    total_pot=poker_game.pot,
-                    deck=poker_game.deck
-                )
-                self.logger.info(f"Pot distributed to last remaining player: {winners}")
-                poker_game.pot = 0
+                poker_game.distribute_pot()
+                self.logger.info(f"Pot distributed to last remaining player")
             else:
                 # Find next active player
                 for p in poker_game.players:
@@ -607,12 +589,7 @@ class GameService:
             for player in poker_game.players:
                 self.logger.info(f"NEXT HAND (after blinds): Player {player.player_id} stack {player.stack}")
             
-            # Final chip conservation check
-            total_chips_after = sum(player.stack for player in poker_game.players) + poker_game.pot
-            if total_chips_before != total_chips_after:
-                self.logger.error(f"CHIPS CONSERVATION ERROR: Total chips changed during new hand setup: {total_chips_before} -> {total_chips_after}")
-            else:
-                self.logger.info(f"CHIPS CONSERVATION CHECK: Total chips preserved during new hand setup: {total_chips_after}")
+            # Chip conservation validation is now handled by the chip ledger in poker_game
             
             # Update game in session manager
             self.session_manager.update_session(game_id, game_data)
@@ -810,22 +787,7 @@ class GameService:
                     self.logger.info(f"SHOWDOWN VERIFY: Winner {pid} has stack {player.stack}, won {amount}")
                     break
         
-        # Verify total chips are conserved
-        total_chips_after = sum(player.stack for player in poker_game.players) + poker_game.pot
-        if total_chips_before != total_chips_after:
-            self.logger.error(f"CHIPS CONSERVATION ERROR: Before: {total_chips_before}, After: {total_chips_after}, Difference: {total_chips_before - total_chips_after}")
-            # If chips were lost (more likely than gained), fix by adding to a winner
-            if total_chips_before > total_chips_after and winners:
-                difference = total_chips_before - total_chips_after
-                first_winner_id = next(iter(winners))
-                for player in poker_game.players:
-                    if player.player_id == first_winner_id:
-                        old_stack = player.stack
-                        player.stack += difference
-                        self.logger.info(f"CHIPS FIXED: Added {difference} missing chips to {player.player_id}, now {player.stack}")
-                        break
-        else:
-            self.logger.info("CHIPS CONSERVATION CHECK: All chips are accounted for after pot distribution")
+        # Chip conservation validation is now handled by the chip ledger in poker_game
         
         # Format hand data
         for pid, (score, hand_rank, player) in evaluated_hands.items():

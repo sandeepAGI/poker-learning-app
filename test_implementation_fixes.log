@@ -1,0 +1,24 @@
+2025-05-29 16:10:54,874 - __main__ - INFO - ============================================================
+2025-05-29 16:10:54,874 - __main__ - INFO - POKER LEARNING APP - IMPLEMENTATION FIXES VALIDATION
+2025-05-29 16:10:54,874 - __main__ - INFO - ============================================================
+2025-05-29 16:10:54,874 - __main__ - INFO - Testing deck management fixes...
+2025-05-29 16:10:54,874 - __main__ - INFO - ✓ Deck management fixes: PASS
+2025-05-29 16:10:54,874 - __main__ - INFO - Testing chip conservation fixes...
+2025-05-29 16:10:54,874 - __main__ - INFO - ✓ Chip conservation fixes: PASS
+2025-05-29 16:10:54,874 - __main__ - INFO - Testing state management fixes...
+2025-05-29 16:10:54,874 - __main__ - INFO - ✓ State management fixes: PASS
+2025-05-29 16:10:54,874 - __main__ - INFO - Testing API integration improvements...
+2025-05-29 16:10:54,874 - test_client.poker_api_client - INFO - Starting complete game test with 2 hands
+2025-05-29 16:10:54,874 - test_client.poker_api_client - INFO - Using test player: TestHuman (test-player-id)
+2025-05-29 16:10:54,879 - test_client.poker_api_client - ERROR - Request failed: {'request_count': 1, 'method': 'POST', 'url': 'http://localhost:8080/api/v1/games', 'status_code': 401, 'response_text': '{"detail":"Invalid API key"}'}
+2025-05-29 16:10:54,879 - test_client.poker_api_client - ERROR - Request 1 failed: 401 Client Error: Unauthorized for url: http://localhost:8080/api/v1/games
+2025-05-29 16:10:54,879 - test_client.poker_api_client - ERROR - Game test failed: 401 Client Error: Unauthorized for url: http://localhost:8080/api/v1/games
+2025-05-29 16:10:54,879 - __main__ - ERROR - API integration test FAILED: 401 Client Error: Unauthorized for url: http://localhost:8080/api/v1/games
+2025-05-29 16:10:54,879 - __main__ - INFO - ✓ API integration fixes: FAIL
+2025-05-29 16:10:54,879 - __main__ - INFO - ============================================================
+2025-05-29 16:10:54,879 - __main__ - INFO - TEST SUMMARY
+2025-05-29 16:10:54,879 - __main__ - INFO - ============================================================
+2025-05-29 16:10:54,879 - __main__ - INFO - Tests passed: 3/4
+2025-05-29 16:10:54,879 - __main__ - INFO - Overall result: FAIL
+2025-05-29 16:10:54,879 - __main__ - WARNING - ⚠️  Some tests failed. Check the logs for details.
+2025-05-29 16:10:54,880 - __main__ - INFO - Detailed results saved to: test_results.json
