@@ -18,6 +18,7 @@ from utils.errors import (
 from utils.session import SessionManager
 from utils.logger import get_logger
 from utils.formatters import format_cards, format_money
+from utils.performance import performance_manager, profile_time, async_profile_time
 
 # Import config
 from config import STARTING_CHIPS, SMALL_BLIND, BIG_BLIND
@@ -63,6 +64,7 @@ class GameService:
         else:
             self.logger.warning("WebSocket manager not available for notifications")
     
+    @profile_time
     def create_game(self, player_id: str, ai_count: int, ai_personalities: List[str]) -> Dict[str, Any]:
         """Create a new game session with actual PokerGame instance"""
         game_id = str(uuid.uuid4())
@@ -137,6 +139,7 @@ class GameService:
             self.logger.error(f"Error creating game: {e}")
             raise
     
+    @profile_time
     def get_game_state(self, game_id: str, player_id: str, show_all_cards: bool = False) -> Dict[str, Any]:
         """Get current game state from the PokerGame instance with option to show all cards."""
         # Get game from session manager
@@ -249,6 +252,7 @@ class GameService:
             
         return response
     
+    @profile_time
     def process_action(self, game_id: str, player_id: str, action_type: str, amount: Optional[int] = None) -> Dict[str, Any]:
         """Process player action using the PokerGame instance"""
         # Get game from session manager
@@ -474,6 +478,7 @@ class GameService:
                     poker_game.pot += actual_bet
                     poker_game.current_bet = player.current_bet
     
+    @profile_time
     def next_hand(self, game_id: str, player_id: str) -> Dict[str, Any]:
         """Advance to the next hand using the PokerGame instance"""
         # Get game from session manager

@@ -10,7 +10,7 @@ import uvicorn
 import os
 
 # Import routers
-from routers import games, players, learning
+from routers import games, players, learning, debug
 
 # Import error handlers
 from utils.errors import (
@@ -24,7 +24,13 @@ from utils.errors import (
 from services.game_service import GameService
 
 # Import logger
-from utils.logger import get_logger
+from utils.logger import (
+    get_logger, 
+    set_correlation_id, 
+    set_request_context, 
+    clear_context,
+    get_correlation_id
+)
 
 # Setup logger
 logger = get_logger("api")
@@ -99,6 +105,51 @@ rate_limit = int(os.environ.get("RATE_LIMIT", "60"))  # 60 requests per minute b
 app.add_middleware(RateLimitMiddleware, calls_per_minute=rate_limit)
 logger.info(f"Added rate limiting middleware: {rate_limit} requests per minute")
 
+# Correlation ID and Request Context Middleware
+class CorrelationMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        # Generate or use existing correlation ID
+        corr_id = request.headers.get("X-Correlation-ID")
+        if not corr_id:
+            corr_id = set_correlation_id()
+        else:
+            set_correlation_id(corr_id)
+        
+        # Set request context
+        context = {
+            "method": request.method,
+            "path": request.url.path,
+            "client_ip": request.client.host if request.client else "unknown",
+            "user_agent": request.headers.get("user-agent", "unknown")
+        }
+        set_request_context(context)
+        
+        # Log request start
+        logger.info(f"Request started: {request.method} {request.url.path}")
+        
+        try:
+            # Process request
+            response = await call_next(request)
+            
+            # Add correlation ID to response headers
+            response.headers["X-Correlation-ID"] = corr_id
+            
+            # Log request completion
+            logger.info(f"Request completed: {request.method} {request.url.path} - Status: {response.status_code}")
+            
+            return response
+        except Exception as e:
+            # Log error with context
+            logger.error(f"Request failed: {request.method} {request.url.path} - Error: {str(e)}", exc_info=True)
+            raise
+        finally:
+            # Clear context
+            clear_context()
+
+# Add correlation middleware
+app.add_middleware(CorrelationMiddleware)
+logger.info("Added correlation ID middleware")
+
 # Add HTTPS redirect in production
 if os.environ.get("ENVIRONMENT") == "production":
     logger.info("Adding HTTPS redirect middleware for production")
@@ -118,6 +169,7 @@ from datetime import datetime
 app.include_router(games.router, prefix="/api/v1")
 app.include_router(players.router, prefix="/api/v1")
 app.include_router(learning.router, prefix="/api/v1")
+app.include_router(debug.router)
 
 # WebSocket connection manager
 class ConnectionManager:

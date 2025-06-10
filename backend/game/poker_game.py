@@ -51,8 +51,9 @@ class PokerGame:
         self.learning_tracker = LearningTracker()
         
         # Initialize chip ledger for tracking chip conservation
-        initial_chips = getattr(self.players[0], 'stack', 1000) if self.players else 1000
-        self.chip_ledger = ChipLedger(initial_chips, len(self.players))
+        # Calculate actual total chips across all players
+        total_player_chips = sum(getattr(player, 'stack', 0) for player in self.players)
+        self.chip_ledger = ChipLedger(total_player_chips, 1)  # Pass total chips and use 1 as multiplier
         
         # Initialize state manager for atomic transactions
         self.state_manager = GameStateManager(self)
@@ -125,12 +126,12 @@ class PokerGame:
         self.last_hand_dealt = self.hand_count
         logger.info(f"Dealt hole cards to {len(active_players)} active players, {len(self.deck)} cards remaining")
     
-    def deal_community_cards(self) -> None:
-        """Deals community cards based on current game state."""
+    def deal_community_cards_for_state(self, target_state: GameState) -> None:
+        """Deals community cards for a specific target state."""
         current_hand = self.hand_count
 
         try:
-            if self.current_state == GameState.FLOP:
+            if target_state == GameState.FLOP:
                 if self.last_community_cards[GameState.FLOP] == current_hand:
                     return
                 flop_cards = self.deck_manager.deal_flop()
@@ -138,7 +139,7 @@ class PokerGame:
                 self.last_community_cards[GameState.FLOP] = current_hand
                 logger.info(f"Dealt flop: {', '.join(flop_cards)}")
 
-            elif self.current_state == GameState.TURN:
+            elif target_state == GameState.TURN:
                 if self.last_community_cards[GameState.TURN] == current_hand:
                     return
                 turn_card = self.deck_manager.deal_turn()
@@ -146,7 +147,7 @@ class PokerGame:
                 self.last_community_cards[GameState.TURN] = current_hand
                 logger.info(f"Dealt turn: {turn_card}")
 
-            elif self.current_state == GameState.RIVER:
+            elif target_state == GameState.RIVER:
                 if self.last_community_cards[GameState.RIVER] == current_hand:
                     return
                 river_card = self.deck_manager.deal_river()
@@ -155,6 +156,16 @@ class PokerGame:
                 logger.info(f"Dealt river: {river_card}")
                 
             # Update the game's deck reference
+            self.deck = self.deck_manager.get_deck()
+            
+        except Exception as e:
+            logger.error(f"Error dealing community cards for {target_state}: {e}")
+            raise
+
+    def deal_community_cards(self) -> None:
+        """Deals community cards based on current game state."""
+        try:
+            self.deal_community_cards_for_state(self.current_state)
             self.deck = self.deck_manager.get_deck()
             
         except ValueError as e:
@@ -244,7 +255,7 @@ class PokerGame:
             
             def advance_to_next():
                 if next_state in [GameState.FLOP, GameState.TURN, GameState.RIVER]:
-                    self.deal_community_cards()
+                    self.deal_community_cards_for_state(next_state)
                 return None
             
             self.state_manager.transition_state(

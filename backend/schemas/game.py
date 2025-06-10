@@ -21,7 +21,6 @@ class PlayerInfo(BaseModel):
 
 # Create game request
 class GameCreate(BaseModel):
-    player_id: str
     ai_count: int
     ai_personalities: List[str]
 

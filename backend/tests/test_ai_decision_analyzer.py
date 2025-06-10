@@ -38,16 +38,12 @@ class TestAIDecisionAnalyzer(unittest.TestCase):
     @patch('stats.ai_decision_analyzer.AIDecisionMaker')
     def test_analyze_decision_match_optimal(self, mock_decision_maker):
         """Test analyzing a decision that matches the optimal strategy."""
-        # Important: We need to mock make_decision to directly return the specific value each time
-        # It's called, rather than setting up multiple return values through side_effect
-        mock_decision_maker.make_decision = MagicMock()
+        # Create a mock instance that will be returned when AIDecisionMaker() is called
+        mock_instance = MagicMock()
+        mock_decision_maker.return_value = mock_instance
         
-        # Set up each strategy to return its own specific decision
-        def specific_make_decision(strategy, *args, **kwargs):
-            # All strategies return "call" to ensure player's "call" matches optimal "call"
-            return "call"
-            
-        mock_decision_maker.make_decision.side_effect = specific_make_decision
+        # Set up the make_decision method on the instance to return "call" for all strategies
+        mock_instance.make_decision.return_value = "call"
         
         # Patch the _find_optimal_strategy method to return a known value
         with patch.object(self.analyzer, '_find_optimal_strategy', 
@@ -78,10 +74,11 @@ class TestAIDecisionAnalyzer(unittest.TestCase):
     @patch('stats.ai_decision_analyzer.AIDecisionMaker')
     def test_analyze_decision_non_optimal(self, mock_decision_maker):
         """Test analyzing a decision that doesn't match the optimal strategy."""
-        # Set up each strategy to return a specific decision 
-        # This is crucial for the test
-        mock_decision_maker.make_decision = MagicMock()
+        # Create a mock instance that will be returned when AIDecisionMaker() is called
+        mock_instance = MagicMock()
+        mock_decision_maker.return_value = mock_instance
         
+        # Set up each strategy to return a specific decision
         def specific_make_decision(strategy, *args, **kwargs):
             if strategy == "Conservative":
                 return "fold"
@@ -92,7 +89,7 @@ class TestAIDecisionAnalyzer(unittest.TestCase):
             else:  # Bluffer
                 return "fold"
                 
-        mock_decision_maker.make_decision.side_effect = specific_make_decision
+        mock_instance.make_decision.side_effect = specific_make_decision
         
         # Patch the _find_optimal_strategy method to return Probability-Based
         with patch.object(self.analyzer, '_find_optimal_strategy', 

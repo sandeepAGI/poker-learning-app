@@ -1299,3 +1299,47 @@ INFO:     127.0.0.1:55605 - "GET /api/v1/games/7177daf4-59a8-422e-9984-5835b1a6b
 2025-06-07 14:20:24 - game_service - INFO - Running scheduled cleanup of inactive games
 2025-06-07 14:25:24 - game_service - INFO - Running scheduled cleanup of inactive games
 2025-06-07 14:30:24 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-07 14:35:24 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-07 18:58:41 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-07 23:04:36 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-07 23:09:36 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 06:42:26 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 09:50:18 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 09:56:07 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 10:01:07 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 10:06:07 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 10:11:07 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 10:25:09 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 10:41:55 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 10:46:55 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 10:51:55 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 10:56:55 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 11:20:55 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 11:54:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 11:59:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 12:04:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 12:09:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 12:14:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 12:19:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 12:24:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 12:29:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 12:34:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 12:39:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 12:44:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 12:49:43 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 13:15:26 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 14:23:07 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 15:00:23 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 15:16:06 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 15:21:06 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 15:26:06 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 15:31:06 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 15:36:06 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 15:41:06 - game_service - INFO - Running scheduled cleanup of inactive games
+2025-06-08 15:46:06 - game_service - INFO - Running scheduled cleanup of inactive games
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-06-08 15:48:58 - api - INFO - Shutting down the Poker Learning App API
+INFO:     Application shutdown complete.
+INFO:     Finished server process [39268]
+INFO:     Stopping reloader process [38991]

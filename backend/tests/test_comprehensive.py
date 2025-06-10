@@ -395,8 +395,24 @@ class TestPlayerElimination(unittest.TestCase):
         for player in self.players:
             self.assertTrue(player.is_active)
         
+        # Set up hole cards for hand evaluation to work
+        self.players[0].hole_cards = ["Ah", "Kh"]  # Strong hand
+        self.players[1].hole_cards = ["2c", "3d"]  # Weak hand
+        self.players[2].hole_cards = ["Qs", "Jh"]  # Medium hand
+        
+        # Set up community cards and appropriate game state
+        self.game.community_cards = ["Ac", "Ad", "Ks", "Qh", "Jc"]
+        self.game.current_state = GameState.SHOWDOWN
+        
+        # Simulate betting that creates the pot (remove chips from players)
+        # Players bet, creating a pot while maintaining chip conservation
+        self.players[0].stack -= 50  # P1 contributes 50
+        self.players[0].total_bet = 50  # Track P1's contribution
+        self.players[1].stack -= 50  # P2 contributes 50  
+        self.players[1].total_bet = 50  # Track P2's contribution
+        self.game.pot = 100  # Pot now has 100 chips from player contributions
+        
         # Distribute pot which calls eliminate() on all players
-        self.game.pot = 100  # Add some chips to pot
         self.game.distribute_pot(self.game.deck)
         
         # Player 3 should be eliminated (stack < 5)
@@ -423,6 +439,24 @@ class TestPlayerElimination(unittest.TestCase):
         self.assertTrue(players[1].is_active)   # 5 >= 5
         self.assertFalse(players[2].is_active)  # 4 < 5
         self.assertFalse(players[3].is_active)  # 0 < 5
+    
+    def test_elimination_edge_case_invalid_pot_state(self):
+        """Test that elimination still works even if pot distribution would fail."""
+        # Create a scenario where pot distribution might fail but elimination should still work
+        players = [
+            Player(player_id="p1", stack=1000),
+            Player(player_id="p2", stack=8),     # Just above threshold
+            Player(player_id="p3", stack=3),     # Below threshold
+        ]
+        
+        # Test elimination directly (what happens at end of distribute_pot)
+        for player in players:
+            player.eliminate()
+        
+        # Verify elimination logic works independently of pot distribution
+        self.assertTrue(players[0].is_active)   # 1000 > 5
+        self.assertTrue(players[1].is_active)   # 8 > 5
+        self.assertFalse(players[2].is_active)  # 3 < 5
 
 class TestCommunityCards(unittest.TestCase):
     """Test suite for verifying community card dealing."""

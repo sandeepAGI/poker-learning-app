@@ -1,5 +1,6 @@
 import random
 from treys import Evaluator, Card
+from utils.performance import performance_manager, profile_time
 
 class BaseAI:
     """Base class for AI players, defining evaluation behavior."""
@@ -7,6 +8,8 @@ class BaseAI:
     def __init__(self):
         self.evaluator = Evaluator()
 
+    @performance_manager.cache_hand_evaluation
+    @profile_time
     def evaluate_hand(self, hole_cards, community_cards, deck):
         """Evaluates the hand strength and returns both hand score and hand rank."""
         board = [Card.new(card.replace("10", "T")) for card in community_cards]
@@ -24,8 +27,8 @@ class BaseAI:
         if len(remaining_deck) < (5 - len(board)):
             return float("inf"), "Unknown"
 
-        # Run Monte Carlo simulation
-        simulations = 100
+        # Run optimized Monte Carlo simulation (reduced from 100 to 50 for performance)
+        simulations = 50
         scores = []
         for _ in range(simulations):
             simulated_deck = remaining_deck[:]
@@ -39,6 +42,8 @@ class BaseAI:
 
         return avg_score, avg_rank_str
     
+    @performance_manager.cache_ai_decision
+    @profile_time
     def make_decision(self, hole_cards, game_state, deck, pot_size, spr):
         """Base method to evaluate hand strength for decision making.
     

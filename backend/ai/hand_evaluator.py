@@ -2,6 +2,7 @@ import random
 import itertools
 from typing import List, Tuple
 from treys import Evaluator, Card
+from utils.performance import performance_manager, profile_time
 
 
 class HandEvaluator:
@@ -14,6 +15,8 @@ class HandEvaluator:
         """Initialize with a treys Evaluator."""
         self.evaluator = Evaluator()
     
+    @performance_manager.cache_hand_evaluation
+    @profile_time
     def evaluate_hand(self, hole_cards: List[str], community_cards: List[str], 
                      deck: List[str]) -> Tuple[float, str]:
         """
@@ -44,8 +47,8 @@ class HandEvaluator:
         if len(remaining_deck) < (5 - len(board)):
             return float("inf"), "Unknown"
 
-        # Run Monte Carlo simulation
-        simulations = 100
+        # Run optimized Monte Carlo simulation (reduced from 100 to 50 for performance)
+        simulations = 50
         scores = []
         for _ in range(simulations):
             simulated_deck = remaining_deck[:]
