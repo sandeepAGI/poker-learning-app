@@ -177,6 +177,44 @@ curl http://localhost:8080/api/v1/debug/logs?lines=50
 
 ## Recent Major Updates (June 2025)
 
+### 🔧 **Critical Frontend User Experience Fixes (June 11, 2025)**
+
+#### **Frontend UX Issues RESOLVED** ✅
+Following user testing feedback, three critical frontend issues were identified and fixed:
+
+**1. Name Input Issue Fixed** ✅
+- **Issue**: Application didn't consistently ask for user name on first run
+- **Root Cause**: Cached player data in localStorage persisted between sessions
+- **Solution**: Added localStorage clearing functionality and improved session management
+- **Files Modified**: `frontend/src/App.js`, `frontend/src/components/AuthModal.js`
+
+**2. Player Identification Enhancement** ✅
+- **Issue**: Players not clearly marked - unclear who is human vs AI players
+- **Root Cause**: Generic player display without clear distinction
+- **Solution**: Added visual markers, "(You)" labels, and enhanced styling for human player identification
+- **Features Added**:
+  - Human player clearly marked with "(You)" label and 👤 icon
+  - Blue border and background for human player position
+  - Action history shows player names instead of IDs
+  - Enhanced visual distinction between active/inactive players
+- **Files Modified**: `frontend/src/components/PokerTable.js`, `frontend/src/components/PokerGameContainer.js`
+
+**3. Action Handling Stability Fixed** ✅
+- **Issue**: Taking actions sometimes redirected to create new game screen
+- **Root Cause**: Game state management incorrectly resetting to lobby state after actions
+- **Solution**: Enhanced state preservation logic and improved game state mapping
+- **Features Added**:
+  - Game state preservation during action submission
+  - Improved backend response mapping
+  - Prevention of unexpected lobby redirects
+  - Better state consistency across components
+- **Files Modified**: `frontend/src/store/gameStore.js`
+
+**Development Utilities Added** ✅
+- Added "Clear All Data & Refresh" button in development mode for testing
+- Enhanced localStorage management for better session handling
+- Improved error handling and state recovery
+
 ### 🔧 **Critical Frontend/Backend Integration Fixes (June 10, 2025)**
 
 #### **Authentication and Validation Issues RESOLVED** ✅

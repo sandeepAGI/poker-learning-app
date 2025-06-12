@@ -13,9 +13,9 @@ const PokerTable = () => {
       <div
         key={player.id}
         className={`absolute transform -translate-x-1/2 -translate-y-1/2 ${
-          isCurrentPlayer ? 'border-2 border-blue-400' : 'border border-gray-600'
+          isCurrentPlayer ? 'border-2 border-blue-400 bg-blue-900' : 'border border-gray-600'
         } ${
-          isActivePlayer ? 'bg-yellow-900' : 'bg-gray-800'
+          isActivePlayer ? 'bg-yellow-900' : isCurrentPlayer ? 'bg-blue-900' : 'bg-gray-800'
         } rounded-lg p-3 min-w-32`}
         style={{
           left: `${50 + 35 * Math.cos((index * 2 * Math.PI) / state.players.length)}%`,
@@ -24,8 +24,9 @@ const PokerTable = () => {
       >
         <div className="text-center">
           <div className="text-sm font-semibold text-white mb-1">
-            {player.name}
+            {isCurrentPlayer ? `${player.name} (You)` : player.name}
             {isDealer && <span className="ml-1 text-yellow-400">D</span>}
+            {isCurrentPlayer && <span className="ml-1 text-blue-400">👤</span>}
           </div>
           <div className="text-xs text-green-400">${player.chips}</div>
           {player.current_bet > 0 && (

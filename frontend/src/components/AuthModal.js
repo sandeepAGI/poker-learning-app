@@ -91,10 +91,19 @@ const AuthModal = ({ onLogin }) => {
         {/* Development information */}
         {process.env.NODE_ENV === 'development' && (
           <div className="mt-6 p-3 bg-gray-700 rounded-md">
-            <p className="text-gray-300 text-xs">
+            <p className="text-gray-300 text-xs mb-2">
               <strong>Development Mode:</strong> Authentication is simplified for testing.
               In production, this would include proper user registration and login.
             </p>
+            <button
+              onClick={() => {
+                localStorage.clear();
+                window.location.reload();
+              }}
+              className="text-xs bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded"
+            >
+              Clear All Data & Refresh
+            </button>
           </div>
         )}
       </div>

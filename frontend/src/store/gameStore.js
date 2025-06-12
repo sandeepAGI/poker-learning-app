@@ -139,12 +139,27 @@ const gameReducer = (state, action) => {
       };
 
     case ACTION_TYPES.UPDATE_GAME_STATE:
-      return {
+      // Preserve existing gameId and gameState if not explicitly provided
+      const updatedState = {
         ...state,
         ...action.payload,
         loading: false,
         error: null
       };
+      
+      // Ensure we don't lose the game state unexpectedly
+      if (state.gameId && !action.payload.gameId) {
+        updatedState.gameId = state.gameId;
+      }
+      
+      // Prevent going back to lobby if we have an active game unless explicitly finished
+      if (state.gameState === GAME_STATES.PLAYING && 
+          action.payload.gameState === GAME_STATES.LOBBY && 
+          updatedState.players && updatedState.players.length > 0) {
+        updatedState.gameState = GAME_STATES.PLAYING;
+      }
+      
+      return updatedState;
 
     case ACTION_TYPES.SET_LOADING:
       return {
@@ -227,8 +242,12 @@ const gameReducer = (state, action) => {
 
 // Helper function to map backend response to frontend state
 const mapBackendResponse = (response) => {
+  // Ensure we maintain the playing state if we have players and a game is active
+  const hasActivePlayers = response.players && response.players.length > 0;
+  const isGameActive = response.current_state && response.current_state !== 'finished';
+  
   return {
-    gameState: response.current_state ? GAME_STATES.PLAYING : GAME_STATES.LOBBY,
+    gameState: (hasActivePlayers && isGameActive) ? GAME_STATES.PLAYING : GAME_STATES.LOBBY,
     roundState: response.current_state || ROUND_STATES.PRE_FLOP,
     players: response.players || [],
     pot: response.pot || 0,
@@ -239,7 +258,7 @@ const mapBackendResponse = (response) => {
     communityCards: response.community_cards || [],
     handCount: response.hand_number || 1,
     currentPlayerIndex: response.current_player ? 
-      (response.players || []).findIndex(p => p.player_id === response.current_player) : 0
+      (response.players || []).findIndex(p => p.player_id === response.current_player || p.id === response.current_player) : 0
   };
 };
 

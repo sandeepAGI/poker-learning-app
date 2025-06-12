@@ -37,6 +37,7 @@ function App() {
   const handleLogout = () => {
     auth.clearToken();
     localStorage.removeItem('player_data');
+    localStorage.removeItem('game_data'); // Clear any cached game data
     setIsAuthenticated(false);
   };
 

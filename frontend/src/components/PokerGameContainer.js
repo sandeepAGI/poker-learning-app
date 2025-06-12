@@ -169,9 +169,12 @@ const PokerGameContainer = ({ onLogout }) => {
               <div className="bg-gray-800 rounded-lg p-4">
                 <h3 className="text-lg font-semibold mb-4">Recent Actions</h3>
                 <div className="space-y-2 max-h-40 overflow-y-auto">
-                  {state.actionHistory.slice(0, 10).map((action, index) => (
+                  {state.actionHistory.slice(0, 10).map((action, index) => {
+                    const player = state.players.find(p => p.player_id === action.playerId || p.id === action.playerId);
+                    const playerName = player ? (action.playerId === state.playerId ? `${player.name} (You)` : player.name) : action.playerId;
+                    return (
                     <div key={index} className="text-sm text-gray-300">
-                      <span className="text-blue-400">{action.playerId}</span>
+                      <span className="text-blue-400">{playerName}</span>
                       {' '}
                       <span className="text-white">{action.action}</span>
                       {action.amount && (
@@ -181,7 +184,8 @@ const PokerGameContainer = ({ onLogout }) => {
                         {new Date(action.timestamp).toLocaleTimeString()}
                       </div>
                     </div>
-                  ))}
+                  )
+                  })}
                 </div>
               </div>
 
