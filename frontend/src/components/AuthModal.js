@@ -88,22 +88,37 @@ const AuthModal = ({ onLogin }) => {
           </p>
         </div>
 
+        {/* User options */}
+        <div className="mt-6 p-3 bg-gray-700 rounded-md">
+          <p className="text-gray-300 text-xs mb-3">
+            Want to start fresh? Clear your saved data to enter a different name next time.
+          </p>
+          <button
+            onClick={() => {
+              localStorage.clear();
+              window.location.reload();
+            }}
+            className="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded mr-2"
+          >
+            Clear All Data & Restart
+          </button>
+          <button
+            onClick={() => {
+              localStorage.setItem('ask_for_name_on_startup', 'true');
+            }}
+            className="text-xs bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded"
+          >
+            Ask for Name Next Time
+          </button>
+        </div>
+
         {/* Development information */}
         {process.env.NODE_ENV === 'development' && (
-          <div className="mt-6 p-3 bg-gray-700 rounded-md">
-            <p className="text-gray-300 text-xs mb-2">
+          <div className="mt-4 p-3 bg-blue-900 rounded-md">
+            <p className="text-blue-300 text-xs">
               <strong>Development Mode:</strong> Authentication is simplified for testing.
               In production, this would include proper user registration and login.
             </p>
-            <button
-              onClick={() => {
-                localStorage.clear();
-                window.location.reload();
-              }}
-              className="text-xs bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded"
-            >
-              Clear All Data & Refresh
-            </button>
           </div>
         )}
       </div>

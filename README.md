@@ -177,6 +177,117 @@ curl http://localhost:8080/api/v1/debug/logs?lines=50
 
 ## Recent Major Updates (June 2025)
 
+### 🔧 **Critical Bug Investigation & Frontend Architecture Improvements (June 12, 2025)**
+
+#### **Systematic Frontend Analysis and Debugging** 🔧 In Progress
+Following user reports of gameplay interruption (actions redirecting to create new game screen), implemented comprehensive debugging and testing infrastructure:
+
+**1. Frontend Architecture Documentation** ✅
+- **New File**: `FRONTEND_ARCHITECTURE.md` - Complete system analysis
+- **Documented**: Data flow, state management patterns, component hierarchy
+- **Identified**: Critical areas where lobby redirect bug occurs
+- **Key Areas**: Action submission flow, backend response mapping, conditional rendering logic
+
+**2. Comprehensive Test Suite Development** ✅
+- **New Test Files**:
+  - `src/store/gameStore.test.js` - Core state management testing
+  - `src/store/actionSubmission.test.js` - Action flow analysis (where bug occurs)
+  - `src/store/mapBackendResponse.test.js` - Backend response mapping (critical function)
+  - `src/components/PokerGameContainer.test.js` - Component rendering logic
+- **Test Coverage**: Authentication flow, state transitions, action submission, error handling
+- **Dependencies**: Added React Testing Library and Jest configuration improvements
+
+**3. Real-Time Diagnostic Tool** ✅
+- **New Component**: `DebugDiagnostic.js` - Browser-based debugging tool
+- **Location**: Bottom-left corner of game interface (development mode)
+- **Features**:
+  - **Run Diagnostic Test**: Analyzes current game state and mapping logic
+  - **Simulate Bug Scenario**: Tests exact lobby redirect conditions
+  - **Monitor Action Flow**: Real-time action submission monitoring
+- **Purpose**: Identify exact root cause of lobby redirect bug without Jest dependency issues
+
+**4. Enhanced Player Identification System** ✅
+- **User Issue Resolved**: Players now clearly marked with actual names
+- **Visual Improvements**:
+  - Human player: Uses actual entered name with 👤 icon and "(You)" label
+  - AI players: Clearly marked with 🤖 robot icons and "AI" designation
+  - Enhanced visual contrast and styling for better distinction
+- **Files Modified**: `frontend/src/components/PokerTable.js`, `frontend/src/components/PokerGameContainer.js`
+
+**5. Flexible Authentication Management** ✅
+- **User Control Features**:
+  - "Change Player" button in main interface
+  - "Ask for Name Next Time" option in authentication modal
+  - "Clear All Data & Restart" for complete fresh start
+  - Smart session management respecting user preferences
+- **Session Logic**: Improved localStorage management and authentication flow
+- **Files Modified**: `frontend/src/App.js`, `frontend/src/components/AuthModal.js`
+
+**6. Game State Management Improvements** 🔧 Attempted
+- **Issue**: Action submissions (raise/call/fold) redirect to create new game screen
+- **Root Cause**: Under investigation using diagnostic tools
+- **Attempted Fixes**:
+  - Enhanced `mapBackendResponse()` function to be more conservative
+  - Improved `UPDATE_GAME_STATE` reducer logic to prevent unexpected lobby redirects
+  - Added state preservation safeguards during action processing
+- **Status**: Bug persists despite logical fixes - systematic diagnosis in progress
+
+#### **Current Status: Active Bug Investigation** 🔍
+**The Problem**: Taking any poker action (raise, call, fold) causes immediate redirect to "create new game" screen instead of continuing gameplay.
+
+**Evidence Gathered**:
+- Backend processes actions correctly (confirmed in logs)
+- Frontend receives valid responses from backend
+- Issue occurs in frontend state management during action processing
+- Bug bypasses current state preservation logic
+
+**Diagnostic Tools Available**:
+- Real-time browser diagnostic tool for step-by-step analysis
+- Comprehensive test suite for systematic validation
+- Enhanced logging and state monitoring capabilities
+
+#### **Next Steps for Bug Resolution** 📋
+
+**Immediate Actions Required**:
+
+1. **Use Diagnostic Tool** (User Action Required)
+   - Start the frontend application
+   - Navigate to poker game and create a game
+   - Look for "🐛 Bug Diagnostic Tool" in bottom-left corner
+   - Click "Monitor Action Flow" before taking any action
+   - Take a raise/call/fold action and monitor browser console output
+   - **Report console output** for analysis
+
+2. **Systematic Testing Protocol**
+   ```bash
+   # Test the diagnostic tool functionality
+   cd frontend
+   npm start
+   # Follow steps above and capture console output
+   ```
+
+3. **Expected Diagnostic Output**
+   - Pre-action state analysis
+   - Backend response inspection
+   - State mapping logic verification
+   - Post-action state confirmation
+   - **Identification of exact failure point**
+
+**Likely Root Causes to Investigate**:
+- Backend response structure doesn't match frontend expectations
+- Timing issues in state updates (race conditions)  
+- WebSocket events interfering with API responses
+- Hidden state corruption during action processing
+- Reducer logic edge cases not covered by current safeguards
+
+**Development Workflow**:
+1. **Capture diagnostic data** from browser console
+2. **Analyze specific failure point** in action flow
+3. **Implement targeted fix** based on root cause
+4. **Validate fix** with diagnostic tool monitoring
+5. **Run comprehensive test suite** to prevent regressions
+6. **Document resolution** and update architecture guide
+
 ### 🔧 **Critical Frontend User Experience Fixes (June 11, 2025)**
 
 #### **Frontend UX Issues RESOLVED** ✅
@@ -607,37 +718,61 @@ python -m pytest tests/ --ignore=tests/archive/ --ignore=tests/archive_deprecate
 
 ## Next Steps
 
-### Completed High Priority Items ✅
+### 🚨 **Critical Priority: Bug Resolution**
+
+#### **URGENT: Lobby Redirect Bug** 
+**Status**: 🔴 Blocking gameplay - requires immediate attention
+- **Issue**: Action submissions redirect to create new game screen
+- **Impact**: Game unplayable after first action
+- **Next Action**: Use diagnostic tool to capture root cause data
+- **Timeline**: Immediate resolution required
+
+#### **Bug Resolution Workflow**
+1. **Immediate**: Run diagnostic tool and capture console output
+2. **Analysis**: Identify exact failure point in action flow  
+3. **Fix**: Implement targeted solution based on root cause
+4. **Validation**: Test fix with diagnostic monitoring
+5. **Regression**: Run test suite to ensure no new issues
+
+### ✅ **Completed High Priority Items**
+
+#### **Infrastructure & Debugging** ✅
 1. **Enhanced Logging System** ✅ 
-   - ✅ Implemented structured JSON logging with contextual information
-   - ✅ Added correlation IDs for request tracking
-   - ✅ Created debugging endpoints for troubleshooting
+   - Structured JSON logging with correlation IDs
+   - Debug endpoints for troubleshooting
+   - Performance monitoring and caching
 
-2. **Code Cleanup** ✅
-   - ✅ Removed obsolete files in `/backend/archive/` and `/backend/tests/archive/`
-   - ✅ Consolidated documentation files
-   - ✅ Standardized error handling across components
+2. **Frontend Architecture** ✅
+   - Complete system documentation (`FRONTEND_ARCHITECTURE.md`)
+   - Comprehensive test suite (5 test files)
+   - Real-time diagnostic tool (`DebugDiagnostic.js`)
+   - Enhanced state management safeguards
 
-3. **Performance Optimization** ✅
-   - ✅ Profiled critical game paths with execution timing
-   - ✅ Optimized AI decision-making and hand evaluation
-   - ✅ Implemented intelligent caching and connection pooling
+3. **User Experience** ✅
+   - Flexible authentication with user control
+   - Clear player identification with actual names
+   - Enhanced visual distinction (human vs AI players)
+   - Improved session management
 
-### Medium Priority
-1. **Frontend Integration**
-   - Update React components to use improved backend APIs
-   - Add real-time error handling and user feedback
-   - Implement proper loading states
+4. **Code Quality** ✅
+   - Removed obsolete archive files
+   - Consolidated documentation
+   - Standardized error handling
+   - Added React Testing Library support
 
-2. **Advanced AI Strategies**
-   - Implement more sophisticated decision-making algorithms
-   - Add opponent modeling and adaptation
-   - Enhance Monte Carlo simulations
+### 📋 **Medium Priority** (After Bug Fix)
 
-3. **Tournament Mode**
-   - Multi-table tournament functionality
-   - Blind structure progression
-   - Elimination tracking
+#### **Frontend Polish**
+- Real-time error handling improvements
+- Enhanced loading states and transitions
+- Mobile responsiveness optimization
+- Performance monitoring integration
+
+#### **Game Features**
+- Tournament mode implementation
+- Advanced AI strategies and opponent modeling
+- Hand history and replay functionality
+- Player statistics and progress tracking
 
 ### Long Term
 1. **Machine Learning Integration**

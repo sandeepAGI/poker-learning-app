@@ -117,6 +117,15 @@ const PokerGameContainer = ({ onLogout }) => {
               <span className="text-gray-300">Welcome, {state.playerName}</span>
             )}
             <button
+              onClick={() => {
+                localStorage.setItem('ask_for_name_on_startup', 'true');
+                onLogout();
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm transition-colors"
+            >
+              Change Player
+            </button>
+            <button
               onClick={onLogout}
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm transition-colors"
             >
@@ -171,10 +180,13 @@ const PokerGameContainer = ({ onLogout }) => {
                 <div className="space-y-2 max-h-40 overflow-y-auto">
                   {state.actionHistory.slice(0, 10).map((action, index) => {
                     const player = state.players.find(p => p.player_id === action.playerId || p.id === action.playerId);
-                    const playerName = player ? (action.playerId === state.playerId ? `${player.name} (You)` : player.name) : action.playerId;
+                    const isYou = action.playerId === state.playerId;
+                    const playerName = isYou ? (state.playerName || player?.name) : (player?.name || action.playerId);
                     return (
                     <div key={index} className="text-sm text-gray-300">
-                      <span className="text-blue-400">{playerName}</span>
+                      <span className={`${isYou ? 'text-blue-300 font-semibold' : 'text-gray-400'}`}>
+                        {isYou ? '👤' : '🤖'} {playerName}{isYou ? ' (You)' : ''}
+                      </span>
                       {' '}
                       <span className="text-white">{action.action}</span>
                       {action.amount && (

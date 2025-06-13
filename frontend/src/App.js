@@ -3,6 +3,7 @@ import { GameProvider } from './store/gameStore';
 import PokerGameContainer from './components/PokerGameContainer';
 import AuthModal from './components/AuthModal';
 import DebugPanel from './components/DebugPanel';
+import DebugDiagnostic from './components/DebugDiagnostic';
 import ErrorBoundary from './components/ErrorBoundary';
 import { auth } from './services/apiClient';
 
@@ -11,8 +12,17 @@ function App() {
   const [showDebug, setShowDebug] = useState(false);
 
   useEffect(() => {
-    // Check for existing authentication
-    setIsAuthenticated(auth.isAuthenticated());
+    // Check for existing authentication but allow fresh start option
+    const hasToken = auth.isAuthenticated();
+    const shouldAskForName = localStorage.getItem('ask_for_name_on_startup') === 'true';
+    
+    // If user wants fresh start or no token exists, show auth modal
+    if (shouldAskForName || !hasToken) {
+      setIsAuthenticated(false);
+      localStorage.removeItem('ask_for_name_on_startup');
+    } else {
+      setIsAuthenticated(hasToken);
+    }
 
     // Listen for authentication events
     const handleAuthRequired = () => {
@@ -63,6 +73,9 @@ function App() {
 
             {/* Debug panel */}
             {showDebug && <DebugPanel />}
+            
+            {/* Bug diagnostic tool */}
+            <DebugDiagnostic />
 
             <PokerGameContainer onLogout={handleLogout} />
           </GameProvider>

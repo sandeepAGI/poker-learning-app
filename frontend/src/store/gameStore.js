@@ -241,13 +241,20 @@ const gameReducer = (state, action) => {
 };
 
 // Helper function to map backend response to frontend state
-const mapBackendResponse = (response) => {
-  // Ensure we maintain the playing state if we have players and a game is active
-  const hasActivePlayers = response.players && response.players.length > 0;
-  const isGameActive = response.current_state && response.current_state !== 'finished';
+export const mapBackendResponse = (response) => {
+  // Only set game state to LOBBY if the game is explicitly finished or no players exist
+  const hasPlayers = response.players && response.players.length > 0;
+  const isGameFinished = response.current_state === 'finished' || response.game_status === 'finished';
+  
+  // Always stay in PLAYING state if we have players and the game isn't finished
+  // This prevents unexpected redirects to lobby after actions
+  let gameState = GAME_STATES.PLAYING;
+  if (!hasPlayers || isGameFinished) {
+    gameState = GAME_STATES.LOBBY;
+  }
   
   return {
-    gameState: (hasActivePlayers && isGameActive) ? GAME_STATES.PLAYING : GAME_STATES.LOBBY,
+    gameState,
     roundState: response.current_state || ROUND_STATES.PRE_FLOP,
     players: response.players || [],
     pot: response.pot || 0,

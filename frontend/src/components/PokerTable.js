@@ -5,7 +5,7 @@ const PokerTable = () => {
   const { state, computed } = useGame();
 
   const renderPlayerSeat = (player, index) => {
-    const isCurrentPlayer = player.id === state.playerId;
+    const isCurrentPlayer = player.id === state.playerId || player.player_id === state.playerId;
     const isActivePlayer = index === state.currentPlayerIndex;
     const isDealer = index === state.dealerIndex;
 
@@ -13,20 +13,25 @@ const PokerTable = () => {
       <div
         key={player.id}
         className={`absolute transform -translate-x-1/2 -translate-y-1/2 ${
-          isCurrentPlayer ? 'border-2 border-blue-400 bg-blue-900' : 'border border-gray-600'
+          isCurrentPlayer ? 'border-4 border-blue-400 bg-blue-900 shadow-lg shadow-blue-500/50' : 'border border-gray-600'
         } ${
-          isActivePlayer ? 'bg-yellow-900' : isCurrentPlayer ? 'bg-blue-900' : 'bg-gray-800'
-        } rounded-lg p-3 min-w-32`}
+          isActivePlayer ? 'bg-yellow-900 ring-2 ring-yellow-400' : isCurrentPlayer ? 'bg-blue-900' : 'bg-gray-800'
+        } rounded-lg p-3 min-w-36`}
         style={{
           left: `${50 + 35 * Math.cos((index * 2 * Math.PI) / state.players.length)}%`,
           top: `${50 + 25 * Math.sin((index * 2 * Math.PI) / state.players.length)}%`
         }}
       >
         <div className="text-center">
-          <div className="text-sm font-semibold text-white mb-1">
-            {isCurrentPlayer ? `${player.name} (You)` : player.name}
-            {isDealer && <span className="ml-1 text-yellow-400">D</span>}
-            {isCurrentPlayer && <span className="ml-1 text-blue-400">👤</span>}
+          <div className={`text-sm font-semibold mb-1 ${
+            isCurrentPlayer ? 'text-blue-200 font-bold' : 'text-white'
+          }`}>
+            <div className={`${isCurrentPlayer ? 'text-blue-300 font-bold' : 'text-white'}`}>
+              {isCurrentPlayer ? '👤' : '🤖'} 
+              {isCurrentPlayer ? (state.playerName || player.name || 'You') : (player.name || 'AI Player')}
+              {isCurrentPlayer ? ' (You)' : ''}
+            </div>
+            {isDealer && <span className="ml-1 text-yellow-400 text-lg">🔥</span>}
           </div>
           <div className="text-xs text-green-400">${player.chips}</div>
           {player.current_bet > 0 && (
