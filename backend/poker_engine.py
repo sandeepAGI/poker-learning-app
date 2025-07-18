@@ -4,6 +4,7 @@ import json
 from typing import List, Dict, Optional, Tuple
 from enum import Enum
 from dataclasses import dataclass, field
+from datetime import datetime
 from treys import Evaluator, Card
 
 class GameState(Enum):
@@ -12,6 +13,29 @@ class GameState(Enum):
     TURN = "turn"
     RIVER = "river"
     SHOWDOWN = "showdown"
+
+@dataclass
+class HandEvent:
+    """Track events that happen during a hand for learning."""
+    timestamp: str
+    event_type: str  # "deal", "bet", "fold", "call", "raise", "showdown"
+    player_id: str
+    action: str
+    amount: int = 0
+    hand_strength: float = 0.0
+    reasoning: str = ""
+    pot_size: int = 0
+    current_bet: int = 0
+
+@dataclass 
+class AIDecision:
+    """AI decision with reasoning for transparency."""
+    action: str
+    amount: int
+    reasoning: str
+    hand_strength: float
+    pot_odds: float
+    confidence: float
 
 @dataclass
 class Player:
@@ -127,48 +151,148 @@ class HandEvaluator:
         return {winner_id: 1 for winner_id in winners}  # Equal split
 
 class AIStrategy:
-    """Simple AI strategies extracted from your implementation."""
+    """AI strategies with decision reasoning for learning."""
+    
+    @staticmethod
+    def make_decision_with_reasoning(personality: str, hole_cards: List[str], community_cards: List[str], 
+                                   current_bet: int, pot_size: int, player_stack: int, player_bet: int = 0) -> AIDecision:
+        """Make AI decision with full reasoning for transparency."""
+        
+        # Hand strength calculation
+        evaluator = HandEvaluator()
+        hand_score, hand_rank = evaluator.evaluate_hand(hole_cards, community_cards)
+        
+        # Proper hand strength based on poker hand rankings
+        # Treys scores: Royal Flush=1, Straight Flush=2-10, Four of a Kind=11-166, etc.
+        if hand_score <= 10:  # Straight flush or better
+            hand_strength = 0.95
+        elif hand_score <= 166:  # Four of a kind
+            hand_strength = 0.90
+        elif hand_score <= 322:  # Full house  
+            hand_strength = 0.85
+        elif hand_score <= 1599:  # Flush
+            hand_strength = 0.75
+        elif hand_score <= 1609:  # Straight
+            hand_strength = 0.65
+        elif hand_score <= 2467:  # Three of a kind
+            hand_strength = 0.55
+        elif hand_score <= 3325:  # Two pair
+            hand_strength = 0.45
+        elif hand_score <= 6185:  # One pair
+            hand_strength = 0.25  # Most pairs are weak
+        else:  # High card
+            hand_strength = 0.05  # Very weak
+        
+        # Pot odds calculation
+        call_amount = current_bet - player_bet
+        pot_odds = call_amount / (pot_size + call_amount) if (pot_size + call_amount) > 0 else 0
+        
+        # Position and stack considerations
+        effective_stack = min(player_stack, 1000)  # Simplified
+        stack_pressure = player_stack / 1000  # Stack to starting ratio
+        
+        if personality == "Conservative":
+            if hand_strength >= 0.75:  # Flush or better
+                action = "raise" if random.random() > 0.3 else "call"
+                amount = min(current_bet * 2, player_stack // 4) if action == "raise" else call_amount
+                reasoning = f"Premium hand ({hand_rank}, strength: {hand_strength:.1%}). Conservative value betting."
+                confidence = 0.9
+            elif hand_strength >= 0.45:  # Two pair or better
+                action = "call"
+                amount = call_amount
+                reasoning = f"Solid hand ({hand_rank}, strength: {hand_strength:.1%}). Conservative call."
+                confidence = 0.7
+            elif hand_strength >= 0.25 and call_amount <= player_stack // 20:  # Pairs, small bet only
+                action = "call"
+                amount = call_amount
+                reasoning = f"Marginal hand ({hand_rank}, strength: {hand_strength:.1%}). Small bet, worth a call."
+                confidence = 0.5
+            else:
+                action = "fold"
+                amount = 0
+                reasoning = f"Weak hand ({hand_rank}, strength: {hand_strength:.1%}). Conservative fold."
+                confidence = 0.9
+                
+        elif personality == "Aggressive":
+            if hand_strength >= 0.55:  # Three of a kind or better
+                action = "raise" if random.random() > 0.2 else "call"
+                amount = min(current_bet * 3, player_stack // 3) if action == "raise" else call_amount
+                reasoning = f"Strong hand ({hand_rank}, strength: {hand_strength:.1%}). Aggressive value betting."
+                confidence = 0.8
+            elif hand_strength >= 0.25:  # Any pair
+                if random.random() > 0.4:  # 60% of time
+                    action = "raise" if random.random() > 0.6 else "call"
+                    amount = min(current_bet * 2, player_stack // 4) if action == "raise" else call_amount
+                    reasoning = f"Playable hand ({hand_rank}, strength: {hand_strength:.1%}). Aggressive play to build pot."
+                    confidence = 0.6
+                else:
+                    action = "fold"
+                    amount = 0
+                    reasoning = f"Marginal hand ({hand_rank}). Aggressive fold to control pot size."
+                    confidence = 0.5
+            else:  # High card
+                if random.random() > 0.7 and call_amount <= player_stack // 40:  # 30% bluff, tiny bets only
+                    action = "raise"
+                    amount = min(current_bet * 2, player_stack // 6)
+                    reasoning = f"Weak hand ({hand_rank}) but bluffing for fold equity. Aggressive move."
+                    confidence = 0.3
+                else:
+                    action = "fold"
+                    amount = 0
+                    reasoning = f"Too weak to continue ({hand_rank}, strength: {hand_strength:.1%}). Smart aggression."
+                    confidence = 0.8
+                    
+        elif personality == "Mathematical":
+            # Mathematical approach with proper poker thresholds
+            if hand_strength >= 0.65:  # Straight or better
+                action = "raise"
+                amount = min(current_bet * 2, player_stack // 3)
+                reasoning = f"Strong hand ({hand_rank}, {hand_strength:.1%}). Mathematical value betting."
+                confidence = 0.9
+            elif hand_strength >= 0.45:  # Two pair or better
+                action = "call"
+                amount = call_amount
+                reasoning = f"Solid hand ({hand_rank}, {hand_strength:.1%}). Positive expectation call."
+                confidence = 0.8
+            elif hand_strength >= 0.25 and pot_odds <= 0.33:  # Pairs with good pot odds
+                action = "call"
+                amount = call_amount
+                reasoning = f"Marginal hand ({hand_rank}, {hand_strength:.1%}) but pot odds ({pot_odds:.1%}) justify call."
+                confidence = 0.6
+            elif hand_strength >= 0.25:  # Pairs with poor pot odds
+                action = "fold"
+                amount = 0
+                reasoning = f"Pair ({hand_rank}) but pot odds ({pot_odds:.1%}) too poor. Mathematical fold."
+                confidence = 0.8
+            else:
+                action = "fold"
+                amount = 0
+                reasoning = f"Weak hand ({hand_rank}, {hand_strength:.1%}). Clear mathematical fold."
+                confidence = 0.95
+        else:
+            # Default Conservative
+            action = "call" if hand_strength > 0.4 else "fold"
+            amount = call_amount if action == "call" else 0
+            reasoning = f"Default strategy: {action} with {hand_strength:.1%} hand strength."
+            confidence = 0.5
+        
+        return AIDecision(
+            action=action,
+            amount=amount,
+            reasoning=reasoning,
+            hand_strength=hand_strength,
+            pot_odds=pot_odds,
+            confidence=confidence
+        )
     
     @staticmethod
     def make_decision(personality: str, hole_cards: List[str], community_cards: List[str], 
                      current_bet: int, pot_size: int, player_stack: int) -> str:
-        """Make AI decision based on personality."""
-        
-        # Quick hand strength estimation
-        evaluator = HandEvaluator()
-        hand_score, hand_rank = evaluator.evaluate_hand(hole_cards, community_cards)
-        
-        # Normalize score (lower is better, so invert for strength)
-        hand_strength = max(0, (7500 - hand_score) / 7500)
-        
-        if personality == "Conservative":
-            if hand_strength > 0.7:
-                return "raise" if random.random() > 0.5 else "call"
-            elif hand_strength > 0.4:
-                return "call"
-            else:
-                return "fold"
-                
-        elif personality == "Aggressive":
-            if hand_strength > 0.3:
-                return "raise" if random.random() > 0.3 else "call"
-            elif hand_strength > 0.1:
-                return "call" if random.random() > 0.4 else "fold"
-            else:
-                return "fold" if random.random() > 0.2 else "call"  # Bluff sometimes
-                
-        elif personality == "Mathematical":
-            # Pot odds based decisions
-            pot_odds = current_bet / (pot_size + current_bet) if pot_size > 0 else 0
-            if hand_strength > pot_odds + 0.1:
-                return "call"
-            elif hand_strength > 0.6:
-                return "raise"
-            else:
-                return "fold"
-        
-        # Default Conservative
-        return "call" if hand_strength > 0.4 else "fold"
+        """Legacy method for backward compatibility."""
+        decision = AIStrategy.make_decision_with_reasoning(
+            personality, hole_cards, community_cards, current_bet, pot_size, player_stack
+        )
+        return decision.action
 
 class PokerGame:
     """Main poker game class - simplified from your excellent implementation."""
@@ -192,9 +316,36 @@ class PokerGame:
         self.dealer_index = 0
         self.hand_count = 0
         
+        # Learning features
+        self.hand_events: List[HandEvent] = []
+        self.current_hand_events: List[HandEvent] = []
+        self.last_ai_decisions: Dict[str, AIDecision] = {}
+    
+    def _log_hand_event(self, event_type: str, player_id: str, action: str, 
+                       amount: int = 0, hand_strength: float = 0.0, reasoning: str = ""):
+        """Log a hand event for learning analysis."""
+        event = HandEvent(
+            timestamp=datetime.now().isoformat(),
+            event_type=event_type,
+            player_id=player_id,
+            action=action,
+            amount=amount,
+            hand_strength=hand_strength,
+            reasoning=reasoning,
+            pot_size=self.pot,
+            current_bet=self.current_bet
+        )
+        self.current_hand_events.append(event)
+        
     def start_new_hand(self):
         """Start a new poker hand."""
+        # Save previous hand events to history
+        if self.current_hand_events:
+            self.hand_events.extend(self.current_hand_events)
+        
         self.hand_count += 1
+        self.current_hand_events = []  # Reset for new hand
+        self.last_ai_decisions = {}
         
         # Reset for new hand
         for player in self.players:
@@ -208,10 +359,12 @@ class PokerGame:
         # Reset deck
         self.deck_manager.reset()
         
-        # Deal hole cards
+        # Deal hole cards and log events
         for player in self.players:
             if player.is_active:
                 player.hole_cards = self.deck_manager.deal_cards(2)
+                self._log_hand_event("deal", player.player_id, "hole_cards", 0, 0.0, 
+                                   f"Dealt {len(player.hole_cards)} hole cards")
         
         # Post blinds
         self._post_blinds()
@@ -230,22 +383,52 @@ class PokerGame:
         self.current_bet = 10
     
     def submit_human_action(self, action: str, amount: int = None) -> bool:
-        """Process human player action."""
+        """Process human player action with logging."""
         human_player = next(p for p in self.players if p.is_human)
         
         if not human_player.is_active:
             return False
         
+        # Calculate hand strength for human player using same logic as AI
+        hand_strength = 0.0
+        if human_player.hole_cards:
+            hand_score, _ = self.hand_evaluator.evaluate_hand(human_player.hole_cards, self.community_cards)
+            # Use same proper hand strength calculation as AI
+            if hand_score <= 10:  # Straight flush or better
+                hand_strength = 0.95
+            elif hand_score <= 166:  # Four of a kind
+                hand_strength = 0.90
+            elif hand_score <= 322:  # Full house  
+                hand_strength = 0.85
+            elif hand_score <= 1599:  # Flush
+                hand_strength = 0.75
+            elif hand_score <= 1609:  # Straight
+                hand_strength = 0.65
+            elif hand_score <= 2467:  # Three of a kind
+                hand_strength = 0.55
+            elif hand_score <= 3325:  # Two pair
+                hand_strength = 0.45
+            elif hand_score <= 6185:  # One pair
+                hand_strength = 0.25
+            else:  # High card
+                hand_strength = 0.05
+        
         if action == "fold":
             human_player.is_active = False
+            self._log_hand_event("action", human_player.player_id, "fold", 0, 
+                               hand_strength, f"Human player folded with {hand_strength:.1%} hand strength")
         elif action == "call":
             call_amount = self.current_bet - human_player.current_bet
             bet_amount = human_player.bet(call_amount)
             self.pot += bet_amount
+            self._log_hand_event("action", human_player.player_id, "call", bet_amount,
+                               hand_strength, f"Human called ${call_amount}")
         elif action == "raise" and amount:
             bet_amount = human_player.bet(amount)
             self.pot += bet_amount
             self.current_bet = amount
+            self._log_hand_event("action", human_player.player_id, "raise", bet_amount,
+                               hand_strength, f"Human raised to ${amount}")
         
         # Process AI actions
         self._process_ai_actions()
@@ -256,25 +439,37 @@ class PokerGame:
         return True
     
     def _process_ai_actions(self):
-        """Process AI player actions."""
+        """Process AI player actions with reasoning for learning."""
         for player in self.players:
             if not player.is_human and player.is_active and not player.all_in:
-                decision = AIStrategy.make_decision(
+                # Get AI decision with full reasoning
+                ai_decision = AIStrategy.make_decision_with_reasoning(
                     player.personality, player.hole_cards, self.community_cards,
-                    self.current_bet, self.pot, player.stack
+                    self.current_bet, self.pot, player.stack, player.current_bet
                 )
                 
-                if decision == "fold":
+                # Store decision for frontend display
+                self.last_ai_decisions[player.player_id] = ai_decision
+                
+                # Process the action
+                if ai_decision.action == "fold":
                     player.is_active = False
-                elif decision == "call":
+                    self._log_hand_event("action", player.player_id, "fold", 0, 
+                                       ai_decision.hand_strength, ai_decision.reasoning)
+                elif ai_decision.action == "call":
                     call_amount = self.current_bet - player.current_bet
                     bet_amount = player.bet(call_amount)
                     self.pot += bet_amount
-                elif decision == "raise":
-                    raise_amount = self.current_bet + 20  # Simple raise
+                    self._log_hand_event("action", player.player_id, "call", bet_amount,
+                                       ai_decision.hand_strength, ai_decision.reasoning)
+                elif ai_decision.action == "raise":
+                    raise_amount = min(ai_decision.amount, player.stack)
+                    total_bet = raise_amount + player.current_bet
                     bet_amount = player.bet(raise_amount)
                     self.pot += bet_amount
-                    self.current_bet = raise_amount
+                    self.current_bet = max(self.current_bet, total_bet)
+                    self._log_hand_event("action", player.player_id, "raise", bet_amount,
+                                       ai_decision.hand_strength, ai_decision.reasoning)
     
     def _maybe_advance_state(self):
         """Advance game state if betting round is complete."""
@@ -336,7 +531,7 @@ class PokerGame:
         }
     
     def get_game_state(self) -> Dict:
-        """Get current game state."""
+        """Get current game state with learning data."""
         return {
             "game_state": self.current_state.value,
             "players": [
@@ -353,5 +548,26 @@ class PokerGame:
             "community_cards": self.community_cards,
             "pot": self.pot,
             "current_bet": self.current_bet,
-            "hand_count": self.hand_count
+            "hand_count": self.hand_count,
+            # Learning features
+            "ai_decisions": {
+                player_id: {
+                    "action": decision.action,
+                    "reasoning": decision.reasoning,
+                    "hand_strength": decision.hand_strength,
+                    "pot_odds": decision.pot_odds,
+                    "confidence": decision.confidence
+                } for player_id, decision in self.last_ai_decisions.items()
+            },
+            "current_hand_events": [
+                {
+                    "timestamp": event.timestamp,
+                    "event_type": event.event_type,
+                    "player_id": event.player_id,
+                    "action": event.action,
+                    "amount": event.amount,
+                    "reasoning": event.reasoning,
+                    "hand_strength": event.hand_strength
+                } for event in self.current_hand_events[-5:]  # Last 5 events
+            ]
         }

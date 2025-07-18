@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = 'http://localhost:8000/api';
 
 function App() {
   const [gameId, setGameId] = useState(null);
@@ -11,6 +11,7 @@ function App() {
   const [playerName, setPlayerName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showLearning, setShowLearning] = useState(true);
 
   const createGame = async () => {
     if (!playerName.trim()) {
@@ -181,6 +182,117 @@ function App() {
           </button>
         </div>
       )}
+
+      {/* Learning Features */}
+      <div className="learning-section">
+        <div className="learning-header">
+          <h3>🎓 Learning Center</h3>
+          <button 
+            className="toggle-learning"
+            onClick={() => setShowLearning(!showLearning)}
+          >
+            {showLearning ? 'Hide' : 'Show'} Learning
+          </button>
+        </div>
+        
+        {showLearning && (
+          <div className="learning-content">
+            {/* AI Decisions */}
+            {gameState.ai_decisions && Object.keys(gameState.ai_decisions).length > 0 && (
+              <div className="ai-decisions">
+                <h4>🤖 AI Thoughts This Round</h4>
+                {Object.entries(gameState.ai_decisions).map(([playerId, decision]) => {
+                  const player = gameState.players.find(p => p.player_id === playerId);
+                  return (
+                    <div key={playerId} className="ai-decision">
+                      <div className="ai-decision-header">
+                        <strong>{player?.name}</strong> 
+                        <span className="action-badge">{decision.action.toUpperCase()}</span>
+                        <span className="confidence">({Math.round(decision.confidence * 100)}% confident)</span>
+                      </div>
+                      <div className="ai-reasoning">"{decision.reasoning}"</div>
+                      <div className="ai-stats">
+                        Hand Strength: {Math.round(decision.hand_strength * 100)}% | 
+                        Pot Odds: {Math.round(decision.pot_odds * 100)}%
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Hand Timeline */}
+            {gameState.current_hand_events && gameState.current_hand_events.length > 0 && (
+              <div className="hand-timeline">
+                <h4>📋 Hand Timeline</h4>
+                <div className="timeline">
+                  {gameState.current_hand_events.slice(-8).map((event, i) => {
+                    const player = gameState.players.find(p => p.player_id === event.player_id);
+                    const isHuman = event.player_id === 'human';
+                    return (
+                      <div key={i} className={`timeline-event ${isHuman ? 'human-event' : 'ai-event'}`}>
+                        <div className="event-time">
+                          {new Date(event.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}
+                        </div>
+                        <div className="event-content">
+                          <strong>{player?.name || event.player_id}</strong> {event.action}
+                          {event.amount > 0 && <span className="amount"> ${event.amount}</span>}
+                          {event.hand_strength > 0 && (
+                            <span className="hand-strength"> ({Math.round(event.hand_strength * 100)}% strength)</span>
+                          )}
+                        </div>
+                        {event.reasoning && event.reasoning !== `Dealt ${event.amount} hole cards` && (
+                          <div className="event-reasoning">💭 {event.reasoning}</div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Hand Strength Meter for Human */}
+            {humanPlayer && humanPlayer.hole_cards && humanPlayer.hole_cards.length > 0 && (
+              <div className="hand-strength-meter">
+                <h4>💪 Your Hand Analysis</h4>
+                <div className="strength-display">
+                  <div className="cards-display">
+                    Your cards: {humanPlayer.hole_cards.map((card, i) => (
+                      <span key={i} className="card">{card}</span>
+                    ))}
+                  </div>
+                  {/* We'll calculate this from recent events */}
+                  {(() => {
+                    const lastHumanEvent = gameState.current_hand_events
+                      .filter(e => e.player_id === 'human' && e.hand_strength > 0)
+                      .pop();
+                    if (lastHumanEvent) {
+                      const strength = Math.round(lastHumanEvent.hand_strength * 100);
+                      return (
+                        <div className="strength-meter">
+                          <div className="strength-bar">
+                            <div 
+                              className="strength-fill" 
+                              style={{width: `${strength}%`, backgroundColor: strength > 70 ? '#28a745' : strength > 40 ? '#ffc107' : '#dc3545'}}
+                            ></div>
+                          </div>
+                          <div className="strength-text">Hand Strength: {strength}%</div>
+                          <div className="strength-advice">
+                            {strength > 70 ? "💚 Strong hand - consider betting for value" :
+                             strength > 40 ? "💛 Decent hand - play cautiously" :
+                             "❤️ Weak hand - consider folding unless pot odds are favorable"}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Controls */}
       <div className="controls">
