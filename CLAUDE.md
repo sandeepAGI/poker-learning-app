@@ -1,8 +1,4 @@
 Start by reviewing the README file and the codebase
-When I start gameplay, I still see that my name is in the cache, it is not asking for it
-Also, the players are not clearly marked in the screen
-Please fix these two issues
-Create new unit tests
-Then run unit and regression tests
-After completion, update README 
-Shutdown any servers or programs that are still running prior to exit
+This project has gotten out of me because I believe it became too complex
+I think we need to start by evaluating whether we get rid of all the API and FE related code and start again with sound design principles
+Let me know if that is your assessment
