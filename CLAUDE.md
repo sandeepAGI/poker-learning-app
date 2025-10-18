@@ -42,7 +42,7 @@ This project has become too complex with over-engineering in the API and fronten
 **Testing Checkpoint 0.2**:
 - [x] All original code safely archived with timestamps
 - [x] Archive directory has README explaining what's inside
-- [ ] Git commit created: "Phase 0 complete: Documentation cleanup and code archival"
+- [x] Git commit created: "Phase 0 complete: Documentation cleanup and code archival"
 - [x] Working directory ready for new implementation
 
 ### Phase 0 Completion: Git Commit & Push
@@ -516,6 +516,115 @@ This ensures:
 
 ---
 
+## DOCUMENTATION MANAGEMENT POLICY
+
+### Core Principle
+**ZERO DOCUMENTATION SPRAWL**: Strictly control documentation growth to prevent the complexity we're trying to eliminate.
+
+### Allowed Documentation Files (MAX 5)
+
+1. **CLAUDE.md** (THIS FILE)
+   - **Purpose**: Master refactoring plan and single source of truth
+   - **Updates**: Phase completion, findings, discoveries
+   - **Keep**: Concise summaries only, detailed analysis in Update History
+
+2. **README.md**
+   - **Purpose**: User-facing quick start and status
+   - **Updates**: After Phase 4 only (final documentation)
+   - **Keep**: < 200 lines, simple setup instructions
+
+3. **BE-FINDINGS.md**
+   - **Purpose**: Critical bugs reference
+   - **Updates**: NEVER (historical record)
+   - **Archive**: After Phase 1 when bugs are fixed
+
+4. **REQUIREMENTS.md**
+   - **Purpose**: What to preserve vs simplify
+   - **Updates**: NEVER (historical record)
+   - **Archive**: After Phase 2 when approach is validated
+
+5. **ARCHITECTURE.md** (Create in Phase 4)
+   - **Purpose**: Final design decisions
+   - **Updates**: One-time creation in Phase 4
+   - **Keep**: < 150 lines, design rationale only
+
+### FORBIDDEN During Development
+
+❌ **DO NOT CREATE**:
+- No FINDINGS.md, ANALYSIS.md, REVIEW.md files
+- No separate verification reports
+- No phase-specific documentation
+- No TODO.md, NOTES.md, THOUGHTS.md
+- No duplicate documentation with different names
+
+❌ **DO NOT LET GROW**:
+- CLAUDE.md must stay < 600 lines (currently ~540)
+- If it grows beyond 600 lines, archive old content
+- Update History should be concise bullets, not essays
+
+### Where to Put Findings
+
+**During Development (Phases 0-3)**:
+- ✅ **Critical discoveries**: Add to CLAUDE.md "Update History" as concise bullets
+- ✅ **Bug findings**: Reference BE-FINDINGS.md (don't duplicate)
+- ✅ **Code issues**: Add inline comments in code, not separate docs
+- ✅ **Test failures**: In test output and git commit messages
+
+**Example - GOOD**:
+```
+### 2025-10-18: Phase 0 Backend Review
+- Reviewed REQUIREMENTS.md against actual code (poker_engine.py: 572 lines)
+- Found: ChipLedger, StateManager, JWT don't exist (no removal needed)
+- Found: Only 3 AI personalities (not 4), no Risk-Taker
+- Found: File structure is single-file, not multi-directory
+- Conclusion: Backend already simplified, focus Phase 1 on fixing 5 bugs
+```
+
+**Example - BAD**:
+```
+Created 250-line REQUIREMENTS-VS-REALITY.md with detailed analysis...
+(This creates documentation sprawl)
+```
+
+### Documentation Review Checkpoints
+
+**At End of Each Phase**:
+- [ ] Count .md files in root (must be ≤ 5)
+- [ ] Check CLAUDE.md line count (must be < 600)
+- [ ] Archive historical docs to archive/docs-original/
+- [ ] Remove any temporary analysis files
+
+### Archive Strategy
+
+**When to Archive**:
+- BE-FINDINGS.md → Archive after Phase 1 (bugs fixed)
+- REQUIREMENTS.md → Archive after Phase 2 (approach validated)
+- DOCUMENTATION-REVIEW.md → Archive now (Phase 0 complete)
+
+**How to Archive**:
+```bash
+mv OLD-DOC.md archive/docs-original/
+# Add note to CLAUDE.md Update History
+```
+
+### Violation Response
+
+**If documentation sprawls** (> 5 .md files or CLAUDE.md > 600 lines):
+1. STOP work immediately
+2. Consolidate into existing docs
+3. Archive what's no longer needed
+4. Delete redundant files
+5. Update this policy if needed
+
+### Success Metrics
+
+**Phase 0**: ✅ 5 .md files (CLAUDE.md, README.md, BE-FINDINGS.md, REQUIREMENTS.md, DOCUMENTATION-REVIEW.md)
+**Phase 1-3**: ≤ 5 .md files
+**Phase 4**: ≤ 5 .md files (add ARCHITECTURE.md, archive BE-FINDINGS.md + REQUIREMENTS.md)
+**Final**: Exactly 3 .md files (CLAUDE.md, README.md, ARCHITECTURE.md)
+
+---
+
 ## UPDATE HISTORY
 
 ### 2025-10-18: Initial Refactoring Plan Created
@@ -536,4 +645,24 @@ This ensures:
 - Created archive/README.md explaining what was archived and why
 - Created new temporary README.md for refactoring period
 - Updated CLAUDE.md with git commit requirements for each phase
+- **Added Documentation Management Policy** to prevent sprawl (max 5 .md files)
 - Repository ready for Phase 1
+
+### 2025-10-18: Phase 0 Backend Review (REQUIREMENTS.md vs Reality)
+**Reviewed**: REQUIREMENTS.md claims against actual backend code (poker_engine.py: 572 lines, main.py: 129 lines)
+
+**Key Findings**:
+- ✅ **Already simplified**: 701 lines total (within 500-800 target), NOT "2000+" as claimed
+- ❌ **File structure wrong**: Claims game/, ai/strategies/, models/ directories don't exist - everything in one file
+- ❌ **Removal claims false**: ChipLedger, StateManager, JWT, WebSockets, correlation tracking NOT present (already removed/never added)
+- ✅ **Good features verified**: DeckManager clean, Treys+MonteCarlo excellent, AI decision tracking exceptional
+- ⚠️ **3 AI personalities** (not 4): Conservative, Aggressive, Mathematical - no "Risk-Taker"
+- ❌ **"Solid/excellent" contradicted**: 5 critical bugs from BE-FINDINGS.md prove it's buggy but fixable
+- ✅ **Learning features**: HandEvent tracking, AI reasoning, action history all well-implemented
+- ❌ **Missing features**: SPR calculations (claimed), side pots (required), proper turn order
+
+**Critical Insight**: Backend has **good structure** but **critical bugs**. Not "excellent" - it's **buggy but well-organized**.
+
+**Phase 1 Implication**: Focus on **fixing 5 bugs** (BE-FINDINGS.md), NOT removing complexity that doesn't exist.
+
+**Documentation Strategy**: Use REQUIREMENTS.md for philosophy (what to value), NOT as facts (what exists).
