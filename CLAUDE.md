@@ -167,8 +167,119 @@ git push origin main
 
 ---
 
+## PHASE 1.5: Enhance AI Strategy with SPR (Stack-to-Pot Ratio)
+**Goal**: Add robust pot-relative decision making to AI strategies before building API.
+
+### Why This Phase
+UAT testing revealed AI strategies lack sophistication - they don't account for pot size relative to stacks. This is a critical poker concept that makes AI play more realistic and provides better learning examples.
+
+### Step 1.5.1: Add SPR Calculation
+- [ ] Add SPR calculation to `make_decision_with_reasoning()`
+- [ ] Formula: `spr = player_stack / pot_size` (or infinity if pot is 0)
+- [ ] Pass SPR to each personality's decision logic
+
+**Code Location**: Lines 219-352 in `poker_engine.py` (AIStrategy class)
+
+### Step 1.5.2: Enhance Conservative Strategy with SPR
+- [ ] Low SPR (< 3): More willing to commit with decent hands (pot-committed scenario)
+- [ ] Medium SPR (3-7): Standard play
+- [ ] High SPR (> 7): Tighter play, need premium hands
+
+**Logic**:
+```python
+# Conservative with SPR awareness
+if spr < 3 and hand_strength >= 0.45:  # Pot-committed with two pair+
+    action = "raise"
+    reasoning = f"Low SPR ({spr:.1f}) - pot committed with {hand_rank}"
+elif spr > 10 and hand_strength < 0.65:  # Deep stacks need strong hands
+    action = "fold"
+    reasoning = f"High SPR ({spr:.1f}) - need premium hand, folding {hand_rank}"
+```
+
+### Step 1.5.3: Enhance Aggressive Strategy with SPR
+- [ ] Low SPR: Push/fold strategy with wider range
+- [ ] High SPR: More bluffs and pressure plays
+
+**Logic**:
+```python
+# Aggressive with SPR awareness
+if spr < 3 and hand_strength >= 0.25:  # Any pair, push/fold
+    action = "raise"
+    reasoning = f"Low SPR ({spr:.1f}) - aggressive push with {hand_rank}"
+elif spr > 7:  # Deep stacks - apply pressure
+    bluff_chance = 0.4 if call_amount <= player_stack // 20 else 0.2
+```
+
+### Step 1.5.4: Enhance Mathematical Strategy with SPR
+- [ ] Calculate pot odds AND SPR
+- [ ] Use both to make optimal EV decisions
+- [ ] Explain decision with both metrics
+
+**Logic**:
+```python
+# Mathematical with SPR + pot odds
+implied_odds = spr * pot_odds  # Simplified implied odds
+if hand_strength >= 0.25 and (pot_odds <= 0.33 or spr < 3):
+    action = "call"
+    reasoning = f"Pot odds {pot_odds:.1%}, SPR {spr:.1f} - positive EV"
+```
+
+### Step 1.5.5: Create SPR Test Suite
+- [ ] Create `tests/test_ai_spr_decisions.py`
+- [ ] Test low SPR scenarios (pot-committed)
+- [ ] Test high SPR scenarios (deep stacks)
+- [ ] Test medium SPR (balanced play)
+- [ ] Verify different personalities make different SPR-based decisions
+
+**Testing Checkpoint 1.5.5**:
+```python
+def test_conservative_low_spr():
+    """Conservative should be more willing to commit with low SPR."""
+    # Setup: pot=300, player_stack=200 (SPR = 0.67)
+    # Hand: Two pair (hand_strength = 0.45)
+    # Expected: Raise (pot-committed)
+
+def test_aggressive_high_spr():
+    """Aggressive should bluff more with high SPR."""
+    # Setup: pot=50, player_stack=1000 (SPR = 20)
+    # Hand: High card (hand_strength = 0.05)
+    # Expected: Occasional bluffs/raises
+
+def test_mathematical_spr_pot_odds():
+    """Mathematical should use both SPR and pot odds."""
+    # Test various SPR + pot odds combinations
+    # Verify optimal EV decisions
+```
+
+### Step 1.5.6: Update AIDecision Output
+- [ ] Add `spr` field to AIDecision dataclass
+- [ ] Include SPR in reasoning strings for transparency
+- [ ] Update all tests to handle new field
+
+**PHASE 1.5 GATE: Cannot proceed to Phase 2 until SPR tests pass**
+
+### Phase 1.5 Completion: Git Commit & Push
+```bash
+git add .
+git commit -m "Phase 1.5 complete: AI strategies enhanced with SPR
+
+- Added Stack-to-Pot Ratio calculation to AI decision-making
+- Conservative: SPR-aware tightness (tighter at high SPR)
+- Aggressive: SPR-aware aggression (more bluffs at high SPR)
+- Mathematical: Combined SPR + pot odds for optimal EV
+- All personalities now make pot-relative decisions
+- Comprehensive SPR test suite
+
+Tests: [X/X SPR tests passing]
+All existing tests still passing"
+
+git push origin main
+```
+
+---
+
 ## PHASE 2: Build Simple API Layer
-**Goal**: Create minimal FastAPI wrapper around fixed game engine.
+**Goal**: Create minimal FastAPI wrapper around enhanced game engine.
 
 ### Step 2.1: Create Simple API Structure
 - [ ] Create `backend/main.py` with 4 core endpoints
