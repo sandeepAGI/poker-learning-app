@@ -37,6 +37,7 @@ class AIDecision:
     hand_strength: float
     pot_odds: float
     confidence: float
+    spr: float = 0.0  # Stack-to-Pot Ratio for pot-relative decision making
 
 @dataclass
 class Player:
@@ -252,43 +253,76 @@ class AIStrategy:
         call_amount = current_bet - player_bet
         pot_odds = call_amount / (pot_size + call_amount) if (pot_size + call_amount) > 0 else 0
 
+        # SPR (Stack-to-Pot Ratio) calculation - key poker metric for pot-relative decisions
+        spr = player_stack / pot_size if pot_size > 0 else float('inf')
+
         if personality == "Conservative":
-            if hand_strength >= 0.75:  # Flush or better
+            # SPR-aware Conservative: Tighter with deep stacks, more committed with shallow stacks
+            if spr < 3 and hand_strength >= 0.45:  # Low SPR - pot-committed with two pair+
                 action = "raise" if random.random() > 0.3 else "call"
-                # Fixed: Minimum raise is current_bet + big_blind
+                amount = max(current_bet + big_blind, player_stack) if action == "raise" else call_amount
+                amount = min(amount, player_stack)
+                reasoning = f"Low SPR ({spr:.1f}) - pot committed with {hand_rank} ({hand_strength:.1%})"
+                confidence = 0.85
+            elif spr > 10 and hand_strength < 0.65:  # High SPR - need premium hands
+                action = "fold"
+                amount = 0
+                reasoning = f"High SPR ({spr:.1f}) - need premium hand, folding {hand_rank} ({hand_strength:.1%})"
+                confidence = 0.8
+            elif hand_strength >= 0.75:  # Flush or better
+                action = "raise" if random.random() > 0.3 else "call"
                 amount = max(current_bet + big_blind, current_bet * 2) if action == "raise" else call_amount
                 amount = min(amount, player_stack)
-                reasoning = f"Premium hand ({hand_rank}, strength: {hand_strength:.1%}). Conservative value betting."
+                reasoning = f"Premium hand ({hand_rank}, {hand_strength:.1%}). Conservative value betting."
                 confidence = 0.9
             elif hand_strength >= 0.45:  # Two pair or better
                 action = "call"
                 amount = call_amount
-                reasoning = f"Solid hand ({hand_rank}, strength: {hand_strength:.1%}). Conservative call."
+                reasoning = f"Solid hand ({hand_rank}, {hand_strength:.1%}). Conservative call."
                 confidence = 0.7
             elif hand_strength >= 0.25 and call_amount <= player_stack // 20:
                 action = "call"
                 amount = call_amount
-                reasoning = f"Marginal hand ({hand_rank}, strength: {hand_strength:.1%}). Small bet, worth a call."
+                reasoning = f"Marginal hand ({hand_rank}, {hand_strength:.1%}). Small bet, worth a call."
                 confidence = 0.5
             else:
                 action = "fold"
                 amount = 0
-                reasoning = f"Weak hand ({hand_rank}, strength: {hand_strength:.1%}). Conservative fold."
+                reasoning = f"Weak hand ({hand_rank}, {hand_strength:.1%}). Conservative fold."
                 confidence = 0.9
 
         elif personality == "Aggressive":
-            if hand_strength >= 0.55:  # Three of a kind or better
+            # SPR-aware Aggressive: Push/fold with low SPR, bluff more with high SPR
+            if spr < 3 and hand_strength >= 0.25:  # Low SPR - any pair, push/fold
+                action = "raise"
+                amount = player_stack  # All-in or near all-in
+                reasoning = f"Low SPR ({spr:.1f}) - aggressive push with {hand_rank} ({hand_strength:.1%})"
+                confidence = 0.75
+            elif spr > 7 and hand_strength < 0.25:  # High SPR - more bluffs
+                bluff_chance = 0.4 if call_amount <= player_stack // 20 else 0.2
+                if random.random() < bluff_chance:
+                    action = "raise"
+                    amount = max(current_bet + big_blind, current_bet * 2)
+                    amount = min(amount, player_stack)
+                    reasoning = f"High SPR ({spr:.1f}) - applying pressure with weak {hand_rank}. Bluff play."
+                    confidence = 0.4
+                else:
+                    action = "fold"
+                    amount = 0
+                    reasoning = f"High SPR ({spr:.1f}) - weak hand ({hand_rank}), conserving chips for better spots."
+                    confidence = 0.7
+            elif hand_strength >= 0.55:  # Three of a kind or better
                 action = "raise" if random.random() > 0.2 else "call"
                 amount = max(current_bet + big_blind, current_bet * 3) if action == "raise" else call_amount
                 amount = min(amount, player_stack)
-                reasoning = f"Strong hand ({hand_rank}, strength: {hand_strength:.1%}). Aggressive value betting."
+                reasoning = f"Strong hand ({hand_rank}, {hand_strength:.1%}). Aggressive value betting."
                 confidence = 0.8
             elif hand_strength >= 0.25:  # Any pair
                 if random.random() > 0.4:
                     action = "raise" if random.random() > 0.6 else "call"
                     amount = max(current_bet + big_blind, current_bet * 2) if action == "raise" else call_amount
                     amount = min(amount, player_stack)
-                    reasoning = f"Playable hand ({hand_rank}, strength: {hand_strength:.1%}). Aggressive play to build pot."
+                    reasoning = f"Playable hand ({hand_rank}, {hand_strength:.1%}). Aggressive play to build pot."
                     confidence = 0.6
                 else:
                     action = "fold"
@@ -305,11 +339,19 @@ class AIStrategy:
                 else:
                     action = "fold"
                     amount = 0
-                    reasoning = f"Too weak to continue ({hand_rank}, strength: {hand_strength:.1%}). Smart aggression."
+                    reasoning = f"Too weak to continue ({hand_rank}, {hand_strength:.1%}). Smart aggression."
                     confidence = 0.8
 
         elif personality == "Mathematical":
-            if hand_strength >= 0.65:  # Straight or better
+            # SPR + pot odds combined for optimal EV decisions
+            implied_odds_factor = min(spr * pot_odds, 1.0) if spr != float('inf') else pot_odds
+
+            if spr < 3 and hand_strength >= 0.25:  # Low SPR - committed with any pair
+                action = "call" if call_amount < player_stack else "raise"
+                amount = call_amount if action == "call" else player_stack
+                reasoning = f"Low SPR ({spr:.1f}) - pot committed with {hand_rank}. Positive EV."
+                confidence = 0.85
+            elif hand_strength >= 0.65:  # Straight or better
                 action = "raise"
                 amount = max(current_bet + big_blind, current_bet * 2)
                 amount = min(amount, player_stack)
@@ -320,15 +362,15 @@ class AIStrategy:
                 amount = call_amount
                 reasoning = f"Solid hand ({hand_rank}, {hand_strength:.1%}). Positive expectation call."
                 confidence = 0.8
-            elif hand_strength >= 0.25 and pot_odds <= 0.33:
+            elif hand_strength >= 0.25 and (pot_odds <= 0.33 or spr < 5):
                 action = "call"
                 amount = call_amount
-                reasoning = f"Marginal hand ({hand_rank}, {hand_strength:.1%}) but pot odds ({pot_odds:.1%}) justify call."
+                reasoning = f"Marginal hand ({hand_rank}, {hand_strength:.1%}). Pot odds {pot_odds:.1%}, SPR {spr:.1f} - positive EV."
                 confidence = 0.6
             elif hand_strength >= 0.25:
                 action = "fold"
                 amount = 0
-                reasoning = f"Pair ({hand_rank}) but pot odds ({pot_odds:.1%}) too poor. Mathematical fold."
+                reasoning = f"Pair ({hand_rank}). Pot odds {pot_odds:.1%}, SPR {spr:.1f} - negative EV fold."
                 confidence = 0.8
             else:
                 action = "fold"
@@ -348,7 +390,8 @@ class AIStrategy:
             reasoning=reasoning,
             hand_strength=hand_strength,
             pot_odds=pot_odds,
-            confidence=confidence
+            confidence=confidence,
+            spr=spr
         )
 
 class PokerGame:
