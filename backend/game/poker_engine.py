@@ -118,13 +118,13 @@ class HandEvaluator:
         # Simple Monte Carlo for incomplete hands
         if len(board) < 5:
             remaining_deck = [rank + suit for rank in "23456789TJQKA" for suit in "shdc"]
-            # Remove known cards
+            # Remove known cards (player's perspective: only their cards + community)
             for card in hole_cards + community_cards:
                 if card in remaining_deck:
                     remaining_deck.remove(card)
 
             scores = []
-            for _ in range(20):  # Quick simulation
+            for _ in range(100):  # Monte Carlo simulation (increased from 20 to 100 for accuracy)
                 sim_deck = remaining_deck.copy()
                 random.shuffle(sim_deck)
                 sim_board = board + [Card.new(c.replace("10", "T")) for c in sim_deck[:5-len(board)]]
