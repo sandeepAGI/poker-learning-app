@@ -255,13 +255,12 @@ while game.current_state != GameState.SHOWDOWN and iterations < max_iterations:
     # Check if human needs to act
     current_player = game.get_current_player()
     if current_player and current_player.is_human:
+        # submit_human_action already calls _process_remaining_actions() and _maybe_advance_state()
         game.submit_human_action('call')
-
-    # Process AI actions
-    game._process_remaining_actions()
-
-    # Advance state if betting round complete
-    game._maybe_advance_state()
+    else:
+        # Only process AI actions if human is not current player
+        game._process_remaining_actions()
+        game._maybe_advance_state()
 
 # Check chips mid-game (after loop, before showdown resolution)
 mid_chips = sum(p.stack for p in game.players) + game.pot

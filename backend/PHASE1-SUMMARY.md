@@ -120,7 +120,21 @@ All 7 UATs passing - Phase 1 verified complete
 - Tests: ~400 lines
 - Total backend: ~1150 lines (within Phase 1 target)
 
-## Next Steps - Phase 2
+## Test Suite Notes
+
+### UAT-5 Test Fix (2025-10-18)
+**Issue**: UAT-5 was intermittently hanging due to double processing
+**Root Cause**: Test loop called both `submit_human_action()` AND `_process_remaining_actions()` + `_maybe_advance_state()`, but `submit_human_action()` already calls these methods internally (lines 582, 585 in poker_engine.py). This double processing caused `has_acted` flags to get out of sync.
+**Fix**: Modified UAT-5 test to only call `_process_remaining_actions()` and `_maybe_advance_state()` when current player is NOT human
+**Verification**: 10 consecutive runs with perfect chip conservation, no hanging
+
+## Next Steps - Phase 1.5
+- Add SPR (Stack-to-Pot Ratio) calculations to AI strategies
+- Enhance all 3 AI personalities with pot-relative decision making
+- Create comprehensive SPR test suite
+- See CLAUDE.md Phase 1.5 for detailed plan
+
+## Next Steps - Phase 2 (after Phase 1.5)
 - Create simple FastAPI wrapper (4 endpoints)
 - Test API integration
 - Verify end-to-end game flow through API
