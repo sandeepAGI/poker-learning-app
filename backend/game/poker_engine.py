@@ -143,21 +143,29 @@ class HandEvaluator:
         Returns list of pots with winners and amounts.
         Fixed: Bug #5 - Side pot implementation
         """
-        eligible_players = [p for p in players if p.is_active or p.all_in]
+        # Players who can win pots
+        eligible_winners = [p for p in players if p.is_active or p.all_in]
 
-        if len(eligible_players) <= 1:
-            winner = eligible_players[0] if eligible_players else None
+        # Include ALL players (even folded) when calculating pot amounts
+        # because their chips are in the pot
+        all_players_with_investment = [p for p in players if p.total_invested > 0]
+
+        if len(eligible_winners) <= 1:
+            winner = eligible_winners[0] if eligible_winners else None
             if not winner:
                 return []
+            # Pot amount is sum of ALL investments, not just winner's
+            total_pot = sum(p.total_invested for p in all_players_with_investment)
             return [{
                 'winners': [winner.player_id],
-                'amount': winner.total_invested,
-                'type': 'main'
+                'amount': total_pot,
+                'type': 'main',
+                'eligible_player_ids': [p.player_id for p in eligible_winners]
             }]
 
         # Build side pots
         pots = []
-        remaining_players = eligible_players.copy()
+        remaining_players = all_players_with_investment.copy()
 
         while remaining_players:
             # Find minimum investment among remaining players
@@ -165,21 +173,25 @@ class HandEvaluator:
             if min_investment == 0:
                 break
 
-            # Create pot at this level
+            # Create pot at this level - include ALL players' contributions
             pot_amount = 0
-            pot_players = []
+            pot_contributors = []  # All who contribute to this pot
+            eligible_for_pot = []  # Only active/all-in can win
 
             for player in remaining_players:
                 contribution = min(player.total_invested, min_investment)
                 pot_amount += contribution
                 player.total_invested -= contribution
                 if contribution > 0:
-                    pot_players.append(player)
+                    pot_contributors.append(player)
+                    # Only eligible winners can actually win this pot
+                    if player in eligible_winners:
+                        eligible_for_pot.append(player)
 
-            # Evaluate hands for this pot
-            if pot_players:
+            # Evaluate hands for this pot (only among eligible winners)
+            if eligible_for_pot:
                 hands = {}
-                for player in pot_players:
+                for player in eligible_for_pot:
                     if player.hole_cards:
                         score, rank = self.evaluate_hand(player.hole_cards, community_cards)
                         hands[player.player_id] = (score, rank, player)
@@ -191,7 +203,8 @@ class HandEvaluator:
                     pots.append({
                         'winners': winners,
                         'amount': pot_amount,
-                        'type': 'main' if len(pots) == 0 else f'side_{len(pots)}'
+                        'type': 'main' if len(pots) == 0 else f'side_{len(pots)}',
+                        'eligible_player_ids': [p.player_id for p in eligible_for_pot]
                     })
 
             # Remove players with zero investment
@@ -586,8 +599,12 @@ class PokerGame:
 
             current_player = self.players[self.current_player_index]
 
-            # Skip human player (they act via API)
-            if current_player.is_human:
+            # Stop at human player if they haven't acted yet (wait for API call)
+            if current_player.is_human and not current_player.has_acted:
+                break
+
+            # Skip human player who has already acted
+            if current_player.is_human and current_player.has_acted:
                 self.current_player_index = self._get_next_active_player_index(self.current_player_index + 1)
                 continue
 

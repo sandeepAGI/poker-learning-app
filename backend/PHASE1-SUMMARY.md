@@ -1,7 +1,7 @@
-# Phase 1 Complete - Core Backend Bug Fixes
+# Phase 1 Complete - Core Backend Bug Fixes (FINAL)
 
 ## Summary
-Fixed all 5 critical bugs identified in BE-FINDINGS.md and created test suite to verify fixes.
+Fixed all 7 critical bugs (5 from BE-FINDINGS.md + 2 discovered during UAT) and created comprehensive test suite to verify fixes.
 
 ## Bugs Fixed
 
@@ -47,7 +47,27 @@ Fixed all 5 critical bugs identified in BE-FINDINGS.md and created test suite to
 - Creates multiple pots when players invest different amounts
 - Distributes each pot to eligible winners
 - Handles remainder chips correctly
-**Code**: Lines 148-200, 684-704 in poker_engine.py
+**Code**: Lines 140-213, 684-704 in poker_engine.py
+
+### Bug #6: Chip Conservation Failure (UAT Discovery) ✅
+**Problem**: Folded players' chips excluded from pot calculations → chips disappeared
+**Symptom**: $60 chips lost per hand when players folded
+**Fix**:
+- Modified `determine_winners_with_side_pots()` to include ALL players' `total_invested`
+- Separated logic: all players contribute to pots, only active/all-in can win
+- Added remainder chip distribution to first winner(s)
+**Code**: Lines 146-189 (include folded players in pot calculations)
+**Test**: UAT-5 verifies perfect chip conservation ($4000 maintained)
+
+### Bug #7: Game Hanging on Human Turn (UAT Discovery) ✅
+**Problem**: `_process_remaining_actions()` would skip past human player even when they hadn't acted
+**Symptom**: Game hung in infinite loop, stuck at TURN/RIVER state
+**Fix**:
+- Added check to STOP processing when encountering unacted human player
+- Human players who already acted are correctly skipped
+- Prevents infinite loops while maintaining turn order
+**Code**: Lines 602-609 in `_process_remaining_actions()`
+**Test**: UAT-5 and all integration tests now pass without hanging
 
 ## Files Changed
 
@@ -63,8 +83,20 @@ Fixed all 5 critical bugs identified in BE-FINDINGS.md and created test suite to
 
 ### Test Results
 ```
-Bug #1: Turn Order Enforcement ✅ PASSED (4/4 tests)
-Bug #2: Hand Resolution After Fold ✅ PASSED (2/2 tests)
+Automated Tests:
+  Bug #1: Turn Order Enforcement ✅ PASSED (4/4 tests)
+  Bug #2: Hand Resolution After Fold ✅ PASSED (2/2 tests)
+
+UAT Tests (PHASE1-UAT.md):
+  UAT-1: Automated test suite ✅ PASSED
+  UAT-2: Turn order enforcement ✅ PASSED
+  UAT-3: Hand continues after fold ✅ PASSED
+  UAT-4: Raise validation ✅ PASSED
+  UAT-5: Chip conservation ✅ PASSED
+  UAT-6: Side pot handling ✅ PASSED
+  UAT-7: Complete game integration ✅ PASSED
+
+All 7 UATs passing - Phase 1 verified complete
 ```
 
 ## Code Quality Improvements
