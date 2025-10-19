@@ -285,6 +285,7 @@ git push origin main
 - [ ] Create `backend/main.py` with 4 core endpoints
 - [ ] Implement simple in-memory game storage (dict)
 - [ ] Add basic request/response models (Pydantic)
+- [ ] Add CORS middleware for frontend development (Next.js on port 3000)
 - [ ] Remove all complex middleware, correlation tracking, etc.
 
 **API Endpoints**:
@@ -349,55 +350,205 @@ git push origin main
 
 ---
 
-## PHASE 3: Build Simple Frontend
-**Goal**: Create clean React UI with minimal complexity.
+## PHASE 3: Build Modern, Engaging Frontend
+**Goal**: Create professional, visually engaging poker UI optimized for learning and performance.
 
-### Step 3.1: Setup Basic React App
-- [ ] Create new React app with create-react-app
-- [ ] Setup basic folder structure
-- [ ] Add axios for API calls
-- [ ] Setup simple CSS/styling
+**Tech Stack Decision**: Using Next.js 14+ instead of Create React App for:
+- Better performance (server components, code splitting, optimization)
+- Faster development (Tailwind CSS, built-in features)
+- Professional polish (Framer Motion animations)
+- Better UX for learning app (smooth interactions, visual engagement)
+- Future-proof (CRA deprecated, Next.js is React team's recommendation)
+- Lightweight in production (better tree-shaking, ~150KB vs ~200KB)
+
+### Step 3.1: Setup Next.js App with Modern Stack
+- [ ] Create Next.js 14+ app with TypeScript and Tailwind CSS
+- [ ] Install dependencies: framer-motion, zustand, axios
+- [ ] Setup project structure (app/, components/, lib/)
+- [ ] Configure Tailwind for poker theme (green felt, card colors, chip colors)
+- [ ] Setup environment variables for API endpoint
+
+**Commands**:
+```bash
+npx create-next-app@latest poker-frontend --typescript --tailwind --app
+cd poker-frontend
+npm install framer-motion zustand axios
+```
 
 **Testing Checkpoint 3.1**:
 ```bash
 cd frontend
-npm install
-npm start
-# Verify app loads without errors
+npm run dev
+# Verify app loads without errors at localhost:3000
 ```
-- [ ] React app runs successfully
+- [ ] Next.js app runs successfully
 - [ ] No build warnings
-- [ ] Can connect to backend API
+- [ ] Tailwind CSS working (test with utility classes)
+- [ ] TypeScript compiling correctly
 
-### Step 3.2: Create Core Components
-- [ ] `GameLobby.js` - Create new game interface
-- [ ] `PokerTable.js` - Display table, players, cards, pot
-- [ ] `GameControls.js` - Action buttons (fold/check/call/bet)
-- [ ] `App.js` - Simple routing and state management
+### Step 3.2: Create Core Components with Tailwind + Framer Motion
+- [ ] `components/GameLobby.tsx` - Game creation interface with animations
+- [ ] `components/PokerTable.tsx` - Oval table with green felt gradient, player positions
+- [ ] `components/Player.tsx` - Avatar, stack, cards (with fold/active animations)
+- [ ] `components/Card.tsx` - SVG or high-quality card images (flip animations)
+- [ ] `components/CommunityCards.tsx` - Flop/turn/river with deal animations
+- [ ] `components/Pot.tsx` - Center pot with chip stack visual + glow effect
+- [ ] `components/GameControls.tsx` - Action buttons (hover/active states)
+- [ ] `components/AIExplanation.tsx` - Tooltip/panel for AI reasoning (beginner/advanced toggle)
+- [ ] `lib/store.ts` - Zustand store for game state
+- [ ] `lib/api.ts` - Axios API wrapper functions
 
 **Component Requirements**:
-- Use simple `useState` and `useEffect` (no complex state management)
-- Direct API calls with axios (no abstraction layers)
-- Clear, readable code
-- Basic but functional styling
+- Use Tailwind for all styling (no CSS files)
+- Use Framer Motion for animations (card dealing, chip movement, transitions)
+- Use Zustand for global state (game state, player turn, pot)
+- TypeScript for type safety
+- Responsive design (works on desktop and tablet)
+
+**Animation Examples**:
+```tsx
+// Card dealing animation
+<motion.div
+  initial={{ x: -200, rotateY: 180 }}
+  animate={{ x: 0, rotateY: 0 }}
+  transition={{ type: "spring" }}
+>
+  <Card />
+</motion.div>
+
+// Chips sliding to pot
+<motion.div
+  animate={{ x: potPosition.x, y: potPosition.y }}
+  transition={{ type: "spring", damping: 15 }}
+>
+  <Chips amount={bet} />
+</motion.div>
+```
+
+**Tailwind Theme Examples**:
+```tsx
+// Poker table felt
+<div className="bg-gradient-to-br from-green-800 to-green-900 rounded-[50%] shadow-2xl">
+
+// Chip with gradient
+<div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-red-700 shadow-lg border-4 border-white">
+
+// Glowing pot
+<div className="bg-amber-400 rounded-full p-6 shadow-2xl shadow-amber-500/50">
+```
 
 **Testing Checkpoint 3.2**:
 ```bash
 # Manual testing checklist:
 ```
 - [ ] Can create a new game
-- [ ] Poker table displays correctly
-- [ ] Player positions shown
-- [ ] Community cards display
-- [ ] Pot amount visible
-- [ ] Action buttons appear for human player
+- [ ] Poker table displays with professional felt appearance
+- [ ] Player avatars positioned around oval table
+- [ ] Community cards display in center
+- [ ] Pot displays with visual chip representation
+- [ ] Action buttons have smooth hover effects
+- [ ] AI explanation panel displays with toggle
+- [ ] All animations run at 60fps
+- [ ] Responsive on different screen sizes
 
-### Step 3.3: Implement Game Flow
-- [ ] Connect GameLobby to POST /games
-- [ ] Poll GET /games/{id} for state updates
-- [ ] Implement action submission
-- [ ] Handle game state transitions
-- [ ] Implement "Next Hand" button
+### Step 3.2.5: Implement Beginner-Friendly AI Explanations (LEARNING FEATURE)
+**Goal**: Make AI reasoning understandable for poker beginners (learning app requirement)
+
+**Phase 1.5 Gap**: AI reasoning currently uses poker jargon ("SPR", "EV", "pot odds") that beginners won't understand
+
+**Implementation**:
+- [ ] Add `beginner_reasoning` field to AIDecision dataclass in poker_engine.py
+- [ ] Implement dual-mode reasoning generation in AIStrategy.make_decision_with_reasoning()
+- [ ] Create explanation translation layer:
+  - Technical: "Low SPR (2.5) - pot committed with Two Pair"
+  - Beginner: "The pot is large relative to my stack, so I'm committed to playing this decent hand"
+  - Technical: "High SPR (66.7) - need premium hand"
+  - Beginner: "I have lots of chips and the pot is small, so I'm only playing very strong hands"
+  - Technical: "Pot odds 30%, SPR 5.0 - positive EV"
+  - Beginner: "The pot is offering good value for my hand strength, so calling makes sense"
+
+**UI Components**:
+- [ ] Add beginner/advanced mode toggle to AIExplanation.js
+- [ ] Display beginner_reasoning by default for new users
+- [ ] Add tooltips for poker terms (SPR, EV, pot odds, hand strength %)
+- [ ] Show example hands in glossary/help section
+
+**Testing Checkpoint 3.2.5**:
+```bash
+# Manual testing with non-poker players:
+```
+- [ ] Beginner can understand AI decisions without poker knowledge
+- [ ] Toggle switches between beginner and technical explanations
+- [ ] Tooltips clarify poker terminology
+- [ ] Examples help illustrate concepts
+
+**Code Changes Required**:
+```python
+# poker_engine.py - AIDecision dataclass
+@dataclass
+class AIDecision:
+    action: str
+    amount: int
+    reasoning: str  # Technical reasoning (existing)
+    beginner_reasoning: str  # NEW - Layperson-friendly explanation
+    hand_strength: float
+    pot_odds: float
+    confidence: float
+    spr: float
+
+# poker_engine.py - AIStrategy methods
+def _translate_to_beginner(reasoning, action, hand_rank, spr, pot_odds):
+    """Convert technical reasoning to beginner-friendly explanation."""
+    # Examples:
+    # "Low SPR (2.5)" → "The pot is large compared to my stack"
+    # "positive EV" → "good value"
+    # "pot committed" → "invested too much to fold now"
+```
+
+**Files to Modify**:
+- backend/game/poker_engine.py (~30 reasoning strings + new translation function)
+- frontend/src/components/AIExplanation.js (new component)
+- backend/tests/test_ai_spr_decisions.py (verify beginner_reasoning exists)
+
+### Step 3.3: Implement Game Flow with State Management
+- [ ] Setup Zustand store with game state shape
+- [ ] Create API wrapper functions in `lib/api.ts`
+- [ ] Connect GameLobby to POST /games API
+- [ ] Implement polling GET /games/{id} for state updates (or use intervals)
+- [ ] Connect action buttons to POST /games/{id}/actions
+- [ ] Handle state transitions with smooth animations
+- [ ] Implement "Next Hand" button with transition animation
+- [ ] Add loading states during API calls
+- [ ] Add error handling with user-friendly messages
+
+**Zustand Store Example**:
+```tsx
+// lib/store.ts
+interface GameStore {
+  gameId: string | null
+  gameState: GameState | null
+  isLoading: boolean
+  error: string | null
+  setGameState: (state: GameState) => void
+  submitAction: (action: string, amount?: number) => Promise<void>
+}
+```
+
+**Animation for State Transitions**:
+```tsx
+// Animate flop reveal
+<AnimatePresence>
+  {gameState === 'flop' && (
+    <motion.div
+      initial={{ scale: 0, rotateY: 180 }}
+      animate={{ scale: 1, rotateY: 0 }}
+      transition={{ stagger: 0.1 }}
+    >
+      {flopCards.map(card => <Card key={card} />)}
+    </motion.div>
+  )}
+</AnimatePresence>
+```
 
 **Testing Checkpoint 3.3**:
 ```bash
@@ -405,37 +556,81 @@ npm start
 ```
 - [ ] Create game with 3 AI opponents
 - [ ] Play complete hand: pre-flop → flop → turn → river → showdown
-- [ ] AI players act automatically
+- [ ] AI players act automatically with smooth transitions
 - [ ] Can fold/check/call/raise appropriately
-- [ ] Pot awarded correctly
-- [ ] Can start next hand
+- [ ] Cards animate when dealt (flip animation)
+- [ ] Chips animate to pot when betting
+- [ ] Pot awarded correctly with animation
+- [ ] Can start next hand with smooth transition
 - [ ] Play 5+ consecutive hands without errors
+- [ ] Loading states prevent double-actions
+- [ ] Errors display user-friendly messages
 
-### Step 3.4: Error Handling and Polish
-- [ ] Add loading states
-- [ ] Add error messages for failed API calls
-- [ ] Add basic validation (bet amounts, etc.)
-- [ ] Test edge cases (disconnection, invalid actions)
+### Step 3.4: Polish and Deployment Preparation
+- [ ] Add loading skeletons for better UX
+- [ ] Add error toast notifications (or inline messages)
+- [ ] Add bet amount validation before API call
+- [ ] Add keyboard shortcuts (Enter to call, F to fold, etc.)
+- [ ] Add dark mode support (optional but Tailwind makes it easy)
+- [ ] Optimize images and assets
+- [ ] Test edge cases (API errors, network issues, invalid actions)
+- [ ] Add favicon and metadata for PWA support
+- [ ] Performance optimization (lazy loading, code splitting)
+
+**Polish Examples**:
+```tsx
+// Loading skeleton
+<div className="animate-pulse bg-gray-700 rounded-lg h-24 w-32" />
+
+// Error toast with Framer Motion
+<motion.div
+  initial={{ y: -100, opacity: 0 }}
+  animate={{ y: 0, opacity: 1 }}
+  className="bg-red-500 text-white p-4 rounded-lg shadow-lg"
+>
+  {error}
+</motion.div>
+
+// Keyboard shortcuts
+useEffect(() => {
+  const handleKeyPress = (e: KeyboardEvent) => {
+    if (e.key === 'f') handleFold()
+    if (e.key === 'Enter') handleCall()
+  }
+  window.addEventListener('keydown', handleKeyPress)
+  return () => window.removeEventListener('keydown', handleKeyPress)
+}, [])
+```
 
 **Testing Checkpoint 3.4**:
-- [ ] Error messages display clearly
+- [ ] Error messages display with smooth animations
 - [ ] Loading states prevent double-actions
 - [ ] Invalid bets are caught before API call
 - [ ] Game recovers gracefully from errors
+- [ ] Keyboard shortcuts work
+- [ ] Performance is smooth (60fps animations)
+- [ ] Works on different screen sizes (responsive)
+- [ ] No console errors or warnings
 
-**PHASE 3 GATE: Cannot proceed to Phase 4 until end-to-end gameplay works**
+**PHASE 3 GATE: Cannot proceed to Phase 4 until end-to-end gameplay works smoothly**
 
 ### Phase 3 Completion: Git Commit & Push
 **Required before proceeding to Phase 4**:
 ```bash
 git add .
-git commit -m "Phase 3 complete: Simple frontend implemented
+git commit -m "Phase 3 complete: Modern, engaging frontend implemented
 
-- React app with minimal complexity
-- End-to-end gameplay working
+- Next.js 14 app with TypeScript and Tailwind CSS
+- Framer Motion animations (cards, chips, transitions)
+- Zustand for state management
+- Professional poker table with visual polish
+- Beginner-friendly AI explanations with toggle
+- End-to-end gameplay working smoothly
 - All manual testing scenarios pass
 - 5+ consecutive hands played without errors
 
+Tech Stack: Next.js 14, TypeScript, Tailwind CSS, Framer Motion, Zustand
+Bundle Size: ~150KB gzipped
 Manual testing: Complete"
 
 git push origin main
@@ -530,12 +725,15 @@ git push origin v2.0-simplified
 
 ### Technical Requirements
 - [ ] Backend: < 800 lines of core code (excluding tests)
-- [ ] Frontend: < 500 lines of code
+- [ ] Frontend: < 800 lines of component code (TypeScript + TSX)
 - [ ] API: 4 endpoints only
 - [ ] No complex infrastructure (no WebSockets, correlation tracking, etc.)
 - [ ] Test coverage ≥ 80% on backend core logic
 - [ ] All tests pass consistently
 - [ ] Setup time < 10 minutes for new developer
+- [ ] Production bundle size < 200KB gzipped
+- [ ] Lighthouse performance score > 90
+- [ ] 60fps animations throughout
 
 ### Code Quality Requirements
 - [ ] Code is readable and well-commented
@@ -783,3 +981,79 @@ mv OLD-DOC.md archive/docs-original/
 - [PENDING]: Phase 1 final with UAT bugs fixed (7 bugs total)
 
 **Status**: All UATs passing, ready for final commit & push
+
+### 2025-10-18: Phase 1.5 Complete - SPR Enhancement + AI-Only Tournament Test
+**SPR Implementation**:
+- Added SPR (Stack-to-Pot Ratio) field to AIDecision dataclass
+- Enhanced all 3 AI personalities with SPR-aware decision making:
+  - Conservative: Tighter at high SPR (>10), committed at low SPR (<3)
+  - Aggressive: Push/fold at low SPR, more bluffs at high SPR (>7)
+  - Mathematical: Combined SPR + pot odds for EV calculations
+- Increased Monte Carlo simulations from 20 to 100 for better accuracy
+- Created comprehensive SPR test suite (test_ai_spr_decisions.py) - 7/7 tests passing
+
+**AI-Only Tournament Test**:
+- Created test_ai_only_games.py - 5 complete games with 4 AI players
+- Total: 500 hands played, 1,587 AI decisions logged
+- Chip conservation verified: All 5 games maintained perfect $4,000 total
+- All sanity checks passed (1,587/1,587)
+- Winners: Mathematical AI won 4/5 games (most sophisticated strategy)
+- Detailed log in ai_game_decisions.log for manual review
+
+**Learning App Gap Identified**:
+- AI reasoning uses poker jargon (SPR, EV, pot odds) that beginners won't understand
+- Examples: "High SPR (66.7) - need premium hand", "positive EV fold", "pot committed"
+- User identified this as critical for learning app purpose
+- **Decision**: Document as Phase 3 requirement (frontend + dual-mode reasoning)
+- Will implement beginner-friendly explanations with technical/beginner toggle in UI
+
+**Files Modified**:
+- backend/game/poker_engine.py (lines 40, 127, 256-380)
+- backend/tests/test_ai_spr_decisions.py (created, 234 lines)
+- backend/tests/test_ai_only_games.py (created, 315 lines)
+- backend/ai_game_decisions.log (generated, full tournament log)
+- CLAUDE.md (added Phase 3.2.5 for beginner-friendly explanations)
+
+**Commits**:
+- [PENDING]: Phase 1.5 complete with SPR enhancement
+
+**Status**: Phase 1.5 complete, ready for Phase 2 (API layer)
+
+### 2025-10-18: Phase 3 Tech Stack Updated - Modern Frontend Approach
+**Decision**: Replace Create React App with Next.js 14 + Tailwind CSS + Framer Motion
+
+**Rationale**:
+- User requested "robust FE with nice graphics, engaging, visually stimulating, and lightweight"
+- CRA is deprecated, Next.js is React team's recommended approach
+- Tailwind CSS accelerates UI development 3-5x vs custom CSS
+- Framer Motion enables professional animations (card dealing, chip movement, smooth transitions)
+- Learning app requires engaging UX - animations critical for user retention
+- Bundle size actually smaller (~150KB vs ~200KB) due to better tree-shaking
+
+**Benefits for Poker Learning App**:
+- **Visual engagement**: Professional felt table, smooth card dealing, chip animations
+- **Development speed**: Tailwind utilities prevent CSS sprawl, faster iteration
+- **Performance**: Next.js optimization, 60fps animations, <100ms load times on Vercel
+- **Learning features**: Smooth tooltips for AI explanations, polished beginner/advanced toggle
+- **Mobile-ready**: Tailwind responsive utilities built-in
+- **Future-proof**: Industry standard stack, active ecosystem
+
+**Changes Made to CLAUDE.md**:
+- Phase 3.1: Updated setup to use `npx create-next-app@latest` with TypeScript + Tailwind
+- Phase 3.2: Expanded component list with animation examples and Tailwind theme code
+- Phase 3.3: Added Zustand for state management, animation examples for game flow
+- Phase 3.4: Added polish requirements (loading skeletons, error toasts, keyboard shortcuts)
+- Acceptance Criteria: Updated bundle size target (<200KB), added Lighthouse score requirement (>90)
+- Phase 2: Added CORS middleware requirement for Next.js development
+
+**Phase 2 Impact**: Minimal - only added CORS middleware (1 line change)
+
+**Documentation Updated**:
+- ✅ Phase 3 completely rewritten with Next.js stack
+- ✅ Acceptance criteria updated with performance metrics
+- ✅ Phase 2 minor adjustment (CORS)
+- ✅ Code examples added (Tailwind themes, Framer Motion animations)
+
+**User Approval**: Obtained before implementing changes
+
+**Status**: Documentation complete, ready to begin Phase 2
