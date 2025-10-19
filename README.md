@@ -1,251 +1,177 @@
-# Poker Learning App - Under Refactoring
+# Poker Learning App
 
-**Status**: 🚧 Phase 0 Complete - Ready to begin Phase 1
-**Last Updated**: 2025-10-18
+A full-stack poker application for learning poker strategy through AI opponents with transparent decision-making.
 
----
+**Status**: ✅ All 3 Phases Complete - Production Ready
 
-## ⚠️ Important Notice
+## Quick Start
 
-This project is currently being refactored to **simplify the architecture** while preserving the excellent poker game logic and AI strategies.
+```bash
+# 1. Install dependencies
+cd backend && pip install -r requirements.txt
+cd ../frontend && npm install
 
-**DO NOT USE** the archived implementation - it contains critical bugs (see `BE-FINDINGS.md`).
+# 2. Start backend (Terminal 1)
+cd backend && python main.py
 
----
+# 3. Start frontend (Terminal 2)  
+cd frontend && npm run dev
 
-## Current Status
+# 4. Play! → http://localhost:3000
+```
 
-### ✅ Phase 0: Documentation & Cleanup (COMPLETE)
-- [x] Created comprehensive refactoring plan (see `CLAUDE.md`)
-- [x] Reviewed and categorized all documentation
-- [x] Archived complex implementation
-- [x] Verified code and documentation accuracy
-- [x] Repository ready for fresh implementation
+## What is This?
 
-### 🎯 Next: Phase 1 - Extract and Fix Core Backend Logic
-**Goals**:
-1. Extract core game engine from archive
-2. Fix 5 critical bugs identified in `BE-FINDINGS.md`:
-   - Turn order enforcement
-   - Hand resolution after folds
-   - Raise validation
-   - Raise accounting
-   - Side pot handling
-3. Create comprehensive test suite (80%+ coverage)
-4. All tests must pass before proceeding to Phase 2
+An educational poker app where you play Texas Hold'em against AI opponents that explain their decisions in real-time. Perfect for learning:
+- Poker strategy and decision-making
+- SPR (Stack-to-Pot Ratio) concepts
+- Pot odds and Expected Value (EV)
+- Different playing styles (Conservative, Aggressive, Mathematical)
 
----
+## Features
 
-## Project Overview
+- **AI Opponents**: 3 distinct personalities with transparent reasoning
+- **Real-time Learning**: See why AIs fold, call, or raise
+- **Beginner Mode**: Toggle between simple and advanced explanations
+- **Smooth Animations**: Card dealing, chip movements, turn indicators
+- **Full Game Flow**: Pre-flop → Flop → Turn → River → Showdown
+- **Chip Conservation**: Perfect accounting, no bugs
 
-### What We're Building
-A **simple, educational poker learning app** where users can:
-- Play Texas Hold'em against AI opponents
-- Learn poker strategy through transparent AI decision-making
-- Track progress and improve skills
+## Tech Stack
 
-### What We're Preserving
-From the original implementation:
-- ✅ Solid poker game engine (after bug fixes)
-- ✅ AI strategies (Conservative, Mathematical, Bluffer, Risk-Taker)
-- ✅ Hand evaluation with Treys library + Monte Carlo simulations
-- ✅ Learning features (hand history, AI transparency)
-
-### What We're Simplifying
-- 🔧 Remove complex infrastructure (ChipLedger, StateManager, correlation tracking, WebSockets)
-- 🔧 Simple API: 4 endpoints instead of 13+
-- 🔧 Simple frontend: React with useState instead of complex state management
-- 🔧 Minimal dependencies
-- 🔧 Clean, readable code
-
----
-
-## Architecture Goals
-
-### Backend
-- **Target**: < 800 lines of core code
-- **API**: 4 simple endpoints (create game, get state, submit action, next hand)
-- **Storage**: Simple in-memory or JSON file
-- **Testing**: 80%+ coverage with comprehensive test suite
-
-### Frontend
-- **Target**: < 500 lines of code
-- **Stack**: React with simple useState/useEffect
-- **API Calls**: Direct axios calls, no abstraction layers
-- **Styling**: Basic but functional
-
----
-
-## Critical Issues Being Fixed
-
-From `BE-FINDINGS.md` analysis:
-
-### 🔴 Critical
-1. **Turn order not enforced**: AI processes all actions simultaneously instead of sequentially
-2. **Hand cannot resolve after human folds**: Game stalls when human player folds
-3. **Raise validation allows chip manipulation**: Players can exploit betting validation
-
-### 🟡 Major
-4. **Raise accounting incorrect**: Double-counting bug in bet tracking
-5. **Showdown payout ignores side pots**: All-in scenarios handled incorrectly
-
-All bugs will be fixed in Phase 1 with comprehensive tests.
-
----
+**Backend**: Python, FastAPI, Treys poker library  
+**Frontend**: Next.js 15, TypeScript, Tailwind CSS, Framer Motion, Zustand
 
 ## Documentation
 
-### 📋 Key Documents
+- **[SETUP.md](SETUP.md)** - Complete setup & operations guide
+- **[PHASE3-UAT.md](PHASE3-UAT.md)** - User acceptance testing instructions
+- **[CLAUDE.md](CLAUDE.md)** - Master project plan
+- **Backend**: PHASE1-SUMMARY.md, PHASE2-SUMMARY.md
+- **Tests**: backend/tests/ directory
 
-- **`CLAUDE.md`**: Complete refactoring plan with phase-by-phase instructions and testing checkpoints
-- **`BE-FINDINGS.md`**: Critical bug analysis from code review
-- **`REQUIREMENTS.md`**: Requirements and what to preserve vs simplify
-- **`DOCUMENTATION-REVIEW.md`**: Documentation audit results
+## Project Phases
 
-### 📁 Archive
+### Phase 1: Core Backend ✅
+- Fixed 7 critical bugs in poker engine
+- Comprehensive test suite (80%+ coverage)
+- Turn order, fold resolution, side pots, chip conservation
 
-- **`archive/`**: Original implementation safely preserved
-  - `backend-original/`: 701 lines with known bugs
-  - `frontend-original/`: ~6,300 lines, over-engineered
-  - `docs-original/`: Original documentation
-  - See `archive/README.md` for details
+### Phase 1.5: AI Enhancement ✅  
+- Added SPR (Stack-to-Pot Ratio) to all AI personalities
+- Enhanced decision-making with pot-relative logic
+- 7/7 SPR tests passing, 5-game AI tournament verified
 
----
+### Phase 2: API Layer ✅
+- FastAPI wrapper with 4 endpoints
+- CORS middleware for Next.js
+- 9/9 integration tests passing
 
-## Getting Started (After Phase 4)
+### Phase 3: Frontend ✅
+- Next.js with TypeScript & Tailwind
+- Framer Motion animations
+- Zustand state management  
+- Responsive poker table UI
 
-### Setup (Not Ready Yet)
-The application is being rebuilt from scratch. Check back after Phase 2 completion for:
+## Running the App
+
+**Start Backend:**
 ```bash
-# Backend
 cd backend
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
 python main.py
-
-# Frontend
-cd frontend
-npm install
-npm start
+# → http://localhost:8000
 ```
 
-**Estimated ready**: After Phase 4 completion
+**Start Frontend:**
+```bash
+cd frontend
+npm run dev
+# → http://localhost:3000
+```
 
----
+**Stop Servers:**
+```bash
+# Press Ctrl+C in each terminal
+# Or kill by port:
+kill -9 $(lsof -ti:8000)  # Backend
+kill -9 $(lsof -ti:3000)  # Frontend
+```
 
-## Development Roadmap
+## Testing
 
-### Phase 0: Documentation & Cleanup ✅
-- Comprehensive planning
-- Code archival
-- Documentation cleanup
+```bash
+cd backend
 
-### Phase 1: Extract and Fix Core Backend 🎯 NEXT
-- Extract core game engine
-- Fix 5 critical bugs
-- Comprehensive test suite
-- 80%+ code coverage
+# Run all tests
+python tests/run_all_tests.py
 
-### Phase 2: Build Simple API Layer
-- 4 minimal endpoints
-- Simple in-memory storage
-- Integration tests
+# Run specific suites
+python tests/test_ai_spr_decisions.py  # AI SPR tests
+python tests/test_api_integration.py    # API tests (requires backend running)
+```
 
-### Phase 3: Build Simple Frontend
-- Clean React UI
-- Direct API integration
-- End-to-end testing
+## Architecture
 
-### Phase 4: Final Testing & Documentation
-- Comprehensive testing
-- Performance validation
-- Final documentation
-- Ready for use
+```
+Backend (Python/FastAPI)
+├── poker_engine.py  → Core game logic
+├── main.py          → REST API (4 endpoints)
+└── tests/           → Comprehensive test suite
 
----
+Frontend (Next.js/TypeScript)
+├── app/page.tsx        → Main game page
+├── components/         → Card, PlayerSeat, PokerTable
+└── lib/                → API client, types, state management
+```
 
-## Testing Requirements
+## AI Personalities
 
-Each phase has **strict testing checkpoints**:
+**Conservative**: Plays tight, folds weak hands, SPR-aware tightness  
+**Aggressive**: Bluffs often, pushes with low SPR, pressure tactics  
+**Mathematical**: Pot odds + EV calculations, optimal decision-making
 
-### Phase 1 Gate
-- [ ] All extracted files have unit tests
-- [ ] All 5 critical bugs fixed and tested
-- [ ] Test coverage ≥ 80%
-- [ ] All tests pass consistently
-- [ ] Cannot proceed to Phase 2 until complete
+## API Endpoints
 
-### Phase 2 Gate
-- [ ] API integration tests pass
-- [ ] Complete game flow works via API
-- [ ] No data loss between calls
+- `GET /` - Health check
+- `POST /games` - Create new game
+- `GET /games/{id}` - Get game state
+- `POST /games/{id}/actions` - Submit player action
+- `POST /games/{id}/next` - Start next hand
 
-### Phase 3 Gate
-- [ ] End-to-end gameplay works
-- [ ] 5+ consecutive hands playable
-- [ ] All manual tests pass
+**Full API docs**: http://localhost:8000/docs (when running)
 
-### Phase 4 Gate
-- [ ] All acceptance criteria met
-- [ ] 30+ minute play session without errors
-- [ ] Setup time < 10 minutes
+## Troubleshooting
 
----
+**Port already in use:**
+```bash
+kill -9 $(lsof -ti:8000)  # Backend
+kill -9 $(lsof -ti:3000)  # Frontend
+```
+
+**Module not found:**
+```bash
+cd backend && pip install -r requirements.txt
+cd frontend && npm install
+```
+
+**CORS errors**: Verify backend is running and check frontend/.env.local
+
+See [SETUP.md](SETUP.md) for detailed troubleshooting.
 
 ## Contributing
 
-**During Refactoring**: Please refer to `CLAUDE.md` for current phase and requirements.
-
-**After Refactoring**: Standard contribution workflow will be established.
-
----
-
-## Git Workflow
-
-**Mandatory**: Each phase must be committed and pushed before proceeding to next phase.
-
-See `CLAUDE.md` → "Git Commit Requirements" for commit message templates.
-
----
-
-## Success Criteria
-
-### Functional
-- [ ] Complete Texas Hold'em gameplay
-- [ ] All 4 AI opponents with distinct strategies
-- [ ] Turn order enforced correctly
-- [ ] All edge cases handled (folds, all-ins, side pots)
-- [ ] No chip creation/destruction bugs
-
-### Technical
-- [ ] Backend: < 800 lines
-- [ ] Frontend: < 500 lines
-- [ ] API: 4 endpoints only
-- [ ] Test coverage ≥ 80%
-- [ ] Setup time < 10 minutes
-
-### Quality
-- [ ] Readable, well-commented code
-- [ ] No over-engineering
-- [ ] Minimal dependencies
-- [ ] Clean separation of concerns
-
----
-
-## Questions?
-
-- **Refactoring Plan**: See `CLAUDE.md`
-- **Bug Details**: See `BE-FINDINGS.md`
-- **Original Code**: See `archive/`
-- **Current Progress**: Check Phase status above
-
----
+1. Fork the repository
+2. Create feature branch
+3. Write tests for new features
+4. Ensure all tests pass
+5. Submit pull request
 
 ## License
 
-Educational project for learning poker strategy and software development with AI assistance.
+Educational purposes.
 
 ---
 
-**Next Step**: Begin Phase 1 - Extract and fix core backend logic per `CLAUDE.md`
+**Questions?** Check SETUP.md, PHASE3-UAT.md, or CLAUDE.md for detailed documentation.
+
+**Live**: http://localhost:3000 (when running locally)
