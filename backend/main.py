@@ -5,8 +5,10 @@ Phase 2: Minimal API layer with 4 core endpoints
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple
 import uuid
+import time
+import asyncio
 
 from game.poker_engine import PokerGame, GameState
 
@@ -22,8 +24,40 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory game storage (simple dict)
-games: Dict[str, PokerGame] = {}
+# In-memory game storage with TTL (Time To Live)
+# Format: {game_id: (PokerGame, last_access_timestamp)}
+games: Dict[str, Tuple[PokerGame, float]] = {}
+
+# Memory management constants
+GAME_MAX_IDLE_SECONDS = 3600  # Remove games idle > 1 hour
+GAME_CLEANUP_INTERVAL_SECONDS = 300  # Clean up every 5 minutes
+
+
+def cleanup_old_games(max_age_seconds: int = GAME_MAX_IDLE_SECONDS) -> int:
+    """Remove games inactive for > max_age_seconds. Returns number removed."""
+    current_time = time.time()
+    to_remove = [
+        game_id for game_id, (game, last_access) in games.items()
+        if current_time - last_access > max_age_seconds
+    ]
+    for game_id in to_remove:
+        del games[game_id]
+    return len(to_remove)
+
+
+# Periodic cleanup task
+@app.on_event("startup")
+async def startup_event():
+    """Start periodic cleanup of old games."""
+    async def periodic_cleanup():
+        while True:
+            await asyncio.sleep(GAME_CLEANUP_INTERVAL_SECONDS)
+            removed = cleanup_old_games()
+            if removed > 0:
+                print(f"[Cleanup] Removed {removed} idle game(s)")
+
+    asyncio.create_task(periodic_cleanup())
+    print(f"[Startup] Periodic game cleanup enabled (every {GAME_CLEANUP_INTERVAL_SECONDS}s, max idle {GAME_MAX_IDLE_SECONDS}s)")
 
 
 # Request/Response Models
@@ -66,13 +100,13 @@ def create_game(request: CreateGameRequest):
 
     # Create game
     game_id = str(uuid.uuid4())
-    game = PokerGame(request.player_name)
+    game = PokerGame(request.player_name, request.ai_count)
 
     # Start first hand
     game.start_new_hand()
 
-    # Store in memory
-    games[game_id] = game
+    # Store in memory with timestamp
+    games[game_id] = (game, time.time())
 
     return {"game_id": game_id}
 
@@ -87,7 +121,9 @@ def get_game_state(game_id: str):
     if game_id not in games:
         raise HTTPException(status_code=404, detail="Game not found")
 
-    game = games[game_id]
+    # Get game and update last access time
+    game, _ = games[game_id]
+    games[game_id] = (game, time.time())
 
     # Find human player
     human_player = next((p for p in game.players if p.is_human), None)
@@ -159,7 +195,9 @@ def submit_action(game_id: str, request: GameActionRequest):
     if game_id not in games:
         raise HTTPException(status_code=404, detail="Game not found")
 
-    game = games[game_id]
+    # Get game and update last access time
+    game, _ = games[game_id]
+    games[game_id] = (game, time.time())
 
     # Validate action
     if request.action not in ["fold", "call", "raise"]:
@@ -189,7 +227,9 @@ def next_hand(game_id: str):
     if game_id not in games:
         raise HTTPException(status_code=404, detail="Game not found")
 
-    game = games[game_id]
+    # Get game and update last access time
+    game, _ = games[game_id]
+    games[game_id] = (game, time.time())
 
     # Check if current hand is finished
     if game.current_state != GameState.SHOWDOWN:

@@ -8,6 +8,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from treys import Evaluator, Card
 
+# Memory management constants
+MAX_HAND_EVENTS_HISTORY = 1000  # Keep last ~10-20 hands worth of events
+
 class GameState(Enum):
     PRE_FLOP = "pre_flop"
     FLOP = "flop"
@@ -397,17 +400,33 @@ class AIStrategy:
 class PokerGame:
     """Main poker game class with bug fixes applied."""
 
-    def __init__(self, human_player_name: str):
+    def __init__(self, human_player_name: str, ai_count: int = 3):
+        """
+        Create a new poker game.
+
+        Args:
+            human_player_name: Name of the human player
+            ai_count: Number of AI opponents (1-3, default 3)
+        """
+        if ai_count < 1 or ai_count > 3:
+            raise ValueError("AI count must be between 1 and 3")
+
         self.deck_manager = DeckManager()
         self.hand_evaluator = HandEvaluator()
 
-        # Create players
-        self.players = [
-            Player("human", human_player_name, is_human=True),
-            Player("ai1", "AI Conservative", personality="Conservative"),
-            Player("ai2", "AI Aggressive", personality="Aggressive"),
-            Player("ai3", "AI Mathematical", personality="Mathematical")
-        ]
+        # Create human player
+        self.players = [Player("human", human_player_name, is_human=True)]
+
+        # Add AI players dynamically
+        personalities = ["Conservative", "Aggressive", "Mathematical"]
+        for i in range(ai_count):
+            self.players.append(
+                Player(
+                    player_id=f"ai{i+1}",
+                    name=f"AI {personalities[i]}",
+                    personality=personalities[i]
+                )
+            )
 
         self.community_cards = []
         self.pot = 0
@@ -474,6 +493,10 @@ class PokerGame:
         # Save previous hand events to history
         if self.current_hand_events:
             self.hand_events.extend(self.current_hand_events)
+
+            # Cap hand_events to prevent unbounded growth
+            if len(self.hand_events) > MAX_HAND_EVENTS_HISTORY:
+                self.hand_events = self.hand_events[-MAX_HAND_EVENTS_HISTORY:]
 
         self.hand_count += 1
         self.current_hand_events = []
