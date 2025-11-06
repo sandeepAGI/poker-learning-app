@@ -519,9 +519,8 @@ class PokerGame:
         sb_amount = sb_player.bet(self.small_blind)
         bb_amount = bb_player.bet(self.big_blind)
 
-        # Mark blinds as having acted
-        sb_player.has_acted = True
-        bb_player.has_acted = True
+        # Blinds will mark themselves as acted during the natural betting round
+        # This ensures BB gets their option to raise when everyone calls
 
         self.pot += sb_amount + bb_amount
         self.current_bet = self.big_blind
@@ -707,7 +706,31 @@ class PokerGame:
     def _maybe_advance_state(self):
         """Advance game state if betting round is complete."""
         active_count = sum(1 for p in self.players if p.is_active)
-        if active_count <= 1:
+
+        if active_count == 0:
+            # All players folded - award pot to last player who acted
+            # This is rare but maintains chip conservation
+            last_actor_id = None
+            for event in reversed(self.current_hand_events):
+                if event.event_type == "action":
+                    last_actor_id = event.player_id
+                    break
+
+            if last_actor_id and self.pot > 0:
+                winner = next((p for p in self.players if p.player_id == last_actor_id), None)
+                if winner:
+                    winner.stack += self.pot
+                    winner.is_active = True  # Reactivate for pot award
+
+                    self._log_hand_event("pot_award", winner.player_id, "win", self.pot, 0.0,
+                                       f"All players folded - {winner.name} wins ${self.pot} by default")
+                    self.pot = 0
+
+            self.current_state = GameState.SHOWDOWN
+            return
+
+        if active_count == 1:
+            # Exactly one player remaining - standard win by fold
             self.current_state = GameState.SHOWDOWN
             return
 

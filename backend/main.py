@@ -47,7 +47,7 @@ class GameResponse(BaseModel):
     current_bet: int
     players: list
     community_cards: list
-    current_player_index: int
+    current_player_index: Optional[int]  # None when all players all-in or folded
     human_player: dict
     last_ai_decisions: dict
 
