@@ -174,12 +174,15 @@ class HandEvaluator:
             }]
 
         # Build side pots
+        # CRITICAL FIX: Don't mutate player.total_invested - make a copy!
+        # Bug: Function was called multiple times, each time reducing total_invested
+        # causing chips to disappear
+        investments = {p.player_id: p.total_invested for p in all_players_with_investment}
         pots = []
-        remaining_players = all_players_with_investment.copy()
 
-        while remaining_players:
+        while investments:
             # Find minimum investment among remaining players
-            min_investment = min(p.total_invested for p in remaining_players if p.total_invested > 0)
+            min_investment = min(inv for inv in investments.values() if inv > 0)
             if min_investment == 0:
                 break
 
@@ -188,10 +191,13 @@ class HandEvaluator:
             pot_contributors = []  # All who contribute to this pot
             eligible_for_pot = []  # Only active/all-in can win
 
-            for player in remaining_players:
-                contribution = min(player.total_invested, min_investment)
+            for player in all_players_with_investment:
+                if player.player_id not in investments:
+                    continue
+
+                contribution = min(investments[player.player_id], min_investment)
                 pot_amount += contribution
-                player.total_invested -= contribution
+                investments[player.player_id] -= contribution
                 if contribution > 0:
                     pot_contributors.append(player)
                     # Only eligible winners can actually win this pot
@@ -218,7 +224,7 @@ class HandEvaluator:
                     })
 
             # Remove players with zero investment
-            remaining_players = [p for p in remaining_players if p.total_invested > 0]
+            investments = {pid: inv for pid, inv in investments.items() if inv > 0}
 
         return pots
 
@@ -494,6 +500,7 @@ class PokerGame:
         """
         Assert that game state is valid.
         Checks multiple invariants that should always be true.
+        ENHANCED: Now checks all-in logic, current player validity, and more.
         """
         if not self.qc_enabled:
             return
@@ -518,20 +525,60 @@ class PokerGame:
             if p.current_bet < 0:
                 errors.append(f"{p.name} has negative current_bet: ${p.current_bet}")
 
-        # 5. Active players should have non-negative stacks or be all-in
+        # 5. Player total_invested should never be negative (NEW)
+        for p in self.players:
+            if p.total_invested < 0:
+                errors.append(f"{p.name} has negative total_invested: ${p.total_invested}")
+
+        # 6. Active players should have non-negative stacks or be all-in
         for p in self.players:
             if p.is_active and p.stack < 0:
                 errors.append(f"Active player {p.name} has negative stack: ${p.stack}")
 
-        # 6. At showdown, pot should be 0 (already awarded)
+        # 7. All-in consistency checks (NEW - would have caught the all-in bug!)
+        for p in self.players:
+            # If marked all-in, stack must be 0
+            if p.all_in and p.stack > 0:
+                errors.append(f"{p.name} marked all-in but has ${p.stack} remaining")
+
+            # If stack is 0 and player is active with a bet, must be all-in
+            if p.stack == 0 and p.is_active and p.total_invested > 0 and not p.all_in:
+                errors.append(f"{p.name} has $0 stack and active with bet ${p.total_invested} but NOT marked all-in")
+
+        # 8. Current player validation (NEW - critical for turn order)
+        if self.current_state not in [GameState.SHOWDOWN]:
+            if self.current_player_index is not None:
+                current = self.players[self.current_player_index]
+
+                # Current player must be active
+                if not current.is_active:
+                    errors.append(f"Current player {current.name} is not active (index={self.current_player_index})")
+
+                # Current player cannot be all-in (NEW - would have caught the bug!)
+                if current.all_in:
+                    errors.append(f"Current player {current.name} is all-in but marked as current (index={self.current_player_index})")
+
+                # Current player must have chips if not all-in
+                if current.stack == 0 and not current.all_in:
+                    errors.append(f"Current player {current.name} has $0 but not all-in (index={self.current_player_index})")
+
+        # 9. At showdown, pot should be 0 (already awarded)
         if self.current_state == GameState.SHOWDOWN and self.pot > 0:
             errors.append(f"At SHOWDOWN but pot not awarded: ${self.pot}")
 
-        # 7. If only 0-1 active players during hand play (not at start), should be at SHOWDOWN
+        # 10. If only 0-1 active players during hand play (not at start), should be at SHOWDOWN
         # NOTE: At PRE_FLOP start, busted players from previous hands are inactive - this is valid
         active_count = sum(1 for p in self.players if p.is_active)
         if active_count <= 1 and self.current_state != GameState.SHOWDOWN and self.current_state != GameState.PRE_FLOP:
             errors.append(f"Only {active_count} active players but not at SHOWDOWN (state: {self.current_state.value})")
+
+        # 11. Betting round consistency (NEW)
+        if self.current_state in [GameState.PRE_FLOP, GameState.FLOP, GameState.TURN, GameState.RIVER]:
+            active_not_all_in = [p for p in self.players if p.is_active and not p.all_in]
+
+            # If multiple players can act, must have a current player
+            if len(active_not_all_in) > 1 and self.current_player_index is None:
+                errors.append(f"{len(active_not_all_in)} active players can act but no current player set")
 
         if errors:
             error_msg = "\n   ".join(errors)
@@ -671,6 +718,9 @@ class PokerGame:
 
         # Process AI actions if AI player is first to act
         self._process_remaining_actions()
+
+        # Check if game should advance (e.g., all players all-in)
+        self._maybe_advance_state()
 
         # QC: Verify chip conservation and game state after starting new hand
         self._assert_chip_conservation("after start_new_hand()")
@@ -887,11 +937,12 @@ class PokerGame:
             current_player = self.players[self.current_player_index]
 
             # Stop at human player if they haven't acted yet (wait for API call)
-            if current_player.is_human and not current_player.has_acted:
+            # BUT: If human is all-in, they can't act, so don't wait for them
+            if current_player.is_human and not current_player.has_acted and not current_player.all_in:
                 break
 
-            # Skip human player who has already acted
-            if current_player.is_human and current_player.has_acted:
+            # Skip human player who has already acted OR is all-in
+            if current_player.is_human and (current_player.has_acted or current_player.all_in):
                 self.current_player_index = self._get_next_active_player_index(self.current_player_index + 1)
                 continue
 
@@ -990,6 +1041,28 @@ class PokerGame:
             self.current_player_index = None  # No one left to act
             return
 
+        # NEW: Check if all remaining active players are all-in (no more betting possible)
+        active_not_all_in = [p for p in self.players if p.is_active and not p.all_in]
+        if len(active_not_all_in) <= 1:
+            # All players are all-in (or only 1 player can act) - fast-forward to showdown
+            # Deal remaining community cards
+            if self.current_state == GameState.PRE_FLOP:
+                self.community_cards.extend(self.deck_manager.deal_cards(3))  # Flop
+                self.community_cards.extend(self.deck_manager.deal_cards(1))  # Turn
+                self.community_cards.extend(self.deck_manager.deal_cards(1))  # River
+            elif self.current_state == GameState.FLOP:
+                self.community_cards.extend(self.deck_manager.deal_cards(1))  # Turn
+                self.community_cards.extend(self.deck_manager.deal_cards(1))  # River
+            elif self.current_state == GameState.TURN:
+                self.community_cards.extend(self.deck_manager.deal_cards(1))  # River
+            # (RIVER already has all cards)
+
+            # Go directly to showdown
+            self.current_state = GameState.SHOWDOWN
+            self._award_pot_at_showdown()
+            self.current_player_index = None
+            return
+
         if not self._betting_round_complete():
             return
 
@@ -1042,6 +1115,10 @@ class PokerGame:
                 winner = next(p for p in self.players if p.player_id == winner_id)
                 award_amount = split_amount + (1 if i < remainder else 0)
                 winner.stack += award_amount
+
+                # Clear all-in flag if winner now has chips (Bug fix from marathon simulation)
+                if winner.stack > 0 and winner.all_in:
+                    winner.all_in = False
 
                 # Log pot award event for winner_info
                 self._log_hand_event("pot_award", winner.player_id, "win", award_amount, 0.0,
