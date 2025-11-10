@@ -529,6 +529,9 @@ class PokerGame:
         bb_index = (self.dealer_index + 2) % len(self.players)
         self.current_player_index = self._get_next_active_player_index(bb_index + 1)
 
+        # Process AI actions if AI player is first to act
+        self._process_remaining_actions()
+
     def _post_blinds(self):
         """Post small and big blinds."""
         self.dealer_index = (self.dealer_index + 1) % len(self.players)
@@ -794,6 +797,9 @@ class PokerGame:
 
         # Process actions if no human or human not first
         self._process_remaining_actions()
+
+        # Check if hand should end after processing actions
+        self._maybe_advance_state()
 
     def get_showdown_results(self) -> Optional[Dict]:
         """Get showdown results with side pots. Fixed: Bug #5."""
