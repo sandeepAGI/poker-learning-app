@@ -578,6 +578,16 @@ class PokerGame:
 
     def start_new_hand(self):
         """Start a new poker hand."""
+        # QC: Ensure previous hand's pot was distributed (pot should be 0)
+        if self.pot > 0:
+            raise RuntimeError(
+                f"🚨 POT NOT DISTRIBUTED BEFORE NEW HAND!\n"
+                f"   Pot: ${self.pot}\n"
+                f"   State: {self.current_state.value}\n"
+                f"   Previous hand ended without distributing ${self.pot}!\n"
+                f"   This is a CRITICAL BUG - chips about to disappear!"
+            )
+
         # Save previous hand events to history
         if self.current_hand_events:
             self.hand_events.extend(self.current_hand_events)
@@ -610,15 +620,19 @@ class PokerGame:
                 self._log_hand_event("deal", player.player_id, "hole_cards", 0, 0.0,
                                    f"Dealt {len(player.hole_cards)} hole cards")
 
-        # Post blinds
-        self._post_blinds()
+        # Post blinds and get actual blind positions (important when players are busted)
+        sb_index, bb_index = self._post_blinds()
 
         # QC: Verify chip conservation immediately after blind posting
         self._assert_chip_conservation("immediately after _post_blinds()")
 
         # Set first player to act (after big blind)
-        bb_index = (self.dealer_index + 2) % len(self.players)
-        self.current_player_index = self._get_next_active_player_index(bb_index + 1)
+        # Use actual BB index, not dealer+2 (handles busted players correctly)
+        if bb_index is not None:
+            self.current_player_index = self._get_next_active_player_index(bb_index + 1)
+        else:
+            # Not enough players with chips
+            self.current_player_index = None
 
         # Process AI actions if AI player is first to act
         self._process_remaining_actions()
@@ -627,8 +641,20 @@ class PokerGame:
         self._assert_chip_conservation("after start_new_hand()")
         self._assert_valid_game_state("after start_new_hand()")
 
-    def _post_blinds(self):
-        """Post small and big blinds. Fixed: Handle busted players, partial blinds, and heads-up."""
+    def _post_blinds(self) -> tuple:
+        """
+        Post small and big blinds. Fixed: Handle busted players, partial blinds, and heads-up.
+        Returns (sb_index, bb_index) for correct turn order calculation.
+        """
+        # DEBUG (set to True to enable logging)
+        debug = False
+        if debug:
+            print(f"\n>>> _post_blinds() START:")
+            for i, p in enumerate(self.players):
+                print(f"    [{i}] {p.name}: ${p.stack}, invested=${p.total_invested}")
+            print(f"    Pot: ${self.pot}")
+            print(f"    Dealer index (before move): {self.dealer_index}")
+
         # Count players with chips
         players_with_chips_count = sum(1 for p in self.players if p.stack > 0)
         if players_with_chips_count < 2:
@@ -636,7 +662,7 @@ class PokerGame:
             # But for now, just don't post blinds
             self.pot = 0
             self.current_bet = 0
-            return
+            return (None, None)
 
         # Move dealer button (skip completely busted players with stack=0)
         self.dealer_index = (self.dealer_index + 1) % len(self.players)
@@ -679,17 +705,32 @@ class PokerGame:
         sb_player = self.players[sb_index]
         bb_player = self.players[bb_index]
 
+        if debug:
+            print(f"    Dealer index (after move): {self.dealer_index}")
+            print(f"    SB index: {sb_index} ({sb_player.name})")
+            print(f"    BB index: {bb_index} ({bb_player.name})")
+
         sb_amount = sb_player.bet(self.small_blind)
         bb_amount = bb_player.bet(self.big_blind)
+
+        if debug:
+            print(f"    SB amount posted: ${sb_amount}")
+            print(f"    BB amount posted: ${bb_amount}")
 
         # Blinds will mark themselves as acted during the natural betting round
         # This ensures BB gets their option to raise when everyone calls
 
         self.pot += sb_amount + bb_amount
 
+        if debug:
+            print(f"    Pot after blinds: ${self.pot}")
+            print(f">>> _post_blinds() END\n")
+
         # Current bet is the actual BB amount (might be less if BB went all-in)
         self.current_bet = bb_amount
         self.last_raiser_index = bb_index  # BB is last raiser pre-flop
+
+        return (sb_index, bb_index)
 
     def get_current_player(self) -> Optional[Player]:
         """Get the player whose turn it is. Fixed: Bug #1."""
