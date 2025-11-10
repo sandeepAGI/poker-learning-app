@@ -750,11 +750,19 @@ class PokerGame:
                     self.pot = 0
 
             self.current_state = GameState.SHOWDOWN
+            self.current_player_index = None  # No one left to act
             return
 
         if active_count == 1:
-            # Exactly one player remaining - standard win by fold
+            # Exactly one player remaining - award pot immediately
+            winner = next((p for p in self.players if p.is_active), None)
+            if winner and self.pot > 0:
+                winner.stack += self.pot
+                self._log_hand_event("pot_award", winner.player_id, "win", self.pot, 0.0,
+                                   f"{winner.name} wins ${self.pot} (all others folded)")
+                self.pot = 0
             self.current_state = GameState.SHOWDOWN
+            self.current_player_index = None  # No one left to act
             return
 
         if not self._betting_round_complete():
