@@ -85,6 +85,9 @@ class GameResponse(BaseModel):
     human_player: dict
     last_ai_decisions: dict
     winner_info: Optional[dict] = None  # Winner information at showdown
+    small_blind: int  # Issue #1 fix: Expose blind levels
+    big_blind: int
+    hand_count: int  # Current hand number
 
 
 # API Endpoints
@@ -200,7 +203,10 @@ def get_game_state(game_id: str):
         current_player_index=game.current_player_index,
         human_player=human_data,
         last_ai_decisions=ai_decisions_data,
-        winner_info=winner_info
+        winner_info=winner_info,
+        small_blind=game.small_blind,
+        big_blind=game.big_blind,
+        hand_count=game.hand_count
     )
 
 

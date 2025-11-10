@@ -438,6 +438,11 @@ class PokerGame:
         self.big_blind = 10
         self.small_blind = 5
 
+        # Blind escalation (Issue #1 fix)
+        self.blind_escalation_enabled = True  # Enable/disable blind increases
+        self.hands_per_blind_level = 10  # Increase blinds every 10 hands
+        self.blind_multiplier = 1.5  # Multiply by 1.5 each level
+
         # Fixed: Bug #1 - Turn order tracking
         self.current_player_index = 0
         self.last_raiser_index = None
@@ -576,6 +581,26 @@ class PokerGame:
 
         return True
 
+    def _maybe_increase_blinds(self):
+        """Increase blinds if blind escalation is enabled and threshold reached (Issue #1 fix)."""
+        if not self.blind_escalation_enabled:
+            return
+
+        # Check if we should increase blinds (every N hands, starting after the first N hands)
+        # hand_count is incremented before this is called
+        # Increase at hand 11, 21, 31, etc. (after 10, 20, 30 hands complete)
+        if self.hand_count > self.hands_per_blind_level and (self.hand_count - 1) % self.hands_per_blind_level == 0:
+            old_sb = self.small_blind
+            old_bb = self.big_blind
+
+            # Increase blinds
+            self.small_blind = int(self.small_blind * self.blind_multiplier)
+            self.big_blind = int(self.big_blind * self.blind_multiplier)
+
+            # Log blind increase event
+            self._log_hand_event("blind_increase", "system", "increase", 0, 0.0,
+                               f"Blinds increased from ${old_sb}/${old_bb} to ${self.small_blind}/${self.big_blind}")
+
     def start_new_hand(self):
         """Start a new poker hand."""
         # QC: Ensure previous hand's pot was distributed (pot should be 0)
@@ -597,6 +622,10 @@ class PokerGame:
                 self.hand_events = self.hand_events[-MAX_HAND_EVENTS_HISTORY:]
 
         self.hand_count += 1
+
+        # Issue #1 fix: Increase blinds if needed (tournament mode)
+        self._maybe_increase_blinds()
+
         self.current_hand_events = []
         self.last_ai_decisions = {}
 

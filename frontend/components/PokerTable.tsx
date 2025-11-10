@@ -14,7 +14,8 @@ export function PokerTable() {
 
   const isMyTurn = gameState.human_player.is_current_turn && gameState.human_player.is_active;
   const isShowdown = gameState.state === 'showdown';
-  const minRaise = gameState.current_bet + 10; // Assuming 10 is big blind
+  const minRaise = gameState.current_bet + (gameState.big_blind || 10);
+  const maxRaise = gameState.human_player.stack;
   const [raiseAmount, setRaiseAmount] = useState(minRaise);
   const [showWinnerModal, setShowWinnerModal] = useState(false);
 
@@ -22,6 +23,19 @@ export function PokerTable() {
   useEffect(() => {
     setRaiseAmount(minRaise);
   }, [minRaise]);
+
+  // Issue #5 fix: Validate and cap raise amount
+  const handleRaiseAmountChange = (value: number) => {
+    // Cap between minRaise and maxRaise
+    const capped = Math.max(minRaise, Math.min(value, maxRaise));
+    setRaiseAmount(capped);
+  };
+
+  // Issue #3 fix: All-in button handler
+  const handleAllIn = () => {
+    setRaiseAmount(maxRaise);
+    submitAction('raise', maxRaise);
+  };
 
   // Show winner modal when winner_info is available
   useEffect(() => {
@@ -43,6 +57,10 @@ export function PokerTable() {
         <div>
           <h1 className="text-2xl font-bold">Poker Learning App</h1>
           <div className="text-sm opacity-80">Game State: {gameState.state.toUpperCase()}</div>
+          {/* Issue #1 fix: Display blind levels and hand count */}
+          <div className="text-sm opacity-80 mt-1">
+            Hand #{gameState.hand_count || 1} | Blinds: ${gameState.small_blind || 5}/${gameState.big_blind || 10}
+          </div>
         </div>
         <button
           onClick={toggleBeginnerMode}
@@ -157,23 +175,34 @@ export function PokerTable() {
                     <input
                       type="number"
                       value={raiseAmount}
-                      onChange={(e) => setRaiseAmount(parseInt(e.target.value) || 0)}
+                      onChange={(e) => handleRaiseAmountChange(parseInt(e.target.value) || minRaise)}
                       min={minRaise}
-                      max={gameState.human_player.stack}
+                      max={maxRaise}
                       className="w-full px-4 py-4 rounded-lg bg-gray-900 text-white text-xl font-bold border-4 border-green-400 focus:border-green-300 focus:outline-none text-center placeholder-gray-400"
                       placeholder={`Min $${minRaise}`}
                     />
                     <div className="text-white text-xs mt-1">
-                      Min: ${minRaise} | Max: ${gameState.human_player.stack}
+                      Min: ${minRaise} | Max: ${maxRaise}
                     </div>
                   </div>
-                  <button
-                    onClick={() => submitAction('raise', raiseAmount)}
-                    disabled={loading || raiseAmount < minRaise}
-                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg disabled:opacity-50 self-end mb-5"
-                  >
-                    Raise
-                  </button>
+                  <div className="flex flex-col gap-2">
+                    {/* Issue #3 fix: All-In button */}
+                    <button
+                      onClick={handleAllIn}
+                      disabled={loading || maxRaise < minRaise}
+                      className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-6 rounded-lg disabled:opacity-50 whitespace-nowrap"
+                      title="Go all-in with your entire stack"
+                    >
+                      All-In (${maxRaise})
+                    </button>
+                    <button
+                      onClick={() => submitAction('raise', raiseAmount)}
+                      disabled={loading || raiseAmount < minRaise || raiseAmount > maxRaise}
+                      className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg disabled:opacity-50"
+                    >
+                      Raise
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
