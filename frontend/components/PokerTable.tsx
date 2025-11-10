@@ -143,7 +143,7 @@ export function PokerTable() {
                       onChange={(e) => setRaiseAmount(parseInt(e.target.value) || 0)}
                       min={minRaise}
                       max={gameState.human_player.stack}
-                      className="w-full px-4 py-4 rounded-lg text-black text-xl font-bold border-4 border-green-400 focus:border-green-300 focus:outline-none text-center"
+                      className="w-full px-4 py-4 rounded-lg bg-gray-900 text-white text-xl font-bold border-4 border-green-400 focus:border-green-300 focus:outline-none text-center placeholder-gray-400"
                       placeholder={`Min $${minRaise}`}
                     />
                     <div className="text-white text-xs mt-1">
