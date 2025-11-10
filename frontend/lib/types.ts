@@ -23,6 +23,14 @@ export interface AIDecision {
   spr: number;
 }
 
+export interface WinnerInfo {
+  player_id: string;
+  name: string;
+  amount: number;
+  is_human: boolean;
+  personality: string | null;
+}
+
 export interface GameState {
   game_id: string;
   state: 'pre_flop' | 'flop' | 'turn' | 'river' | 'showdown';
@@ -33,6 +41,7 @@ export interface GameState {
   current_player_index: number;
   human_player: Player;
   last_ai_decisions: Record<string, AIDecision>;
+  winner_info: WinnerInfo | null;
 }
 
 export interface CreateGameRequest {

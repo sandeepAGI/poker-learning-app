@@ -84,6 +84,7 @@ class GameResponse(BaseModel):
     current_player_index: Optional[int]  # None when all players all-in or folded
     human_player: dict
     last_ai_decisions: dict
+    winner_info: Optional[dict] = None  # Winner information at showdown
 
 
 # API Endpoints
@@ -172,6 +173,23 @@ def get_game_state(game_id: str):
             "spr": decision.spr
         }
 
+    # Find winner information if at showdown
+    winner_info = None
+    if game.current_state == GameState.SHOWDOWN:
+        # Look for pot_award event in current hand events
+        for event in reversed(game.current_hand_events):
+            if event.event_type == "pot_award":
+                winner = next((p for p in game.players if p.player_id == event.player_id), None)
+                if winner:
+                    winner_info = {
+                        "player_id": winner.player_id,
+                        "name": winner.name,
+                        "amount": event.amount,
+                        "is_human": winner.is_human,
+                        "personality": winner.personality if not winner.is_human else None
+                    }
+                break
+
     return GameResponse(
         game_id=game_id,
         state=game.current_state.value,
@@ -181,7 +199,8 @@ def get_game_state(game_id: str):
         community_cards=game.community_cards,
         current_player_index=game.current_player_index,
         human_player=human_data,
-        last_ai_decisions=ai_decisions_data
+        last_ai_decisions=ai_decisions_data,
+        winner_info=winner_info
     )
 
 

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Card } from './Card';
 import { PlayerSeat } from './PlayerSeat';
+import { WinnerModal } from './WinnerModal';
 import { useGameStore } from '../lib/store';
 import { useState, useEffect } from 'react';
 
@@ -15,11 +16,25 @@ export function PokerTable() {
   const isShowdown = gameState.state === 'showdown';
   const minRaise = gameState.current_bet + 10; // Assuming 10 is big blind
   const [raiseAmount, setRaiseAmount] = useState(minRaise);
+  const [showWinnerModal, setShowWinnerModal] = useState(false);
 
   // Update raise amount when minRaise changes (new betting round, someone raises, etc.)
   useEffect(() => {
     setRaiseAmount(minRaise);
   }, [minRaise]);
+
+  // Show winner modal when winner_info is available
+  useEffect(() => {
+    if (gameState.winner_info) {
+      setShowWinnerModal(true);
+    }
+  }, [gameState.winner_info]);
+
+  // Handle winner modal close - advance to next hand
+  const handleWinnerModalClose = () => {
+    setShowWinnerModal(false);
+    nextHand();
+  };
 
   return (
     <div className="flex flex-col h-screen bg-green-800 p-4">
@@ -61,6 +76,7 @@ export function PokerTable() {
                 isCurrentTurn={gameState.players[gameState.current_player_index]?.player_id === player.player_id}
                 aiDecision={gameState.last_ai_decisions[player.player_id]}
                 beginnerMode={beginnerMode}
+                isShowdown={isShowdown}
               />
             ))}
         </div>
@@ -99,6 +115,7 @@ export function PokerTable() {
             player={gameState.human_player}
             isCurrentTurn={isMyTurn}
             beginnerMode={beginnerMode}
+            isShowdown={isShowdown}
           />
         </div>
 
@@ -167,6 +184,16 @@ export function PokerTable() {
           )}
         </div>
       </div>
+
+      {/* Winner announcement modal */}
+      {gameState.winner_info && (
+        <WinnerModal
+          isOpen={showWinnerModal}
+          winner={gameState.players.find(p => p.player_id === gameState.winner_info?.player_id) || null}
+          amount={gameState.winner_info.amount}
+          onClose={handleWinnerModalClose}
+        />
+      )}
     </div>
   );
 }

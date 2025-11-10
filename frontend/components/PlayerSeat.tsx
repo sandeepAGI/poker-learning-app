@@ -9,9 +9,10 @@ interface PlayerSeatProps {
   isCurrentTurn: boolean;
   aiDecision?: AIDecision;
   beginnerMode: boolean;
+  isShowdown?: boolean;
 }
 
-export function PlayerSeat({ player, isCurrentTurn, aiDecision, beginnerMode }: PlayerSeatProps) {
+export function PlayerSeat({ player, isCurrentTurn, aiDecision, beginnerMode, isShowdown = false }: PlayerSeatProps) {
   return (
     <motion.div
       className={`relative p-4 rounded-lg ${
@@ -25,7 +26,8 @@ export function PlayerSeat({ player, isCurrentTurn, aiDecision, beginnerMode }: 
       {/* Player name and personality */}
       <div className="flex items-center gap-2 mb-2">
         <div className="font-bold text-sm">{player.name}</div>
-        {player.personality && (
+        {/* Only reveal AI strategy at showdown */}
+        {player.personality && isShowdown && (
           <div className="text-xs bg-blue-200 px-2 py-0.5 rounded">{player.personality}</div>
         )}
         {player.all_in && <div className="text-xs bg-red-200 px-2 py-0.5 rounded">ALL-IN</div>}
@@ -62,8 +64,8 @@ export function PlayerSeat({ player, isCurrentTurn, aiDecision, beginnerMode }: 
         )}
       </div>
 
-      {/* AI Decision reasoning */}
-      {aiDecision && (
+      {/* AI Decision reasoning - only show at showdown */}
+      {aiDecision && isShowdown && (
         <motion.div
           className="mt-3 p-2 bg-blue-50 border border-blue-200 rounded text-xs"
           initial={{ opacity: 0, height: 0 }}

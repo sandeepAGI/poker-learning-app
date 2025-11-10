@@ -417,13 +417,14 @@ class PokerGame:
         # Create human player
         self.players = [Player("human", human_player_name, is_human=True)]
 
-        # Add AI players dynamically
+        # Add AI players dynamically with creative AI pun names
         personalities = ["Conservative", "Aggressive", "Mathematical"]
+        ai_names = ["AI-ce", "AI-ron", "AI-nstein"]  # Fun AI puns
         for i in range(ai_count):
             self.players.append(
                 Player(
                     player_id=f"ai{i+1}",
-                    name=f"AI {personalities[i]}",
+                    name=ai_names[i],
                     personality=personalities[i]
                 )
             )
