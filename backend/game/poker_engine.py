@@ -57,14 +57,20 @@ class Player:
     has_acted: bool = False  # Track if player has acted this round
 
     def bet(self, amount: int) -> int:
-        """Place a bet, reducing stack. Fixed: proper accounting."""
-        if amount > self.stack:
+        """Place a bet, reducing stack. Fixed: proper accounting + all-in handling."""
+        if amount >= self.stack:
+            # Betting entire stack or more - mark as all-in
             amount = self.stack
             self.all_in = True
 
         self.stack -= amount
         self.current_bet += amount
         self.total_invested += amount
+
+        # Double-check: if stack is now 0, definitely all-in
+        if self.stack == 0 and self.current_bet > 0:
+            self.all_in = True
+
         return amount
 
     def reset_for_new_hand(self):

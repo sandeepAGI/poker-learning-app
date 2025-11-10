@@ -12,12 +12,18 @@ export function PokerTable() {
 
   if (!gameState) return null;
 
-  const isMyTurn = gameState.human_player.is_current_turn && gameState.human_player.is_active;
+  // Fix: Don't show actions if player has no chips (all-in or busted)
+  const isMyTurn = gameState.human_player.is_current_turn &&
+                   gameState.human_player.is_active &&
+                   gameState.human_player.stack > 0;
   const isShowdown = gameState.state === 'showdown';
   const minRaise = gameState.current_bet + (gameState.big_blind || 10);
   const maxRaise = gameState.human_player.stack;
   const [raiseAmount, setRaiseAmount] = useState(minRaise);
   const [showWinnerModal, setShowWinnerModal] = useState(false);
+
+  // Check if player is all-in (has chips invested but stack = 0)
+  const isAllIn = gameState.human_player.current_bet > 0 && gameState.human_player.stack === 0;
 
   // Update raise amount when minRaise changes (new betting round, someone raises, etc.)
   useEffect(() => {
@@ -208,7 +214,7 @@ export function PokerTable() {
             </div>
           ) : (
             <div className="text-white text-center py-4">
-              {loading ? 'Processing...' : "Waiting for other players..."}
+              {loading ? 'Processing...' : isAllIn ? "All-In! Waiting for hand to complete..." : "Waiting for other players..."}
             </div>
           )}
         </div>
