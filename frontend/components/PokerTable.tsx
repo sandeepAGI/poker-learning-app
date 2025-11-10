@@ -133,23 +133,31 @@ export function PokerTable() {
               </button>
 
               {/* Raise */}
-              <div className="flex-1 flex gap-2">
-                <input
-                  type="number"
-                  value={raiseAmount}
-                  onChange={(e) => setRaiseAmount(parseInt(e.target.value) || 0)}
-                  min={minRaise}
-                  max={gameState.human_player.stack}
-                  className="flex-1 px-4 py-2 rounded-lg text-black"
-                  placeholder={`Min $${minRaise}`}
-                />
-                <button
-                  onClick={() => submitAction('raise', raiseAmount)}
-                  disabled={loading || raiseAmount < minRaise}
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg disabled:opacity-50"
-                >
-                  Raise
-                </button>
+              <div className="flex-1 flex flex-col gap-2">
+                <div className="flex gap-2">
+                  <div className="flex-1 flex flex-col">
+                    <label className="text-white text-sm mb-1 font-semibold">Raise Amount:</label>
+                    <input
+                      type="number"
+                      value={raiseAmount}
+                      onChange={(e) => setRaiseAmount(parseInt(e.target.value) || 0)}
+                      min={minRaise}
+                      max={gameState.human_player.stack}
+                      className="w-full px-4 py-4 rounded-lg text-black text-xl font-bold border-4 border-green-400 focus:border-green-300 focus:outline-none text-center"
+                      placeholder={`Min $${minRaise}`}
+                    />
+                    <div className="text-white text-xs mt-1">
+                      Min: ${minRaise} | Max: ${gameState.human_player.stack}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => submitAction('raise', raiseAmount)}
+                    disabled={loading || raiseAmount < minRaise}
+                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg disabled:opacity-50 self-end mb-5"
+                  >
+                    Raise
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
