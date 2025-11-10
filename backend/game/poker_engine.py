@@ -784,6 +784,8 @@ class PokerGame:
             self.community_cards.extend(self.deck_manager.deal_cards(1))
         elif self.current_state == GameState.RIVER:
             self.current_state = GameState.SHOWDOWN
+            # Award pot at showdown with proper side pot handling
+            self._award_pot_at_showdown()
             return
 
         # Reset for new betting round
@@ -802,10 +804,10 @@ class PokerGame:
         # Check if hand should end after processing actions
         self._maybe_advance_state()
 
-    def get_showdown_results(self) -> Optional[Dict]:
-        """Get showdown results with side pots. Fixed: Bug #5."""
-        if self.current_state != GameState.SHOWDOWN:
-            return None
+    def _award_pot_at_showdown(self):
+        """Award pot to winners at showdown. Called automatically when reaching SHOWDOWN."""
+        if self.pot == 0:
+            return  # No pot to award
 
         pots = self.hand_evaluator.determine_winners_with_side_pots(self.players, self.community_cards)
 
@@ -817,12 +819,25 @@ class PokerGame:
 
             for i, winner_id in enumerate(pot_info['winners']):
                 winner = next(p for p in self.players if p.player_id == winner_id)
-                winner.stack += split_amount
-                # Give remainder chips to first winner(s)
-                if i < remainder:
-                    winner.stack += 1
+                award_amount = split_amount + (1 if i < remainder else 0)
+                winner.stack += award_amount
+
+                # Log pot award event for winner_info
+                self._log_hand_event("pot_award", winner.player_id, "win", award_amount, 0.0,
+                                   f"{winner.name} wins ${award_amount} at showdown")
 
         self.pot = 0
+
+    def get_showdown_results(self) -> Optional[Dict]:
+        """Get showdown results with side pots. Fixed: Bug #5."""
+        if self.current_state != GameState.SHOWDOWN:
+            return None
+
+        # Award pot if not already awarded
+        self._award_pot_at_showdown()
+
+        # Return results (pot is already 0 after awarding)
+        pots = self.hand_evaluator.determine_winners_with_side_pots(self.players, self.community_cards)
 
         return {
             "pots": pots,
