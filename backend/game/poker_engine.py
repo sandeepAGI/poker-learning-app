@@ -447,6 +447,91 @@ class PokerGame:
         self.current_hand_events: List[HandEvent] = []
         self.last_ai_decisions: Dict[str, AIDecision] = {}
 
+        # QC: Enable runtime assertions for poker rule validation
+        self.qc_enabled = True  # Set to False to disable for performance
+
+    # ========================================================================
+    # QC RUNTIME ASSERTIONS - Phase 1: Catch bugs immediately
+    # ========================================================================
+
+    def _assert_chip_conservation(self, context: str = ""):
+        """
+        Assert that total chips always equal $4000.
+        This is THE fundamental invariant of poker - chips cannot be created or destroyed.
+
+        If this fails, a critical bug has occurred and the game is corrupt.
+        """
+        if not self.qc_enabled:
+            return
+
+        total = sum(p.stack for p in self.players) + self.pot
+        if total != 4000:
+            # Build detailed error message
+            stacks_info = ", ".join([f"{p.name}=${p.stack}" for p in self.players])
+            raise RuntimeError(
+                f"🚨 CHIP CONSERVATION VIOLATED {context}\n"
+                f"   Total: ${total} (Expected: $4000)\n"
+                f"   Missing: ${4000 - total}\n"
+                f"   Pot: ${self.pot}\n"
+                f"   Stacks: {stacks_info}\n"
+                f"   State: {self.current_state.value}\n"
+                f"   This is a CRITICAL BUG - chips disappeared or were created!"
+            )
+
+    def _assert_valid_game_state(self, context: str = ""):
+        """
+        Assert that game state is valid.
+        Checks multiple invariants that should always be true.
+        """
+        if not self.qc_enabled:
+            return
+
+        errors = []
+
+        # 1. Pot should never be negative
+        if self.pot < 0:
+            errors.append(f"Pot is negative: ${self.pot}")
+
+        # 2. Current bet should never be negative
+        if self.current_bet < 0:
+            errors.append(f"Current bet is negative: ${self.current_bet}")
+
+        # 3. Player stacks should never be negative
+        for p in self.players:
+            if p.stack < 0:
+                errors.append(f"{p.name} has negative stack: ${p.stack}")
+
+        # 4. Player current_bet should never be negative
+        for p in self.players:
+            if p.current_bet < 0:
+                errors.append(f"{p.name} has negative current_bet: ${p.current_bet}")
+
+        # 5. Active players should have non-negative stacks or be all-in
+        for p in self.players:
+            if p.is_active and p.stack < 0:
+                errors.append(f"Active player {p.name} has negative stack: ${p.stack}")
+
+        # 6. At showdown, pot should be 0 (already awarded)
+        if self.current_state == GameState.SHOWDOWN and self.pot > 0:
+            errors.append(f"At SHOWDOWN but pot not awarded: ${self.pot}")
+
+        # 7. If only 0-1 active players, should be at SHOWDOWN
+        active_count = sum(1 for p in self.players if p.is_active)
+        if active_count <= 1 and self.current_state != GameState.SHOWDOWN:
+            errors.append(f"Only {active_count} active players but not at SHOWDOWN (state: {self.current_state.value})")
+
+        if errors:
+            error_msg = "\n   ".join(errors)
+            raise RuntimeError(
+                f"🚨 INVALID GAME STATE {context}\n"
+                f"   {error_msg}\n"
+                f"   This is a CRITICAL BUG - game rules violated!"
+            )
+
+    # ========================================================================
+    # End QC Assertions
+    # ========================================================================
+
     def _log_hand_event(self, event_type: str, player_id: str, action: str,
                        amount: int = 0, hand_strength: float = 0.0, reasoning: str = ""):
         """Log a hand event for learning analysis."""
@@ -532,6 +617,10 @@ class PokerGame:
 
         # Process AI actions if AI player is first to act
         self._process_remaining_actions()
+
+        # QC: Verify chip conservation and game state after starting new hand
+        self._assert_chip_conservation("after start_new_hand()")
+        self._assert_valid_game_state("after start_new_hand()")
 
     def _post_blinds(self):
         """Post small and big blinds."""
@@ -653,6 +742,10 @@ class PokerGame:
         # Advance game if betting round complete
         self._maybe_advance_state()
 
+        # QC: Verify chip conservation and game state after human action
+        self._assert_chip_conservation("after submit_human_action()")
+        self._assert_valid_game_state("after submit_human_action()")
+
         return True
 
     def _process_remaining_actions(self):
@@ -729,6 +822,9 @@ class PokerGame:
 
             self._log_hand_event("action", player.player_id, "raise", bet_amount,
                                ai_decision.hand_strength, ai_decision.reasoning)
+
+        # QC: Verify chip conservation after each AI action
+        self._assert_chip_conservation(f"after AI {player.name} action: {ai_decision.action}")
 
     def _maybe_advance_state(self):
         """Advance game state if betting round is complete."""
@@ -827,6 +923,10 @@ class PokerGame:
                                    f"{winner.name} wins ${award_amount} at showdown")
 
         self.pot = 0
+
+        # QC: Verify chip conservation after pot award
+        self._assert_chip_conservation("after _award_pot_at_showdown()")
+        self._assert_valid_game_state("after _award_pot_at_showdown()")
 
     def get_showdown_results(self) -> Optional[Dict]:
         """Get showdown results with side pots. Fixed: Bug #5."""
