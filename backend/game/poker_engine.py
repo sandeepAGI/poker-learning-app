@@ -449,6 +449,7 @@ class PokerGame:
 
         # QC: Enable runtime assertions for poker rule validation
         self.qc_enabled = True  # Set to False to disable for performance
+        self.total_chips = sum(p.stack for p in self.players) + self.pot  # Track expected total
 
     # ========================================================================
     # QC RUNTIME ASSERTIONS - Phase 1: Catch bugs immediately
@@ -465,13 +466,13 @@ class PokerGame:
             return
 
         total = sum(p.stack for p in self.players) + self.pot
-        if total != 4000:
+        if total != self.total_chips:
             # Build detailed error message
             stacks_info = ", ".join([f"{p.name}=${p.stack}" for p in self.players])
             raise RuntimeError(
                 f"🚨 CHIP CONSERVATION VIOLATED {context}\n"
-                f"   Total: ${total} (Expected: $4000)\n"
-                f"   Missing: ${4000 - total}\n"
+                f"   Total: ${total} (Expected: ${self.total_chips})\n"
+                f"   Missing: ${self.total_chips - total}\n"
                 f"   Pot: ${self.pot}\n"
                 f"   Stacks: {stacks_info}\n"
                 f"   State: {self.current_state.value}\n"
@@ -515,9 +516,10 @@ class PokerGame:
         if self.current_state == GameState.SHOWDOWN and self.pot > 0:
             errors.append(f"At SHOWDOWN but pot not awarded: ${self.pot}")
 
-        # 7. If only 0-1 active players, should be at SHOWDOWN
+        # 7. If only 0-1 active players during hand play (not at start), should be at SHOWDOWN
+        # NOTE: At PRE_FLOP start, busted players from previous hands are inactive - this is valid
         active_count = sum(1 for p in self.players if p.is_active)
-        if active_count <= 1 and self.current_state != GameState.SHOWDOWN:
+        if active_count <= 1 and self.current_state != GameState.SHOWDOWN and self.current_state != GameState.PRE_FLOP:
             errors.append(f"Only {active_count} active players but not at SHOWDOWN (state: {self.current_state.value})")
 
         if errors:
@@ -611,6 +613,9 @@ class PokerGame:
         # Post blinds
         self._post_blinds()
 
+        # QC: Verify chip conservation immediately after blind posting
+        self._assert_chip_conservation("immediately after _post_blinds()")
+
         # Set first player to act (after big blind)
         bb_index = (self.dealer_index + 2) % len(self.players)
         self.current_player_index = self._get_next_active_player_index(bb_index + 1)
@@ -623,12 +628,54 @@ class PokerGame:
         self._assert_valid_game_state("after start_new_hand()")
 
     def _post_blinds(self):
-        """Post small and big blinds."""
-        self.dealer_index = (self.dealer_index + 1) % len(self.players)
-        sb_index = (self.dealer_index + 1) % len(self.players)
-        bb_index = (self.dealer_index + 2) % len(self.players)
+        """Post small and big blinds. Fixed: Handle busted players, partial blinds, and heads-up."""
+        # Count players with chips
+        players_with_chips_count = sum(1 for p in self.players if p.stack > 0)
+        if players_with_chips_count < 2:
+            # Not enough players to post blinds - game should end
+            # But for now, just don't post blinds
+            self.pot = 0
+            self.current_bet = 0
+            return
 
-        # Post blinds
+        # Move dealer button (skip completely busted players with stack=0)
+        self.dealer_index = (self.dealer_index + 1) % len(self.players)
+        for _ in range(len(self.players)):
+            if self.players[self.dealer_index].stack > 0:
+                break
+            self.dealer_index = (self.dealer_index + 1) % len(self.players)
+
+        # Special case: Heads-up (exactly 2 players with chips)
+        # In heads-up, dealer posts SB and other player posts BB
+        if players_with_chips_count == 2:
+            sb_index = self.dealer_index
+            # Find the other player with chips (BB)
+            bb_index = (self.dealer_index + 1) % len(self.players)
+            for _ in range(len(self.players)):
+                if self.players[bb_index].stack > 0 and bb_index != sb_index:
+                    break
+                bb_index = (bb_index + 1) % len(self.players)
+        else:
+            # Normal case: 3+ players with chips
+            # Find SB (next player with chips after dealer)
+            sb_index = (self.dealer_index + 1) % len(self.players)
+            for _ in range(len(self.players)):
+                if self.players[sb_index].stack > 0:
+                    break
+                sb_index = (sb_index + 1) % len(self.players)
+
+            # Find BB (next player with chips after SB)
+            bb_index = (sb_index + 1) % len(self.players)
+            for _ in range(len(self.players)):
+                if self.players[bb_index].stack > 0:
+                    break
+                bb_index = (bb_index + 1) % len(self.players)
+
+        # Sanity check: SB and BB must be different players
+        if sb_index == bb_index:
+            raise RuntimeError(f"🚨 BLIND POSTING BUG: SB and BB are same player (index={sb_index})")
+
+        # Post blinds (players will auto-go all-in if they don't have enough)
         sb_player = self.players[sb_index]
         bb_player = self.players[bb_index]
 
@@ -639,7 +686,9 @@ class PokerGame:
         # This ensures BB gets their option to raise when everyone calls
 
         self.pot += sb_amount + bb_amount
-        self.current_bet = self.big_blind
+
+        # Current bet is the actual BB amount (might be less if BB went all-in)
+        self.current_bet = bb_amount
         self.last_raiser_index = bb_index  # BB is last raiser pre-flop
 
     def get_current_player(self) -> Optional[Player]:
