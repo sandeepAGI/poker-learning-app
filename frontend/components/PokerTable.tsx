@@ -4,17 +4,22 @@ import { motion } from 'framer-motion';
 import { Card } from './Card';
 import { PlayerSeat } from './PlayerSeat';
 import { useGameStore } from '../lib/store';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function PokerTable() {
   const { gameState, beginnerMode, submitAction, nextHand, toggleBeginnerMode, loading, error } = useGameStore();
-  const [raiseAmount, setRaiseAmount] = useState(0);
 
   if (!gameState) return null;
 
   const isMyTurn = gameState.human_player.is_current_turn && gameState.human_player.is_active;
   const isShowdown = gameState.state === 'showdown';
   const minRaise = gameState.current_bet + 10; // Assuming 10 is big blind
+  const [raiseAmount, setRaiseAmount] = useState(minRaise);
+
+  // Update raise amount when minRaise changes (new betting round, someone raises, etc.)
+  useEffect(() => {
+    setRaiseAmount(minRaise);
+  }, [minRaise]);
 
   return (
     <div className="flex flex-col h-screen bg-green-800 p-4">
