@@ -10,14 +10,17 @@ interface GameStore {
   gameState: GameState | null;
   loading: boolean;
   error: string | null;
-  beginnerMode: boolean;
+  showAiThinking: boolean; // UX Phase 1: Control AI reasoning visibility
+  handAnalysis: any | null; // UX Phase 2: Store hand analysis
 
   // Actions
   createGame: (playerName: string, aiCount: number) => Promise<void>;
   fetchGameState: () => Promise<void>;
   submitAction: (action: 'fold' | 'call' | 'raise', amount?: number) => Promise<void>;
   nextHand: () => Promise<void>;
-  toggleBeginnerMode: () => void;
+  toggleShowAiThinking: () => void; // UX Phase 1: Toggle AI reasoning
+  getHandAnalysis: () => Promise<void>; // UX Phase 2: Fetch analysis
+  quitGame: () => void; // Bug fix: Allow player to quit
   setError: (error: string | null) => void;
 }
 
@@ -27,7 +30,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   gameState: null,
   loading: false,
   error: null,
-  beginnerMode: true, // Start in beginner mode for educational purposes
+  showAiThinking: false, // UX Phase 1: Hidden by default for cleaner UI
+  handAnalysis: null, // UX Phase 2: No analysis initially
 
   // Create a new game
   createGame: async (playerName: string, aiCount: number) => {
@@ -49,7 +53,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // Fetch current game state
   fetchGameState: async () => {
-    const { gameId } = get();
+    const { gameId, showAiThinking } = get();
     if (!gameId) {
       set({ error: 'No game ID found' });
       return;
@@ -57,7 +61,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({ loading: true, error: null });
     try {
-      const gameState = await pokerApi.getGameState(gameId);
+      const gameState = await pokerApi.getGameState(gameId, showAiThinking);
       set({ gameState, loading: false });
     } catch (error: any) {
       console.error('Error fetching game state:', error);
@@ -113,9 +117,44 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
 
-  // Toggle between beginner and expert mode
-  toggleBeginnerMode: () => {
-    set((state) => ({ beginnerMode: !state.beginnerMode }));
+  // UX Phase 1: Toggle AI reasoning visibility
+  toggleShowAiThinking: () => {
+    const newValue = !get().showAiThinking;
+    set({ showAiThinking: newValue });
+    // Re-fetch game state with new setting
+    get().fetchGameState();
+  },
+
+  // UX Phase 2: Get hand analysis
+  getHandAnalysis: async () => {
+    const { gameId } = get();
+    if (!gameId) {
+      set({ error: 'No game ID found' });
+      return;
+    }
+
+    set({ loading: true, error: null });
+    try {
+      const analysis = await pokerApi.getHandAnalysis(gameId);
+      set({ handAnalysis: analysis, loading: false });
+    } catch (error: any) {
+      console.error('Error fetching hand analysis:', error);
+      set({
+        error: error.response?.data?.detail || 'No completed hands to analyze yet',
+        loading: false
+      });
+    }
+  },
+
+  // Bug fix: Quit game and return to lobby
+  quitGame: () => {
+    set({
+      gameId: null,
+      gameState: null,
+      handAnalysis: null,
+      error: null,
+      loading: false
+    });
   },
 
   // Set error message

@@ -8,11 +8,11 @@ interface PlayerSeatProps {
   player: Player;
   isCurrentTurn: boolean;
   aiDecision?: AIDecision;
-  beginnerMode: boolean;
+  showAiThinking: boolean; // UX Phase 1: Control AI reasoning visibility
   isShowdown?: boolean;
 }
 
-export function PlayerSeat({ player, isCurrentTurn, aiDecision, beginnerMode, isShowdown = false }: PlayerSeatProps) {
+export function PlayerSeat({ player, isCurrentTurn, aiDecision, showAiThinking, isShowdown = false }: PlayerSeatProps) {
   return (
     <motion.div
       className={`relative p-4 rounded-lg ${
@@ -64,8 +64,8 @@ export function PlayerSeat({ player, isCurrentTurn, aiDecision, beginnerMode, is
         )}
       </div>
 
-      {/* AI Decision reasoning - only show at showdown */}
-      {aiDecision && isShowdown && (
+      {/* UX Phase 1: AI Decision reasoning - only show when showAiThinking is true */}
+      {aiDecision && showAiThinking && aiDecision.reasoning && (
         <motion.div
           className="mt-3 p-2 bg-blue-50 border border-blue-200 rounded text-xs"
           initial={{ opacity: 0, height: 0 }}
@@ -76,13 +76,15 @@ export function PlayerSeat({ player, isCurrentTurn, aiDecision, beginnerMode, is
             Action: {aiDecision.action.toUpperCase()}{' '}
             {aiDecision.amount > 0 && `$${aiDecision.amount}`}
           </div>
-          <div className="text-gray-700">
-            {beginnerMode ? aiDecision.beginner_reasoning : aiDecision.reasoning}
+          <div className="text-gray-700 italic">
+            "{aiDecision.reasoning}"
           </div>
-          <div className="mt-1 text-gray-500 text-[10px]">
-            SPR: {aiDecision.spr.toFixed(1)} | Pot Odds: {(aiDecision.pot_odds * 100).toFixed(0)}% |
-            Hand: {(aiDecision.hand_strength * 100).toFixed(0)}%
-          </div>
+          {aiDecision.spr !== undefined && aiDecision.pot_odds !== undefined && aiDecision.hand_strength !== undefined && (
+            <div className="mt-1 text-gray-500 text-[10px]">
+              SPR: {aiDecision.spr.toFixed(1)} | Pot Odds: {(aiDecision.pot_odds * 100).toFixed(0)}% |
+              Hand: {(aiDecision.hand_strength * 100).toFixed(0)}%
+            </div>
+          )}
         </motion.div>
       )}
     </motion.div>

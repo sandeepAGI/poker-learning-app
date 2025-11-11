@@ -4,11 +4,23 @@ import { motion } from 'framer-motion';
 import { Card } from './Card';
 import { PlayerSeat } from './PlayerSeat';
 import { WinnerModal } from './WinnerModal';
+import { AnalysisModal } from './AnalysisModal';
 import { useGameStore } from '../lib/store';
 import { useState, useEffect } from 'react';
 
 export function PokerTable() {
-  const { gameState, beginnerMode, submitAction, nextHand, toggleBeginnerMode, loading, error } = useGameStore();
+  const {
+    gameState,
+    showAiThinking,
+    handAnalysis,
+    submitAction,
+    nextHand,
+    toggleShowAiThinking,
+    getHandAnalysis,
+    quitGame,
+    loading,
+    error
+  } = useGameStore();
 
   if (!gameState) return null;
 
@@ -17,13 +29,25 @@ export function PokerTable() {
                    gameState.human_player.is_active &&
                    gameState.human_player.stack > 0;
   const isShowdown = gameState.state === 'showdown';
+
+  // Bug Fix #1: Proper call amount calculation (prevent negative)
+  const callAmount = Math.max(0, gameState.current_bet - gameState.human_player.current_bet);
+  const canCall = gameState.human_player.stack >= callAmount;
+
+  // Bug Fix #1: Proper raise amount validation
   const minRaise = gameState.current_bet + (gameState.big_blind || 10);
   const maxRaise = gameState.human_player.stack;
+  const canRaise = maxRaise >= minRaise && gameState.human_player.stack > callAmount;
+
   const [raiseAmount, setRaiseAmount] = useState(minRaise);
   const [showWinnerModal, setShowWinnerModal] = useState(false);
+  const [showAnalysisModal, setShowAnalysisModal] = useState(false);
 
   // Check if player is all-in (has chips invested but stack = 0)
   const isAllIn = gameState.human_player.current_bet > 0 && gameState.human_player.stack === 0;
+
+  // Bug Fix #3: Check if player is busted (not in game anymore)
+  const isBusted = gameState.human_player.stack === 0 && !gameState.human_player.is_active;
 
   // Update raise amount when minRaise changes (new betting round, someone raises, etc.)
   useEffect(() => {
@@ -56,6 +80,19 @@ export function PokerTable() {
     nextHand();
   };
 
+  // UX Phase 2: Handle analysis button click
+  const handleAnalysisClick = async () => {
+    await getHandAnalysis();
+    setShowAnalysisModal(true);
+  };
+
+  // Show analysis modal when analysis is available
+  useEffect(() => {
+    if (handAnalysis && !showAnalysisModal) {
+      setShowAnalysisModal(true);
+    }
+  }, [handAnalysis]);
+
   return (
     <div className="flex flex-col h-screen bg-green-800 p-4">
       {/* Header */}
@@ -68,12 +105,41 @@ export function PokerTable() {
             Hand #{gameState.hand_count || 1} | Blinds: ${gameState.small_blind || 5}/${gameState.big_blind || 10}
           </div>
         </div>
-        <button
-          onClick={toggleBeginnerMode}
-          className="bg-white text-green-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
-        >
-          {beginnerMode ? 'Beginner Mode' : 'Expert Mode'}
-        </button>
+
+        {/* UX Controls */}
+        <div className="flex gap-2">
+          {/* UX Phase 2: Analyze Last Hand button */}
+          <button
+            onClick={handleAnalysisClick}
+            disabled={loading}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold disabled:opacity-50"
+            title="Analyze your last hand to learn from your decisions"
+          >
+            📊 Analyze Hand
+          </button>
+
+          {/* UX Phase 1: Toggle AI Thinking */}
+          <button
+            onClick={toggleShowAiThinking}
+            className={`px-4 py-2 rounded-lg font-semibold ${
+              showAiThinking
+                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                : 'bg-white text-green-800 hover:bg-gray-100'
+            }`}
+            title="Toggle AI reasoning visibility"
+          >
+            {showAiThinking ? '🤖 Hide AI Thinking' : '🤖 Show AI Thinking'}
+          </button>
+
+          {/* Bug Fix #2: Quit Game button */}
+          <button
+            onClick={quitGame}
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold"
+            title="Quit game and return to lobby"
+          >
+            ❌ Quit
+          </button>
+        </div>
       </div>
 
       {/* Error display */}
@@ -99,7 +165,7 @@ export function PokerTable() {
                 player={player}
                 isCurrentTurn={gameState.players[gameState.current_player_index]?.player_id === player.player_id}
                 aiDecision={gameState.last_ai_decisions[player.player_id]}
-                beginnerMode={beginnerMode}
+                showAiThinking={showAiThinking}
                 isShowdown={isShowdown}
               />
             ))}
@@ -138,14 +204,31 @@ export function PokerTable() {
           <PlayerSeat
             player={gameState.human_player}
             isCurrentTurn={isMyTurn}
-            beginnerMode={beginnerMode}
+            showAiThinking={showAiThinking}
             isShowdown={isShowdown}
           />
         </div>
 
         {/* Action buttons */}
         <div className="bg-gray-900 p-4 rounded-lg">
-          {isShowdown ? (
+          {/* Bug Fix #3: Show game state to busted players */}
+          {isBusted ? (
+            <div className="text-center py-4">
+              <div className="text-red-400 font-bold text-xl mb-2">💀 You're Out!</div>
+              <div className="text-white text-sm mb-4">
+                You've been eliminated from the game. Watch the remaining players compete!
+              </div>
+              {isShowdown && (
+                <button
+                  onClick={() => nextHand()}
+                  disabled={loading}
+                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg disabled:opacity-50"
+                >
+                  {loading ? 'Loading...' : 'Next Hand'}
+                </button>
+              )}
+            </div>
+          ) : isShowdown ? (
             <button
               onClick={() => nextHand()}
               disabled={loading}
@@ -164,53 +247,63 @@ export function PokerTable() {
                 Fold
               </button>
 
-              {/* Call */}
+              {/* Call - Bug Fix #1: Use validated callAmount */}
               <button
                 onClick={() => submitAction('call')}
-                disabled={loading}
+                disabled={loading || !canCall}
                 className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-lg disabled:opacity-50"
+                title={!canCall ? 'Not enough chips to call' : ''}
               >
-                Call ${gameState.current_bet - gameState.human_player.current_bet}
+                Call ${callAmount}
               </button>
 
-              {/* Raise */}
-              <div className="flex-1 flex flex-col gap-2">
-                <div className="flex gap-2">
-                  <div className="flex-1 flex flex-col">
-                    <label className="text-white text-sm mb-1 font-semibold">Raise Amount:</label>
-                    <input
-                      type="number"
-                      value={raiseAmount}
-                      onChange={(e) => handleRaiseAmountChange(parseInt(e.target.value) || minRaise)}
-                      min={minRaise}
-                      max={maxRaise}
-                      className="w-full px-4 py-4 rounded-lg bg-gray-900 text-white text-xl font-bold border-4 border-green-400 focus:border-green-300 focus:outline-none text-center placeholder-gray-400"
-                      placeholder={`Min $${minRaise}`}
-                    />
-                    <div className="text-white text-xs mt-1">
-                      Min: ${minRaise} | Max: ${maxRaise}
+              {/* Raise - Bug Fix #1: Better validation */}
+              {canRaise ? (
+                <div className="flex-1 flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <div className="flex-1 flex flex-col">
+                      <label className="text-white text-sm mb-1 font-semibold">Raise Amount:</label>
+                      <input
+                        type="number"
+                        value={raiseAmount}
+                        onChange={(e) => handleRaiseAmountChange(parseInt(e.target.value) || minRaise)}
+                        min={minRaise}
+                        max={maxRaise}
+                        disabled={loading}
+                        className="w-full px-4 py-4 rounded-lg bg-gray-900 text-white text-xl font-bold border-4 border-green-400 focus:border-green-300 focus:outline-none text-center placeholder-gray-400 disabled:opacity-50"
+                        placeholder={`Min $${minRaise}`}
+                      />
+                      <div className="text-white text-xs mt-1">
+                        Min: ${minRaise} | Max: ${maxRaise}
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      {/* All-In button */}
+                      <button
+                        onClick={handleAllIn}
+                        disabled={loading}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-6 rounded-lg disabled:opacity-50 whitespace-nowrap"
+                        title="Go all-in with your entire stack"
+                      >
+                        All-In (${maxRaise})
+                      </button>
+                      <button
+                        onClick={() => submitAction('raise', raiseAmount)}
+                        disabled={loading || raiseAmount < minRaise || raiseAmount > maxRaise}
+                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg disabled:opacity-50"
+                      >
+                        Raise
+                      </button>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    {/* Issue #3 fix: All-In button */}
-                    <button
-                      onClick={handleAllIn}
-                      disabled={loading || maxRaise < minRaise}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-6 rounded-lg disabled:opacity-50 whitespace-nowrap"
-                      title="Go all-in with your entire stack"
-                    >
-                      All-In (${maxRaise})
-                    </button>
-                    <button
-                      onClick={() => submitAction('raise', raiseAmount)}
-                      disabled={loading || raiseAmount < minRaise || raiseAmount > maxRaise}
-                      className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg disabled:opacity-50"
-                    >
-                      Raise
-                    </button>
-                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="flex-1 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 text-sm">
+                  {gameState.human_player.stack <= callAmount
+                    ? 'Call or fold only (not enough chips to raise)'
+                    : 'Raise not available'}
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-white text-center py-4">
@@ -229,6 +322,13 @@ export function PokerTable() {
           onClose={handleWinnerModalClose}
         />
       )}
+
+      {/* UX Phase 2: Hand analysis modal */}
+      <AnalysisModal
+        isOpen={showAnalysisModal}
+        analysis={handAnalysis}
+        onClose={() => setShowAnalysisModal(false)}
+      />
     </div>
   );
 }

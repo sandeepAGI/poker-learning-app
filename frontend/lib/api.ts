@@ -29,8 +29,16 @@ export const pokerApi = {
   },
 
   // Get current game state
-  async getGameState(gameId: string): Promise<GameState> {
-    const response = await api.get<GameState>(`/games/${gameId}`);
+  async getGameState(gameId: string, showAiThinking: boolean = false): Promise<GameState> {
+    const response = await api.get<GameState>(`/games/${gameId}`, {
+      params: { show_ai_thinking: showAiThinking }
+    });
+    return response.data;
+  },
+
+  // Get hand analysis (UX Phase 2)
+  async getHandAnalysis(gameId: string): Promise<any> {
+    const response = await api.get(`/games/${gameId}/analysis`);
     return response.data;
   },
 
