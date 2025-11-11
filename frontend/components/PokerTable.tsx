@@ -83,10 +83,10 @@ export function PokerTable() {
   // UX Phase 2: Handle analysis button click
   const handleAnalysisClick = async () => {
     await getHandAnalysis();
-    setShowAnalysisModal(true);
+    // Only show modal if analysis was successfully fetched (checked in next useEffect)
   };
 
-  // Show analysis modal when analysis is available
+  // Show analysis modal when analysis is available (and not null)
   useEffect(() => {
     if (handAnalysis && !showAnalysisModal) {
       setShowAnalysisModal(true);

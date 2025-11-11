@@ -43,24 +43,34 @@ export function AnalysisModal({ isOpen, analysis, onClose }: AnalysisModalProps)
             <div className="p-6 space-y-6">
               {/* Hand Summary */}
               <div className="bg-gray-800 p-4 rounded-lg">
-                <h3 className="text-xl font-semibold mb-2 text-blue-400">Hand #{analysis.hand_number}</h3>
+                <h3 className="text-xl font-semibold mb-2 text-blue-400">
+                  Hand #{analysis.hand_number || 'N/A'}
+                </h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-gray-400">Your Action:</span>
-                    <span className="ml-2 font-bold">{analysis.human_action}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400">Pot Size:</span>
-                    <span className="ml-2 font-bold">${analysis.pot_size}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400">Your Cards:</span>
-                    <span className="ml-2 font-bold">{analysis.human_cards.join(', ')}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400">Community:</span>
-                    <span className="ml-2 font-bold">{analysis.community_cards.join(', ')}</span>
-                  </div>
+                  {analysis.human_action && (
+                    <div>
+                      <span className="text-gray-400">Your Action:</span>
+                      <span className="ml-2 font-bold">{analysis.human_action}</span>
+                    </div>
+                  )}
+                  {analysis.pot_size !== undefined && (
+                    <div>
+                      <span className="text-gray-400">Pot Size:</span>
+                      <span className="ml-2 font-bold">${analysis.pot_size}</span>
+                    </div>
+                  )}
+                  {analysis.human_cards && analysis.human_cards.length > 0 && (
+                    <div>
+                      <span className="text-gray-400">Your Cards:</span>
+                      <span className="ml-2 font-bold">{analysis.human_cards.join(', ')}</span>
+                    </div>
+                  )}
+                  {analysis.community_cards && analysis.community_cards.length > 0 && (
+                    <div>
+                      <span className="text-gray-400">Community:</span>
+                      <span className="ml-2 font-bold">{analysis.community_cards.join(', ')}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 

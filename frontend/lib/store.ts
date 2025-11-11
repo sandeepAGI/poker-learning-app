@@ -139,9 +139,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({ handAnalysis: analysis, loading: false });
     } catch (error: any) {
       console.error('Error fetching hand analysis:', error);
+      const errorMsg = error.response?.status === 404
+        ? 'No completed hands to analyze yet. Play at least one hand first!'
+        : error.response?.data?.detail || 'Failed to fetch hand analysis';
       set({
-        error: error.response?.data?.detail || 'No completed hands to analyze yet',
-        loading: false
+        error: errorMsg,
+        loading: false,
+        handAnalysis: null  // Clear any stale analysis
       });
     }
   },
