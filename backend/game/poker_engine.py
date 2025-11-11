@@ -828,6 +828,14 @@ class PokerGame:
         Process human player action.
         Fixed: Bug #1 (turn order), Bug #2 (fold resolution), Bug #3 (raise validation)
         """
+        # CRITICAL: Validate input types (fuzzing found this bug!)
+        if action not in ["fold", "call", "raise"]:
+            return False  # Invalid action type
+
+        if amount is not None and not isinstance(amount, int):
+            # Reject non-integer amounts (prevents rounding errors creating/destroying chips)
+            return False
+
         human_player = next(p for p in self.players if p.is_human)
         human_index = next(i for i, p in enumerate(self.players) if p.is_human)
 
@@ -1006,6 +1014,26 @@ class PokerGame:
         """Advance game state if betting round is complete."""
         active_count = sum(1 for p in self.players if p.is_active)
 
+        # SAFETY CHECK: If no current player and not at showdown, force showdown
+        # This handles edge cases where betting can't continue but hand isn't over
+        if self.current_player_index is None and self.current_state != GameState.SHOWDOWN:
+            if self.pot > 0:
+                # Award pot to remaining active player or last actor
+                if active_count == 1:
+                    winner = next((p for p in self.players if p.is_active), None)
+                    if winner:
+                        winner.stack += self.pot
+                        self._log_hand_event("pot_award", winner.player_id, "win", self.pot, 0.0,
+                                           f"{winner.name} wins ${self.pot} (no other players can act)")
+                        self.pot = 0
+                elif active_count > 1:
+                    # Multiple players still active but no one can act - go to showdown
+                    self.current_state = GameState.SHOWDOWN
+                    self._award_pot_at_showdown()
+                    return
+            self.current_state = GameState.SHOWDOWN
+            return
+
         if active_count == 0:
             # All players folded - award pot to last player who acted
             # This is rare but maintains chip conservation
@@ -1103,9 +1131,21 @@ class PokerGame:
         if self.pot == 0:
             return  # No pot to award
 
+        # Store original pot for verification
+        original_pot = self.pot
+
         pots = self.hand_evaluator.determine_winners_with_side_pots(self.players, self.community_cards)
 
+        # Calculate total pot from side pot calculation
+        calculated_pot_total = sum(pot_info['amount'] for pot_info in pots)
+
+        # CRITICAL FIX: The actual pot might differ from calculated pots due to
+        # rounding or partial blind posts. Always award the ACTUAL pot, not calculated.
+        # Distribute any difference to the first winner.
+        pot_difference = original_pot - calculated_pot_total
+
         # Distribute winnings with proper remainder handling
+        total_awarded = 0
         for pot_info in pots:
             num_winners = len(pot_info['winners'])
             split_amount = pot_info['amount'] // num_winners
@@ -1114,7 +1154,13 @@ class PokerGame:
             for i, winner_id in enumerate(pot_info['winners']):
                 winner = next(p for p in self.players if p.player_id == winner_id)
                 award_amount = split_amount + (1 if i < remainder else 0)
+
+                # Add pot difference to first winner (handles rounding errors)
+                if pot_difference > 0 and total_awarded == 0:
+                    award_amount += pot_difference
+
                 winner.stack += award_amount
+                total_awarded += award_amount
 
                 # Clear all-in flag if winner now has chips (Bug fix from marathon simulation)
                 if winner.stack > 0 and winner.all_in:
