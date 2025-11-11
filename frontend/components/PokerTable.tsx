@@ -5,6 +5,7 @@ import { Card } from './Card';
 import { PlayerSeat } from './PlayerSeat';
 import { WinnerModal } from './WinnerModal';
 import { AnalysisModal } from './AnalysisModal';
+import { GameOverModal } from './GameOverModal';
 import { useGameStore } from '../lib/store';
 import { useState, useEffect } from 'react';
 
@@ -42,12 +43,16 @@ export function PokerTable() {
   const [raiseAmount, setRaiseAmount] = useState(minRaise);
   const [showWinnerModal, setShowWinnerModal] = useState(false);
   const [showAnalysisModal, setShowAnalysisModal] = useState(false);
+  const [showGameOverModal, setShowGameOverModal] = useState(false);
 
   // Check if player is all-in (has chips invested but stack = 0)
   const isAllIn = gameState.human_player.current_bet > 0 && gameState.human_player.stack === 0;
 
   // Bug Fix #3: Check if player is busted (not in game anymore)
   const isBusted = gameState.human_player.stack === 0 && !gameState.human_player.is_active;
+
+  // Feature: Detect when human player is eliminated (game over)
+  const isEliminated = gameState.human_player.stack === 0;
 
   // Update raise amount when minRaise changes (new betting round, someone raises, etc.)
   useEffect(() => {
@@ -92,6 +97,23 @@ export function PokerTable() {
       setShowAnalysisModal(true);
     }
   }, [handAnalysis]);
+
+  // Show game over modal when human player is eliminated
+  useEffect(() => {
+    if (isEliminated && isShowdown && !showGameOverModal) {
+      // Wait a moment to let the last showdown complete
+      const timer = setTimeout(() => {
+        setShowGameOverModal(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isEliminated, isShowdown, showGameOverModal]);
+
+  // Handle new game after elimination
+  const handleNewGame = () => {
+    setShowGameOverModal(false);
+    quitGame(); // Return to lobby to start fresh game
+  };
 
   return (
     <div className="flex flex-col h-screen bg-green-800 p-4">
@@ -211,22 +233,13 @@ export function PokerTable() {
 
         {/* Action buttons */}
         <div className="bg-gray-900 p-4 rounded-lg">
-          {/* Bug Fix #3: Show game state to busted players */}
-          {isBusted ? (
+          {/* Feature: Game over when eliminated - don't show controls */}
+          {isEliminated ? (
             <div className="text-center py-4">
-              <div className="text-red-400 font-bold text-xl mb-2">💀 You're Out!</div>
-              <div className="text-white text-sm mb-4">
-                You've been eliminated from the game. Watch the remaining players compete!
+              <div className="text-red-400 font-bold text-xl mb-2">💀 Game Over</div>
+              <div className="text-white text-sm">
+                You've been eliminated. Game ending...
               </div>
-              {isShowdown && (
-                <button
-                  onClick={() => nextHand()}
-                  disabled={loading}
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg disabled:opacity-50"
-                >
-                  {loading ? 'Loading...' : 'Next Hand'}
-                </button>
-              )}
             </div>
           ) : isShowdown ? (
             <button
@@ -328,6 +341,13 @@ export function PokerTable() {
         isOpen={showAnalysisModal}
         analysis={handAnalysis}
         onClose={() => setShowAnalysisModal(false)}
+      />
+
+      {/* Game Over modal - shown when human player is eliminated */}
+      <GameOverModal
+        isOpen={showGameOverModal}
+        handsPlayed={gameState.hand_count || 0}
+        onNewGame={handleNewGame}
       />
     </div>
   );
