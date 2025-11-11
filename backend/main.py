@@ -116,9 +116,14 @@ def create_game(request: CreateGameRequest):
 
 
 @app.get("/games/{game_id}", response_model=GameResponse)
-def get_game_state(game_id: str):
+def get_game_state(game_id: str, show_ai_thinking: bool = False):
     """
     Get current game state
+
+    Args:
+        game_id: Game identifier
+        show_ai_thinking: If True, include AI reasoning (default: False for cleaner UX)
+
     Returns: Complete game state including players, cards, pot, etc.
     """
     # Validate game exists
@@ -162,19 +167,27 @@ def get_game_state(game_id: str):
         "is_current_turn": game.get_current_player() == human_player if game.get_current_player() else False
     }
 
-    # Convert last_ai_decisions to serializable format
+    # Convert last_ai_decisions to serializable format (UX Phase 1: hide by default)
     ai_decisions_data = {}
-    for player_id, decision in game.last_ai_decisions.items():
-        ai_decisions_data[player_id] = {
-            "action": decision.action,
-            "amount": decision.amount,
-            "reasoning": decision.reasoning,
-            "beginner_reasoning": decision.reasoning,  # TODO: Add in Phase 3
-            "hand_strength": decision.hand_strength,
-            "pot_odds": decision.pot_odds,
-            "confidence": decision.confidence,
-            "spr": decision.spr
-        }
+    if show_ai_thinking:
+        for player_id, decision in game.last_ai_decisions.items():
+            ai_decisions_data[player_id] = {
+                "action": decision.action,
+                "amount": decision.amount,
+                "reasoning": decision.reasoning,
+                "beginner_reasoning": decision.reasoning,  # TODO: Add beginner-friendly version
+                "hand_strength": decision.hand_strength,
+                "pot_odds": decision.pot_odds,
+                "confidence": decision.confidence,
+                "spr": decision.spr
+            }
+    else:
+        # Only show action, not reasoning (cleaner UX by default)
+        for player_id, decision in game.last_ai_decisions.items():
+            ai_decisions_data[player_id] = {
+                "action": decision.action,
+                "amount": decision.amount
+            }
 
     # Find winner information if at showdown
     winner_info = None
@@ -270,6 +283,28 @@ def next_hand(game_id: str):
 
     # Return updated game state
     return get_game_state(game_id)
+
+
+@app.get("/games/{game_id}/analysis")
+def get_hand_analysis(game_id: str):
+    """
+    Get rule-based analysis of the last completed hand.
+    UX Phase 2 - Learning feature.
+
+    Returns insights, tips, and AI reasoning for the last hand.
+    """
+    if game_id not in games:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    game, _ = games[game_id]
+    games[game_id] = (game, time.time())  # Update access time
+
+    analysis = game.analyze_last_hand()
+
+    if not analysis:
+        raise HTTPException(status_code=404, detail="No completed hands to analyze yet")
+
+    return analysis
 
 
 # Health check endpoint

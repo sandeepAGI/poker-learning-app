@@ -43,6 +43,23 @@ class AIDecision:
     spr: float = 0.0  # Stack-to-Pot Ratio for pot-relative decision making
 
 @dataclass
+class CompletedHand:
+    """Store completed hand for analysis."""
+    hand_number: int
+    community_cards: List[str]
+    pot_size: int
+    winner_ids: List[str]
+    winner_names: List[str]
+    human_action: str  # fold, call, raise, all-in
+    human_cards: List[str]
+    human_final_stack: int
+    human_hand_strength: float
+    human_pot_odds: float  # When they made their final decision
+    ai_decisions: Dict[str, AIDecision]  # player_id -> their decision
+    events: List[HandEvent]  # All events in the hand
+    analysis_available: bool = True
+
+@dataclass
 class Player:
     player_id: str
     name: str
@@ -429,14 +446,31 @@ class PokerGame:
         # Create human player
         self.players = [Player("human", human_player_name, is_human=True)]
 
-        # Add AI players dynamically with creative AI pun names
+        # Add AI players dynamically with creative AI pun names (20+ names)
+        ai_name_pool = [
+            # Classic AI puns
+            "AI-ce", "AI-ron", "AI-nstein",
+            # Tech/Science themed
+            "Chip Checker", "The Algorithm", "Beta Bluffer", "Neural Net",
+            "Deep Blue", "Data Dealer", "Binary Bob", "Quantum Quinn",
+            # Poker themed
+            "All-In Annie", "Fold Franklin", "Raise Rachel", "Call Carl",
+            "Bluff Master", "The Calculator", "Lady Luck", "Card Shark",
+            # Personality themed
+            "Cool Hand Luke", "The Professor", "Wild Card", "Stone Face",
+            "The Grinder", "Risk Taker", "The Rock", "Loose Lucy"
+        ]
+
+        # Randomly select unique names for AI players
+        import random
+        selected_names = random.sample(ai_name_pool, min(ai_count, len(ai_name_pool)))
+
         personalities = ["Conservative", "Aggressive", "Mathematical"]
-        ai_names = ["AI-ce", "AI-ron", "AI-nstein"]  # Fun AI puns
         for i in range(ai_count):
             self.players.append(
                 Player(
                     player_id=f"ai{i+1}",
-                    name=ai_names[i],
+                    name=selected_names[i],
                     personality=personalities[i]
                 )
             )
@@ -463,6 +497,10 @@ class PokerGame:
         self.hand_events: List[HandEvent] = []
         self.current_hand_events: List[HandEvent] = []
         self.last_ai_decisions: Dict[str, AIDecision] = {}
+
+        # Hand history for analysis (UX Phase 2)
+        self.completed_hands: List[CompletedHand] = []
+        self.last_hand_summary: Optional[CompletedHand] = None
 
         # QC: Enable runtime assertions for poker rule validation
         self.qc_enabled = True  # Set to False to disable for performance
@@ -1060,11 +1098,17 @@ class PokerGame:
         if active_count == 1:
             # Exactly one player remaining - award pot immediately
             winner = next((p for p in self.players if p.is_active), None)
+            pot_awarded = 0
             if winner and self.pot > 0:
+                pot_awarded = self.pot
                 winner.stack += self.pot
                 self._log_hand_event("pot_award", winner.player_id, "win", self.pot, 0.0,
                                    f"{winner.name} wins ${self.pot} (all others folded)")
                 self.pot = 0
+
+            # Save hand for analysis (early end - fold)
+            self._save_hand_on_early_end(winner.player_id if winner else None, pot_awarded)
+
             self.current_state = GameState.SHOWDOWN
             self.current_player_index = None  # No one left to act
             return
@@ -1172,9 +1216,266 @@ class PokerGame:
 
         self.pot = 0
 
+        # Save completed hand for analysis (UX Phase 2)
+        self._save_completed_hand(pots, original_pot)
+
         # QC: Verify chip conservation after pot award
         self._assert_chip_conservation("after _award_pot_at_showdown()")
         self._assert_valid_game_state("after _award_pot_at_showdown()")
+
+    def _save_hand_on_early_end(self, winner_id: Optional[str], pot_size: int):
+        """Save hand that ended early (before showdown). UX Phase 2."""
+        try:
+            human = next(p for p in self.players if p.is_human)
+
+            # Determine winner
+            winner_ids = [winner_id] if winner_id else []
+            winner_names = []
+            if winner_id:
+                winner = next((p for p in self.players if p.player_id == winner_id), None)
+                if winner:
+                    winner_names = [winner.name]
+
+            # Determine human's final action
+            human_action = "unknown"
+            if not human.is_active:
+                human_action = "fold"
+            elif human.all_in:
+                human_action = "all-in"
+            else:
+                # Check last action from events
+                for event in reversed(self.current_hand_events):
+                    if event.player_id == human.player_id and event.event_type == "action":
+                        human_action = event.action
+                        break
+
+            # Get human's hand strength if cards were dealt
+            human_hand_strength = 0.0
+            if human.hole_cards:
+                if self.community_cards:
+                    score, _ = self.hand_evaluator.evaluate_hand(human.hole_cards, self.community_cards)
+                    # Convert to 0-1 scale
+                    if score <= 10:
+                        human_hand_strength = 0.95
+                    elif score <= 166:
+                        human_hand_strength = 0.90
+                    elif score <= 1599:
+                        human_hand_strength = 0.75
+                    elif score <= 2467:
+                        human_hand_strength = 0.55
+                    elif score <= 3325:
+                        human_hand_strength = 0.45
+                    elif score <= 6185:
+                        human_hand_strength = 0.25
+                    else:
+                        human_hand_strength = 0.05
+
+            # Calculate pot odds
+            human_pot_odds = 0.0
+            for event in reversed(self.current_hand_events):
+                if event.player_id == human.player_id and event.pot_size > 0:
+                    call_amount = event.current_bet
+                    if call_amount > 0:
+                        human_pot_odds = call_amount / (event.pot_size + call_amount)
+                    break
+
+            # Create completed hand record
+            completed_hand = CompletedHand(
+                hand_number=self.hand_count,
+                community_cards=self.community_cards.copy(),
+                pot_size=pot_size,
+                winner_ids=winner_ids,
+                winner_names=winner_names,
+                human_action=human_action,
+                human_cards=human.hole_cards.copy() if human.hole_cards else [],
+                human_final_stack=human.stack,
+                human_hand_strength=human_hand_strength,
+                human_pot_odds=human_pot_odds,
+                ai_decisions=self.last_ai_decisions.copy(),
+                events=self.current_hand_events.copy()
+            )
+
+            # Store
+            self.last_hand_summary = completed_hand
+            self.completed_hands.append(completed_hand)
+
+            # Keep only last 50 hands
+            if len(self.completed_hands) > 50:
+                self.completed_hands = self.completed_hands[-50:]
+
+        except Exception as e:
+            print(f"Warning: Failed to save early-end hand for analysis: {e}")
+
+    def _save_completed_hand(self, pots: List[Dict], pot_size: int):
+        """Save completed hand for later analysis. UX Phase 2."""
+        try:
+            human = next(p for p in self.players if p.is_human)
+
+            # Collect all winners from all pots
+            all_winner_ids = set()
+            for pot_info in pots:
+                all_winner_ids.update(pot_info.get('winners', []))
+
+            winner_names = [p.name for p in self.players if p.player_id in all_winner_ids]
+
+            # Determine human's final action
+            human_action = "unknown"
+            if not human.is_active:
+                human_action = "fold"
+            elif human.all_in:
+                human_action = "all-in"
+            else:
+                # Check last action from events
+                for event in reversed(self.current_hand_events):
+                    if event.player_id == human.player_id and event.event_type == "action":
+                        human_action = event.action
+                        break
+
+            # Get human's hand strength at showdown
+            human_hand_strength = 0.0
+            if human.hole_cards and self.community_cards:
+                score, _ = self.hand_evaluator.evaluate_hand(human.hole_cards, self.community_cards)
+                # Convert to 0-1 scale (lower score = better hand)
+                if score <= 10:
+                    human_hand_strength = 0.95
+                elif score <= 166:
+                    human_hand_strength = 0.90
+                elif score <= 1599:
+                    human_hand_strength = 0.75
+                elif score <= 2467:
+                    human_hand_strength = 0.55
+                elif score <= 3325:
+                    human_hand_strength = 0.45
+                elif score <= 6185:
+                    human_hand_strength = 0.25
+                else:
+                    human_hand_strength = 0.05
+
+            # Calculate pot odds for human's last decision
+            human_pot_odds = 0.0
+            for event in reversed(self.current_hand_events):
+                if event.player_id == human.player_id and event.pot_size > 0:
+                    call_amount = event.current_bet
+                    if call_amount > 0:
+                        human_pot_odds = call_amount / (event.pot_size + call_amount)
+                    break
+
+            # Create completed hand record
+            completed_hand = CompletedHand(
+                hand_number=self.hand_count,
+                community_cards=self.community_cards.copy(),
+                pot_size=pot_size,
+                winner_ids=list(all_winner_ids),
+                winner_names=winner_names,
+                human_action=human_action,
+                human_cards=human.hole_cards.copy() if human.hole_cards else [],
+                human_final_stack=human.stack,
+                human_hand_strength=human_hand_strength,
+                human_pot_odds=human_pot_odds,
+                ai_decisions=self.last_ai_decisions.copy(),
+                events=self.current_hand_events.copy()
+            )
+
+            # Store as last hand and in history
+            self.last_hand_summary = completed_hand
+            self.completed_hands.append(completed_hand)
+
+            # Keep only last 50 hands to avoid memory issues
+            if len(self.completed_hands) > 50:
+                self.completed_hands = self.completed_hands[-50:]
+
+        except Exception as e:
+            # Don't fail the game if hand saving fails
+            print(f"Warning: Failed to save hand for analysis: {e}")
+
+    def analyze_last_hand(self) -> Optional[Dict]:
+        """
+        Analyze the last completed hand and provide rule-based insights.
+        UX Phase 2 - Learning feature.
+        """
+        if not self.last_hand_summary:
+            return None
+
+        hand = self.last_hand_summary
+        insights = []
+        tips = []
+
+        # Determine if human won
+        human_won = "human" in hand.winner_ids
+        human = next(p for p in self.players if p.is_human)
+
+        # Analysis 1: Pot Odds vs Decision
+        if hand.human_action in ["fold", "call", "raise"]:
+            if hand.human_pot_odds > 0:
+                pot_odds_pct = hand.human_pot_odds * 100
+                hand_strength_pct = hand.human_hand_strength * 100
+
+                if hand.human_action == "fold" and hand.human_hand_strength >= 0.4 and hand.human_pot_odds < 0.33:
+                    insights.append(f"✓ Good fold! You had a decent hand ({hand_strength_pct:.0f}%) but pot odds ({pot_odds_pct:.0f}%) weren't favorable.")
+                elif hand.human_action == "fold" and hand.human_hand_strength >= 0.5:
+                    insights.append(f"⚠️ You folded a strong hand ({hand_strength_pct:.0f}%). With pot odds of {pot_odds_pct:.0f}%, calling might have been better.")
+                    tips.append("Tip: With strong hands (>50%), you should call unless facing a very large bet.")
+
+                elif hand.human_action == "call" and hand.human_hand_strength < 0.25 and hand.human_pot_odds > 0.5:
+                    insights.append(f"⚠️ You called with a weak hand ({hand_strength_pct:.0f}%) and poor pot odds ({pot_odds_pct:.0f}%).")
+                    tips.append("Tip: Calling with weak hands and bad pot odds usually loses money. Consider folding.")
+                elif hand.human_action == "call" and hand.human_hand_strength > 0.4:
+                    insights.append(f"✓ Reasonable call with {hand_strength_pct:.0f}% hand strength.")
+
+        # Analysis 2: Outcome
+        if human_won:
+            insights.append(f"🎉 You won ${hand.pot_size}!")
+            if hand.human_action == "fold":
+                insights.append("(You won by default - all others folded)")
+        else:
+            if hand.human_action != "fold":
+                insights.append(f"You lost to {', '.join(hand.winner_names)}")
+                if hand.human_hand_strength >= 0.6:
+                    insights.append("Tough beat - you had a strong hand but got outdrawn.")
+
+        # Analysis 3: AI Decisions (what were they thinking?)
+        ai_thinking = []
+        for player_id, decision in hand.ai_decisions.items():
+            ai_player = next((p for p in self.players if p.player_id == player_id), None)
+            if ai_player:
+                ai_thinking.append({
+                    'name': ai_player.name,
+                    'personality': ai_player.personality,
+                    'action': decision.action,
+                    'reasoning': decision.reasoning,
+                    'hand_strength': decision.hand_strength,
+                    'confidence': decision.confidence
+                })
+
+        # Analysis 4: Hand Strength Comparison
+        if hand.community_cards and human_won is False:
+            insights.append(f"Your final hand strength: {hand.human_hand_strength*100:.0f}%")
+
+        # Analysis 5: Strategic Tips
+        if hand.human_action == "raise" and not human_won:
+            tips.append("Tip: Raising is powerful but risky. Make sure you have a strong hand or good bluffing opportunity.")
+
+        if hand.human_action == "all-in":
+            if human_won:
+                insights.append("✓ All-in paid off!")
+            else:
+                insights.append("All-in didn't work out this time. Make sure you're all-in with strong hands or as a calculated bluff.")
+
+        # Build final analysis
+        return {
+            'hand_number': hand.hand_number,
+            'your_action': hand.human_action,
+            'your_cards': hand.human_cards,
+            'community_cards': hand.community_cards,
+            'pot_size': hand.pot_size,
+            'you_won': human_won,
+            'winners': hand.winner_names,
+            'your_hand_strength': f"{hand.human_hand_strength*100:.0f}%",
+            'insights': insights,
+            'tips': tips,
+            'ai_thinking': ai_thinking,
+            'detailed_events': len(hand.events),  # Number of actions in hand
+        }
 
     def get_showdown_results(self) -> Optional[Dict]:
         """Get showdown results with side pots. Fixed: Bug #5."""
