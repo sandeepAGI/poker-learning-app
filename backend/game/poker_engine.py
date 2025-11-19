@@ -1170,6 +1170,41 @@ class PokerGame:
         # Check if hand should end after processing actions
         self._maybe_advance_state()
 
+    def _advance_state_for_websocket(self):
+        """
+        Advance game state without processing AI actions (for WebSocket flow).
+        Used when AI actions are handled externally one-by-one.
+        """
+        if not self._betting_round_complete():
+            return False  # Can't advance yet
+
+        # Advance to next state and deal cards
+        if self.current_state == GameState.PRE_FLOP:
+            self.current_state = GameState.FLOP
+            self.community_cards.extend(self.deck_manager.deal_cards(3))
+        elif self.current_state == GameState.FLOP:
+            self.current_state = GameState.TURN
+            self.community_cards.extend(self.deck_manager.deal_cards(1))
+        elif self.current_state == GameState.TURN:
+            self.current_state = GameState.RIVER
+            self.community_cards.extend(self.deck_manager.deal_cards(1))
+        elif self.current_state == GameState.RIVER:
+            self.current_state = GameState.SHOWDOWN
+            self._award_pot_at_showdown()
+            return True  # Showdown reached
+
+        # Reset for new betting round
+        for player in self.players:
+            player.reset_for_new_round()
+        self.current_bet = 0
+        self.last_raiser_index = None
+
+        # First to act is after dealer
+        first_to_act = self._get_next_active_player_index(self.dealer_index + 1)
+        self.current_player_index = first_to_act
+
+        return True  # State advanced
+
     def _award_pot_at_showdown(self):
         """Award pot to winners at showdown. Called automatically when reaching SHOWDOWN."""
         if self.pot == 0:

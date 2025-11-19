@@ -1,16 +1,19 @@
 """
-Poker Learning App - Simple FastAPI wrapper
-Phase 2: Minimal API layer with 4 core endpoints
+Poker Learning App - Enhanced FastAPI with WebSockets
+Phase 2: Minimal API layer with REST endpoints
+Phase 3: WebSocket support for real-time AI turn visibility
 """
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, Tuple
 import uuid
 import time
 import asyncio
+import json
 
 from game.poker_engine import PokerGame, GameState
+from websocket_manager import manager, process_ai_turns_with_events, serialize_game_state
 
 # FastAPI app
 app = FastAPI(title="Poker Learning App API", version="2.0")
@@ -305,6 +308,126 @@ def get_hand_analysis(game_id: str):
         raise HTTPException(status_code=404, detail="No completed hands to analyze yet")
 
     return analysis
+
+
+@app.websocket("/ws/{game_id}")
+async def websocket_endpoint(websocket: WebSocket, game_id: str):
+    """
+    WebSocket endpoint for real-time game updates.
+    Phase 3: Enables smooth AI turn-by-turn visibility.
+
+    Flow:
+    1. Client connects
+    2. Client sends action: {"action": "fold/call/raise", "amount": 100}
+    3. Server processes human action
+    4. Server processes AI turns ONE AT A TIME, emitting events for each
+    5. Client receives events and animates each action
+    """
+    # Validate game exists
+    if game_id not in games:
+        await websocket.close(code=1008, reason="Game not found")
+        return
+
+    # Connect to WebSocket manager
+    await manager.connect(game_id, websocket)
+
+    try:
+        # Send initial game state
+        game, _ = games[game_id]
+        await manager.broadcast_state(game_id, game, show_ai_thinking=False)
+
+        print(f"[WebSocket] Client connected to game {game_id}, awaiting actions...")
+
+        # Listen for client messages
+        while True:
+            # Receive action from client
+            data = await websocket.receive_json()
+            print(f"[WebSocket] Received: {data}")
+
+            # Update game access time
+            games[game_id] = (game, time.time())
+
+            # Handle different message types
+            message_type = data.get("type", "action")
+
+            if message_type == "action":
+                # Human player action
+                action = data.get("action")
+                amount = data.get("amount")
+                show_ai_thinking = data.get("show_ai_thinking", False)
+
+                # Validate action
+                if action not in ["fold", "call", "raise"]:
+                    await manager.send_event(game_id, {
+                        "type": "error",
+                        "data": {"message": "Invalid action"}
+                    })
+                    continue
+
+                # Submit human action
+                success = game.submit_human_action(action, amount)
+
+                if not success:
+                    await manager.send_event(game_id, {
+                        "type": "error",
+                        "data": {"message": "Invalid action or not your turn"}
+                    })
+                    continue
+
+                # Broadcast state after human action
+                await manager.broadcast_state(game_id, game, show_ai_thinking)
+
+                # Process AI turns with events
+                await process_ai_turns_with_events(game, game_id, show_ai_thinking)
+
+            elif message_type == "next_hand":
+                # Start next hand
+                if game.current_state != GameState.SHOWDOWN:
+                    await manager.send_event(game_id, {
+                        "type": "error",
+                        "data": {"message": "Current hand not finished"}
+                    })
+                    continue
+
+                # Check if game is over
+                active_players = [p for p in game.players if p.stack > 0]
+                if len(active_players) <= 1:
+                    await manager.send_event(game_id, {
+                        "type": "game_over",
+                        "data": {"message": "Game over"}
+                    })
+                    continue
+
+                # Start new hand
+                game.start_new_hand()
+                await manager.broadcast_state(game_id, game, data.get("show_ai_thinking", False))
+
+                # Process AI turns if game starts with AI
+                current = game.get_current_player()
+                if current and not current.is_human:
+                    await process_ai_turns_with_events(game, game_id, data.get("show_ai_thinking", False))
+
+            elif message_type == "get_state":
+                # Client requesting current state
+                show_ai_thinking = data.get("show_ai_thinking", False)
+                await manager.broadcast_state(game_id, game, show_ai_thinking)
+
+            else:
+                await manager.send_event(game_id, {
+                    "type": "error",
+                    "data": {"message": f"Unknown message type: {message_type}"}
+                })
+
+    except WebSocketDisconnect:
+        manager.disconnect(game_id)
+        print(f"[WebSocket] Client disconnected from game {game_id}")
+    except Exception as e:
+        print(f"[WebSocket] Error in game {game_id}: {e}")
+        manager.disconnect(game_id)
+        try:
+            await websocket.close(code=1011, reason="Internal server error")
+        except:
+            pass
 
 
 # Health check endpoint
