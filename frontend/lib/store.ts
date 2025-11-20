@@ -3,6 +3,7 @@
 import { create } from 'zustand';
 import { GameState } from './types';
 import { pokerApi } from './api';
+import { PokerWebSocket, ConnectionState } from './websocket';
 
 interface GameStore {
   // State
@@ -13,15 +14,23 @@ interface GameStore {
   showAiThinking: boolean; // UX Phase 1: Control AI reasoning visibility
   handAnalysis: any | null; // UX Phase 2: Store hand analysis
 
+  // WebSocket state (Phase 1.4)
+  wsClient: PokerWebSocket | null;
+  connectionState: ConnectionState;
+  aiActionQueue: any[]; // Queue of AI actions for animations
+
   // Actions
   createGame: (playerName: string, aiCount: number) => Promise<void>;
-  fetchGameState: () => Promise<void>;
-  submitAction: (action: 'fold' | 'call' | 'raise', amount?: number) => Promise<void>;
-  nextHand: () => Promise<void>;
+  submitAction: (action: 'fold' | 'call' | 'raise', amount?: number) => void;
+  nextHand: () => void;
   toggleShowAiThinking: () => void; // UX Phase 1: Toggle AI reasoning
-  getHandAnalysis: () => Promise<void>; // UX Phase 2: Fetch analysis
+  getHandAnalysis: () => Promise<void>; // UX Phase 2: Fetch analysis (still uses REST)
   quitGame: () => void; // Bug fix: Allow player to quit
   setError: (error: string | null) => void;
+
+  // WebSocket actions (Phase 1.4)
+  connectWebSocket: (gameId: string) => void;
+  disconnectWebSocket: () => void;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -33,15 +42,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
   showAiThinking: false, // UX Phase 1: Hidden by default for cleaner UI
   handAnalysis: null, // UX Phase 2: No analysis initially
 
-  // Create a new game
+  // WebSocket state (Phase 1.4)
+  wsClient: null,
+  connectionState: ConnectionState.DISCONNECTED,
+  aiActionQueue: [],
+
+  // Create a new game (Phase 1.4: Now uses WebSocket)
   createGame: async (playerName: string, aiCount: number) => {
     set({ loading: true, error: null });
     try {
       const response = await pokerApi.createGame(playerName, aiCount);
-      set({ gameId: response.game_id });
+      const gameId = response.game_id;
+      set({ gameId });
 
-      // Fetch initial game state
-      await get().fetchGameState();
+      // Connect to WebSocket for real-time updates
+      get().connectWebSocket(gameId);
     } catch (error: any) {
       console.error('Error creating game:', error);
       set({
@@ -51,69 +66,37 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
 
-  // Fetch current game state
-  fetchGameState: async () => {
-    const { gameId, showAiThinking } = get();
-    if (!gameId) {
-      set({ error: 'No game ID found' });
+  // Submit a player action (Phase 1.4: Now uses WebSocket)
+  submitAction: (action: 'fold' | 'call' | 'raise', amount?: number) => {
+    const { wsClient, showAiThinking } = get();
+    if (!wsClient) {
+      set({ error: 'Not connected to game server' });
       return;
     }
 
-    set({ loading: true, error: null });
     try {
-      const gameState = await pokerApi.getGameState(gameId, showAiThinking);
-      set({ gameState, loading: false });
-    } catch (error: any) {
-      console.error('Error fetching game state:', error);
-      set({
-        error: error.response?.data?.detail || 'Failed to fetch game state',
-        loading: false
-      });
-    }
-  },
-
-  // Submit a player action
-  submitAction: async (action: 'fold' | 'call' | 'raise', amount?: number) => {
-    const { gameId } = get();
-    if (!gameId) {
-      set({ error: 'No game ID found' });
-      return;
-    }
-
-    set({ loading: true, error: null });
-    try {
-      const gameState = await pokerApi.submitAction(gameId, action, amount);
-      set({ gameState, loading: false });
+      wsClient.sendAction(action, amount, showAiThinking);
+      // State updates will come via WebSocket events
     } catch (error: any) {
       console.error('Error submitting action:', error);
-      set({
-        error: error.response?.data?.detail || `Failed to ${action}. Please try again.`,
-        loading: false
-      });
-
-      // Refresh game state even on error
-      await get().fetchGameState();
+      set({ error: `Failed to ${action}. Please try again.` });
     }
   },
 
-  // Start next hand
-  nextHand: async () => {
-    const { gameId } = get();
-    if (!gameId) {
-      set({ error: 'No game ID found' });
+  // Start next hand (Phase 1.4: Now uses WebSocket)
+  nextHand: () => {
+    const { wsClient } = get();
+    if (!wsClient) {
+      set({ error: 'Not connected to game server' });
       return;
     }
 
-    set({ loading: true, error: null });
     try {
-      const gameState = await pokerApi.nextHand(gameId);
-      set({ gameState, loading: false });
+      wsClient.nextHand();
+      // State updates will come via WebSocket events
     } catch (error: any) {
       console.error('Error starting next hand:', error);
-      set({
-        error: error.response?.data?.detail || 'Failed to start next hand',
-        loading: false
-      });
+      set({ error: 'Failed to start next hand' });
     }
   },
 
@@ -121,8 +104,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   toggleShowAiThinking: () => {
     const newValue = !get().showAiThinking;
     set({ showAiThinking: newValue });
-    // Re-fetch game state with new setting
-    get().fetchGameState();
+    // With WebSocket, this will affect future actions only
+    // No need to re-fetch state
   },
 
   // UX Phase 2: Get hand analysis
@@ -152,17 +135,77 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // Bug fix: Quit game and return to lobby
   quitGame: () => {
+    // Disconnect WebSocket (Phase 1.4)
+    get().disconnectWebSocket();
+
     set({
       gameId: null,
       gameState: null,
       handAnalysis: null,
       error: null,
-      loading: false
+      loading: false,
+      aiActionQueue: []
     });
   },
 
   // Set error message
   setError: (error: string | null) => {
     set({ error });
+  },
+
+  // WebSocket connection management (Phase 1.4)
+  connectWebSocket: (gameId: string) => {
+    const { showAiThinking } = get();
+
+    // Disconnect any existing connection first
+    get().disconnectWebSocket();
+
+    // Create new WebSocket client with event handlers
+    const wsClient = new PokerWebSocket(gameId, {
+      onStateUpdate: (gameState: GameState) => {
+        set({ gameState, loading: false });
+      },
+
+      onAIAction: (aiAction: any) => {
+        // Add AI action to queue for animations (Phase 2)
+        set(state => ({
+          aiActionQueue: [...state.aiActionQueue, aiAction]
+        }));
+      },
+
+      onError: (error: string) => {
+        set({ error });
+      },
+
+      onGameOver: () => {
+        // Game over event received
+        console.log('Game over - player eliminated');
+      },
+
+      onConnect: () => {
+        set({
+          connectionState: ConnectionState.CONNECTED,
+          loading: false
+        });
+      },
+
+      onDisconnect: () => {
+        set({
+          connectionState: ConnectionState.DISCONNECTED
+        });
+      }
+    });
+
+    // Connect to WebSocket
+    wsClient.connect();
+    set({ wsClient, connectionState: ConnectionState.CONNECTING });
+  },
+
+  disconnectWebSocket: () => {
+    const { wsClient } = get();
+    if (wsClient) {
+      wsClient.disconnect();
+      set({ wsClient: null, connectionState: ConnectionState.DISCONNECTED });
+    }
   },
 }));
