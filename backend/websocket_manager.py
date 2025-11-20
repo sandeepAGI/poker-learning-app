@@ -6,7 +6,7 @@ from fastapi import WebSocket, WebSocketDisconnect
 from typing import Dict, Any
 import json
 import asyncio
-from game.poker_engine import PokerGame, GameState, Player
+from game.poker_engine import PokerGame, GameState, Player, AIStrategy
 
 
 class ConnectionManager:
@@ -162,11 +162,14 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
         print(f"[WebSocket] Processing AI turn: {current_player.name}")
 
         # Get AI decision
-        decision = game.make_decision_with_reasoning(
-            current_player,
+        decision = AIStrategy.make_decision_with_reasoning(
+            current_player.personality,
+            current_player.hole_cards,
+            game.community_cards,
             game.current_bet,
             game.pot,
-            game.community_cards,
+            current_player.stack,
+            current_player.current_bet,
             game.big_blind
         )
 

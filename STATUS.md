@@ -56,25 +56,30 @@ An educational poker application where players learn Texas Hold'em strategy by p
 
 **Decision**: User selected Option 3 - Full UX Overhaul (12-15 days total effort)
 
-### Phase 1: WebSocket Infrastructure (40% Complete)
+### Phase 1: WebSocket Infrastructure (60% Complete)
 
-#### ✅ Completed (Phase 1.1-1.2)
+#### ✅ Completed (Phase 1.1-1.3)
 - **Backend WebSocket endpoint** at `/ws/{game_id}`
 - **ConnectionManager** for WebSocket lifecycle management
 - **Event-driven AI processing**: AI players act ONE-BY-ONE instead of all-at-once
 - **Real-time state broadcasting** after each action
 - **Helper methods**: `_advance_state_for_websocket()` in poker_engine.py
 - **Message types**: action, next_hand, get_state, error, game_over
+- **Frontend WebSocket client** (`frontend/lib/websocket.ts` - 358 lines)
+  - Automatic reconnection with exponential backoff
+  - Event-driven architecture (onStateUpdate, onAIAction, onError, onGameOver)
+  - Connection state management (DISCONNECTED, CONNECTING, CONNECTED, RECONNECTING, FAILED)
+- **Backend testing** (test_websocket_backend.py - all passing ✅)
+- **Backend bug fixes**: Fixed AI decision method call in websocket_manager.py
 
-**Key Achievement**: Backend now processes AI turns individually with 0.5s delays and emits events for smooth frontend animation.
+**Key Achievement**: Backend WebSocket endpoint fully tested and working. Frontend WebSocket client created with robust error handling and reconnection logic.
 
-#### ⏳ Remaining (Phase 1.3-1.6)
-- Frontend WebSocket client class (TypeScript)
-- Zustand store integration for WebSocket
+#### ⏳ Remaining (Phase 1.4-1.6)
+- Zustand store integration for WebSocket (replace REST calls)
 - Update UI components to handle real-time events
-- Testing & debugging WebSocket flow
+- End-to-end testing with frontend
 
-**Estimated Time**: 4-6 hours
+**Estimated Time**: 3-4 hours
 
 ### Phase 2: Visual Animations (Pending)
 - Card dealing animations (slide from deck, flip reveal)
