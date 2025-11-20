@@ -1,7 +1,15 @@
 # Poker Learning App - Refactoring Plan
 
-## Project Status
-This project has become too complex with over-engineering in the API and frontend layers. The core poker engine, AI strategies, and game logic are solid and should be preserved. We need to simplify the architecture while maintaining the excellent poker gameplay.
+**STATUS**: ✅ **REFACTORING COMPLETE** (Phases 0-3)
+**CURRENT WORK**: 🚧 UX Enhancement (Full Overhaul) - See [STATUS.md](STATUS.md) and [UX-ROADMAP.md](UX-ROADMAP.md)
+
+This document is the **historical record** of the refactoring process (Phases 0-3).
+For current project status, see **[STATUS.md](STATUS.md)**.
+
+---
+
+## Original Project Status (When Refactoring Began)
+This project had become too complex with over-engineering in the API and frontend layers. The core poker engine, AI strategies, and game logic were solid and needed to be preserved. We needed to simplify the architecture while maintaining the excellent poker gameplay.
 
 ## Key Issues Identified
 1. **Backend findings** (see BE-FINDINGS.md): Critical bugs in turn order, hand resolution after fold, raise validation, and side pot handling
