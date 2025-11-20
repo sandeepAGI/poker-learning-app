@@ -38,10 +38,13 @@ export interface GameState {
   current_bet: number;
   players: Player[];
   community_cards: string[];
-  current_player_index: number;
+  current_player_index: number | null;
   human_player: Player;
   last_ai_decisions: Record<string, AIDecision>;
   winner_info: WinnerInfo | null;
+  small_blind: number;
+  big_blind: number;
+  hand_count: number;
 }
 
 export interface CreateGameRequest {
