@@ -20,15 +20,16 @@ export function PokerTable() {
     getHandAnalysis,
     quitGame,
     loading,
-    error
+    error,
+    connectionState
   } = useGameStore();
 
   if (!gameState) return null;
 
   // Fix: Don't show actions if player has no chips (all-in or busted)
-  const isMyTurn = gameState.human_player.is_current_turn &&
+  const isMyTurn = !!(gameState.human_player.is_current_turn &&
                    gameState.human_player.is_active &&
-                   gameState.human_player.stack > 0;
+                   gameState.human_player.stack > 0);
   const isShowdown = gameState.state === 'showdown';
 
   // Bug Fix #1: Proper call amount calculation (prevent negative)
@@ -121,7 +122,17 @@ export function PokerTable() {
       <div className="flex justify-between items-center mb-4 text-white">
         <div>
           <h1 className="text-2xl font-bold">Poker Learning App</h1>
-          <div className="text-sm opacity-80">Game State: {gameState.state.toUpperCase()}</div>
+          <div className="flex items-center gap-3 text-sm opacity-80">
+            <span>Game State: {gameState.state.toUpperCase()}</span>
+            {/* WebSocket connection status */}
+            <span className="flex items-center gap-1">
+              {connectionState === 'connected' && <span className="text-green-400">● Connected</span>}
+              {connectionState === 'connecting' && <span className="text-yellow-400">⟳ Connecting...</span>}
+              {connectionState === 'reconnecting' && <span className="text-orange-400">⟳ Reconnecting...</span>}
+              {connectionState === 'disconnected' && <span className="text-gray-400">○ Disconnected</span>}
+              {connectionState === 'failed' && <span className="text-red-400">✗ Connection Failed</span>}
+            </span>
+          </div>
           {/* Issue #1 fix: Display blind levels and hand count */}
           <div className="text-sm opacity-80 mt-1">
             Hand #{gameState.hand_count || 1} | Blinds: ${gameState.small_blind || 5}/${gameState.big_blind || 10}
@@ -185,7 +196,7 @@ export function PokerTable() {
               <PlayerSeat
                 key={player.player_id}
                 player={player}
-                isCurrentTurn={gameState.players[gameState.current_player_index]?.player_id === player.player_id}
+                isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === player.player_id}
                 aiDecision={gameState.last_ai_decisions[player.player_id]}
                 showAiThinking={showAiThinking}
                 isShowdown={isShowdown}
