@@ -281,12 +281,51 @@ export function PokerTable() {
                 Call ${callAmount}
               </button>
 
-              {/* Raise - Bug Fix #1: Better validation */}
+              {/* Raise - Improved UX with slider + quick buttons */}
               {canRaise ? (
                 <div className="flex-1 flex flex-col gap-2">
+                  {/* Quick bet buttons */}
+                  <div className="flex gap-1 justify-center">
+                    <button
+                      onClick={() => handleRaiseAmountChange(minRaise)}
+                      className="bg-gray-700 hover:bg-gray-600 text-white text-xs py-1 px-2 rounded"
+                    >
+                      Min
+                    </button>
+                    <button
+                      onClick={() => handleRaiseAmountChange(Math.floor(gameState.pot * 0.5))}
+                      className="bg-gray-700 hover:bg-gray-600 text-white text-xs py-1 px-2 rounded"
+                    >
+                      ½ Pot
+                    </button>
+                    <button
+                      onClick={() => handleRaiseAmountChange(gameState.pot)}
+                      className="bg-gray-700 hover:bg-gray-600 text-white text-xs py-1 px-2 rounded"
+                    >
+                      Pot
+                    </button>
+                    <button
+                      onClick={() => handleRaiseAmountChange(gameState.pot * 2)}
+                      className="bg-gray-700 hover:bg-gray-600 text-white text-xs py-1 px-2 rounded"
+                    >
+                      2x Pot
+                    </button>
+                  </div>
                   <div className="flex gap-2">
                     <div className="flex-1 flex flex-col">
                       <label className="text-white text-sm mb-1 font-semibold">Raise Amount:</label>
+                      {/* Slider */}
+                      <input
+                        type="range"
+                        value={raiseAmount}
+                        onChange={(e) => handleRaiseAmountChange(parseInt(e.target.value))}
+                        min={minRaise}
+                        max={maxRaise}
+                        step={gameState.big_blind || 10}
+                        disabled={loading}
+                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500"
+                      />
+                      {/* Number input for precise amounts */}
                       <input
                         type="number"
                         value={raiseAmount}
@@ -294,10 +333,10 @@ export function PokerTable() {
                         min={minRaise}
                         max={maxRaise}
                         disabled={loading}
-                        className="w-full px-4 py-4 rounded-lg bg-gray-900 text-white text-xl font-bold border-4 border-green-400 focus:border-green-300 focus:outline-none text-center placeholder-gray-400 disabled:opacity-50"
+                        className="w-full mt-2 px-4 py-3 rounded-lg bg-gray-900 text-white text-xl font-bold border-2 border-green-400 focus:border-green-300 focus:outline-none text-center placeholder-gray-400 disabled:opacity-50"
                         placeholder={`Min $${minRaise}`}
                       />
-                      <div className="text-white text-xs mt-1">
+                      <div className="text-white text-xs mt-1 text-center">
                         Min: ${minRaise} | Max: ${maxRaise}
                       </div>
                     </div>
@@ -306,17 +345,17 @@ export function PokerTable() {
                       <button
                         onClick={handleAllIn}
                         disabled={loading}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-6 rounded-lg disabled:opacity-50 whitespace-nowrap"
+                        className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded-lg disabled:opacity-50 whitespace-nowrap text-sm"
                         title="Go all-in with your entire stack"
                       >
-                        All-In (${maxRaise})
+                        All-In ${maxRaise}
                       </button>
                       <button
                         onClick={() => submitAction('raise', raiseAmount)}
                         disabled={loading || raiseAmount < minRaise || raiseAmount > maxRaise}
-                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg disabled:opacity-50"
+                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg disabled:opacity-50"
                       >
-                        Raise
+                        Raise ${raiseAmount}
                       </button>
                     </div>
                   </div>

