@@ -18,9 +18,12 @@ class TestBigBlindOption(unittest.TestCase):
     def test_bb_gets_option_when_all_call(self):
         """BB must get option to act again when all players call pre-flop."""
         game = PokerGame("Player1")
+        # Position dealer so human (index 0) is BB after start_new_hand
+        # dealer moves from 1 to 2, so BB = (2+2)%4 = 0 = human
+        game.dealer_index = 1
         game.start_new_hand()
 
-        # Identify BB position
+        # Identify BB position - should be human
         bb_idx = (game.dealer_index + 2) % len(game.players)
         bb_player = game.players[bb_idx]
 
@@ -50,19 +53,25 @@ class TestBigBlindOption(unittest.TestCase):
                     # BB's turn - they should be able to act
                     if bb_action_count == 1:
                         # First action after everyone called - BB has the "option"
-                        # They should be able to raise OR check
-                        initial_pot = game.pot
+                        # Debug: verify state before action
+                        human_player = next(p for p in game.players if p.is_human)
+                        human_idx = next(i for i, p in enumerate(game.players) if p.is_human)
+
+                        self.assertEqual(game.current_player_index, human_idx,
+                            f"Should be human's turn. current={game.current_player_index}, human={human_idx}")
+                        self.assertEqual(game.current_state, GameState.PRE_FLOP,
+                            f"Should be pre-flop, got {game.current_state}")
 
                         # Try to raise (BB should be allowed to)
-                        success = game.submit_human_action("raise", 20)
+                        # Raise amount must be >= current_bet + big_blind
+                        min_raise = game.current_bet + game.big_blind
+                        success = game.submit_human_action("raise", min_raise)
 
                         self.assertTrue(success,
-                            "BB should be able to raise on their option")
-
-                        if success:
-                            # Verify raise increased pot
-                            self.assertGreater(game.pot, initial_pot,
-                                "BB raise should increase pot")
+                            f"BB should be able to raise to {min_raise}. current_bet={game.current_bet}, "
+                            f"human_bet={human_player.current_bet}, stack={human_player.stack}")
+                        # Note: After raise, AI may fold causing game to end.
+                        break  # Exit loop after BB exercises option
                     else:
                         # After BB raises, just call to advance
                         game.submit_human_action("call")
@@ -87,9 +96,11 @@ class TestBigBlindOption(unittest.TestCase):
     def test_bb_can_check_option(self):
         """BB should be able to check (not forced to raise) on their option."""
         game = PokerGame("Player1")
+        # Position dealer so human (index 0) is BB after start_new_hand
+        game.dealer_index = 1
         game.start_new_hand()
 
-        # Identify BB position
+        # Identify BB position - should be human
         bb_idx = (game.dealer_index + 2) % len(game.players)
         bb_player = game.players[bb_idx]
         human_is_bb = (bb_player.player_id == "human")

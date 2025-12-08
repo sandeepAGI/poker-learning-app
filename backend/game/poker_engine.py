@@ -733,8 +733,14 @@ class PokerGame:
             self._log_hand_event("blind_increase", "system", "increase", 0, 0.0,
                                f"Blinds increased from ${old_sb}/${old_bb} to ${self.small_blind}/${self.big_blind}")
 
-    def start_new_hand(self):
-        """Start a new poker hand."""
+    def start_new_hand(self, process_ai: bool = True):
+        """
+        Start a new poker hand.
+
+        Args:
+            process_ai: If True (default), process AI turns synchronously.
+                       If False, skip AI processing (WebSocket handles it async).
+        """
         # DEFENSIVE: If pot > 0, award to last active player to prevent chip loss
         # This handles edge cases where pot wasn't distributed properly
         if self.pot > 0:
@@ -812,8 +818,10 @@ class PokerGame:
             # Not enough players with chips
             self.current_player_index = None
 
-        # Process AI actions if AI player is first to act
-        self._process_remaining_actions()
+        # Process AI actions if requested (synchronous flow for REST API and tests)
+        # WebSocket flow passes process_ai=False and handles AI turns asynchronously
+        if process_ai:
+            self._process_remaining_actions()
 
         # Check if game should advance (e.g., all players all-in)
         self._maybe_advance_state()
@@ -919,10 +927,16 @@ class PokerGame:
             return None
         return self.players[self.current_player_index]
 
-    def submit_human_action(self, action: str, amount: int = None) -> bool:
+    def submit_human_action(self, action: str, amount: int = None, process_ai: bool = True) -> bool:
         """
         Process human player action.
         Fixed: Bug #1 (turn order), Bug #2 (fold resolution), Bug #3 (raise validation)
+
+        Args:
+            action: 'fold', 'call', or 'raise'
+            amount: Required for raise action
+            process_ai: If True, process AI turns synchronously (REST API).
+                       If False, skip AI processing (WebSocket handles it).
         """
         # CRITICAL: Validate input types (fuzzing found this bug!)
         if action not in ["fold", "call", "raise"]:
@@ -1016,10 +1030,13 @@ class PokerGame:
         self.current_player_index = self._get_next_active_player_index(human_index + 1)
 
         # Fixed Bug #2: Process AI actions even after human folds
-        self._process_remaining_actions()
+        # Only process synchronously for REST API; WebSocket handles AI turns async
+        if process_ai:
+            self._process_remaining_actions()
 
-        # Advance game if betting round complete
-        self._maybe_advance_state()
+        # Advance game if betting round complete (only when processing AI synchronously)
+        if process_ai:
+            self._maybe_advance_state()
 
         # QC: Verify chip conservation and game state after human action
         self._assert_chip_conservation("after submit_human_action()")
@@ -1235,6 +1252,19 @@ class PokerGame:
         """
         if not self._betting_round_complete():
             return False  # Can't advance yet
+
+        # CRITICAL: Check if only 1 player is active (everyone else folded)
+        # In this case, award pot and go to showdown immediately
+        active_players = [p for p in self.players if p.is_active]
+        if len(active_players) == 1:
+            winner = active_players[0]
+            winner.stack += self.pot
+            self._log_hand_event("pot_award", winner.player_id, "win_by_fold",
+                               self.pot, 0.0, f"{winner.name} wins ${self.pot} (all others folded)")
+            self.pot = 0
+            self.current_state = GameState.SHOWDOWN
+            self.current_player_index = None
+            return True  # Hand complete
 
         # Advance to next state and deal cards
         if self.current_state == GameState.PRE_FLOP:

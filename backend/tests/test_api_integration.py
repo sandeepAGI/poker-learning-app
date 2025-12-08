@@ -1,13 +1,37 @@
 """
 API Integration Test - Phase 2
 Tests complete game flow through FastAPI endpoints
+
+NOTE: These tests require a running server at localhost:8000
+Run with: python main.py (in a separate terminal)
+Then run: python -m pytest tests/test_api_integration.py -v
+
+When server is not running, tests are automatically skipped.
 """
 import requests
 import time
 import sys
+import pytest
 
 # API base URL
 BASE_URL = "http://localhost:8000"
+
+
+def server_is_running():
+    """Check if the server is running."""
+    try:
+        requests.get(f"{BASE_URL}/", timeout=1)
+        return True
+    except requests.exceptions.ConnectionError:
+        return False
+
+
+# Skip all tests if server isn't running
+pytestmark = pytest.mark.skipif(
+    not server_is_running(),
+    reason="Server not running at localhost:8000. Start with: python main.py"
+)
+
 
 def test_health_check():
     """Test health check endpoint"""

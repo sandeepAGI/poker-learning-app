@@ -336,6 +336,11 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
         game, _ = games[game_id]
         await manager.broadcast_state(game_id, game, show_ai_thinking=False)
 
+        # Process AI turns if AI player acts first (e.g., heads-up where AI is SB/dealer)
+        current = game.get_current_player()
+        if current and not current.is_human:
+            await process_ai_turns_with_events(game, game_id, show_ai_thinking=False)
+
         print(f"[WebSocket] Client connected to game {game_id}, awaiting actions...")
 
         # Listen for client messages
@@ -364,8 +369,8 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
                     })
                     continue
 
-                # Submit human action
-                success = game.submit_human_action(action, amount)
+                # Submit human action (process_ai=False: let WebSocket handle AI turns)
+                success = game.submit_human_action(action, amount, process_ai=False)
 
                 if not success:
                     await manager.send_event(game_id, {
@@ -398,8 +403,8 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
                     })
                     continue
 
-                # Start new hand
-                game.start_new_hand()
+                # Start new hand (process_ai=False: let WebSocket handle AI turns async)
+                game.start_new_hand(process_ai=False)
                 await manager.broadcast_state(game_id, game, data.get("show_ai_thinking", False))
 
                 # Process AI turns if game starts with AI

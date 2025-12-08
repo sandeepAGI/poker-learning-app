@@ -10,13 +10,18 @@ from game.poker_engine import PokerGame, GameState
 def test_minimum_raise_enforced():
     """Test that minimum raise (current_bet + big_blind) is enforced."""
     game = PokerGame("TestPlayer")
-    game.start_new_hand()
+    # Use process_ai=False to control the flow manually
+    game.start_new_hand(process_ai=False)
 
-    # Wait for human's turn
+    # Manually advance to human's turn if needed
     while game.get_current_player() and not game.get_current_player().is_human:
-        game._process_remaining_actions()
-        if game.current_state != GameState.PRE_FLOP:
-            break
+        current = game.get_current_player()
+        # Skip AI by having them call
+        call_amount = game.current_bet - current.current_bet
+        current.bet(call_amount)
+        game.pot += call_amount
+        current.has_acted = True
+        game.current_player_index = game._get_next_active_player_index(game.current_player_index + 1)
 
     if game.get_current_player() and game.get_current_player().is_human:
         current_bet = game.current_bet
@@ -27,13 +32,13 @@ def test_minimum_raise_enforced():
         human_player = next(p for p in game.players if p.is_human)
 
         if invalid_raise < human_player.stack:
-            result = game.submit_human_action("raise", invalid_raise)
+            result = game.submit_human_action("raise", invalid_raise, process_ai=False)
             assert result == False, f"Raise of {invalid_raise} should be rejected (min: {current_bet + big_blind})"
             print(f"✓ Invalid raise ({invalid_raise}) correctly rejected")
 
         # Try valid raise (should succeed)
         valid_raise = current_bet + big_blind
-        result = game.submit_human_action("raise", valid_raise)
+        result = game.submit_human_action("raise", valid_raise, process_ai=False)
         assert result == True, f"Valid raise of {valid_raise} should succeed"
         assert game.current_bet == valid_raise, "Current bet should be updated to raise amount"
         print(f"✓ Valid raise ({valid_raise}) accepted and current_bet updated")
@@ -41,13 +46,18 @@ def test_minimum_raise_enforced():
 def test_raise_accounting_no_double_count():
     """Test that raise accounting doesn't double-count chips."""
     game = PokerGame("TestPlayer")
-    game.start_new_hand()
+    # Use process_ai=False to control the flow manually
+    game.start_new_hand(process_ai=False)
 
-    # Get to human's turn
+    # Manually advance to human's turn if needed
     while game.get_current_player() and not game.get_current_player().is_human:
-        game._process_remaining_actions()
-        if game.current_state != GameState.PRE_FLOP:
-            break
+        current = game.get_current_player()
+        # Skip AI by having them call
+        call_amount = game.current_bet - current.current_bet
+        current.bet(call_amount)
+        game.pot += call_amount
+        current.has_acted = True
+        game.current_player_index = game._get_next_active_player_index(game.current_player_index + 1)
 
     if game.get_current_player() and game.get_current_player().is_human:
         human_player = next(p for p in game.players if p.is_human)
@@ -61,8 +71,8 @@ def test_raise_accounting_no_double_count():
         raise_amount = current_bet + game.big_blind
         raise_increment = raise_amount - human_player.current_bet
 
-        # Make a raise
-        result = game.submit_human_action("raise", raise_amount)
+        # Make a raise (use process_ai=False to prevent AI from acting after)
+        result = game.submit_human_action("raise", raise_amount, process_ai=False)
         if result:
             # Verify chip accounting
             expected_stack = initial_stack - raise_increment
@@ -105,18 +115,30 @@ def test_no_chip_creation_or_destruction():
 def test_all_in_handling():
     """Test that all-in situations are handled correctly."""
     game = PokerGame("TestPlayer")
-    game.start_new_hand()
 
-    # Find a player and reduce their stack to test all-in
+    # Set up small stack BEFORE starting the hand
+    # This ensures chip conservation is maintained
     test_player = game.players[1]  # AI player
-    test_player.stack = 15  # Small stack
+    test_player.stack = 15  # Small stack - will be able to post blind but go all-in
 
-    # Wait for their turn and they should be able to go all-in
+    # Adjust total chips to account for modified stack
+    # Originally all players have 1000, now player 1 has 15
+    game.total_chips = game.total_chips - 1000 + 15
+
+    game.start_new_hand(process_ai=False)
+
+    # Manually advance to test_player's turn
     while game.get_current_player() != test_player and game.current_state == GameState.PRE_FLOP:
         current = game.get_current_player()
         if current and current.is_human:
-            game.submit_human_action("call")
-        game._process_remaining_actions()
+            game.submit_human_action("call", process_ai=False)
+        elif current:
+            # AI player calls
+            call_amount = game.current_bet - current.current_bet
+            current.bet(call_amount)
+            game.pot += call_amount
+            current.has_acted = True
+            game.current_player_index = game._get_next_active_player_index(game.current_player_index + 1)
 
     if game.get_current_player() == test_player:
         initial_stack = test_player.stack

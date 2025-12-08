@@ -129,12 +129,14 @@ def test_three_way_all_in():
     p1.total_invested = 50
 
     p2 = Player("p2", "Large", stack=100)
-    p2.hole_cards = ["2c", "3c"]  # Worst hand
+    p2.hole_cards = ["2d", "3d"]  # Worst hand
     p2.is_active = True
     p2.total_invested = 100
 
     game.players = [p0, p1, p2]
-    game.community_cards = ["7d", "8d", "9d", "Td", "Jh"]
+    # Use community cards that don't make a straight/flush
+    # p0 and p1 will have A-K high, p2 will have 3-high (worst)
+    game.community_cards = ["4h", "5c", "8s", "Qh", "Jc"]
 
     pots = game.hand_evaluator.determine_winners_with_side_pots(game.players, game.community_cards)
 
@@ -142,9 +144,10 @@ def test_three_way_all_in():
     assert len(pots) >= 2, "Should have at least 2 pots in three-way all-in"
     print(f"✓ Three-way all-in created {len(pots)} pots")
 
-    # p0 and p1 tie for best hand, should win pots they're eligible for
+    # p0 and p1 tie for best hand (A-K high), should win pots they're eligible for
     main_pot = pots[0]
-    assert len(main_pot['winners']) == 2, "Main pot should be split between tied winners"
+    assert len(main_pot['winners']) == 2, \
+        f"Main pot should be split between tied winners (A-K high), got: {main_pot['winners']}"
     print(f"✓ Main pot correctly split between {len(main_pot['winners'])} tied winners")
 
 if __name__ == "__main__":
