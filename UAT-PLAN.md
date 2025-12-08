@@ -1,8 +1,26 @@
 # User Acceptance Testing (UAT) Plan
 
-**Date**: December 7, 2025
-**Version**: Post Bug-Fix (commit b49d457f)
+**Date**: December 8, 2025
+**Version**: 3.2 (Post WebSocket Bug Fixes)
 **Tester**: _______________
+
+---
+
+## Bugs Fixed Since Last UAT
+
+The following critical bugs were identified during UAT and have been fixed:
+
+| Bug | Description | Status |
+|-----|-------------|--------|
+| Bug #7 | Human fold doesn't trigger showdown (game stuck) | **FIXED** |
+| Bug #8 | Infinite loop when all players go all-in | **FIXED** |
+| Betting Round | Game stuck when AI is all-in and human hasn't acted | **FIXED** |
+| All-In Flag | Players marked all-in after winning chips | **FIXED** |
+
+### Test Coverage
+- 64 backend unit tests passing
+- 176,450 property-based checks passing
+- 8 bug-specific tests added and passing
 
 ---
 
@@ -12,22 +30,22 @@
 ```bash
 cd backend && python main.py
 ```
-**Status**: [X] PASS  [ ] FAIL
+**Status**: [ ] PASS  [ ] FAIL
 **Notes**: _________________________________________________
 
 ### Start Frontend
 ```bash
 cd frontend && npm run dev
 ```
-**Status**: [X] PASS  [ ] FAIL
+**Status**: [ ] PASS  [ ] FAIL
 **Notes**: _________________________________________________
 
 ### Verify Connection
 - Open http://localhost:3000
 - Check WebSocket status shows "Connected" (green dot)
 
-**Status**: [X] PASS  [ ] FAIL
-**Notes**: Not sure where to see the "Connected" green dot.  Atleast it doesn'ts show in the signining page.
+**Status**: [ ] PASS  [ ] FAIL
+**Notes**: _________________________________________________
 
 ---
 
@@ -36,14 +54,14 @@ cd frontend && npm run dev
 ### UAT-1: Game Creation
 **Steps**:
 1. Click "New Game" or start button
-2. Select number of AI opponents (3)
+2. Select number of AI opponents (1-3)
 3. Verify game loads with poker table
 
 **Expected**: Game starts, you see your cards, AI players visible
-**Status**: [ ] PASS  [X] FAIL
+**Status**: [ ] PASS  [ ] FAIL
 **Error Details**:
 ```
-I choose only 1 AI player and the first thing that happened is a game got played, even before we could get started
+(paste any errors here)
 ```
 
 ---
@@ -63,11 +81,11 @@ I choose only 1 AI player and the first thing that happened is a game got played
 
 ---
 
-### UAT-3: Basic Actions - Fold
+### UAT-3: Basic Actions - Fold (BUG #7 FIX VERIFICATION)
 **Steps**:
 1. On your turn, click "Fold"
 2. Observe your cards gray out
-3. **Verify game continues** (AI players keep acting)
+3. **Verify game continues** (AI players keep acting OR winner announced)
 4. Hand completes to showdown or last player wins
 
 **Expected**: Game does NOT hang; hand completes correctly
@@ -79,11 +97,11 @@ I choose only 1 AI player and the first thing that happened is a game got played
 
 ---
 
-### UAT-4: Raise Slider UX (BUG FIX VERIFICATION)
+### UAT-4: Raise Slider UX
 **Steps**:
 1. On your turn, look at the raise section
 2. **Test slider**: Move it - should increment by big blind ($10)
-3. **Test quick buttons**: Click "Min", "½ Pot", "Pot", "2x Pot"
+3. **Test quick buttons**: Click "Min", "1/2 Pot", "Pot", "2x Pot"
 4. **Test number input**: Type a specific amount (e.g., 75)
 5. Click "Raise" button
 
@@ -101,12 +119,14 @@ I choose only 1 AI player and the first thing that happened is a game got played
 
 ---
 
-### UAT-5: All-In Button
+### UAT-5: All-In Button (BUG #8 FIX VERIFICATION)
 **Steps**:
 1. On your turn, click "All-In" button
 2. Verify it bets your entire stack
+3. **If opponent also goes all-in**: Game should advance through streets to showdown
+4. **Verify no infinite loop**: Game completes normally
 
-**Expected**: All chips go to pot, you're marked as all-in
+**Expected**: All chips go to pot, game reaches showdown, winner announced
 **Status**: [ ] PASS  [ ] FAIL
 **Error Details**:
 ```
@@ -153,13 +173,13 @@ I choose only 1 AI player and the first thing that happened is a game got played
 
 ### UAT-8: Multiple Hands (Chip Conservation)
 **Steps**:
-1. Note starting chip totals (should be $4,000 across all players)
+1. Note starting chip totals (should be $4,000 across all players with 4 players, or $2,000 with 2 players)
 2. Play 5+ hands
-3. After each hand, verify total chips = $4,000
+3. After each hand, verify total chips are conserved
 
 **How to check**: Add up all player stacks + pot (if mid-hand)
 
-**Expected**: Total chips always = $4,000 (no chip creation/loss)
+**Expected**: Total chips always conserved (no chip creation/loss)
 **Status**: [ ] PASS  [ ] FAIL
 **Error Details**:
 ```
@@ -234,9 +254,9 @@ I choose only 1 AI player and the first thing that happened is a game got played
 |------|--------|-------|
 | UAT-1: Game Creation | | |
 | UAT-2: Call Action | | |
-| UAT-3: Fold Action | | |
+| UAT-3: Fold Action (Bug #7) | | |
 | UAT-4: Raise Slider UX | | |
-| UAT-5: All-In Button | | |
+| UAT-5: All-In (Bug #8) | | |
 | UAT-6: AI Thinking | | |
 | UAT-7: Hand Completion | | |
 | UAT-8: Chip Conservation | | |

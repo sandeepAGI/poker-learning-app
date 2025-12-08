@@ -145,15 +145,20 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
     print(f"[WebSocket] Processing AI turns for game {game_id}")
 
     while game.current_player_index is not None:
+        # CRITICAL: Check if betting round is complete FIRST (prevents infinite loop)
+        if game._betting_round_complete():
+            print(f"[WebSocket] Betting round complete (checked at loop start)")
+            break
+
         current_player = game.players[game.current_player_index]
 
-        # Stop if we reach a human player (wait for their action)
-        if current_player.is_human and not current_player.all_in:
+        # Stop if we reach a human player who hasn't acted yet (wait for their action)
+        if current_player.is_human and not current_player.all_in and not current_player.has_acted:
             print(f"[WebSocket] Reached human player, waiting for action")
             break
 
-        # Skip inactive or all-in players
-        if not current_player.is_active or current_player.all_in:
+        # Skip inactive, all-in, or already-acted players
+        if not current_player.is_active or current_player.all_in or current_player.has_acted:
             game.current_player_index = game._get_next_active_player_index(
                 game.current_player_index + 1
             )
@@ -176,17 +181,27 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
         # Store decision
         game.last_ai_decisions[current_player.player_id] = decision
 
-        # Apply action to game state
+        # Apply action to game state and log event (CRITICAL: logging is needed for BB option check)
         if decision.action == "fold":
             current_player.is_active = False
+            game._log_hand_event("action", current_player.player_id, "fold", 0, 0.0,
+                                f"{current_player.name} folded")
         elif decision.action == "call":
             call_amount = game.current_bet - current_player.current_bet
             current_player.bet(call_amount)
             game.pot += call_amount
+            game._log_hand_event("action", current_player.player_id, "call", call_amount, 0.0,
+                                f"{current_player.name} called ${call_amount}")
         elif decision.action == "raise":
             current_player.bet(decision.amount)
             game.current_bet = current_player.current_bet
             game.pot += decision.amount
+            game._log_hand_event("action", current_player.player_id, "raise", decision.amount, 0.0,
+                                f"{current_player.name} raised to ${game.current_bet}")
+            # Reset has_acted for other players who need to respond to raise
+            for p in game.players:
+                if p.player_id != current_player.player_id and p.is_active and not p.all_in:
+                    p.has_acted = False
 
         current_player.has_acted = True
 
@@ -231,5 +246,10 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
             current = game.get_current_player()
             if current and not current.is_human:
                 await process_ai_turns_with_events(game, game_id, show_ai_thinking)
+    else:
+        # Betting round not complete - send final state update so frontend knows it's human's turn
+        # This is critical: the loop may have broken because we reached a human player,
+        # but the last state broadcast was BEFORE current_player_index was updated
+        await manager.broadcast_state(game_id, game, show_ai_thinking)
 
     print(f"[WebSocket] AI turn processing complete for game {game_id}")

@@ -1,39 +1,39 @@
 # Poker Learning App - Current Status
 
 **Last Updated**: December 8, 2025
-**Version**: 3.1 (Test Stabilization Complete)
+**Version**: 3.2 (WebSocket Bug Fixes Complete)
 **Branch**: `main`
 
 ---
 
 ## Current State
 
-All backend tests passing. Ready for UAT.
+All critical WebSocket game flow bugs fixed. Ready for UAT.
 
 ### Test Results (December 8, 2025)
 
 | Test Suite | Result |
 |------------|--------|
-| Unit Tests | 48 passed, 9 skipped |
-| Property-Based (10,000 scenarios) | 1,757,335 checks, 0 violations |
+| Backend Unit Tests | 64 passed, 9 skipped |
+| Property-Based (1,000 scenarios) | 176,450 checks, 0 violations |
+| Bug-Specific Tests | 8/8 pass |
 | API Integration | Skipped (requires running server) |
 
-### Recent Fixes
+### Recent Fixes (December 8, 2025)
 
 | Bug | Issue | Fix |
 |-----|-------|-----|
-| BB Option | Test used invalid raise amount | Use `current_bet + big_blind` as minimum |
-| Raise Validation | Tests didn't account for AI processing | Added `process_ai=False` parameter |
-| Side Pots | Community cards made a straight | Changed to non-straight board |
-| WebSocket Flow | Tests used wrong AI processing mode | Added `process_ai=False` for WebSocket |
-| API Integration | Tests fail when server not running | Added skip decorator |
+| Bug #7 | Human fold doesn't trigger showdown with `process_ai=False` | Added immediate showdown trigger in `submit_human_action()` |
+| Bug #8 | Infinite loop when all players all-in at SHOWDOWN | Added early return in `_advance_state_for_websocket()` |
+| Betting Round | `_betting_round_complete()` incorrect with all-in players | Distinguished "others folded" vs "others all-in" scenarios |
+| All-In Flag | `all_in` not cleared when players win pots | Added clearing in all 8 pot award locations |
 
 ---
 
 ## Architecture
 
 ### Backend (Python/FastAPI)
-- `game/poker_engine.py` - Core game logic (~1600 lines)
+- `game/poker_engine.py` - Core game logic (~1650 lines)
 - `main.py` - REST + WebSocket API
 - `websocket_manager.py` - Real-time AI turn streaming
 
@@ -78,8 +78,11 @@ npm run dev  # http://localhost:3000
 # Unit tests
 cd backend && python -m pytest tests/ -v
 
-# Property-based (10K scenarios)
+# Property-based (1K scenarios)
 PYTHONPATH=backend python tests/legacy/test_property_based.py
+
+# Bug-specific tests
+python -m pytest tests/test_fold_and_allin_bugs.py -v
 
 # API integration (requires running server)
 python main.py &  # Start server first

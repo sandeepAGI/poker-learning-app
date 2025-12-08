@@ -685,10 +685,22 @@ class PokerGame:
     def _betting_round_complete(self) -> bool:
         """Check if betting round is complete. Fixed: Bug #1 + BB option."""
         active_players = [p for p in self.players if p.is_active and not p.all_in]
+        all_active_players = [p for p in self.players if p.is_active]  # Including all-in
 
-        # If only 0-1 active players, round is complete
-        if len(active_players) <= 1:
+        # If 0 active non-all-in players (everyone folded or all-in), round is complete
+        if len(active_players) == 0:
             return True
+
+        # If only 1 non-all-in player remains:
+        # - If others are all-in (len(all_active_players) > 1), this player needs to act
+        # - If others have folded (len(all_active_players) == 1), pot goes to winner - complete
+        if len(active_players) == 1:
+            if len(all_active_players) > 1:
+                # Others are all-in, this player still needs to act
+                return active_players[0].has_acted
+            else:
+                # All others folded, this player wins - round is complete
+                return True
 
         # All active players must have acted and matched the current bet
         for player in active_players:
@@ -749,6 +761,9 @@ class PokerGame:
                 # Award to first active player (usually the winner by default)
                 winner = active_players[0]
                 winner.stack += self.pot
+                # Clear all-in flag if winner now has chips
+                if winner.stack > 0 and winner.all_in:
+                    winner.all_in = False
                 self._log_hand_event(
                     "pot_award", winner.player_id, "defensive_award",
                     self.pot, 0.0,
@@ -760,6 +775,9 @@ class PokerGame:
                 for p in self.players:
                     if p.stack >= 0:  # Any player still in game
                         p.stack += self.pot
+                        # Clear all-in flag if winner now has chips
+                        if p.stack > 0 and p.all_in:
+                            p.all_in = False
                         self._log_hand_event(
                             "pot_award", p.player_id, "defensive_award",
                             self.pot, 0.0,
@@ -986,6 +1004,26 @@ class PokerGame:
             self._log_hand_event("action", human_player.player_id, "fold", 0,
                                hand_strength, f"Human player folded with {hand_strength:.1%} hand strength")
 
+            # CRITICAL FIX (Bug #7): If 0 or 1 player remains after fold,
+            # advance to showdown immediately (even with process_ai=False)
+            # This is required because QC assertion validates state consistency
+            active_players = [p for p in self.players if p.is_active]
+            if len(active_players) <= 1:
+                if len(active_players) == 1:
+                    winner = active_players[0]
+                    winner.stack += self.pot
+                    # Clear all-in flag if winner now has chips
+                    if winner.stack > 0 and winner.all_in:
+                        winner.all_in = False
+                    self._log_hand_event("pot_award", winner.player_id, "win_by_fold",
+                                       self.pot, 0.0, f"{winner.name} wins ${self.pot} (all others folded)")
+                    self.pot = 0
+                # Edge case: If 0 active players (shouldn't happen in normal play),
+                # pot stays unawarded - this is a degenerate state
+                self.current_state = GameState.SHOWDOWN
+                self.current_player_index = None
+                return True  # Early return - hand complete
+
         elif action == "call":
             call_amount = self.current_bet - human_player.current_bet
             bet_amount = human_player.bet(call_amount)
@@ -1136,6 +1174,9 @@ class PokerGame:
                     winner = next((p for p in self.players if p.is_active), None)
                     if winner:
                         winner.stack += self.pot
+                        # Clear all-in flag if winner now has chips
+                        if winner.stack > 0 and winner.all_in:
+                            winner.all_in = False
                         self._log_hand_event("pot_award", winner.player_id, "win", self.pot, 0.0,
                                            f"{winner.name} wins ${self.pot} (no other players can act)")
                         self.pot = 0
@@ -1161,6 +1202,9 @@ class PokerGame:
                 if winner:
                     winner.stack += self.pot
                     winner.is_active = True  # Reactivate for pot award
+                    # Clear all-in flag if winner now has chips
+                    if winner.stack > 0 and winner.all_in:
+                        winner.all_in = False
 
                     self._log_hand_event("pot_award", winner.player_id, "win", self.pot, 0.0,
                                        f"All players folded - {winner.name} wins ${self.pot} by default")
@@ -1177,6 +1221,9 @@ class PokerGame:
             if winner and self.pot > 0:
                 pot_awarded = self.pot
                 winner.stack += self.pot
+                # Clear all-in flag if winner now has chips
+                if winner.stack > 0 and winner.all_in:
+                    winner.all_in = False
                 self._log_hand_event("pot_award", winner.player_id, "win", self.pot, 0.0,
                                    f"{winner.name} wins ${self.pot} (all others folded)")
                 self.pot = 0
@@ -1250,6 +1297,12 @@ class PokerGame:
         Advance game state without processing AI actions (for WebSocket flow).
         Used when AI actions are handled externally one-by-one.
         """
+        # EARLY RETURN (Bug #8 Fix): Already at SHOWDOWN, nothing to advance
+        # Without this check, the code falls through to "reset for new round"
+        # which causes infinite loop when called repeatedly at SHOWDOWN
+        if self.current_state == GameState.SHOWDOWN:
+            return False
+
         if not self._betting_round_complete():
             return False  # Can't advance yet
 
@@ -1259,6 +1312,9 @@ class PokerGame:
         if len(active_players) == 1:
             winner = active_players[0]
             winner.stack += self.pot
+            # Clear all-in flag if winner now has chips
+            if winner.stack > 0 and winner.all_in:
+                winner.all_in = False
             self._log_hand_event("pot_award", winner.player_id, "win_by_fold",
                                self.pot, 0.0, f"{winner.name} wins ${self.pot} (all others folded)")
             self.pot = 0

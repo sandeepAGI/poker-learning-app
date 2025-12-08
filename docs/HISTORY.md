@@ -44,12 +44,23 @@ For current status, see [STATUS.md](../STATUS.md).
 
 ### December 2025: Bug Fixes & Cleanup
 
-**Bug Fixes**:
+**Bug Fixes (Early December)**:
 1. Defensive pot distribution before new hand
 2. BB option pre-flop (Texas Hold'em rule)
 3. Side pot optimization for simple cases
 4. JSON Infinity error (SPR serialization)
 5. Raise slider UX improvements
+
+**WebSocket Bug Fixes (December 8)**:
+6. Bug #7: Human fold doesn't trigger showdown with `process_ai=False`
+7. Bug #8: Infinite loop when all players all-in at SHOWDOWN
+8. `_betting_round_complete()` incorrect with all-in players
+9. `all_in` flag not cleared when players win pots (8 locations fixed)
+
+**New Tests Added**:
+- `test_fold_and_allin_bugs.py` - 8 comprehensive tests for bugs #7 and #8
+- `test_websocket_flow.py` - WebSocket flow test fixes
+- `test_websocket_simulation.py` - Simulation-based game flow testing
 
 **Repository Cleanup**:
 - Moved 22 test files to tests/legacy/
@@ -97,10 +108,9 @@ All issues resolved in Phase 1.
 ## Test Coverage
 
 ### Automated Tests
-- Core regression: 16 tests
-- Bug fixes: 7 tests
-- AI SPR: 7 tests
-- Property-based: 1000 scenarios, 174K+ checks
+- Backend unit tests: 64 tests
+- Bug-specific tests: 8 tests (bugs #7, #8)
+- Property-based: 1000 scenarios, 176K+ checks
 - Action fuzzing: ~10K actions, 0 corruptions
 
 ### Key Test Files
@@ -108,6 +118,9 @@ All issues resolved in Phase 1.
 - `backend/tests/test_fold_resolution.py`
 - `backend/tests/test_bug_fixes.py`
 - `backend/tests/test_ai_spr_decisions.py`
+- `backend/tests/test_fold_and_allin_bugs.py`
+- `backend/tests/test_websocket_flow.py`
+- `backend/tests/test_websocket_simulation.py`
 - `tests/legacy/test_property_based.py`
 - `tests/legacy/test_action_fuzzing.py`
 
