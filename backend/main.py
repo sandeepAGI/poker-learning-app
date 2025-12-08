@@ -110,7 +110,9 @@ def create_game(request: CreateGameRequest):
     game = PokerGame(request.player_name, request.ai_count)
 
     # Start first hand
-    game.start_new_hand()
+    # Bug Fix #9: Use process_ai=False so hand doesn't complete before WebSocket connects
+    # WebSocket handler will process AI turns when client connects
+    game.start_new_hand(process_ai=False)
 
     # Store in memory with timestamp
     games[game_id] = (game, time.time())

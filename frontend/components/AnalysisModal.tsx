@@ -102,24 +102,34 @@ export function AnalysisModal({ isOpen, analysis, onClose }: AnalysisModalProps)
                 </div>
               )}
 
-              {/* AI Thinking */}
-              {analysis.ai_thinking && Object.keys(analysis.ai_thinking).length > 0 && (
+              {/* AI Thinking - Bug Fix UAT-11: Use name field, not array index */}
+              {analysis.ai_thinking && analysis.ai_thinking.length > 0 && (
                 <div>
                   <h3 className="text-xl font-semibold mb-3 text-purple-400">🤖 AI Players' Thinking</h3>
                   <div className="space-y-3">
-                    {Object.entries(analysis.ai_thinking).map(([name, decision]: [string, any]) => (
-                      <div key={name} className="bg-gray-800 p-3 rounded-lg">
-                        <div className="font-semibold text-blue-300">{name}</div>
-                        <div className="text-sm mt-1">
-                          <span className="text-gray-400">Action:</span>
-                          <span className="ml-2 font-bold">{decision.action}</span>
-                          {decision.amount > 0 && (
-                            <span className="ml-1">${decision.amount}</span>
+                    {analysis.ai_thinking.map((thinking: any, idx: number) => (
+                      <div key={thinking.name || idx} className="bg-gray-800 p-3 rounded-lg">
+                        <div className="font-semibold text-blue-300">
+                          {thinking.name}
+                          {thinking.personality && (
+                            <span className="text-xs text-gray-400 ml-2">({thinking.personality})</span>
                           )}
                         </div>
-                        {decision.reasoning && (
+                        <div className="text-sm mt-1">
+                          <span className="text-gray-400">Action:</span>
+                          <span className="ml-2 font-bold">{thinking.action}</span>
+                        </div>
+                        {thinking.reasoning && (
                           <div className="text-xs text-gray-300 mt-2 italic">
-                            "{decision.reasoning}"
+                            "{thinking.reasoning}"
+                          </div>
+                        )}
+                        {thinking.hand_strength !== undefined && (
+                          <div className="text-xs text-gray-400 mt-1">
+                            Hand Strength: {(thinking.hand_strength * 100).toFixed(0)}%
+                            {thinking.confidence !== undefined && (
+                              <span className="ml-2">| Confidence: {(thinking.confidence * 100).toFixed(0)}%</span>
+                            )}
                           </div>
                         )}
                       </div>

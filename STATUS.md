@@ -1,32 +1,42 @@
 # Poker Learning App - Current Status
 
 **Last Updated**: December 8, 2025
-**Version**: 3.2 (WebSocket Bug Fixes Complete)
+**Version**: 3.3 (All-In & Analysis Bug Fixes)
 **Branch**: `main`
 
 ---
 
 ## Current State
 
-All critical WebSocket game flow bugs fixed. Ready for UAT.
+All UAT bugs fixed. Ready for UAT Round 2.
 
 ### Test Results (December 8, 2025)
 
 | Test Suite | Result |
 |------------|--------|
-| Backend Unit Tests | 64 passed, 9 skipped |
-| Property-Based (1,000 scenarios) | 176,450 checks, 0 violations |
-| Bug-Specific Tests | 8/8 pass |
-| API Integration | Skipped (requires running server) |
+| Critical Backend Tests | 32 passed, 1 skipped |
+| All-In Scenario Tests | 10 passed |
+| Game Start Tests | 8 passed |
+| Analysis Tests | 3 passed |
+| Property-Based (1,000 scenarios) | 178,060 checks, 0 violations |
 
-### Recent Fixes (December 8, 2025)
+### Recent Fixes (December 8, 2025 - UAT Round 1)
 
 | Bug | Issue | Fix |
 |-----|-------|-----|
-| Bug #7 | Human fold doesn't trigger showdown with `process_ai=False` | Added immediate showdown trigger in `submit_human_action()` |
-| Bug #8 | Infinite loop when all players all-in at SHOWDOWN | Added early return in `_advance_state_for_websocket()` |
-| Betting Round | `_betting_round_complete()` incorrect with all-in players | Distinguished "others folded" vs "others all-in" scenarios |
-| All-In Flag | `all_in` not cleared when players win pots | Added clearing in all 8 pot award locations |
+| Bug #9 | Game starts with completed hand (1-2 players) | Use `process_ai=False` in `create_game()` |
+| Bug #10 | Game hangs after all-in elimination | Added `isWaitingAllIn` state, fixed `isEliminated` logic |
+| All-In UI | "Game Over" shown immediately when going all-in | Fixed `isEliminated = stack === 0 && (!all_in \|\| isShowdown)` |
+| UAT-11 | Analysis shows player indices (0,1,2) not names | Fixed array iteration in AnalysisModal |
+
+### Previous Fixes (December 8, 2025 - WebSocket)
+
+| Bug | Issue | Fix |
+|-----|-------|-----|
+| Bug #7 | Human fold doesn't trigger showdown | Added immediate showdown trigger |
+| Bug #8 | Infinite loop when all players all-in | Added early return at SHOWDOWN |
+| Betting Round | Incorrect with all-in players | Distinguished folded vs all-in |
+| All-In Flag | Not cleared when winning pots | Added clearing in 8 locations |
 
 ---
 
@@ -39,6 +49,7 @@ All critical WebSocket game flow bugs fixed. Ready for UAT.
 
 ### Frontend (Next.js/TypeScript)
 - `components/PokerTable.tsx` - Main game UI
+- `components/AnalysisModal.tsx` - Hand analysis with AI names
 - `lib/store.ts` - Zustand state management
 - `lib/websocket.ts` - WebSocket client
 
@@ -75,16 +86,12 @@ npm run dev  # http://localhost:3000
 ## Running Tests
 
 ```bash
-# Unit tests
-cd backend && python -m pytest tests/ -v
+# Critical tests
+cd backend && python -m pytest tests/test_turn_order.py tests/test_fold_resolution.py tests/test_bug_fixes.py tests/test_all_in_scenarios.py -v
 
 # Property-based (1K scenarios)
 PYTHONPATH=backend python tests/legacy/test_property_based.py
 
-# Bug-specific tests
-python -m pytest tests/test_fold_and_allin_bugs.py -v
-
-# API integration (requires running server)
-python main.py &  # Start server first
-python -m pytest tests/test_api_integration.py -v
+# All backend tests
+python -m pytest backend/tests/ -v
 ```

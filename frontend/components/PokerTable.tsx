@@ -47,13 +47,22 @@ export function PokerTable() {
   const [showGameOverModal, setShowGameOverModal] = useState(false);
 
   // Check if player is all-in (has chips invested but stack = 0)
-  const isAllIn = gameState.human_player.current_bet > 0 && gameState.human_player.stack === 0;
+  const isAllIn = gameState.human_player.all_in ||
+                  (gameState.human_player.current_bet > 0 && gameState.human_player.stack === 0);
 
   // Bug Fix #3: Check if player is busted (not in game anymore)
   const isBusted = gameState.human_player.stack === 0 && !gameState.human_player.is_active;
 
   // Feature: Detect when human player is eliminated (game over)
-  const isEliminated = gameState.human_player.stack === 0;
+  // Bug Fix #10: Properly detect elimination:
+  // - stack=0 and NOT all-in → eliminated (busted out without going all-in)
+  // - stack=0 and all-in and at showdown → eliminated (lost the all-in)
+  // - stack=0 and all-in and NOT showdown → NOT eliminated (waiting for hand to complete)
+  const isEliminated = gameState.human_player.stack === 0 &&
+                       (!gameState.human_player.all_in || isShowdown);
+
+  // Player is all-in and waiting for hand to complete
+  const isWaitingAllIn = gameState.human_player.all_in && !isShowdown && gameState.human_player.stack === 0;
 
   // Update raise amount when minRaise changes (new betting round, someone raises, etc.)
   useEffect(() => {
@@ -250,6 +259,14 @@ export function PokerTable() {
               <div className="text-red-400 font-bold text-xl mb-2">💀 Game Over</div>
               <div className="text-white text-sm">
                 You've been eliminated. Game ending...
+              </div>
+            </div>
+          ) : isWaitingAllIn ? (
+            /* Bug Fix #10: Show waiting message when all-in */
+            <div className="text-center py-4">
+              <div className="text-yellow-400 font-bold text-xl mb-2">🎲 All-In!</div>
+              <div className="text-white text-sm">
+                Waiting for hand to complete...
               </div>
             </div>
           ) : isShowdown ? (
