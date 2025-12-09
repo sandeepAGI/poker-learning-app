@@ -339,9 +339,10 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
         await manager.broadcast_state(game_id, game, show_ai_thinking=False)
 
         # Process AI turns if AI player acts first (e.g., heads-up where AI is SB/dealer)
+        # Note: Initial connection always starts without step mode - user can enable it later
         current = game.get_current_player()
         if current and not current.is_human:
-            await process_ai_turns_with_events(game, game_id, show_ai_thinking=False)
+            asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking=False, step_mode=False))
 
         print(f"[WebSocket] Client connected to game {game_id}, awaiting actions...")
 
@@ -362,6 +363,7 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
                 action = data.get("action")
                 amount = data.get("amount")
                 show_ai_thinking = data.get("show_ai_thinking", False)
+                step_mode = data.get("step_mode", False)  # Phase 4: Step Mode (UAT-1 fix)
 
                 # Validate action
                 if action not in ["fold", "call", "raise"]:
@@ -384,8 +386,8 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
                 # Broadcast state after human action
                 await manager.broadcast_state(game_id, game, show_ai_thinking)
 
-                # Process AI turns with events
-                await process_ai_turns_with_events(game, game_id, show_ai_thinking)
+                # Process AI turns in background task (so we can continue receiving messages)
+                asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking, step_mode))
 
             elif message_type == "next_hand":
                 # Start next hand
@@ -407,12 +409,20 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
 
                 # Start new hand (process_ai=False: let WebSocket handle AI turns async)
                 game.start_new_hand(process_ai=False)
-                await manager.broadcast_state(game_id, game, data.get("show_ai_thinking", False))
+                show_ai_thinking = data.get("show_ai_thinking", False)
+                step_mode = data.get("step_mode", False)  # Phase 4: Step Mode
+                await manager.broadcast_state(game_id, game, show_ai_thinking)
 
-                # Process AI turns if game starts with AI
+                # Process AI turns if game starts with AI (background task)
                 current = game.get_current_player()
                 if current and not current.is_human:
-                    await process_ai_turns_with_events(game, game_id, data.get("show_ai_thinking", False))
+                    asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking, step_mode))
+
+            elif message_type == "continue":
+                # Phase 4: User clicked "Continue" button in step mode
+                print(f"[WebSocket] Received continue message for game {game_id}")
+                manager.signal_continue(game_id)
+                print(f"[WebSocket] Continue signal sent to manager")
 
             elif message_type == "get_state":
                 # Client requesting current state

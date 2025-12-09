@@ -15,6 +15,8 @@ class ConnectionManager:
     def __init__(self):
         # Store active connections: {game_id: WebSocket}
         self.active_connections: Dict[str, WebSocket] = {}
+        # Store step mode state: {game_id: continue_event}
+        self.step_mode_events: Dict[str, asyncio.Event] = {}
 
     async def connect(self, game_id: str, websocket: WebSocket):
         """Accept a new WebSocket connection for a game"""
@@ -27,6 +29,15 @@ class ConnectionManager:
         if game_id in self.active_connections:
             del self.active_connections[game_id]
             print(f"[WebSocket] Client disconnected from game {game_id}")
+        # Clean up step mode event if exists
+        if game_id in self.step_mode_events:
+            del self.step_mode_events[game_id]
+
+    def signal_continue(self, game_id: str):
+        """Signal that user wants to continue to next AI action"""
+        if game_id in self.step_mode_events:
+            self.step_mode_events[game_id].set()
+            print(f"[WebSocket] Continue signal received for game {game_id}")
 
     async def send_event(self, game_id: str, event: Dict[str, Any]):
         """Send an event to a specific game's WebSocket"""
@@ -137,14 +148,47 @@ def serialize_game_state(game: PokerGame, show_ai_thinking: bool = False) -> Dic
     }
 
 
-async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_thinking: bool = False):
+async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_thinking: bool = False, step_mode: bool = False):
     """
     Process AI turns one-by-one and emit events for each action.
     This is the key function that enables smooth turn-by-turn gameplay!
+
+    Args:
+        game: The PokerGame instance
+        game_id: Game identifier
+        show_ai_thinking: Whether to include AI reasoning in events
+        step_mode: If True, pause after each AI action and wait for user to continue (UAT-1 fix)
     """
-    print(f"[WebSocket] Processing AI turns for game {game_id}")
+    import time
+    start_time = time.time()
+    print(f"[WebSocket] ====== Processing AI turns for game {game_id} (step_mode={step_mode}, state={game.current_state.value}) ======")
+
+    # CRITICAL: Infinite loop protection
+    max_iterations = 50  # Safety limit (4 players * 4 betting rounds * 3 raises per round)
+    iteration_count = 0
+    last_player_index = None
+    same_player_count = 0
 
     while game.current_player_index is not None:
+        iteration_count += 1
+
+        # SAFETY: Detect infinite loop
+        if iteration_count > max_iterations:
+            print(f"[WebSocket] ⚠️  INFINITE LOOP DETECTED! Stopping after {iteration_count} iterations")
+            print(f"[WebSocket] Game state: {game.current_state.value}, current_player_index={game.current_player_index}")
+            print(f"[WebSocket] Active players: {[(p.name, p.is_active, p.all_in, p.has_acted) for p in game.players]}")
+            break
+
+        # SAFETY: Detect same player looping
+        if game.current_player_index == last_player_index:
+            same_player_count += 1
+            if same_player_count > 5:
+                print(f"[WebSocket] ⚠️  STUCK ON SAME PLAYER! Player index {game.current_player_index} ({game.players[game.current_player_index].name}) has been processed {same_player_count} times in a row")
+                print(f"[WebSocket] Player state: is_active={game.players[game.current_player_index].is_active}, all_in={game.players[game.current_player_index].all_in}, has_acted={game.players[game.current_player_index].has_acted}")
+                break
+        else:
+            same_player_count = 0
+        last_player_index = game.current_player_index
         # CRITICAL: Check if betting round is complete FIRST (prevents infinite loop)
         if game._betting_round_complete():
             print(f"[WebSocket] Betting round complete (checked at loop start)")
@@ -164,7 +208,8 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
             )
             continue
 
-        print(f"[WebSocket] Processing AI turn: {current_player.name}")
+        action_start = time.time()
+        print(f"[WebSocket] >>> AI turn #{len([p for p in game.players if not p.is_human and not p.is_active]) + 1}: {current_player.name} (player_index={game.current_player_index})")
 
         # Get AI decision
         decision = AIStrategy.make_decision_with_reasoning(
@@ -206,11 +251,43 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
             }
         })
 
-        # Small delay for UX (frontend can also add delay)
-        await asyncio.sleep(0.5)
-
         # Broadcast updated state
         await manager.broadcast_state(game_id, game, show_ai_thinking)
+
+        # STEP MODE: Pause IMMEDIATELY after AI action (no delay first!)
+        if step_mode:
+            # Create a new event for this game if not exists
+            if game_id not in manager.step_mode_events:
+                manager.step_mode_events[game_id] = asyncio.Event()
+
+            # Clear any previous continue signal
+            manager.step_mode_events[game_id].clear()
+
+            # Send "awaiting_continue" event to frontend
+            await manager.send_event(game_id, {
+                "type": "awaiting_continue",
+                "data": {
+                    "player_name": current_player.name,
+                    "action": decision.action
+                }
+            })
+
+            wait_start = time.time()
+            print(f"[WebSocket] ⏸️  PAUSED - Waiting for continue signal... (t={wait_start - start_time:.2f}s)")
+            # Wait for user to click "Continue" button (with 60 second timeout for safety)
+            try:
+                await asyncio.wait_for(manager.step_mode_events[game_id].wait(), timeout=60.0)
+                continue_received = time.time()
+                print(f"[WebSocket] ▶️  Continue signal received (waited {continue_received - wait_start:.2f}s, total t={continue_received - start_time:.2f}s)")
+                # Small delay after continue to let user see the action before next one
+                await asyncio.sleep(0.3)
+                after_delay = time.time()
+                print(f"[WebSocket] Post-continue delay done (0.3s), continuing loop (t={after_delay - start_time:.2f}s)")
+            except asyncio.TimeoutError:
+                print(f"[WebSocket] Step mode: Timeout waiting for continue (proceeding anyway)")
+        else:
+            # Non-step mode: Small delay for better UX visibility
+            await asyncio.sleep(0.5)
 
         # Check if action triggered showdown (e.g., all others folded)
         # apply_action() sets current_player_index = None when hand is complete
@@ -228,20 +305,33 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
 
     # Check if we should advance game state
     if game._betting_round_complete():
-        print(f"[WebSocket] Betting round complete, advancing state")
+        advance_start = time.time()
+        print(f"[WebSocket] 🔄 Betting round complete, advancing state (t={advance_start - start_time:.2f}s)")
         advanced = game._advance_state_for_websocket()
+        advance_done = time.time()
+        print(f"[WebSocket] State advanced: {advanced}, new state={game.current_state.value if advanced else 'N/A'} (took {advance_done - advance_start:.3f}s)")
 
         if advanced:
             await manager.broadcast_state(game_id, game, show_ai_thinking)
+            broadcast_done = time.time()
+            print(f"[WebSocket] State broadcast done (took {broadcast_done - advance_done:.3f}s, total t={broadcast_done - start_time:.2f}s)")
 
             # If still AI turns remaining (next betting round), continue
             current = game.get_current_player()
             if current and not current.is_human:
-                await process_ai_turns_with_events(game, game_id, show_ai_thinking)
+                print(f"[WebSocket] 🔁 Next player is AI ({current.name}), recursively processing AI turns...")
+                await process_ai_turns_with_events(game, game_id, show_ai_thinking, step_mode)
+            else:
+                print(f"[WebSocket] Next player is human or None, stopping AI processing")
     else:
         # Betting round not complete - send final state update so frontend knows it's human's turn
         # This is critical: the loop may have broken because we reached a human player,
         # but the last state broadcast was BEFORE current_player_index was updated
+        final_broadcast_start = time.time()
+        print(f"[WebSocket] Betting round NOT complete, sending final state broadcast (t={final_broadcast_start - start_time:.2f}s)")
         await manager.broadcast_state(game_id, game, show_ai_thinking)
+        final_broadcast_done = time.time()
+        print(f"[WebSocket] Final broadcast done (took {final_broadcast_done - final_broadcast_start:.3f}s)")
 
-    print(f"[WebSocket] AI turn processing complete for game {game_id}")
+    end_time = time.time()
+    print(f"[WebSocket] ====== AI turn processing complete for game {game_id} (total time: {end_time - start_time:.2f}s) ======")

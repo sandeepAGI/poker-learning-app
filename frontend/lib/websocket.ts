@@ -14,7 +14,7 @@ import { GameState } from './types';
 
 // WebSocket message types from backend
 export interface WSMessage {
-  type: 'state_update' | 'ai_action' | 'error' | 'game_over';
+  type: 'state_update' | 'ai_action' | 'error' | 'game_over' | 'awaiting_continue';
   data: any;
 }
 
@@ -36,6 +36,7 @@ export interface WebSocketCallbacks {
   onGameOver: () => void;
   onConnect: () => void;
   onDisconnect: () => void;
+  onAwaitingContinue?: (playerName: string, action: string) => void; // Phase 4: Step Mode
 }
 
 // Connection states
@@ -160,6 +161,16 @@ export class PokerWebSocket {
         this.callbacks.onGameOver();
         break;
 
+      case 'awaiting_continue':
+        // Phase 4: Step Mode - waiting for user to continue
+        if (this.callbacks.onAwaitingContinue) {
+          this.callbacks.onAwaitingContinue(
+            message.data.player_name,
+            message.data.action
+          );
+        }
+        break;
+
       default:
         console.warn('[WebSocket] Unknown message type:', message.type);
     }
@@ -168,7 +179,7 @@ export class PokerWebSocket {
   /**
    * Send action to server
    */
-  sendAction(action: 'fold' | 'call' | 'raise', amount?: number, showAiThinking: boolean = false): void {
+  sendAction(action: 'fold' | 'call' | 'raise', amount?: number, showAiThinking: boolean = false, stepMode: boolean = false): void {
     if (!this.isConnected()) {
       console.error('[WebSocket] Cannot send action: not connected');
       this.handleError('Not connected to server');
@@ -179,7 +190,8 @@ export class PokerWebSocket {
       type: 'action',
       action,
       amount,
-      show_ai_thinking: showAiThinking
+      show_ai_thinking: showAiThinking,
+      step_mode: stepMode // Phase 4: Step Mode
     };
 
     console.log('[WebSocket] Sending action:', message);
@@ -189,7 +201,7 @@ export class PokerWebSocket {
   /**
    * Request next hand
    */
-  nextHand(showAiThinking: boolean = false): void {
+  nextHand(showAiThinking: boolean = false, stepMode: boolean = false): void {
     if (!this.isConnected()) {
       console.error('[WebSocket] Cannot start next hand: not connected');
       this.handleError('Not connected to server');
@@ -198,10 +210,29 @@ export class PokerWebSocket {
 
     const message = {
       type: 'next_hand',
-      show_ai_thinking: showAiThinking
+      show_ai_thinking: showAiThinking,
+      step_mode: stepMode // Phase 4: Step Mode
     };
 
     console.log('[WebSocket] Starting next hand');
+    this.ws!.send(JSON.stringify(message));
+  }
+
+  /**
+   * Send continue signal (Phase 4: Step Mode)
+   */
+  sendContinue(): void {
+    if (!this.isConnected()) {
+      console.error('[WebSocket] Cannot send continue: not connected');
+      this.handleError('Not connected to server');
+      return;
+    }
+
+    const message = {
+      type: 'continue'
+    };
+
+    console.log('[WebSocket] Sending continue signal');
     this.ws!.send(JSON.stringify(message));
   }
 

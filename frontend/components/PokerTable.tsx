@@ -14,9 +14,13 @@ export function PokerTable() {
     gameState,
     showAiThinking,
     handAnalysis,
+    stepMode,
+    awaitingContinue,
     submitAction,
     nextHand,
     toggleShowAiThinking,
+    toggleStepMode,
+    sendContinue,
     getHandAnalysis,
     quitGame,
     loading,
@@ -125,6 +129,19 @@ export function PokerTable() {
     quitGame(); // Return to lobby to start fresh game
   };
 
+  // Phase 4: Debug - Log when awaitingContinue changes
+  useEffect(() => {
+    console.log('[PokerTable] awaitingContinue changed to:', awaitingContinue);
+    if (awaitingContinue) {
+      console.log('[PokerTable] Continue button SHOULD BE VISIBLE NOW');
+    }
+  }, [awaitingContinue]);
+
+  // Phase 4: Debug - Log when stepMode changes
+  useEffect(() => {
+    console.log('[PokerTable] stepMode changed to:', stepMode);
+  }, [stepMode]);
+
   return (
     <div className="flex flex-col h-screen bg-green-800 p-4">
       {/* Header */}
@@ -145,6 +162,9 @@ export function PokerTable() {
           {/* Issue #1 fix: Display blind levels and hand count */}
           <div className="text-sm opacity-80 mt-1">
             Hand #{gameState.hand_count || 1} | Blinds: ${gameState.small_blind || 5}/${gameState.big_blind || 10}
+            {/* Debug: Show step mode state */}
+            {stepMode && <span className="ml-2 text-yellow-300">| Step Mode: ON</span>}
+            {awaitingContinue && <span className="ml-2 text-green-300 font-bold">| WAITING FOR CONTINUE</span>}
           </div>
         </div>
 
@@ -173,6 +193,36 @@ export function PokerTable() {
             {showAiThinking ? '🤖 Hide AI Thinking' : '🤖 Show AI Thinking'}
           </button>
 
+          {/* Phase 4: Step Mode toggle (UAT-1 fix) */}
+          <button
+            onClick={toggleStepMode}
+            className={`px-4 py-2 rounded-lg font-semibold ${
+              stepMode
+                ? 'bg-yellow-600 hover:bg-yellow-700 text-white'
+                : 'bg-white text-green-800 hover:bg-gray-100'
+            }`}
+            title="Pause after each AI action for better visibility"
+          >
+            {stepMode ? '⏸️ Step Mode ON' : '▶️ Step Mode OFF'}
+          </button>
+
+          {/* Phase 4: Continue button (shown only in Step Mode when waiting) */}
+          {awaitingContinue && (
+            <motion.button
+              onClick={() => {
+                console.log('[PokerTable] Continue button clicked!');
+                sendContinue();
+              }}
+              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-bold shadow-lg border-2 border-white"
+              title="Continue to next AI action"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              ▶️ Continue
+            </motion.button>
+          )}
+
           {/* Bug Fix #2: Quit Game button */}
           <button
             onClick={quitGame}
@@ -183,6 +233,17 @@ export function PokerTable() {
           </button>
         </div>
       </div>
+
+      {/* Phase 4: Step Mode - Awaiting Continue Banner */}
+      {awaitingContinue && (
+        <motion.div
+          className="bg-yellow-100 border-2 border-yellow-600 text-yellow-900 px-4 py-3 rounded mb-4 text-center font-bold"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          ⏸️ PAUSED - Click the green "Continue" button to see the next AI action
+        </motion.div>
+      )}
 
       {/* Error display */}
       {error && (
