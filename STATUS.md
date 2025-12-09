@@ -1,53 +1,73 @@
 # Poker Learning App - Current Status
 
 **Last Updated**: December 8, 2025
-**Version**: 3.3 (All-In & Analysis Bug Fixes)
+**Version**: 3.4 (Refactoring Phase)
 **Branch**: `main`
 
 ---
 
 ## Current State
 
-All UAT bugs fixed. Ready for UAT Round 2.
+UAT Round 2 complete. Code audit identified 9 divergence issues. Entering refactoring phase.
 
-### Test Results (December 8, 2025)
+### UAT Round 2 Results (December 8, 2025)
 
-| Test Suite | Result |
-|------------|--------|
-| Critical Backend Tests | 32 passed, 1 skipped |
-| All-In Scenario Tests | 10 passed |
-| Game Start Tests | 8 passed |
-| Analysis Tests | 3 passed |
-| Property-Based (1,000 scenarios) | 178,060 checks, 0 violations |
+| Test | Status | Notes |
+|------|--------|-------|
+| UAT-1: Game Creation | FAIL | AI folds too fast with 1-2 players (design issue) |
+| UAT-2: Call Action | PASS | |
+| UAT-3: Fold Action | PASS | |
+| UAT-4: Raise Slider UX | PASS | |
+| UAT-5: All-In Flow | FAIL | Game hangs when multiple players go all-in |
+| UAT-6: AI Thinking | PASS | But not very useful - AI moves too quickly |
+| UAT-7: Hand Completion | PASS | |
+| UAT-8: Chip Conservation | PASS | |
+| UAT-9: BB Option | PASS | |
+| UAT-10: Console Errors | PASS | |
+| UAT-11: Hand Analysis | FAIL | Intermittent - sometimes doesn't show |
+| UAT-12: Quit Game | PASS | |
+| UAT-13: Heads-Up All-In | PASS | |
 
-### Recent Fixes (December 8, 2025 - UAT Round 1)
+### Code Audit Findings
 
-| Bug | Issue | Fix |
-|-----|-------|-----|
-| Bug #9 | Game starts with completed hand (1-2 players) | Use `process_ai=False` in `create_game()` |
-| Bug #10 | Game hangs after all-in elimination | Added `isWaitingAllIn` state, fixed `isEliminated` logic |
-| All-In UI | "Game Over" shown immediately when going all-in | Fixed `isEliminated = stack === 0 && (!all_in \|\| isShowdown)` |
-| UAT-11 | Analysis shows player indices (0,1,2) not names | Fixed array iteration in AnalysisModal |
+Found 9 code divergence issues between REST and WebSocket paths:
 
-### Previous Fixes (December 8, 2025 - WebSocket)
+| Priority | Issue | Impact |
+|----------|-------|--------|
+| CRITICAL | Raise bet calculation differs | Pot grows incorrectly via WebSocket |
+| CRITICAL | All-in fast-forward missing in WS | UAT-5 hang bug |
+| HIGH | `last_raiser_index` not set in WS | BB option broken |
+| HIGH | Fold doesn't set `has_acted` in WS | Potential infinite loop |
+| HIGH | Hand strength has 4 copies (2 incomplete) | Wrong analysis |
 
-| Bug | Issue | Fix |
-|-----|-------|-----|
-| Bug #7 | Human fold doesn't trigger showdown | Added immediate showdown trigger |
-| Bug #8 | Infinite loop when all players all-in | Added early return at SHOWDOWN |
-| Betting Round | Incorrect with all-in players | Distinguished folded vs all-in |
-| All-In Flag | Not cleared when winning pots | Added clearing in 8 locations |
+Full details in [docs/REFACTOR-PLAN.md](docs/REFACTOR-PLAN.md).
+
+---
+
+## Next Steps: Refactoring Plan
+
+See [docs/REFACTOR-PLAN.md](docs/REFACTOR-PLAN.md) for complete plan.
+
+| Phase | Description | Status |
+|-------|-------------|--------|
+| 1 | Consolidate action processing (`apply_action()`) | Pending |
+| 2 | Consolidate state advancement (`_advance_state_core()`) | Pending |
+| 3 | Consolidate hand strength calculation | Pending |
+| 4 | Implement Step Mode (UAT-1 fix) | Pending |
+| 5 | Enhanced test suite | Pending |
 
 ---
 
 ## Architecture
 
 ### Backend (Python/FastAPI)
+
 - `game/poker_engine.py` - Core game logic (~1650 lines)
 - `main.py` - REST + WebSocket API
 - `websocket_manager.py` - Real-time AI turn streaming
 
 ### Frontend (Next.js/TypeScript)
+
 - `components/PokerTable.tsx` - Main game UI
 - `components/AnalysisModal.tsx` - Hand analysis with AI names
 - `lib/store.ts` - Zustand state management

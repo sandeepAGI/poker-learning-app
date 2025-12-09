@@ -2,7 +2,7 @@
 
 **Date**: December 8, 2025
 **Version**: 3.3 (Post All-In & Analysis Bug Fixes)
-**Tester**: _________________
+**Tester**: Sandeep
 
 ---
 
@@ -29,21 +29,21 @@
 ```bash
 cd backend && python main.py
 ```
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**: _________________________________________________
 
 ### Start Frontend
 ```bash
 cd frontend && npm run dev
 ```
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**: _________________________________________________
 
 ### Verify Connection
 - Open http://localhost:3000
 - Check WebSocket status shows "Connected" (green dot) after starting game
 
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**: _________________________________________________
 
 ---
@@ -64,11 +64,11 @@ cd frontend && npm run dev
 - Game does NOT start at showdown
 - Current player is set (either you or AI)
 
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [ ] PASS  [X] FAIL
 **Notes**:
 ```
+Again, for 1 and 2 players it goes straight to showdown but I know why it is happening.  It is because the AI player is losing and folds but as the game play is very fast, you see Player winning.  I think we need to think of what we want to do here - maybe drop having 1 or 2 player option?
 ```
-
 ---
 
 ### UAT-2: Basic Actions - Call
@@ -78,7 +78,7 @@ cd frontend && npm run dev
 3. Observe chips move to pot
 
 **Expected**: Your bet is placed, turn advances to next player
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**:
 ```
 ```
@@ -93,7 +93,7 @@ cd frontend && npm run dev
 4. Hand completes to showdown or last player wins
 
 **Expected**: Game does NOT hang; hand completes correctly
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**:
 ```
 ```
@@ -114,7 +114,7 @@ cd frontend && npm run dev
 - Can type exact amount in input field
 - Raise button shows amount: "Raise $XX"
 
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**:
 ```
 ```
@@ -141,9 +141,30 @@ cd frontend && npm run dev
 - Game does NOT hang
 
 **Expected**: Clean flow from all-in to showdown to result
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [ ] PASS  [X] FAIL
 **Notes**:
 ```
+I went all in and so did 2 other players and then it hung
+
+3ad
+[WebSocket] Received: {'type': 'next_hand', 'show_ai_thinking': False}
+[WebSocket] Client disconnected from game 07dcedb2-319c-4d39-b845-724fba5533ad
+[WebSocket] Client disconnected from game 07dcedb2-319c-4d39-b845-724fba5533ad
+INFO:     connection closed
+INFO:     127.0.0.1:52035 - "POST /games HTTP/1.1" 200 OK
+INFO:     ('127.0.0.1', 52037) - "WebSocket /ws/4f2604a7-3bc6-4d4e-ad4c-dc2d0a147428" [accepted]
+[WebSocket] Client connected to game 4f2604a7-3bc6-4d4e-ad4c-dc2d0a147428
+INFO:     connection open
+[WebSocket] Client connected to game 4f2604a7-3bc6-4d4e-ad4c-dc2d0a147428, awaiting actions...
+[WebSocket] Received: {'type': 'action', 'action': 'raise', 'amount': 1000, 'show_ai_thinking': False}
+[WebSocket] Processing AI turns for game 4f2604a7-3bc6-4d4e-ad4c-dc2d0a147428
+[WebSocket] Processing AI turn: AI-ce
+[WebSocket] Processing AI turn: Lady Luck
+[WebSocket] Processing AI turn: AI-nstein
+[WebSocket] Betting round complete, advancing state
+[WebSocket] AI turn processing complete for game 4f2604a7-3bc6-4d4e-ad4c-dc2d0a147428
+
+
 ```
 
 ---
@@ -155,9 +176,10 @@ cd frontend && npm run dev
 3. Look for reasoning text under each AI player
 
 **Expected**: See AI decision reasoning (e.g., "High SPR - need premium hand")
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**:
 ```
+But to be honest, not very helpful.  Maybe this is not a good functionality to have as AI players move quickly.  Maybe have the human have an ability to pause between AI players?
 ```
 
 ---
@@ -175,7 +197,7 @@ cd frontend && npm run dev
 - Next hand deals new cards
 - No JSON errors in console
 
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**:
 ```
 ```
@@ -191,7 +213,7 @@ cd frontend && npm run dev
 **How to check**: Add up all player stacks + pot (if mid-hand)
 
 **Expected**: Total chips always conserved (no chip creation/loss)
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**:
 ```
 ```
@@ -205,7 +227,7 @@ cd frontend && npm run dev
 3. This should only happen pre-flop
 
 **Expected**: BB gets option to raise even when everyone just called
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**:
 ```
 ```
@@ -220,7 +242,7 @@ cd frontend && npm run dev
 4. Check for any red errors
 
 **Expected**: No errors, especially no "Infinity" JSON errors
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**:
 ```
 ```
@@ -244,9 +266,10 @@ cd frontend && npm run dev
 - Shows hand strength percentages
 - Shows reasoning quotes
 
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [ ] PASS  [X] FAIL
 **Notes**:
 ```
+Maybe a stabiity issues.  There were a number of games where I could not see it and then I did.  When it shows - all good.
 ```
 
 ---
@@ -257,7 +280,7 @@ cd frontend && npm run dev
 2. Verify return to lobby/start screen
 
 **Expected**: Game ends, returns to new game screen
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**:
 ```
 ```
@@ -274,7 +297,7 @@ cd frontend && npm run dev
    - AI calls: Showdown occurs, winner announced
 
 **Expected**: No hanging, no premature "Game Over"
-**Status**: [ ] PASS  [ ] FAIL
+**Status**: [X] PASS  [ ] FAIL
 **Notes**:
 ```
 ```
