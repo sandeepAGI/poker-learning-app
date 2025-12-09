@@ -164,6 +164,44 @@ class HandEvaluator:
 
         return 7500, "High Card"  # Default
 
+    @staticmethod
+    def score_to_strength(score: int) -> float:
+        """
+        Convert hand evaluator score to 0-1 strength value.
+        SINGLE SOURCE OF TRUTH for hand strength calculation.
+
+        Score ranges (lower is better, based on Treys evaluator):
+        - 1-10: Royal Flush / Straight Flush
+        - 11-166: Four of a Kind
+        - 167-322: Full House
+        - 323-1599: Flush
+        - 1600-1609: Straight
+        - 1610-2467: Three of a Kind
+        - 2468-3325: Two Pair
+        - 3326-6185: One Pair
+        - 6186-7462: High Card
+
+        Returns: float between 0.0 (worst) and 1.0 (best)
+        """
+        if score <= 10:
+            return 0.95  # Royal Flush / Straight Flush
+        elif score <= 166:
+            return 0.90  # Four of a Kind
+        elif score <= 322:
+            return 0.85  # Full House
+        elif score <= 1599:
+            return 0.75  # Flush
+        elif score <= 1609:
+            return 0.65  # Straight
+        elif score <= 2467:
+            return 0.55  # Three of a Kind
+        elif score <= 3325:
+            return 0.45  # Two Pair
+        elif score <= 6185:
+            return 0.25  # One Pair
+        else:
+            return 0.05  # High Card
+
     def determine_winners_with_side_pots(
         self, players: List[Player], community_cards: List[str]
     ) -> List[Dict]:
@@ -287,25 +325,8 @@ class AIStrategy:
         evaluator = HandEvaluator()
         hand_score, hand_rank = evaluator.evaluate_hand(hole_cards, community_cards)
 
-        # Proper hand strength based on poker hand rankings
-        if hand_score <= 10:  # Straight flush or better
-            hand_strength = 0.95
-        elif hand_score <= 166:  # Four of a kind
-            hand_strength = 0.90
-        elif hand_score <= 322:  # Full house
-            hand_strength = 0.85
-        elif hand_score <= 1599:  # Flush
-            hand_strength = 0.75
-        elif hand_score <= 1609:  # Straight
-            hand_strength = 0.65
-        elif hand_score <= 2467:  # Three of a kind
-            hand_strength = 0.55
-        elif hand_score <= 3325:  # Two pair
-            hand_strength = 0.45
-        elif hand_score <= 6185:  # One pair
-            hand_strength = 0.25
-        else:  # High card
-            hand_strength = 0.05
+        # Use consolidated hand strength calculation
+        hand_strength = HandEvaluator.score_to_strength(hand_score)
 
         # Pot odds calculation
         call_amount = current_bet - player_bet
@@ -1073,28 +1094,11 @@ class PokerGame:
         if not human_player.is_active and action != "fold":
             return False
 
-        # Calculate hand strength for logging (TODO: Phase 3 will consolidate this)
+        # Calculate hand strength for logging using consolidated method
         hand_strength = 0.0
         if human_player.hole_cards:
             hand_score, _ = self.hand_evaluator.evaluate_hand(human_player.hole_cards, self.community_cards)
-            if hand_score <= 10:
-                hand_strength = 0.95
-            elif hand_score <= 166:
-                hand_strength = 0.90
-            elif hand_score <= 322:
-                hand_strength = 0.85
-            elif hand_score <= 1599:
-                hand_strength = 0.75
-            elif hand_score <= 1609:
-                hand_strength = 0.65
-            elif hand_score <= 2467:
-                hand_strength = 0.55
-            elif hand_score <= 3325:
-                hand_strength = 0.45
-            elif hand_score <= 6185:
-                hand_strength = 0.25
-            else:
-                hand_strength = 0.05
+            hand_strength = HandEvaluator.score_to_strength(hand_score)
 
         # Use apply_action() - SINGLE SOURCE OF TRUTH for action processing
         result = self.apply_action(
@@ -1441,26 +1445,11 @@ class PokerGame:
                         human_action = event.action
                         break
 
-            # Get human's hand strength if cards were dealt
+            # Get human's hand strength if cards were dealt (using consolidated method)
             human_hand_strength = 0.0
-            if human.hole_cards:
-                if self.community_cards:
-                    score, _ = self.hand_evaluator.evaluate_hand(human.hole_cards, self.community_cards)
-                    # Convert to 0-1 scale
-                    if score <= 10:
-                        human_hand_strength = 0.95
-                    elif score <= 166:
-                        human_hand_strength = 0.90
-                    elif score <= 1599:
-                        human_hand_strength = 0.75
-                    elif score <= 2467:
-                        human_hand_strength = 0.55
-                    elif score <= 3325:
-                        human_hand_strength = 0.45
-                    elif score <= 6185:
-                        human_hand_strength = 0.25
-                    else:
-                        human_hand_strength = 0.05
+            if human.hole_cards and self.community_cards:
+                score, _ = self.hand_evaluator.evaluate_hand(human.hole_cards, self.community_cards)
+                human_hand_strength = HandEvaluator.score_to_strength(score)
 
             # Calculate pot odds
             human_pot_odds = 0.0
@@ -1523,25 +1512,11 @@ class PokerGame:
                         human_action = event.action
                         break
 
-            # Get human's hand strength at showdown
+            # Get human's hand strength at showdown (using consolidated method)
             human_hand_strength = 0.0
             if human.hole_cards and self.community_cards:
                 score, _ = self.hand_evaluator.evaluate_hand(human.hole_cards, self.community_cards)
-                # Convert to 0-1 scale (lower score = better hand)
-                if score <= 10:
-                    human_hand_strength = 0.95
-                elif score <= 166:
-                    human_hand_strength = 0.90
-                elif score <= 1599:
-                    human_hand_strength = 0.75
-                elif score <= 2467:
-                    human_hand_strength = 0.55
-                elif score <= 3325:
-                    human_hand_strength = 0.45
-                elif score <= 6185:
-                    human_hand_strength = 0.25
-                else:
-                    human_hand_strength = 0.05
+                human_hand_strength = HandEvaluator.score_to_strength(score)
 
             # Calculate pot odds for human's last decision
             human_pot_odds = 0.0
