@@ -1190,20 +1190,45 @@ class PokerGame:
         # QC: Verify chip conservation after each AI action
         self._assert_chip_conservation(f"after AI {player.name} action: {ai_decision.action}")
 
-    def _maybe_advance_state(self):
-        """Advance game state if betting round is complete."""
+    def _advance_state_core(self, process_ai: bool = True) -> bool:
+        """
+        Core state advancement logic. SINGLE SOURCE OF TRUTH for state transitions.
+
+        This method consolidates all state advancement logic that was previously
+        duplicated (and diverging) between:
+        - _maybe_advance_state() (used by REST path)
+        - _advance_state_for_websocket() (used by WebSocket path)
+
+        Args:
+            process_ai: If True, process remaining AI actions after state change.
+                       Set False for WebSocket path (AI handled externally).
+
+        Returns:
+            True if state changed, False otherwise.
+
+        Handles all edge cases:
+        - Already at SHOWDOWN (no-op)
+        - No current player but not at SHOWDOWN (safety fallback)
+        - 0 active players (award pot to last actor)
+        - 1 active player (award pot, fold victory)
+        - All players all-in (fast-forward to showdown) <- Fixes UAT-5!
+        - Normal state advancement (PRE_FLOP -> FLOP -> TURN -> RIVER -> SHOWDOWN)
+        """
+        # EARLY RETURN: Already at SHOWDOWN, nothing to advance
+        if self.current_state == GameState.SHOWDOWN:
+            return False
+
         active_count = sum(1 for p in self.players if p.is_active)
 
-        # SAFETY CHECK: If no current player and not at showdown, force showdown
+        # SAFETY CHECK: If no current player and not at showdown, force resolution
         # This handles edge cases where betting can't continue but hand isn't over
-        if self.current_player_index is None and self.current_state != GameState.SHOWDOWN:
+        if self.current_player_index is None:
             if self.pot > 0:
-                # Award pot to remaining active player or last actor
                 if active_count == 1:
+                    # Award pot to sole active player
                     winner = next((p for p in self.players if p.is_active), None)
                     if winner:
                         winner.stack += self.pot
-                        # Clear all-in flag if winner now has chips
                         if winner.stack > 0 and winner.all_in:
                             winner.all_in = False
                         self._log_hand_event("pot_award", winner.player_id, "win", self.pot, 0.0,
@@ -1213,13 +1238,12 @@ class PokerGame:
                     # Multiple players still active but no one can act - go to showdown
                     self.current_state = GameState.SHOWDOWN
                     self._award_pot_at_showdown()
-                    return
+                    return True
             self.current_state = GameState.SHOWDOWN
-            return
+            return True
 
+        # Handle 0 active players (all folded - award to last actor)
         if active_count == 0:
-            # All players folded - award pot to last player who acted
-            # This is rare but maintains chip conservation
             last_actor_id = None
             for event in reversed(self.current_hand_events):
                 if event.event_type == "action":
@@ -1231,26 +1255,23 @@ class PokerGame:
                 if winner:
                     winner.stack += self.pot
                     winner.is_active = True  # Reactivate for pot award
-                    # Clear all-in flag if winner now has chips
                     if winner.stack > 0 and winner.all_in:
                         winner.all_in = False
-
                     self._log_hand_event("pot_award", winner.player_id, "win", self.pot, 0.0,
                                        f"All players folded - {winner.name} wins ${self.pot} by default")
                     self.pot = 0
 
             self.current_state = GameState.SHOWDOWN
-            self.current_player_index = None  # No one left to act
-            return
+            self.current_player_index = None
+            return True
 
+        # Handle 1 active player (everyone else folded - award pot)
         if active_count == 1:
-            # Exactly one player remaining - award pot immediately
             winner = next((p for p in self.players if p.is_active), None)
             pot_awarded = 0
             if winner and self.pot > 0:
                 pot_awarded = self.pot
                 winner.stack += self.pot
-                # Clear all-in flag if winner now has chips
                 if winner.stack > 0 and winner.all_in:
                     winner.all_in = False
                 self._log_hand_event("pot_award", winner.player_id, "win", self.pot, 0.0,
@@ -1261,13 +1282,13 @@ class PokerGame:
             self._save_hand_on_early_end(winner.player_id if winner else None, pot_awarded)
 
             self.current_state = GameState.SHOWDOWN
-            self.current_player_index = None  # No one left to act
-            return
+            self.current_player_index = None
+            return True
 
-        # NEW: Check if all remaining active players are all-in (no more betting possible)
+        # ALL-IN FAST-FORWARD (UAT-5 fix): If all remaining active players are all-in
+        # (or only 1 player can still act), no more betting is possible - go to showdown
         active_not_all_in = [p for p in self.players if p.is_active and not p.all_in]
         if len(active_not_all_in) <= 1:
-            # All players are all-in (or only 1 player can act) - fast-forward to showdown
             # Deal remaining community cards
             if self.current_state == GameState.PRE_FLOP:
                 self.community_cards.extend(self.deck_manager.deal_cards(3))  # Flop
@@ -1278,78 +1299,17 @@ class PokerGame:
                 self.community_cards.extend(self.deck_manager.deal_cards(1))  # River
             elif self.current_state == GameState.TURN:
                 self.community_cards.extend(self.deck_manager.deal_cards(1))  # River
-            # (RIVER already has all cards)
+            # RIVER already has all cards
 
             # Go directly to showdown
             self.current_state = GameState.SHOWDOWN
             self._award_pot_at_showdown()
             self.current_player_index = None
-            return
+            return True
 
-        if not self._betting_round_complete():
-            return
-
-        # Advance to next state
-        if self.current_state == GameState.PRE_FLOP:
-            self.current_state = GameState.FLOP
-            self.community_cards.extend(self.deck_manager.deal_cards(3))
-        elif self.current_state == GameState.FLOP:
-            self.current_state = GameState.TURN
-            self.community_cards.extend(self.deck_manager.deal_cards(1))
-        elif self.current_state == GameState.TURN:
-            self.current_state = GameState.RIVER
-            self.community_cards.extend(self.deck_manager.deal_cards(1))
-        elif self.current_state == GameState.RIVER:
-            self.current_state = GameState.SHOWDOWN
-            # Award pot at showdown with proper side pot handling
-            self._award_pot_at_showdown()
-            return
-
-        # Reset for new betting round
-        for player in self.players:
-            player.reset_for_new_round()
-        self.current_bet = 0
-        self.last_raiser_index = None
-
-        # First to act is after dealer
-        first_to_act = self._get_next_active_player_index(self.dealer_index + 1)
-        self.current_player_index = first_to_act
-
-        # Process actions if no human or human not first
-        self._process_remaining_actions()
-
-        # Check if hand should end after processing actions
-        self._maybe_advance_state()
-
-    def _advance_state_for_websocket(self):
-        """
-        Advance game state without processing AI actions (for WebSocket flow).
-        Used when AI actions are handled externally one-by-one.
-        """
-        # EARLY RETURN (Bug #8 Fix): Already at SHOWDOWN, nothing to advance
-        # Without this check, the code falls through to "reset for new round"
-        # which causes infinite loop when called repeatedly at SHOWDOWN
-        if self.current_state == GameState.SHOWDOWN:
-            return False
-
+        # Normal case: Check if betting round is complete before advancing
         if not self._betting_round_complete():
             return False  # Can't advance yet
-
-        # CRITICAL: Check if only 1 player is active (everyone else folded)
-        # In this case, award pot and go to showdown immediately
-        active_players = [p for p in self.players if p.is_active]
-        if len(active_players) == 1:
-            winner = active_players[0]
-            winner.stack += self.pot
-            # Clear all-in flag if winner now has chips
-            if winner.stack > 0 and winner.all_in:
-                winner.all_in = False
-            self._log_hand_event("pot_award", winner.player_id, "win_by_fold",
-                               self.pot, 0.0, f"{winner.name} wins ${self.pot} (all others folded)")
-            self.pot = 0
-            self.current_state = GameState.SHOWDOWN
-            self.current_player_index = None
-            return True  # Hand complete
 
         # Advance to next state and deal cards
         if self.current_state == GameState.PRE_FLOP:
@@ -1364,7 +1324,7 @@ class PokerGame:
         elif self.current_state == GameState.RIVER:
             self.current_state = GameState.SHOWDOWN
             self._award_pot_at_showdown()
-            return True  # Showdown reached
+            return True
 
         # Reset for new betting round
         for player in self.players:
@@ -1376,7 +1336,31 @@ class PokerGame:
         first_to_act = self._get_next_active_player_index(self.dealer_index + 1)
         self.current_player_index = first_to_act
 
-        return True  # State advanced
+        # Optionally process AI actions (REST path does this, WebSocket path doesn't)
+        if process_ai:
+            self._process_remaining_actions()
+            # Recursive check if hand should end after processing actions
+            self._advance_state_core(process_ai=True)
+
+        return True
+
+    def _maybe_advance_state(self):
+        """Advance game state if betting round is complete."""
+        # Delegate to core method with AI processing enabled
+        self._advance_state_core(process_ai=True)
+
+    def _advance_state_for_websocket(self):
+        """
+        Advance game state without processing AI actions (for WebSocket flow).
+        Used when AI actions are handled externally one-by-one.
+
+        Delegates to _advance_state_core() with process_ai=False.
+        This ensures WebSocket path has ALL the same edge case handling:
+        - All-in fast-forward (UAT-5 fix)
+        - 0 active players handling
+        - Proper showdown triggering
+        """
+        return self._advance_state_core(process_ai=False)
 
     def _award_pot_at_showdown(self):
         """Award pot to winners at showdown. Called automatically when reaching SHOWDOWN."""
