@@ -945,10 +945,108 @@ class PokerGame:
             return None
         return self.players[self.current_player_index]
 
+    def apply_action(self, player_index: int, action: str, amount: int = 0,
+                     hand_strength: float = 0.0, reasoning: str = "") -> dict:
+        """
+        Apply a player action to the game state. SINGLE SOURCE OF TRUTH for action processing.
+
+        This method consolidates all action processing logic that was previously duplicated in:
+        - submit_human_action()
+        - _process_single_ai_action()
+        - websocket_manager.process_ai_turns_with_events()
+
+        Args:
+            player_index: Index of the player taking the action
+            action: 'fold', 'call', or 'raise'
+            amount: For raise, the TOTAL bet amount (not increment). Ignored for fold/call.
+            hand_strength: Optional hand strength for logging (0.0-1.0)
+            reasoning: Optional reasoning text for logging
+
+        Returns:
+            dict with keys:
+                - success: bool - whether action was applied
+                - bet_amount: int - actual chips added to pot (0 for fold)
+                - triggers_showdown: bool - whether this action ends the hand
+                - error: str - error message if success=False
+        """
+        if action not in ["fold", "call", "raise"]:
+            return {"success": False, "bet_amount": 0, "triggers_showdown": False,
+                    "error": f"Invalid action: {action}"}
+
+        if player_index < 0 or player_index >= len(self.players):
+            return {"success": False, "bet_amount": 0, "triggers_showdown": False,
+                    "error": f"Invalid player_index: {player_index}"}
+
+        player = self.players[player_index]
+        bet_amount = 0
+        triggers_showdown = False
+
+        if action == "fold":
+            player.is_active = False
+            player.has_acted = True
+            self._log_hand_event("action", player.player_id, "fold", 0,
+                               hand_strength, reasoning or f"{player.name} folded")
+
+            # Check if <= 1 player remains after fold - triggers immediate showdown
+            active_players = [p for p in self.players if p.is_active]
+            if len(active_players) <= 1:
+                triggers_showdown = True
+                if len(active_players) == 1:
+                    winner = active_players[0]
+                    winner.stack += self.pot
+                    # Clear all-in flag if winner now has chips
+                    if winner.stack > 0 and winner.all_in:
+                        winner.all_in = False
+                    self._log_hand_event("pot_award", winner.player_id, "win_by_fold",
+                                       self.pot, 0.0, f"{winner.name} wins ${self.pot} (all others folded)")
+                    self.pot = 0
+                # Advance to showdown
+                self.current_state = GameState.SHOWDOWN
+                self.current_player_index = None
+
+        elif action == "call":
+            call_amount = self.current_bet - player.current_bet
+            bet_amount = player.bet(call_amount)
+            self.pot += bet_amount
+            player.has_acted = True
+            self._log_hand_event("action", player.player_id, "call", bet_amount,
+                               hand_strength, reasoning or f"{player.name} called ${call_amount}")
+
+        elif action == "raise":
+            # Validate raise amount
+            min_raise = self.current_bet + self.big_blind
+            if amount < min_raise and amount < player.stack + player.current_bet:
+                return {"success": False, "bet_amount": 0, "triggers_showdown": False,
+                        "error": f"Raise amount {amount} below minimum {min_raise}"}
+
+            # Calculate bet increment (amount is TOTAL bet, not increment)
+            raise_total = amount
+            bet_increment = raise_total - player.current_bet
+
+            # Cap at player's stack (all-in for less)
+            if bet_increment > player.stack:
+                bet_increment = player.stack
+
+            bet_amount = player.bet(bet_increment)
+            self.pot += bet_amount
+            self.current_bet = raise_total  # CRITICAL: Use raise_total, not player.current_bet
+            self.last_raiser_index = player_index
+            player.has_acted = True
+
+            # Reset has_acted for other players who need to respond to raise
+            for i, p in enumerate(self.players):
+                if i != player_index and p.is_active and not p.all_in:
+                    p.has_acted = False
+
+            self._log_hand_event("action", player.player_id, "raise", bet_amount,
+                               hand_strength, reasoning or f"{player.name} raised to ${self.current_bet}")
+
+        return {"success": True, "bet_amount": bet_amount, "triggers_showdown": triggers_showdown, "error": ""}
+
     def submit_human_action(self, action: str, amount: int = None, process_ai: bool = True) -> bool:
         """
         Process human player action.
-        Fixed: Bug #1 (turn order), Bug #2 (fold resolution), Bug #3 (raise validation)
+        Refactored to use apply_action() as single source of truth.
 
         Args:
             action: 'fold', 'call', or 'raise'
@@ -967,15 +1065,15 @@ class PokerGame:
         human_player = next(p for p in self.players if p.is_human)
         human_index = next(i for i, p in enumerate(self.players) if p.is_human)
 
-        # Fixed Bug #1: Check if it's human's turn
+        # Check if it's human's turn
         if self.current_player_index != human_index:
             return False
 
-        # Fixed Bug #2: Allow action even if not active (for fold case)
+        # Allow action even if not active (for fold case)
         if not human_player.is_active and action != "fold":
             return False
 
-        # Calculate hand strength
+        # Calculate hand strength for logging (TODO: Phase 3 will consolidate this)
         hand_strength = 0.0
         if human_player.hole_cards:
             hand_score, _ = self.hand_evaluator.evaluate_hand(human_player.hole_cards, self.community_cards)
@@ -998,71 +1096,21 @@ class PokerGame:
             else:
                 hand_strength = 0.05
 
-        if action == "fold":
-            human_player.is_active = False
-            human_player.has_acted = True
-            self._log_hand_event("action", human_player.player_id, "fold", 0,
-                               hand_strength, f"Human player folded with {hand_strength:.1%} hand strength")
+        # Use apply_action() - SINGLE SOURCE OF TRUTH for action processing
+        result = self.apply_action(
+            player_index=human_index,
+            action=action,
+            amount=amount or 0,
+            hand_strength=hand_strength,
+            reasoning=f"Human player {action}"
+        )
 
-            # CRITICAL FIX (Bug #7): If 0 or 1 player remains after fold,
-            # advance to showdown immediately (even with process_ai=False)
-            # This is required because QC assertion validates state consistency
-            active_players = [p for p in self.players if p.is_active]
-            if len(active_players) <= 1:
-                if len(active_players) == 1:
-                    winner = active_players[0]
-                    winner.stack += self.pot
-                    # Clear all-in flag if winner now has chips
-                    if winner.stack > 0 and winner.all_in:
-                        winner.all_in = False
-                    self._log_hand_event("pot_award", winner.player_id, "win_by_fold",
-                                       self.pot, 0.0, f"{winner.name} wins ${self.pot} (all others folded)")
-                    self.pot = 0
-                # Edge case: If 0 active players (shouldn't happen in normal play),
-                # pot stays unawarded - this is a degenerate state
-                self.current_state = GameState.SHOWDOWN
-                self.current_player_index = None
-                return True  # Early return - hand complete
-
-        elif action == "call":
-            call_amount = self.current_bet - human_player.current_bet
-            bet_amount = human_player.bet(call_amount)
-            self.pot += bet_amount
-            human_player.has_acted = True
-            self._log_hand_event("action", human_player.player_id, "call", bet_amount,
-                               hand_strength, f"Human called ${call_amount}")
-
-        elif action == "raise" and amount:
-            # Fixed Bug #3: Validate raise
-            call_amount = self.current_bet - human_player.current_bet
-            min_raise = self.current_bet + self.big_blind
-
-            if amount < min_raise and amount < human_player.stack:
-                # Invalid raise amount
-                return False
-
-            # Fixed Bug #4: Proper raise accounting - amount is total bet, not increment
-            total_bet = amount
-            bet_increment = total_bet - human_player.current_bet
-
-            if bet_increment > human_player.stack:
-                bet_increment = human_player.stack
-
-            bet_amount = human_player.bet(bet_increment)
-            self.pot += bet_amount
-            self.current_bet = total_bet  # Fixed: use total_bet, not player.current_bet
-            self.last_raiser_index = human_index
-            human_player.has_acted = True
-
-            # Reset has_acted for other players who need to respond to raise
-            for i, p in enumerate(self.players):
-                if i != human_index and p.is_active and not p.all_in:
-                    p.has_acted = False
-
-            self._log_hand_event("action", human_player.player_id, "raise", bet_amount,
-                               hand_strength, f"Human raised to ${self.current_bet}")
-        else:
+        if not result["success"]:
             return False
+
+        # If fold triggered showdown, we're done (apply_action handled it)
+        if result["triggers_showdown"]:
+            return True
 
         # Move to next player
         self.current_player_index = self._get_next_active_player_index(human_index + 1)
@@ -1109,11 +1157,19 @@ class PokerGame:
             if current_player.is_active and not current_player.all_in:
                 self._process_single_ai_action(current_player, self.current_player_index)
 
+            # Check if action triggered showdown (e.g., all others folded)
+            # apply_action() sets current_player_index = None when hand is complete
+            if self.current_player_index is None:
+                break
+
             # Move to next player
             self.current_player_index = self._get_next_active_player_index(self.current_player_index + 1)
 
     def _process_single_ai_action(self, player: Player, player_index: int):
-        """Process a single AI player action. Fixed: Bug #4 - raise accounting."""
+        """
+        Process a single AI player action.
+        Refactored to use apply_action() as single source of truth.
+        """
         ai_decision = AIStrategy.make_decision_with_reasoning(
             player.personality, player.hole_cards, self.community_cards,
             self.current_bet, self.pot, player.stack, player.current_bet, self.big_blind
@@ -1122,41 +1178,14 @@ class PokerGame:
         # Store decision for frontend
         self.last_ai_decisions[player.player_id] = ai_decision
 
-        if ai_decision.action == "fold":
-            player.is_active = False
-            player.has_acted = True
-            self._log_hand_event("action", player.player_id, "fold", 0,
-                               ai_decision.hand_strength, ai_decision.reasoning)
-
-        elif ai_decision.action == "call":
-            call_amount = self.current_bet - player.current_bet
-            bet_amount = player.bet(call_amount)
-            self.pot += bet_amount
-            player.has_acted = True
-            self._log_hand_event("action", player.player_id, "call", bet_amount,
-                               ai_decision.hand_strength, ai_decision.reasoning)
-
-        elif ai_decision.action == "raise":
-            # Fixed Bug #4: Proper raise accounting
-            raise_total = ai_decision.amount
-            bet_increment = raise_total - player.current_bet
-
-            if bet_increment > player.stack:
-                bet_increment = player.stack
-
-            bet_amount = player.bet(bet_increment)
-            self.pot += bet_amount
-            self.current_bet = raise_total  # Fixed: use raise_total, not player.current_bet
-            self.last_raiser_index = player_index
-            player.has_acted = True
-
-            # Reset has_acted for players who need to respond
-            for i, p in enumerate(self.players):
-                if i != player_index and p.is_active and not p.all_in:
-                    p.has_acted = False
-
-            self._log_hand_event("action", player.player_id, "raise", bet_amount,
-                               ai_decision.hand_strength, ai_decision.reasoning)
+        # Use apply_action() - SINGLE SOURCE OF TRUTH for action processing
+        self.apply_action(
+            player_index=player_index,
+            action=ai_decision.action,
+            amount=ai_decision.amount,
+            hand_strength=ai_decision.hand_strength,
+            reasoning=ai_decision.reasoning
+        )
 
         # QC: Verify chip conservation after each AI action
         self._assert_chip_conservation(f"after AI {player.name} action: {ai_decision.action}")

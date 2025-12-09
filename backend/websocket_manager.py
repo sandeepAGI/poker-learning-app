@@ -181,29 +181,15 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
         # Store decision
         game.last_ai_decisions[current_player.player_id] = decision
 
-        # Apply action to game state and log event (CRITICAL: logging is needed for BB option check)
-        if decision.action == "fold":
-            current_player.is_active = False
-            game._log_hand_event("action", current_player.player_id, "fold", 0, 0.0,
-                                f"{current_player.name} folded")
-        elif decision.action == "call":
-            call_amount = game.current_bet - current_player.current_bet
-            current_player.bet(call_amount)
-            game.pot += call_amount
-            game._log_hand_event("action", current_player.player_id, "call", call_amount, 0.0,
-                                f"{current_player.name} called ${call_amount}")
-        elif decision.action == "raise":
-            current_player.bet(decision.amount)
-            game.current_bet = current_player.current_bet
-            game.pot += decision.amount
-            game._log_hand_event("action", current_player.player_id, "raise", decision.amount, 0.0,
-                                f"{current_player.name} raised to ${game.current_bet}")
-            # Reset has_acted for other players who need to respond to raise
-            for p in game.players:
-                if p.player_id != current_player.player_id and p.is_active and not p.all_in:
-                    p.has_acted = False
-
-        current_player.has_acted = True
+        # Use apply_action() - SINGLE SOURCE OF TRUTH for action processing
+        # This fixes all the divergence bugs (raise accounting, last_raiser_index, has_acted)
+        result = game.apply_action(
+            player_index=game.current_player_index,
+            action=decision.action,
+            amount=decision.amount,
+            hand_strength=decision.hand_strength,
+            reasoning=decision.reasoning
+        )
 
         # Emit AI action event
         await manager.send_event(game_id, {
@@ -215,7 +201,8 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
                 "amount": decision.amount,
                 "reasoning": decision.reasoning if show_ai_thinking else None,
                 "stack_after": current_player.stack,
-                "pot_after": game.pot
+                "pot_after": game.pot,
+                "bet_amount": result["bet_amount"]
             }
         })
 
@@ -224,6 +211,11 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
 
         # Broadcast updated state
         await manager.broadcast_state(game_id, game, show_ai_thinking)
+
+        # Check if action triggered showdown (e.g., all others folded)
+        # apply_action() sets current_player_index = None when hand is complete
+        if game.current_player_index is None or result["triggers_showdown"]:
+            break
 
         # Move to next player
         game.current_player_index = game._get_next_active_player_index(

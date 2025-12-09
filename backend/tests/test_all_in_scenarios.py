@@ -38,6 +38,10 @@ def get_human_to_act(game, max_attempts=50):
         if not current.is_human and current.is_active and not current.all_in:
             game._process_single_ai_action(current, game.current_player_index)
 
+        # Check if action triggered showdown (apply_action sets current_player_index = None)
+        if game.current_player_index is None:
+            return False  # Hand ended
+
         # Move to next player
         game.current_player_index = game._get_next_active_player_index(
             game.current_player_index + 1
