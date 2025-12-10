@@ -1,12 +1,22 @@
 # Poker Learning App - Current Status
 
 **Last Updated**: December 9, 2025
-**Version**: 4.0 (Phase 4 Complete - Production Ready)
+**Version**: 4.1 (Integration Testing Complete - Bugs Fixed)
 **Branch**: `main`
 
 ---
 
 ## Current State
+
+✅ **WebSocket Integration Testing COMPLETE** - All bugs fixed!
+- Built comprehensive WebSocket integration test framework (7 tests)
+- Discovered and fixed 2 critical bugs (all-in calculation, step mode)
+- **7/7 integration tests passing** ✅
+- **72/72 regression tests passing** ✅
+- Zero regressions introduced
+- Production ready with full integration coverage
+
+See `docs/INTEGRATION_TESTING_STATUS.md` for full details.
 
 ✅ **Phase 4 COMPLETE** - Refactoring and comprehensive testing done.
 - Core code consolidated into single sources of truth

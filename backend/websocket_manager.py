@@ -256,6 +256,7 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
 
         # STEP MODE: Pause IMMEDIATELY after AI action (no delay first!)
         if step_mode:
+            print(f"[WebSocket] 🎮 STEP MODE: Pausing after {current_player.name}'s {decision.action}")
             # Create a new event for this game if not exists
             if game_id not in manager.step_mode_events:
                 manager.step_mode_events[game_id] = asyncio.Event()
@@ -271,6 +272,7 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
                     "action": decision.action
                 }
             })
+            print(f"[WebSocket] 📤 Sent 'awaiting_continue' event for {current_player.name}")
 
             wait_start = time.time()
             print(f"[WebSocket] ⏸️  PAUSED - Waiting for continue signal... (t={wait_start - start_time:.2f}s)")

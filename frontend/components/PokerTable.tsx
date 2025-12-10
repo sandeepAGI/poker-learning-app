@@ -42,7 +42,8 @@ export function PokerTable() {
 
   // Bug Fix #1: Proper raise amount validation
   const minRaise = gameState.current_bet + (gameState.big_blind || 10);
-  const maxRaise = gameState.human_player.stack;
+  // Bug Fix: All-in must include current bet (e.g., big blind already posted)
+  const maxRaise = gameState.human_player.stack + gameState.human_player.current_bet;
   const canRaise = maxRaise >= minRaise && gameState.human_player.stack > callAmount;
 
   const [raiseAmount, setRaiseAmount] = useState(minRaise);
