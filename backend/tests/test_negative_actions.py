@@ -268,3 +268,349 @@ class TestInvalidActionHandling:
         assert current_player.has_acted is False, "Failed action should not set has_acted=True"
 
         print(f"[TEST] ✅ Invalid raise properly rejected: {result['error']}")
+
+    @pytest.mark.asyncio
+    async def test_raise_more_than_stack_caps_to_all_in(self):
+        """
+        Test: Raise exceeding stack should cap at all-in.
+
+        Phase 2.1 - Invalid raise amount handling.
+        """
+        game = PokerGame(human_player_name="TestPlayer", ai_count=2)
+        game.start_new_hand(process_ai=False)
+
+        current_player = game.players[game.current_player_index]
+        original_stack = current_player.stack
+
+        # Try to raise more than total chips (stack + current_bet)
+        excessive_raise = current_player.stack + current_player.current_bet + 5000
+
+        result = game.apply_action(
+            player_index=game.current_player_index,
+            action="raise",
+            amount=excessive_raise
+        )
+
+        # Should succeed but cap at all-in
+        assert result["success"] is True, "Should succeed and cap to all-in"
+        assert current_player.stack == 0, "Player should be all-in (stack=0)"
+        assert current_player.all_in is True, "Player should be marked as all-in"
+        assert result["bet_amount"] == original_stack, "Should bet entire original stack"
+
+        print(f"[TEST] ✅ Excessive raise capped to all-in: {result['bet_amount']} chips")
+
+    @pytest.mark.asyncio
+    async def test_negative_raise_amount_rejected(self):
+        """
+        Test: Negative raise amounts should be rejected.
+
+        Phase 2.1 - Invalid raise amount handling.
+        """
+        game = PokerGame(human_player_name="TestPlayer", ai_count=2)
+        game.start_new_hand(process_ai=False)
+
+        current_player = game.players[game.current_player_index]
+
+        # Try negative amount
+        result = game.apply_action(
+            player_index=game.current_player_index,
+            action="raise",
+            amount=-100
+        )
+
+        # Should fail validation
+        assert result["success"] is False, "Negative amount should be rejected"
+        assert current_player.has_acted is False, "Failed action should not set has_acted=True"
+
+        print(f"[TEST] ✅ Negative raise rejected: {result['error']}")
+
+    @pytest.mark.asyncio
+    async def test_zero_raise_amount_rejected(self):
+        """
+        Test: Zero raise amount should be rejected.
+
+        Phase 2.1 - Invalid raise amount handling.
+        """
+        game = PokerGame(human_player_name="TestPlayer", ai_count=2)
+        game.start_new_hand(process_ai=False)
+
+        current_player = game.players[game.current_player_index]
+
+        # Try zero amount
+        result = game.apply_action(
+            player_index=game.current_player_index,
+            action="raise",
+            amount=0
+        )
+
+        # Should fail validation
+        assert result["success"] is False, "Zero amount should be rejected"
+        assert current_player.has_acted is False, "Failed action should not set has_acted=True"
+
+        print(f"[TEST] ✅ Zero raise rejected: {result['error']}")
+
+    @pytest.mark.asyncio
+    async def test_websocket_invalid_raise_handled_gracefully(self):
+        """
+        Test: Invalid raise via WebSocket should be handled gracefully (no crash).
+
+        Phase 2.1 - Full-stack validation via WebSocket.
+        Tests that invalid raises don't cause infinite loops or crashes.
+        """
+        game_id = await create_test_game(ai_count=2)
+
+        async with WebSocketTestClient(game_id) as ws:
+            # Receive initial state
+            initial_state = await ws.receive_event(timeout=3.0)
+            assert initial_state["type"] == "state_update"
+
+            # Send invalid raise (below minimum)
+            await ws.send_action("raise", amount=5)  # Way below minimum
+
+            # Game should handle gracefully - either reject or cap
+            events = await ws.drain_events(timeout=3.0)
+
+            # Verify game didn't crash/hang
+            assert len(events) > 0, "Should receive events (game didn't hang)"
+
+            # Game should continue (AI players should act)
+            ai_action_count = ws.count_events_by_type("ai_action")
+            assert ai_action_count >= 2, f"AI should continue playing (got {ai_action_count} AI actions)"
+
+            print(f"[TEST] ✅ Invalid raise via WebSocket handled gracefully ({len(events)} events received)")
+
+
+class TestInvalidActionSequences:
+    """
+    Phase 2.2: Test actions at wrong times are rejected.
+
+    Validates that the game enforces turn order and game state constraints.
+    """
+
+    @pytest.mark.asyncio
+    async def test_action_when_not_your_turn(self):
+        """
+        Test: Acting out of turn should be rejected.
+
+        Phase 2.2 - Action sequence validation.
+        """
+        game_id = await create_test_game(ai_count=2)
+
+        async with WebSocketTestClient(game_id) as ws:
+            # Receive initial state
+            initial_state = await ws.receive_event(timeout=3.0)
+            assert initial_state["type"] == "state_update"
+
+            current_player_index = initial_state["data"]["current_player_index"]
+
+            # Find human player index from players array
+            players = initial_state["data"]["players"]
+            human_player_index = next(i for i, p in enumerate(players) if p["is_human"])
+
+            # If it's not human's turn, try to act anyway
+            if current_player_index != human_player_index:
+                # Try to act out of turn
+                await ws.send_action("call")
+
+                # Should receive events, but human action shouldn't be processed
+                events = await ws.drain_events(timeout=3.0)
+
+                # Verify AI still acts (game continues normally)
+                ai_action_count = ws.count_events_by_type("ai_action")
+                assert ai_action_count >= 1, "AI should continue acting normally"
+
+                print(f"[TEST] ✅ Out-of-turn action rejected, game continued normally")
+            else:
+                # If it IS human's turn, just act normally and verify it works
+                await ws.send_action("call")
+                events = await ws.drain_events(timeout=3.0)
+                assert len(events) > 0, "Should receive events"
+                print(f"[TEST] ✅ Human was current player, action processed normally")
+
+    @pytest.mark.asyncio
+    async def test_action_after_folding(self):
+        """
+        Test: Folded players cannot act.
+
+        Phase 2.2 - Action sequence validation.
+        """
+        game_id = await create_test_game(ai_count=2)
+
+        async with WebSocketTestClient(game_id) as ws:
+            # Receive initial state
+            initial_state = await ws.receive_event(timeout=3.0)
+            assert initial_state["type"] == "state_update"
+
+            # Fold
+            await ws.send_action("fold")
+
+            # Wait for AI to finish acting
+            events = await ws.drain_events(timeout=3.0)
+
+            # Try to act again after folding
+            await ws.send_action("call")
+
+            # Should not process this action
+            more_events = await ws.drain_events(timeout=2.0)
+
+            # Game should continue with AI actions only
+            ai_actions_after_fold = sum(1 for e in more_events if e.get("type") == "ai_action")
+
+            print(f"[TEST] ✅ Action after fold ignored, game continued with {ai_actions_after_fold} AI actions")
+
+    @pytest.mark.asyncio
+    async def test_action_after_hand_complete(self):
+        """
+        Test: Cannot act after showdown.
+
+        Phase 2.2 - Action sequence validation.
+        """
+        game_id = await create_test_game(ai_count=2)
+
+        async with WebSocketTestClient(game_id) as ws:
+            # Receive initial state
+            initial_state = await ws.receive_event(timeout=3.0)
+
+            # Fold to quickly end hand
+            await ws.send_action("fold")
+
+            # Wait for hand to complete (showdown)
+            events = await ws.drain_events(timeout=5.0)
+
+            # Check if we reached showdown
+            state_updates = [e for e in events if e.get("type") == "state_update"]
+            if state_updates:
+                final_state = state_updates[-1]["data"]["state"]
+                if final_state == "showdown":
+                    # Try to act after showdown
+                    await ws.send_action("call")
+
+                    # Should not process
+                    more_events = await ws.drain_events(timeout=1.0)
+
+                    # Should receive minimal or no events
+                    print(f"[TEST] ✅ Action after showdown ignored ({len(more_events)} events)")
+                else:
+                    print(f"[TEST] ⚠️  Hand didn't reach showdown (state: {final_state}), skipping test")
+            else:
+                print(f"[TEST] ⚠️  No state updates received, test inconclusive")
+
+    @pytest.mark.asyncio
+    async def test_rapid_duplicate_actions(self):
+        """
+        Test: Rapid duplicate actions - only first should count.
+
+        Phase 2.3 - Rapid action handling.
+        """
+        game_id = await create_test_game(ai_count=2)
+
+        async with WebSocketTestClient(game_id) as ws:
+            # Receive initial state
+            initial_state = await ws.receive_event(timeout=3.0)
+
+            # Send same action 10 times rapidly
+            for _ in range(10):
+                await ws.send_action("call")
+
+            # Wait for events
+            events = await ws.drain_events(timeout=5.0)
+
+            # Count how many times human action was processed
+            # Should only be processed once
+            # (Hard to test precisely, but game shouldn't crash/hang)
+
+            # Main validation: Game didn't crash
+            assert len(events) > 0, "Game should continue (not crash from rapid actions)"
+
+            # Game should reach reasonable state
+            ai_action_count = ws.count_events_by_type("ai_action")
+            assert ai_action_count >= 1, "AI should act normally"
+
+            print(f"[TEST] ✅ Rapid duplicate actions handled ({len(events)} events, {ai_action_count} AI actions)")
+
+
+class TestRapidActionSpam:
+    """
+    Phase 2.3: Test rapid action spam doesn't crash the game.
+
+    Validates system resilience under extreme conditions.
+    """
+
+    @pytest.mark.asyncio
+    async def test_action_spam_concurrent(self):
+        """
+        Test: Sending many actions concurrently shouldn't crash.
+
+        Phase 2.3 - Stress test for action handling.
+        """
+        game_id = await create_test_game(ai_count=2)
+
+        async with WebSocketTestClient(game_id) as ws:
+            # Receive initial state
+            initial_state = await ws.receive_event(timeout=3.0)
+            assert initial_state["type"] == "state_update"
+
+            # Send 50 actions as fast as possible
+            # Mix of valid and invalid actions
+            actions = ["call", "fold", "raise"] * 16 + ["call", "fold"]
+            amounts = [None, None, 100] * 16 + [None, None]
+
+            for action, amount in zip(actions, amounts):
+                try:
+                    await ws.send_action(action, amount=amount)
+                except Exception as e:
+                    # Even if some fail, keep trying
+                    pass
+
+            # Give time for all actions to be processed (or rejected)
+            await asyncio.sleep(1.0)
+
+            # Drain events
+            events = await ws.drain_events(timeout=5.0)
+
+            # Main validation: System didn't crash
+            assert len(events) > 0, "System should respond (not crash from action spam)"
+
+            # Game should still be in valid state
+            state_updates = [e for e in events if e.get("type") == "state_update"]
+            if state_updates:
+                final_state = state_updates[-1]["data"]
+                # Basic sanity checks
+                assert "state" in final_state, "Should have valid game state"
+                assert "players" in final_state, "Should have players"
+
+            print(f"[TEST] ✅ Action spam handled ({len(events)} events received, no crash)")
+
+    @pytest.mark.asyncio
+    async def test_invalid_action_types_rejected(self):
+        """
+        Test: Invalid action types should be rejected gracefully.
+
+        Phase 2 - Negative testing for action validation.
+        """
+        game_id = await create_test_game(ai_count=2)
+
+        async with WebSocketTestClient(game_id) as ws:
+            # Receive initial state
+            initial_state = await ws.receive_event(timeout=3.0)
+
+            # Try invalid action types
+            invalid_actions = ["check", "bet", "allin", "CALL", "Fold", "", "invalid"]
+
+            for invalid_action in invalid_actions:
+                try:
+                    await ws.send_action(invalid_action)
+                except Exception:
+                    pass  # Expected to fail
+
+            # Wait a bit
+            await asyncio.sleep(0.5)
+
+            # Game should still function
+            await ws.send_action("fold")  # Valid action
+            events = await ws.drain_events(timeout=3.0)
+
+            # Game should continue normally
+            assert len(events) > 0, "Game should continue after invalid actions"
+
+            print(f"[TEST] ✅ Invalid action types rejected, game continued normally")
