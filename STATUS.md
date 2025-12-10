@@ -1,31 +1,34 @@
 # Poker Learning App - Current Status
 
-**Last Updated**: December 9, 2025
-**Version**: 4.1 (Integration Testing Complete - Bugs Fixed)
+**Last Updated**: December 9, 2025 (Evening)
+**Version**: 4.2 (Testing Overhaul - Critical Bug Found)
 **Branch**: `main`
 
 ---
 
 ## Current State
 
-✅ **WebSocket Integration Testing COMPLETE** - All bugs fixed!
-- Built comprehensive WebSocket integration test framework (7 tests)
-- Discovered and fixed 2 critical bugs (all-in calculation, step mode)
-- **7/7 integration tests passing** ✅
-- **72/72 regression tests passing** ✅
-- Zero regressions introduced
-- Production ready with full integration coverage
+🚨 **CRITICAL BUG FOUND** - Testing strategy under review
+- All 7 integration tests + 72 regression tests passing ✅
+- **BUT**: User found infinite loop bug in <1 minute of testing ⚠️
+- **Root cause**: Tests never validated error handling paths
+- **Issue**: WebSocket AI processing doesn't check `apply_action()` success
+- **Status**: Bug NOT yet fixed - analyzing root cause first
 
-See `docs/INTEGRATION_TESTING_STATUS.md` for full details.
+**Lesson Learned**: "All tests passing" ≠ "No bugs exist"
 
-✅ **Phase 4 COMPLETE** - Refactoring and comprehensive testing done.
+**Next Steps**: Execute comprehensive testing improvement plan
+- See `docs/TESTING_IMPROVEMENT_PLAN.md` for 6-phase plan
+- See `docs/TESTING_FAILURES_ANALYSIS.md` for root cause analysis
+- See `docs/TESTING_PLAN_COMPARISON.md` for what previous plans missed
+
+✅ **Phase 4 Refactoring COMPLETE** - Core consolidation done
 - Core code consolidated into single sources of truth
-- 400+ tests created (59 unit + 350+ edge case)
-- 600+ complete AI games validated (37K+ hands, 640K+ actions)
-- 100% pass rate after player count bug fix
-- 95%+ confidence in production readiness
+- 59 unit tests + 350+ edge case tests + 600 stress tests all passing
+- Engine-level logic is solid
+- **Gap**: Integration layer (WebSocket/API) insufficiently tested
 
-See `docs/PHASE4_COMPLETE_SUMMARY.md` for full details.
+**Old testing docs archived** to `archive/docs/testing-history-2025-12/`
 
 ### UAT Round 2 Results (December 8, 2025)
 
@@ -45,42 +48,42 @@ See `docs/PHASE4_COMPLETE_SUMMARY.md` for full details.
 | UAT-12: Quit Game | PASS | |
 | UAT-13: Heads-Up All-In | PASS | |
 
-### Code Audit Findings
+### Code Audit Findings (Archived)
 
-Found 9 code divergence issues between REST and WebSocket paths:
+Phase 4 refactoring addressed 9 code divergence issues:
+- ✅ Consolidated action processing into `apply_action()`
+- ✅ Consolidated state advancement into `_advance_state_core()`
+- ✅ Consolidated hand strength calculation into `score_to_strength()`
 
-| Priority | Issue | Impact |
-|----------|-------|--------|
-| CRITICAL | Raise bet calculation differs | Pot grows incorrectly via WebSocket |
-| CRITICAL | All-in fast-forward missing in WS | UAT-5 hang bug |
-| HIGH | `last_raiser_index` not set in WS | BB option broken |
-| HIGH | Fold doesn't set `has_acted` in WS | Potential infinite loop |
-| HIGH | Hand strength has 4 copies (2 incomplete) | Wrong analysis |
+**However**: Refactoring tests bypassed WebSocket layer, missing integration bugs.
 
-Full details in [docs/REFACTOR-PLAN.md](docs/REFACTOR-PLAN.md).
+Full details in `archive/docs/testing-history-2025-12/REFACTOR-PLAN.md`
 
 ---
 
-## Phase 4 Refactoring: COMPLETE ✅
+## Phase 4 Refactoring: COMPLETE ✅ (But Testing Was Incomplete)
 
 | Phase | Description | Status |
 |-------|-------------|--------|
 | 1 | Consolidate action processing (`apply_action()`) | ✅ DONE (20 tests) |
 | 2 | Consolidate state advancement (`_advance_state_core()`) | ✅ DONE (15 tests) |
 | 3 | Consolidate hand strength (`score_to_strength()`) | ✅ DONE (24 tests) |
-| 4 | Comprehensive test suite | ✅ DONE (400+ tests) |
+| 4 | Comprehensive test suite | ⏸️ PARTIAL (engine-level only) |
 
-**Test Coverage**:
+**Test Coverage** (Engine-Level):
 - Unit tests: 59/59 passing ✅
 - Edge cases: 350+ scenarios ✅
-- Stress tests: 600 complete games (500 + 100) ✅
-- Heads-up: 100 dedicated games (19m) ✅
-- Multi-player: 100 4-player games (19m) ✅
-- Regression: 500 varied games (2-4 players, 50m) ✅
+- Stress tests: 600 complete games ✅
+- Heads-up: 100 dedicated games ✅
+- Multi-player: 100 4-player games ✅
 
-**Key Bug Fixed**: Player count limit enforced (max 4 players: 1 human + 3 AI)
+**Missing Coverage** (Integration-Level):
+- ❌ Negative testing (error handling paths)
+- ❌ E2E testing (frontend → backend)
+- ❌ Scenario testing (user journeys)
+- ❌ Failure recovery testing
 
-Details in `docs/PHASE4_COMPLETE_SUMMARY.md`
+Details in `archive/docs/testing-history-2025-12/PHASE4_COMPLETE_SUMMARY.md`
 
 ---
 
