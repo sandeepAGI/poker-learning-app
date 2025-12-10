@@ -127,19 +127,30 @@ game.current_player_index = ...  # Moves to next player even if action failed
 ## What Replaced These Plans
 
 **New Documents** (in `/docs`):
-1. **TESTING_FAILURES_ANALYSIS.md** - Honest analysis of why our testing failed
-2. **TESTING_IMPROVEMENT_PLAN.md** - 6-phase plan addressing all gaps
-3. **TESTING_PLAN_COMPARISON.md** - Detailed comparison showing what each plan missed
+1. **TESTING_IMPROVEMENT_PLAN.md** - Comprehensive 11-phase plan (112 hours) addressing all gaps
 
-**Key Differences**:
-- **Phase 1**: Fix bug + regression test (proof of concept)
-- **Phase 2**: 20+ negative tests (completely new)
-- **Phase 3**: Fuzzing with invalid inputs (enhanced)
-- **Phase 4**: 20+ scenario tests (completely new)
-- **Phase 5**: 15+ E2E browser tests (required, not optional)
-- **Phase 6**: CI/CD enforcement (automated, not manual)
+**Analysis Documents** (archived in this directory):
+1. **TESTING_FAILURES_ANALYSIS.md** - Root cause analysis of testing failures
+2. **TESTING_PLAN_COMPARISON.md** - Comparison of 4 previous plans
+3. **TESTING_GAP_ANALYSIS.md** - Industry best practices comparison
 
-**Timeline**: 42 hours (realistic) vs 8-21 hours (optimistic but incomplete)
+**Key Differences in New Plan**:
+- **Tier 1 (78h - Pre-Production)**:
+  - Phase 1: Fix bug + regression test
+  - Phase 2: 20+ negative tests (completely new)
+  - Phase 3: Fuzzing + MD5 validation (enhanced with industry standard)
+  - Phase 4: 20+ scenario tests (completely new)
+  - Phase 5: 15+ E2E browser tests (required, not optional)
+  - Phase 6: CI/CD infrastructure (automated testing)
+  - Phase 7: WebSocket reconnection testing (NEW - critical gap)
+  - Phase 8: Concurrency & race conditions (NEW - critical gap)
+
+- **Tier 2 (34h - Production Hardening)**:
+  - Phase 9: RNG fairness testing (NEW - player trust)
+  - Phase 10: Load & stress testing (NEW - scalability)
+  - Phase 11: Network failure simulation (NEW - reliability)
+
+**Timeline**: 112 hours total (78h Tier 1 + 34h Tier 2) vs previous 8-42 hours (incomplete)
 
 **Success Metric**: UAT finds 0 bugs (not "all tests pass")
 

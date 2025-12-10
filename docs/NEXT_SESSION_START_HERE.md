@@ -34,14 +34,14 @@ The infinite loop bug lives in error handling code that **was never tested**:
 
 ### Documentation
 **Active** (in `docs/`):
-1. **TESTING_FAILURES_ANALYSIS.md** - Why our testing failed
-2. **TESTING_IMPROVEMENT_PLAN.md** - 6-phase plan to fix it (42 hours)
-3. **TESTING_PLAN_COMPARISON.md** - What each previous plan missed
-4. HISTORY.md - Project history
-5. SETUP.md - Operational guide
+1. **TESTING_IMPROVEMENT_PLAN.md** - Comprehensive 11-phase plan (112 hours)
+   - Tier 1 (78h): Pre-production testing (negative tests, fuzzing, E2E, reconnection, concurrency)
+   - Tier 2 (34h): Production hardening (RNG fairness, load testing, network simulation)
+2. HISTORY.md - Project history
+3. SETUP.md - Operational guide
 
 **Archived** (in `archive/docs/testing-history-2025-12/`):
-- 9 old planning documents with comprehensive README explaining why
+- 12 old planning/analysis documents (9 plans + 3 analysis docs) with comprehensive README
 
 ### Test Results
 **Integration tests** (just ran):
@@ -207,13 +207,23 @@ git push origin main
 
 ## After Phase 1: What's Next
 
-Once Phase 1 is complete, continue with **Phase 2: Negative Testing Suite** (8 hours):
-- Create 15+ more negative tests
-- Test invalid raise amounts, wrong turn actions, duplicate actions
-- Test error recovery scenarios
-- Measure error path coverage (target: 50%+)
+Once Phase 1 is complete, continue with remaining phases from the **11-phase plan** (111 hours remaining):
 
-See `docs/TESTING_IMPROVEMENT_PLAN.md` lines 180-230 for details.
+**Tier 1 (Pre-Production) - Phases 2-8 (76h)**:
+- Phase 2: Negative Testing Suite (8h) - 20+ error handling tests
+- Phase 3: Fuzzing + MD5 Validation (10h) - 1000+ random inputs + hand evaluator validation
+- Phase 4: Scenario-Based Testing (8h) - 20+ real user journey tests
+- Phase 5: E2E Browser Testing (12h) - 15+ Playwright tests
+- Phase 6: CI/CD Infrastructure (6h) - Automated testing pipeline
+- Phase 7: WebSocket Reconnection (16h) - Disconnect/reconnect handling
+- Phase 8: Concurrency Testing (16h) - Race conditions & simultaneous actions
+
+**Tier 2 (Production Hardening) - Phases 9-11 (34h)**:
+- Phase 9: RNG Fairness (12h) - Statistical validation of card distribution
+- Phase 10: Load Testing (12h) - Concurrent games, performance benchmarks
+- Phase 11: Network Failure (10h) - High latency, packet loss, intermittent connectivity
+
+See `docs/TESTING_IMPROVEMENT_PLAN.md` for full details on all phases.
 
 ---
 
