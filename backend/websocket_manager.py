@@ -236,7 +236,52 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
             reasoning=decision.reasoning
         )
 
-        # Emit AI action event
+        # CRITICAL: Check if action succeeded
+        # Bug fix: If action fails validation, force fold to prevent infinite loop
+        if not result["success"]:
+            print(f"[WebSocket] ⚠️  AI action FAILED for {current_player.name}: {result.get('error', 'Unknown error')}")
+            print(f"[WebSocket] Applying fallback: force fold to prevent infinite loop")
+
+            # Force fold as fallback
+            fallback_result = game.apply_action(
+                player_index=game.current_player_index,
+                action="fold",
+                amount=0,
+                hand_strength=decision.hand_strength,
+                reasoning=f"[FORCED FOLD] Original {decision.action} failed: {result.get('error')}"
+            )
+
+            # Emit fallback action event
+            await manager.send_event(game_id, {
+                "type": "ai_action",
+                "data": {
+                    "player_id": current_player.player_id,
+                    "player_name": current_player.name,
+                    "action": "fold",
+                    "amount": 0,
+                    "reasoning": f"[FORCED FOLD] {decision.action} failed validation" if show_ai_thinking else None,
+                    "stack_after": current_player.stack,
+                    "pot_after": game.pot,
+                    "bet_amount": 0
+                }
+            })
+
+            # Broadcast updated state
+            await manager.broadcast_state(game_id, game, show_ai_thinking)
+
+            # Check if fallback fold triggered showdown
+            if game.current_player_index is None or fallback_result["triggers_showdown"]:
+                break
+
+            # Move to next player
+            game.current_player_index = game._get_next_active_player_index(
+                game.current_player_index + 1
+            )
+
+            # Continue to next iteration (skip normal action processing)
+            continue
+
+        # Emit AI action event (only if action succeeded)
         await manager.send_event(game_id, {
             "type": "ai_action",
             "data": {
