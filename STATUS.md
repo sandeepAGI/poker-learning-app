@@ -1,7 +1,7 @@
 # Poker Learning App - Current Status
 
 **Last Updated**: December 11, 2025
-**Version**: 7.2 (UX Improvements - Phase 1A+1B Complete)
+**Version**: 7.3 (UX Improvements - Phase 1 COMPLETE)
 **Branch**: `main`
 
 ---
@@ -313,7 +313,7 @@
 - 10 critical UX issues identified
 - 4-phase improvement plan (10-14 hours total)
 
-### Phase 1: Critical Fixes (In Progress - 2/3 complete)
+### Phase 1: Critical Fixes (COMPLETE - All 3 sub-phases)
 
 #### ✅ Phase 1A: Card Component Redesign (COMPLETE)
 **Time**: 15 minutes (estimated 1 hour)
@@ -380,14 +380,50 @@
 **Commit**: `2b86d80a` - Phase 1B: Fix Modal Pointer Events
 **Screenshots**: `tests/e2e/screenshots/ux-phase1/phase1b-*`
 
-#### ⏳ Phase 1C: Simplify Action Controls (NEXT)
-**Estimated Time**: 1 hour
-**Problem**: 8-element control panel overwhelming
-**Solution**: 3 large buttons + expandable raise panel
+#### ✅ Phase 1C: Simplify Action Controls (COMPLETE)
+**Time**: 1 hour 15 minutes (estimated 1 hour)
+**File**: `frontend/components/PokerTable.tsx`
 
-### Remaining Phases (Pending Phase 1 completion)
+**Problem**: 8-element control panel too overwhelming
+- Fold + Call + Raise buttons
+- Slider, input field, 4 quick bet buttons, all-in button
+- Cluttered interface, especially on mobile
+- Difficult to focus on primary actions
 
-- **Phase 2**: Layout Improvements (3-4 hours)
+**Solution Implemented**:
+- ✅ Simplified to 3 large primary buttons (Fold, Call, Raise)
+- ✅ Expandable raise panel with smooth height animation (AnimatePresence)
+- ✅ Quick bet buttons now show amounts (Min $X, ½ Pot $Y, etc.)
+- ✅ Panel auto-closes after raise confirmation
+- ✅ Progressive disclosure - advanced controls hidden until needed
+- ✅ Button size increased (py-5 px-6) for better touch targets
+
+**Impact**:
+- Cleaner, less cluttered interface
+- Better focus on primary actions (Fold/Call/Raise)
+- Mobile-friendly with larger touch targets
+- Raise details available but not overwhelming
+- Professional poker app appearance
+
+**Testing**:
+- ✅ Visual screenshots (before/after/expanded) saved
+- ✅ Manual interaction testing passed
+- ✅ All animations working smoothly
+- ✅ 41 regression tests passing
+
+**Commit**: `4b1559d9` - Phase 1C: Simplify Action Controls
+**Screenshots**: `tests/e2e/screenshots/ux-phase1/phase1c-*`
+
+### Remaining Phases (Phase 1 complete, ready for Phase 2)
+
+**Phase 1 Complete**: All 3 critical fixes delivered (2.25 hours total)
+- ✅ Card component redesign (15 min)
+- ✅ Modal pointer events fix (45 min)
+- ✅ Simplified action controls (1h 15min)
+
+**Next Phases**:
+
+- **Phase 2**: Layout Improvements (3-4 hours) - NEXT
   - Circular table layout
   - Dedicated community cards area
   - Consolidated header menu
@@ -402,8 +438,7 @@
   - Responsive design
   - Smooth animations
 
-**Progress**: Phase 1A complete (33% of Phase 1, 8% of total)
-**Next**: Phase 1B - Fix modal pointer events
+**Progress**: Phase 1 complete (100% of Phase 1, 18% of total UX plan)
 
 ---
 
