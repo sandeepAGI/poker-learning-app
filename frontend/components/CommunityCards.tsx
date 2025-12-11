@@ -1,0 +1,65 @@
+'use client';
+
+import { motion } from 'framer-motion';
+import { Card } from './Card';
+
+interface CommunityCardsProps {
+  cards: string[];
+  gameState: string;
+}
+
+export function CommunityCards({ cards, gameState }: CommunityCardsProps) {
+  if (cards.length === 0) return null;
+
+  // Determine stage label
+  let stageLabel = '';
+  if (cards.length === 3 && gameState === 'flop') {
+    stageLabel = 'FLOP';
+  } else if (cards.length === 4 && gameState === 'turn') {
+    stageLabel = 'TURN';
+  } else if (cards.length === 5 && gameState === 'river') {
+    stageLabel = 'RIVER';
+  }
+
+  return (
+    <div className="flex flex-col items-center">
+      {/* Stage Label */}
+      {stageLabel && (
+        <motion.div
+          className="text-yellow-400 font-bold text-sm mb-2 tracking-wider"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {stageLabel}
+        </motion.div>
+      )}
+
+      {/* Community Cards Container */}
+      <motion.div
+        className="bg-green-900/60 backdrop-blur-sm px-6 py-4 rounded-xl border-2 border-green-700/50 shadow-2xl"
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="flex gap-3">
+          {cards.map((card, i) => (
+            <motion.div
+              key={i}
+              initial={{ scale: 0, rotateY: 180 }}
+              animate={{ scale: 1, rotateY: 0 }}
+              transition={{
+                delay: i * 0.15,
+                type: 'spring',
+                stiffness: 200,
+                damping: 15
+              }}
+            >
+              <Card card={card} />
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    </div>
+  );
+}

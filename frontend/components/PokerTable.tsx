@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from './Card';
 import { PlayerSeat } from './PlayerSeat';
+import { CommunityCards } from './CommunityCards';
 import { WinnerModal } from './WinnerModal';
 import { AnalysisModal } from './AnalysisModal';
 import { GameOverModal } from './GameOverModal';
@@ -318,29 +319,26 @@ export function PokerTable() {
         })()}
 
         {/* Center Area - Community Cards and Pot */}
-        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-4">
           {/* Pot */}
           <motion.div
-            className="bg-yellow-500 text-white px-6 py-3 rounded-full text-2xl font-bold mb-4 shadow-lg"
+            className="bg-yellow-500 text-white px-6 py-3 rounded-full text-2xl font-bold shadow-lg"
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
           >
             Pot: ${gameState.pot}
           </motion.div>
 
-          {/* Community cards */}
-          {gameState.community_cards.length > 0 && (
-            <div className="flex gap-2 mb-4">
-              {gameState.community_cards.map((card, i) => (
-                <Card key={i} card={card} />
-              ))}
-            </div>
-          )}
+          {/* Community cards - Using new dedicated component */}
+          <CommunityCards
+            cards={gameState.community_cards}
+            gameState={gameState.state}
+          />
 
           {/* Current bet */}
           {gameState.current_bet > 0 && (
-            <div className="text-white text-lg">
-              Current Bet: <span className="font-bold">${gameState.current_bet}</span>
+            <div className="text-white text-lg font-semibold">
+              Current Bet: <span className="font-bold text-yellow-400">${gameState.current_bet}</span>
             </div>
           )}
         </div>
