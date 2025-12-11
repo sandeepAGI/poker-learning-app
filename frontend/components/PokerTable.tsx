@@ -168,13 +168,13 @@ export function PokerTable() {
   }, [showSettingsMenu]);
 
   return (
-    <div className="flex flex-col h-screen bg-[#0D5F2F] p-4">
+    <div className="flex flex-col h-screen bg-[#0D5F2F] p-2 sm:p-4">
       {/* Header */}
-      <div className="flex justify-between items-center mb-4 text-white">
+      <div className="flex justify-between items-center mb-2 sm:mb-4 text-white">
         <div>
-          <h1 className="text-2xl font-bold">Poker Learning App</h1>
-          <div className="flex items-center gap-3 text-sm opacity-80">
-            <span>Game State: {gameState.state.toUpperCase()}</span>
+          <h1 className="text-xl sm:text-2xl font-bold">Poker Learning App</h1>
+          <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm opacity-80">
+            <span className="hidden sm:inline">Game State: {gameState.state.toUpperCase()}</span>
             {/* WebSocket connection status */}
             <span className="flex items-center gap-1">
               {connectionState === 'connected' && <span className="text-green-400">● Connected</span>}
@@ -426,7 +426,7 @@ export function PokerTable() {
                 <button
                   onClick={() => submitAction('fold')}
                   disabled={loading}
-                  className="flex-1 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold py-5 px-6 rounded-lg text-2xl disabled:opacity-50 transition-colors"
+                  className="flex-1 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold py-4 sm:py-5 px-4 sm:px-6 rounded-lg text-xl sm:text-2xl disabled:opacity-50 transition-colors min-h-[44px]"
                 >
                   Fold
                 </button>
@@ -435,7 +435,7 @@ export function PokerTable() {
                 <button
                   onClick={() => submitAction('call')}
                   disabled={loading || !canCall}
-                  className="flex-1 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold py-5 px-6 rounded-lg text-2xl disabled:opacity-50 transition-colors"
+                  className="flex-1 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold py-4 sm:py-5 px-4 sm:px-6 rounded-lg text-xl sm:text-2xl disabled:opacity-50 transition-colors min-h-[44px]"
                   title={!canCall ? 'Not enough chips to call' : ''}
                 >
                   Call ${callAmount}
@@ -446,14 +446,14 @@ export function PokerTable() {
                   <button
                     onClick={() => setShowRaisePanel(!showRaisePanel)}
                     disabled={loading}
-                    className={`flex-1 ${showRaisePanel ? 'bg-[#059669]' : 'bg-[#10B981]'} hover:bg-[#059669] text-white font-bold py-5 px-6 rounded-lg text-2xl disabled:opacity-50 transition-colors`}
+                    className={`flex-1 ${showRaisePanel ? 'bg-[#059669]' : 'bg-[#10B981]'} hover:bg-[#059669] text-white font-bold py-4 sm:py-5 px-4 sm:px-6 rounded-lg text-xl sm:text-2xl disabled:opacity-50 transition-colors min-h-[44px]`}
                   >
                     Raise {showRaisePanel ? '▲' : '▼'}
                   </button>
                 ) : (
                   <button
                     disabled
-                    className="flex-1 bg-[#1F7A47]/50 text-gray-400 font-bold py-5 px-6 rounded-lg text-2xl opacity-50 cursor-not-allowed"
+                    className="flex-1 bg-[#1F7A47]/50 text-gray-400 font-bold py-4 sm:py-5 px-4 sm:px-6 rounded-lg text-xl sm:text-2xl opacity-50 cursor-not-allowed min-h-[44px]"
                     title={gameState.human_player.stack <= callAmount ? 'Not enough chips to raise' : 'Raise not available'}
                   >
                     Raise

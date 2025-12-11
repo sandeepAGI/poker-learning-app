@@ -24,7 +24,7 @@ export function AISidebar({ isOpen, decisions }: AISidebarProps) {
           animate={{ width: 320, opacity: 1 }}
           exit={{ width: 0, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
-          className="bg-[#0A4D26]/95 backdrop-blur-sm border-l-2 border-[#1F7A47] overflow-hidden flex flex-col"
+          className="hidden md:flex bg-[#0A4D26]/95 backdrop-blur-sm border-l-2 border-[#1F7A47] overflow-hidden flex-col"
         >
           <div className="flex-1 overflow-y-auto p-4">
             {/* Header */}
