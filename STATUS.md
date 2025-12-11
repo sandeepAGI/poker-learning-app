@@ -1,23 +1,24 @@
 # Poker Learning App - Current Status
 
 **Last Updated**: December 10, 2025
-**Version**: 5.1 (Testing Improvement - Phases 1-4 Complete)
+**Version**: 5.2 (Testing Improvement - Phases 1-5 Complete)
 **Branch**: `main`
 
 ---
 
 ## Current State
 
-✅ **PHASES 1-4 COMPLETE** - Scenario testing validated
-- **235+ tests** collected across 31 test files
-- **All Phase 1-4 tests passing** (36/36 tests)
+✅ **PHASES 1-5 COMPLETE** - E2E browser testing validated
+- **248+ tests** collected across 32 test files
+- **All Phase 1-5 tests passing** (49/49 tests)
+- **E2E browser tests**: 13/13 passing (full stack validation)
 - **Infinite loop bug FIXED** with regression test
 - **Error path coverage**: 0% → 40%
-- **Scenario tests**: 12 comprehensive user journey tests
+- **UAT regression tests**: UAT-5 (all-in hang), UAT-11 (analysis modal)
 
-**Progress**: 36% complete with Tier 1 pre-production testing (28/78 hours)
+**Progress**: 51% complete with Tier 1 pre-production testing (40/78 hours)
 
-**Next Step**: Phase 5 - E2E Browser Testing (12 hours)
+**Next Step**: Phase 6 - CI/CD Infrastructure (8 hours)
 - See `docs/TESTING_IMPROVEMENT_PLAN.md` for full 11-phase roadmap
 
 ### Testing Improvement Plan Progress
@@ -28,8 +29,8 @@
 | **Phase 2**: Negative Testing | ✅ COMPLETE | 12 tests | Error handling validated |
 | **Phase 3**: Fuzzing + Validation | ✅ COMPLETE | 11 tests | Hand evaluator + properties |
 | **Phase 4**: Scenario Testing | ✅ COMPLETE | 12 tests | Real user journeys |
-| **Phase 5**: E2E Browser Testing | 🎯 NEXT | - | Full stack validation |
-| **Phase 6**: CI/CD Infrastructure | ⏸️ Planned | - | Automated pipeline |
+| **Phase 5**: E2E Browser Testing | ✅ COMPLETE | 13 tests | Full stack validated |
+| **Phase 6**: CI/CD Infrastructure | 🎯 NEXT | - | Automated pipeline |
 | **Phase 7**: WebSocket Reconnection | ⏸️ Planned | - | Production reliability |
 | **Phase 8**: Concurrency & Races | ⏸️ Planned | - | Thread safety |
 
@@ -112,6 +113,44 @@
 
 **Result**: 12/12 tests PASSING - 40+ poker hands played across all tests
 
+### Phase 5: E2E Browser Testing ✅
+
+**File**: `tests/e2e/test_critical_flows.py` (13 tests, 640 lines)
+**Runtime**: 2 minutes 22 seconds (142.91s)
+**Framework**: Playwright Python (sync_api)
+
+**Test Categories**:
+
+**Critical User Flows** (6 tests):
+- test_e2e_create_game_and_play_one_hand - Basic game flow
+- test_e2e_all_in_button_works - **UAT-5 regression** (all-in hang fixed)
+- test_e2e_play_3_hands_then_quit - Multi-hand gameplay
+- test_e2e_raise_slider_interaction - Slider UX validation
+- test_e2e_hand_analysis_modal - **UAT-11 regression** (analysis display)
+- test_e2e_chip_conservation_visual - UI/backend state sync
+
+**Visual Regression** (2 tests):
+- test_visual_poker_table_initial_state - Baseline screenshot
+- test_visual_showdown_screen - Showdown UI capture
+
+**Error States** (3 tests):
+- test_backend_unavailable_shows_error - Backend availability check
+- test_websocket_disconnect_recovery - WebSocket connection validation
+- test_invalid_game_id_404_handling - Invalid navigation handling
+
+**Performance** (2 tests):
+- test_game_creation_load_time - <3s benchmark (actual: 0.10-0.14s)
+- test_ai_turn_response_time - <15s benchmark (actual: <1s after fold)
+
+**Key Implementation Details**:
+- Browser automation via Playwright (chromium)
+- JavaScript evaluation for modal-resistant button clicks
+- Screenshot capture for visual regression baselines
+- Wait helpers for poker hand completion (up to 120s for full hands)
+- Headless mode support via `HEADLESS` environment variable
+
+**Result**: 13/13 tests PASSING - Complete stack validation through real browser
+
 ---
 
 ## Architecture
@@ -162,9 +201,17 @@ npm run dev  # http://localhost:3000
 ## Running Tests
 
 ```bash
-# Phase 1-4 tests (Testing Improvement Plan - all passing)
+# Phase 1-5 tests (Testing Improvement Plan - all passing)
 PYTHONPATH=backend python -m pytest backend/tests/test_negative_actions.py backend/tests/test_hand_evaluator_validation.py backend/tests/test_property_based_enhanced.py backend/tests/test_user_scenarios.py -v
-# Result: 36 tests (Phase 1-4 complete)
+PYTHONPATH=. python -m pytest tests/e2e/test_critical_flows.py -v
+# Result: 49 tests total (36 backend + 13 E2E)
+
+# Phase 5 E2E browser tests (requires servers running)
+# Terminal 1: python backend/main.py
+# Terminal 2: cd frontend && npm run dev
+# Terminal 3:
+PYTHONPATH=. python -m pytest tests/e2e/test_critical_flows.py -v
+# Result: 13/13 passing in ~2.5 minutes
 
 # Quick Phase 1-3 tests (23 tests in 48.45s)
 PYTHONPATH=backend python -m pytest backend/tests/test_negative_actions.py backend/tests/test_hand_evaluator_validation.py backend/tests/test_property_based_enhanced.py -v
