@@ -318,7 +318,7 @@ export function PokerTable() {
         })()}
 
         {/* Center Area - Community Cards and Pot */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
           {/* Pot */}
           <motion.div
             className="bg-yellow-500 text-white px-6 py-3 rounded-full text-2xl font-bold mb-4 shadow-lg"
@@ -345,8 +345,8 @@ export function PokerTable() {
           )}
         </div>
 
-        {/* Human Player - Bottom Center */}
-        <div className="absolute bottom-32 left-1/2 -translate-x-1/2">
+        {/* Human Player - Bottom (moved lower to avoid overlap) */}
+        <div className="absolute bottom-44 left-1/2 -translate-x-1/2">
           <PlayerSeat
             player={gameState.human_player}
             isCurrentTurn={isMyTurn}
