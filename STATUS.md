@@ -1,7 +1,7 @@
 # Poker Learning App - Current Status
 
 **Last Updated**: December 11, 2025
-**Version**: 7.1 (UX Improvements - Phase 1A Complete)
+**Version**: 7.2 (UX Improvements - Phase 1A+1B Complete)
 **Branch**: `main`
 
 ---
@@ -313,7 +313,7 @@
 - 10 critical UX issues identified
 - 4-phase improvement plan (10-14 hours total)
 
-### Phase 1: Critical Fixes (In Progress - 1/3 complete)
+### Phase 1: Critical Fixes (In Progress - 2/3 complete)
 
 #### ✅ Phase 1A: Card Component Redesign (COMPLETE)
 **Time**: 15 minutes (estimated 1 hour)
@@ -344,14 +344,43 @@
 - ✅ 41 regression tests passing
 
 **Commit**: `45d38a0c` - UX Phase 1A: Card Component Redesign
-**Screenshots**: `tests/e2e/screenshots/ux-phase1/`
+**Screenshots**: `tests/e2e/screenshots/ux-phase1/phase1a-*`
 
-#### ⏳ Phase 1B: Fix Modal Pointer Events (NEXT)
-**Estimated Time**: 30 minutes
-**Problem**: Modals block clicks on underlying elements
-**Solution**: Fix z-index and pointer-events
+#### ✅ Phase 1B: Fix Modal Pointer Events (COMPLETE)
+**Time**: 45 minutes (estimated 30 minutes)
+**Files**: `frontend/components/{WinnerModal,AnalysisModal,GameOverModal}.tsx`
 
-#### ⏳ Phase 1C: Simplify Action Controls (PENDING)
+**Problem**: Modal overlays blocked clicks on underlying buttons
+- "Analyze Hand" button timed out (30s) with modal visible
+- "Next Hand" button timed out (30s) with modal visible
+- Playwright error: "intercepts pointer events"
+
+**Root Cause**:
+- Modal backdrop was sibling element at z-40
+- Even with pointer-events-none on container (z-50), backdrop blocked all clicks
+
+**Solution Implemented**:
+- ✅ Moved backdrop INSIDE modal container
+- ✅ Set container to pointer-events-none (allows click-through)
+- ✅ Set backdrop to pointer-events-none (visual only)
+- ✅ Set modal content to pointer-events-auto (interactive)
+- ✅ Added relative z-10 to modal content (proper stacking)
+
+**Impact**:
+- Users can now interact with buttons while modals visible
+- No more 30s timeouts or blocked clicks
+- Improved UX - smoother modal interactions
+
+**Testing**:
+- ✅ Manual Playwright verification (6 screenshots)
+- ✅ "Analyze Hand" button clickable at showdown
+- ✅ "Next Hand" button clickable at showdown
+- ✅ 23/23 regression tests passing
+
+**Commit**: `2b86d80a` - Phase 1B: Fix Modal Pointer Events
+**Screenshots**: `tests/e2e/screenshots/ux-phase1/phase1b-*`
+
+#### ⏳ Phase 1C: Simplify Action Controls (NEXT)
 **Estimated Time**: 1 hour
 **Problem**: 8-element control panel overwhelming
 **Solution**: 3 large buttons + expandable raise panel
