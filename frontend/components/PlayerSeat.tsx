@@ -25,7 +25,7 @@ export function PlayerSeat({ player, isCurrentTurn, aiDecision, showAiThinking, 
     >
       {/* Player name and personality */}
       <div className="flex items-center gap-2 mb-2">
-        <div className="font-bold text-sm">{player.name}</div>
+        <div className="font-semibold text-sm">{player.name}</div>
         {/* Only reveal AI strategy at showdown */}
         {player.personality && isShowdown && (
           <div className="text-xs bg-blue-200 px-2 py-0.5 rounded">{player.personality}</div>
@@ -34,7 +34,7 @@ export function PlayerSeat({ player, isCurrentTurn, aiDecision, showAiThinking, 
       </div>
 
       {/* Cards */}
-      <div className="flex gap-1 mb-2">
+      <div className="flex gap-2 mb-3">
         {player.hole_cards.length > 0 ? (
           player.hole_cards.map((card, i) => <Card key={i} card={card} />)
         ) : (
@@ -46,20 +46,20 @@ export function PlayerSeat({ player, isCurrentTurn, aiDecision, showAiThinking, 
       </div>
 
       {/* Stack and bet */}
-      <div className="text-sm space-y-1">
-        <div className="flex justify-between">
-          <span className="text-gray-600">Stack:</span>
-          <span className="font-semibold">${player.stack}</span>
+      <div className="space-y-2">
+        <div className="flex justify-between items-center">
+          <span className="text-sm text-gray-600">Stack:</span>
+          <span className="text-lg font-bold">${player.stack}</span>
         </div>
         {player.current_bet > 0 && (
           <motion.div
-            className="flex justify-between text-green-700"
+            className="flex justify-between items-center text-green-700"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring' }}
           >
-            <span>Bet:</span>
-            <span className="font-semibold">${player.current_bet}</span>
+            <span className="text-sm">Bet:</span>
+            <span className="text-base font-medium">${player.current_bet}</span>
           </motion.div>
         )}
       </div>

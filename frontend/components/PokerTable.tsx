@@ -168,7 +168,7 @@ export function PokerTable() {
   }, [showSettingsMenu]);
 
   return (
-    <div className="flex flex-col h-screen bg-green-800 p-4">
+    <div className="flex flex-col h-screen bg-[#0D5F2F] p-4">
       {/* Header */}
       <div className="flex justify-between items-center mb-4 text-white">
         <div>
@@ -202,7 +202,7 @@ export function PokerTable() {
                 console.log('[PokerTable] Continue button clicked!');
                 sendContinue();
               }}
-              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-bold shadow-lg border-2 border-white"
+              className="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-2 rounded-lg font-bold shadow-lg border-2 border-white"
               title="Continue to next AI action"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -215,7 +215,7 @@ export function PokerTable() {
           {/* Settings Menu Button */}
           <button
             onClick={() => setShowSettingsMenu(!showSettingsMenu)}
-            className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
+            className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
             title="Game settings and options"
           >
             ⚙️ Settings
@@ -226,7 +226,7 @@ export function PokerTable() {
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute top-12 right-20 bg-gray-800 border-2 border-gray-600 rounded-lg shadow-2xl p-2 min-w-[250px] z-50"
+              className="absolute top-12 right-20 bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg shadow-2xl p-2 min-w-[250px] z-50"
             >
               {/* Analyze Hand */}
               <button
@@ -235,7 +235,7 @@ export function PokerTable() {
                   setShowSettingsMenu(false);
                 }}
                 disabled={loading}
-                className="w-full text-left px-4 py-3 hover:bg-gray-700 rounded-lg text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="w-full text-left px-4 py-3 hover:bg-[#1F7A47] rounded-lg text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 📊 Analyze Hand
               </button>
@@ -246,9 +246,9 @@ export function PokerTable() {
                   toggleShowAiThinking();
                   setShowSettingsMenu(false);
                 }}
-                className="w-full text-left px-4 py-3 hover:bg-gray-700 rounded-lg text-white font-medium flex items-center gap-2"
+                className="w-full text-left px-4 py-3 hover:bg-[#1F7A47] rounded-lg text-white font-medium flex items-center gap-2"
               >
-                <span className={showAiThinking ? 'text-blue-400' : 'text-gray-400'}>
+                <span className={showAiThinking ? 'text-[#FCD34D]' : 'text-gray-400'}>
                   {showAiThinking ? '✓' : '○'}
                 </span>
                 🤖 Show AI Thinking
@@ -260,9 +260,9 @@ export function PokerTable() {
                   toggleStepMode();
                   setShowSettingsMenu(false);
                 }}
-                className="w-full text-left px-4 py-3 hover:bg-gray-700 rounded-lg text-white font-medium flex items-center gap-2"
+                className="w-full text-left px-4 py-3 hover:bg-[#1F7A47] rounded-lg text-white font-medium flex items-center gap-2"
               >
-                <span className={stepMode ? 'text-yellow-400' : 'text-gray-400'}>
+                <span className={stepMode ? 'text-[#FCD34D]' : 'text-gray-400'}>
                   {stepMode ? '✓' : '○'}
                 </span>
                 {stepMode ? '⏸️ Step Mode (ON)' : '▶️ Step Mode (OFF)'}
@@ -273,7 +273,7 @@ export function PokerTable() {
           {/* Quit Game button */}
           <button
             onClick={quitGame}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold"
+            className="bg-[#DC2626] hover:bg-[#B91C1C] text-white px-4 py-2 rounded-lg font-semibold"
             title="Quit game and return to lobby"
           >
             ❌ Quit
@@ -357,10 +357,10 @@ export function PokerTable() {
         })()}
 
         {/* Center Area - Community Cards and Pot */}
-        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-4">
+        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6">
           {/* Pot */}
           <motion.div
-            className="bg-yellow-500 text-white px-6 py-3 rounded-full text-2xl font-bold shadow-lg"
+            className="bg-[#D97706] text-white px-6 py-3 rounded-full text-3xl font-bold shadow-2xl"
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
           >
@@ -376,7 +376,7 @@ export function PokerTable() {
           {/* Current bet */}
           {gameState.current_bet > 0 && (
             <div className="text-white text-lg font-semibold">
-              Current Bet: <span className="font-bold text-yellow-400">${gameState.current_bet}</span>
+              Current Bet: <span className="font-bold text-[#FCD34D]">${gameState.current_bet}</span>
             </div>
           )}
         </div>
@@ -393,7 +393,7 @@ export function PokerTable() {
 
         {/* Action buttons - Absolute positioned at bottom */}
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4">
-          <div className="bg-gray-900 p-4 rounded-lg">
+          <div className="bg-[#0A4D26]/90 backdrop-blur-sm border-2 border-[#1F7A47] p-4 rounded-lg">
           {/* Feature: Game over when eliminated - don't show controls */}
           {isEliminated ? (
             <div className="text-center py-4">
@@ -414,7 +414,7 @@ export function PokerTable() {
             <button
               onClick={() => nextHand()}
               disabled={loading}
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg text-lg disabled:opacity-50"
+              className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-bold py-4 px-6 rounded-lg text-lg disabled:opacity-50"
             >
               {loading ? 'Loading...' : 'Next Hand'}
             </button>
@@ -426,7 +426,7 @@ export function PokerTable() {
                 <button
                   onClick={() => submitAction('fold')}
                   disabled={loading}
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-5 px-6 rounded-lg text-xl disabled:opacity-50 transition-colors"
+                  className="flex-1 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold py-5 px-6 rounded-lg text-2xl disabled:opacity-50 transition-colors"
                 >
                   Fold
                 </button>
@@ -435,7 +435,7 @@ export function PokerTable() {
                 <button
                   onClick={() => submitAction('call')}
                   disabled={loading || !canCall}
-                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-5 px-6 rounded-lg text-xl disabled:opacity-50 transition-colors"
+                  className="flex-1 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold py-5 px-6 rounded-lg text-2xl disabled:opacity-50 transition-colors"
                   title={!canCall ? 'Not enough chips to call' : ''}
                 >
                   Call ${callAmount}
@@ -446,14 +446,14 @@ export function PokerTable() {
                   <button
                     onClick={() => setShowRaisePanel(!showRaisePanel)}
                     disabled={loading}
-                    className={`flex-1 ${showRaisePanel ? 'bg-green-600' : 'bg-green-500'} hover:bg-green-600 text-white font-bold py-5 px-6 rounded-lg text-xl disabled:opacity-50 transition-colors`}
+                    className={`flex-1 ${showRaisePanel ? 'bg-[#059669]' : 'bg-[#10B981]'} hover:bg-[#059669] text-white font-bold py-5 px-6 rounded-lg text-2xl disabled:opacity-50 transition-colors`}
                   >
                     Raise {showRaisePanel ? '▲' : '▼'}
                   </button>
                 ) : (
                   <button
                     disabled
-                    className="flex-1 bg-gray-700 text-gray-500 font-bold py-5 px-6 rounded-lg text-xl opacity-50 cursor-not-allowed"
+                    className="flex-1 bg-[#1F7A47]/50 text-gray-400 font-bold py-5 px-6 rounded-lg text-2xl opacity-50 cursor-not-allowed"
                     title={gameState.human_player.stack <= callAmount ? 'Not enough chips to raise' : 'Raise not available'}
                   >
                     Raise
@@ -471,36 +471,36 @@ export function PokerTable() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="bg-gray-800 rounded-lg p-4 space-y-4">
+                    <div className="bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg p-4 space-y-4">
                       {/* Quick bet buttons */}
                       <div className="flex gap-2 justify-center flex-wrap">
                         <button
                           onClick={() => handleRaiseAmountChange(minRaise)}
-                          className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                          className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white font-semibold py-2 px-4 rounded"
                         >
                           Min ${minRaise}
                         </button>
                         <button
                           onClick={() => handleRaiseAmountChange(Math.floor(gameState.pot * 0.5))}
-                          className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                          className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white font-semibold py-2 px-4 rounded"
                         >
                           ½ Pot ${Math.floor(gameState.pot * 0.5)}
                         </button>
                         <button
                           onClick={() => handleRaiseAmountChange(gameState.pot)}
-                          className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                          className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white font-semibold py-2 px-4 rounded"
                         >
                           Pot ${gameState.pot}
                         </button>
                         <button
                           onClick={() => handleRaiseAmountChange(gameState.pot * 2)}
-                          className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                          className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white font-semibold py-2 px-4 rounded"
                         >
                           2x Pot ${gameState.pot * 2}
                         </button>
                         <button
                           onClick={handleAllIn}
-                          className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded"
+                          className="bg-[#F59E0B] hover:bg-[#D97706] text-black font-bold py-2 px-4 rounded"
                         >
                           All-In ${maxRaise}
                         </button>
@@ -519,7 +519,7 @@ export function PokerTable() {
                           max={maxRaise}
                           step={gameState.big_blind || 10}
                           disabled={loading}
-                          className="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500"
+                          className="w-full h-3 bg-[#1F7A47] rounded-lg appearance-none cursor-pointer accent-[#10B981]"
                         />
                         <div className="flex justify-between text-white text-xs mt-1">
                           <span>Min: ${minRaise}</span>
@@ -534,7 +534,7 @@ export function PokerTable() {
                           setShowRaisePanel(false);
                         }}
                         disabled={loading || raiseAmount < minRaise || raiseAmount > maxRaise}
-                        className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg text-lg disabled:opacity-50"
+                        className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-bold py-4 px-6 rounded-lg text-lg disabled:opacity-50"
                       >
                         Confirm Raise ${raiseAmount}
                       </button>

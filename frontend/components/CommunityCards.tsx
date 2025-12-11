@@ -26,7 +26,7 @@ export function CommunityCards({ cards, gameState }: CommunityCardsProps) {
       {/* Stage Label */}
       {stageLabel && (
         <motion.div
-          className="text-yellow-400 font-bold text-sm mb-2 tracking-wider"
+          className="text-[#FCD34D] font-bold text-base mb-2 tracking-wider"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
@@ -37,7 +37,7 @@ export function CommunityCards({ cards, gameState }: CommunityCardsProps) {
 
       {/* Community Cards Container */}
       <motion.div
-        className="bg-green-900/60 backdrop-blur-sm px-6 py-4 rounded-xl border-2 border-green-700/50 shadow-2xl"
+        className="bg-[#0A4D26]/80 backdrop-blur-sm px-6 py-4 rounded-xl border-2 border-[#1F7A47]/60 shadow-2xl"
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
