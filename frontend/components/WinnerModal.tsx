@@ -16,25 +16,25 @@ export function WinnerModal({ isOpen, winner, amount, onClose }: WinnerModalProp
   return (
     <AnimatePresence>
       {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-75 z-40"
-            onClick={onClose}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
+        >
+          {/* Backdrop - inside container, allows clicks to pass through */}
+          <div
+            className="absolute inset-0 bg-black bg-opacity-75 pointer-events-none"
           />
 
-          {/* Modal */}
+          {/* Modal content */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 50 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 50 }}
+            initial={{ scale: 0.8, y: 50 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.8, y: 50 }}
             transition={{ type: 'spring', damping: 20 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-2xl shadow-2xl p-8 max-w-md w-full border-4 border-yellow-300 pointer-events-auto relative z-10"
           >
-            <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-2xl shadow-2xl p-8 max-w-md w-full border-4 border-yellow-300">
               {/* Trophy icon */}
               <div className="text-center mb-6">
                 <motion.div
@@ -94,19 +94,18 @@ export function WinnerModal({ isOpen, winner, amount, onClose }: WinnerModalProp
                 </motion.div>
               )}
 
-              {/* Close button */}
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                onClick={onClose}
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors"
-              >
-                Next Hand
-              </motion.button>
-            </div>
+            {/* Close button */}
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              onClick={onClose}
+              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors"
+            >
+              Next Hand
+            </motion.button>
           </motion.div>
-        </>
+        </motion.div>
       )}
     </AnimatePresence>
   );

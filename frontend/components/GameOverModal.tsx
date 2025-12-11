@@ -13,17 +13,17 @@ export function GameOverModal({ isOpen, handsPlayed, onNewGame }: GameOverModalP
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-black bg-opacity-80" />
+          {/* Backdrop - inside container, allows clicks to pass through */}
+          <div className="absolute inset-0 bg-black bg-opacity-80 pointer-events-none" />
 
           {/* Modal */}
           <motion.div
-            className="relative bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-8"
+            className="relative bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-8 pointer-events-auto z-10"
             initial={{ scale: 0.5, y: 100 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.5, y: 100 }}

@@ -15,20 +15,19 @@ export function AnalysisModal({ isOpen, analysis, onClose }: AnalysisModalProps)
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          {/* Backdrop */}
+          {/* Backdrop - inside container, allows clicks to pass through */}
           <div
-            className="absolute inset-0 bg-black bg-opacity-70"
-            onClick={onClose}
+            className="absolute inset-0 bg-black bg-opacity-70 pointer-events-none"
           />
 
           {/* Modal */}
           <motion.div
-            className="relative bg-gray-900 text-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto"
+            className="relative bg-gray-900 text-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto pointer-events-auto z-10"
             initial={{ scale: 0.9, y: 50 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, y: 50 }}
