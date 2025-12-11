@@ -226,6 +226,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
           connectionState: ConnectionState.CONNECTED,
           loading: false
         });
+
+        // Phase 7: Request state upon reconnection
+        // This ensures the UI shows current game state after network disruptions
+        const client = get().wsClient;
+        if (client) {
+          console.log('[Store] Connected - requesting current game state');
+          client.getState(get().showAiThinking);
+        }
       },
 
       onDisconnect: () => {
