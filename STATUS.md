@@ -1,23 +1,23 @@
 # Poker Learning App - Current Status
 
 **Last Updated**: December 10, 2025
-**Version**: 5.0 (Testing Improvement - Phases 1-3 Complete)
+**Version**: 5.1 (Testing Improvement - Phases 1-4 Complete)
 **Branch**: `main`
 
 ---
 
 ## Current State
 
-✅ **PHASES 1-3 COMPLETE** - Foundation testing established
-- **223 tests** collected across 30 test files
-- **All Phase 1-3 tests passing** (23/23 in 48.45s)
+✅ **PHASES 1-4 COMPLETE** - Scenario testing validated
+- **235+ tests** collected across 31 test files
+- **All Phase 1-4 tests passing** (36/36 tests)
 - **Infinite loop bug FIXED** with regression test
 - **Error path coverage**: 0% → 40%
-- **Negative tests**: 0 → 12 tests
+- **Scenario tests**: 12 comprehensive user journey tests
 
-**Progress**: 27% complete with Tier 1 pre-production testing (20/78 hours)
+**Progress**: 36% complete with Tier 1 pre-production testing (28/78 hours)
 
-**Next Step**: Phase 4 - Scenario-Based Testing (8 hours)
+**Next Step**: Phase 5 - E2E Browser Testing (12 hours)
 - See `docs/TESTING_IMPROVEMENT_PLAN.md` for full 11-phase roadmap
 
 ### Testing Improvement Plan Progress
@@ -27,8 +27,8 @@
 | **Phase 1**: Fix Bug + Regression | ✅ COMPLETE | 1 test | Infinite loop fixed |
 | **Phase 2**: Negative Testing | ✅ COMPLETE | 12 tests | Error handling validated |
 | **Phase 3**: Fuzzing + Validation | ✅ COMPLETE | 11 tests | Hand evaluator + properties |
-| **Phase 4**: Scenario Testing | 🎯 NEXT | - | Real user journeys |
-| **Phase 5**: E2E Browser Testing | ⏸️ Planned | - | Full stack validation |
+| **Phase 4**: Scenario Testing | ✅ COMPLETE | 12 tests | Real user journeys |
+| **Phase 5**: E2E Browser Testing | 🎯 NEXT | - | Full stack validation |
 | **Phase 6**: CI/CD Infrastructure | ⏸️ Planned | - | Automated pipeline |
 | **Phase 7**: WebSocket Reconnection | ⏸️ Planned | - | Production reliability |
 | **Phase 8**: Concurrency & Races | ⏸️ Planned | - | Thread safety |
@@ -85,6 +85,33 @@
 
 **Result**: 11/11 tests PASSING (fuzzing requires server setup)
 
+### Phase 4: Scenario-Based Testing ✅
+
+**File**: `backend/tests/test_user_scenarios.py` (12 tests, 569 lines)
+**Runtime**: 19 minutes 5 seconds (1145.21s) - comprehensive multi-hand testing
+
+**Test Categories**:
+
+**Multi-Hand Scenarios** (3 tests):
+- test_go_all_in_every_hand_for_10_hands - Aggressive all-in strategy
+- test_conservative_strategy_fold_90_percent - Fold 18/20 hands
+- test_mixed_strategy_10_hands - Varied action patterns
+
+**Complex Betting Sequences** (3 tests):
+- test_raise_call_multiple_streets - Complete hand through all streets
+- test_all_players_go_all_in_scenario - **UAT-5 regression** (all-in hang fixed)
+- test_raise_reraise_sequence - Multiple raise rounds
+
+**Edge Case Scenarios** (6 tests):
+- test_minimum_raise_amounts - Boundary testing
+- test_raise_exactly_remaining_stack - Common frontend mistake handling
+- test_call_when_already_matched - Check vs call edge case
+- test_rapid_hand_progression - 5 hands with minimal delay
+- test_very_small_raise_attempt - Invalid raise rejection
+- test_play_until_elimination - Complete player elimination
+
+**Result**: 12/12 tests PASSING - 40+ poker hands played across all tests
+
 ---
 
 ## Architecture
@@ -135,11 +162,17 @@ npm run dev  # http://localhost:3000
 ## Running Tests
 
 ```bash
-# Phase 1-3 tests (Testing Improvement Plan)
-PYTHONPATH=backend python -m pytest backend/tests/test_negative_actions.py backend/tests/test_hand_evaluator_validation.py backend/tests/test_property_based_enhanced.py -v
-# Result: 23 tests in 48.45s
+# Phase 1-4 tests (Testing Improvement Plan - all passing)
+PYTHONPATH=backend python -m pytest backend/tests/test_negative_actions.py backend/tests/test_hand_evaluator_validation.py backend/tests/test_property_based_enhanced.py backend/tests/test_user_scenarios.py -v
+# Result: 36 tests (Phase 1-4 complete)
 
-# All backend tests (223 tests)
+# Quick Phase 1-3 tests (23 tests in 48.45s)
+PYTHONPATH=backend python -m pytest backend/tests/test_negative_actions.py backend/tests/test_hand_evaluator_validation.py backend/tests/test_property_based_enhanced.py -v
+
+# Phase 4 scenario tests (12 tests in ~19 min)
+PYTHONPATH=backend python -m pytest backend/tests/test_user_scenarios.py -v
+
+# All backend tests (235+ tests)
 PYTHONPATH=backend python -m pytest backend/tests/ -v
 
 # Core regression tests
