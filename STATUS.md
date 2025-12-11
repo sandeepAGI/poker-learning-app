@@ -9,14 +9,17 @@
 ## Current State
 
 ✅ **PHASES 1-7 COMPLETE** - Production-ready reconnection
-- **248+ tests** collected across 32 test files
-- **All Phase 1-7 tests passing** (59/59 tests)
+- **256+ tests** collected across 33 test files
+- **All Phase 1-7 tests passing** (67/67 tests)
+  - Phase 1-7 core: 59 tests
+  - Phase 7+ browser refresh: 8 E2E tests
 - **Automated CI/CD**: Pre-commit hooks + GitHub Actions
 - **Coverage tracking**: pytest-cov with HTML reports
 - **Infinite loop bug FIXED** with regression test
 - **Error path coverage**: 0% → 40%
 - **UAT regression tests**: UAT-5 (all-in hang), UAT-11 (analysis modal)
 - **WebSocket reconnection**: Fully tested and production-ready
+- **Browser refresh recovery**: Fully tested with localStorage + URL routing
 
 **Progress**: 79% complete with Tier 1 pre-production testing (62/78 hours)
 
@@ -31,7 +34,7 @@
 | **Phase 2**: Negative Testing | ✅ COMPLETE | 12 tests | Error handling validated |
 | **Phase 3**: Fuzzing + Validation | ✅ COMPLETE | 11 tests | Hand evaluator + properties |
 | **Phase 4**: Scenario Testing | ✅ COMPLETE | 12 tests | Real user journeys |
-| **Phase 5**: E2E Browser Testing | ✅ COMPLETE | 13 tests | Full stack validated |
+| **Phase 5**: E2E Browser Testing | ✅ COMPLETE | 21 tests | Full stack + refresh recovery |
 | **Phase 6**: CI/CD Infrastructure | ✅ COMPLETE | Automated | Pre-commit + GitHub Actions |
 | **Phase 7**: WebSocket Reconnection | ✅ COMPLETE | 10 tests | Production reliability |
 | **Phase 8**: Concurrency & Races | 🎯 NEXT | - | Thread safety |
@@ -117,8 +120,16 @@
 
 ### Phase 5: E2E Browser Testing ✅
 
-**File**: `tests/e2e/test_critical_flows.py` (13 tests, 640 lines)
-**Runtime**: 2 minutes 22 seconds (142.91s)
+**Files**:
+- `tests/e2e/test_critical_flows.py` (13 tests, 640 lines)
+- `tests/e2e/test_browser_refresh.py` (8 tests, 495 lines) - Phase 7+ enhancement
+- `tests/e2e/conftest.py` - Shared Playwright fixtures
+
+**Runtime**:
+- Critical flows: 2 minutes 22 seconds (142.91s)
+- Browser refresh: 23.51 seconds
+- Total: ~3 minutes for 21 E2E tests
+
 **Framework**: Playwright Python (sync_api)
 
 **Test Categories**:
@@ -144,14 +155,25 @@
 - test_game_creation_load_time - <3s benchmark (actual: 0.10-0.14s)
 - test_ai_turn_response_time - <15s benchmark (actual: <1s after fold)
 
+**Browser Refresh Recovery** (8 tests - Phase 7+ enhancement):
+- test_browser_refresh_preserves_game_state - F5 refresh maintains state
+- test_direct_url_navigation_reconnects - URL-based reconnection
+- test_invalid_game_id_shows_error - Error handling for invalid IDs
+- test_localStorage_persists_game_id - localStorage verification
+- test_quit_game_clears_localStorage - Cleanup on quit
+- test_refresh_at_showdown_preserves_state - Showdown state preservation
+- test_multiple_refresh_cycles - Multiple refresh robustness
+- test_url_navigation_after_quit_fails - Post-quit navigation
+
 **Key Implementation Details**:
 - Browser automation via Playwright (chromium)
 - JavaScript evaluation for modal-resistant button clicks
 - Screenshot capture for visual regression baselines
 - Wait helpers for poker hand completion (up to 120s for full hands)
 - Headless mode support via `HEADLESS` environment variable
+- Shared Playwright fixtures via conftest.py
 
-**Result**: 13/13 tests PASSING - Complete stack validation through real browser
+**Result**: 21/21 tests PASSING (13 critical flows + 8 browser refresh) - Complete stack validation through real browser
 
 ### Phase 6: CI/CD Infrastructure ✅
 
@@ -268,6 +290,17 @@
 **User Experience**:
 - **Before**: Browser refresh → ❌ Lose game, start new game
 - **After**: Browser refresh → ✅ Automatically reconnect to same game
+
+**Automated Testing** (8 Playwright tests):
+- ✅ `test_browser_refresh_preserves_game_state` - F5 refresh maintains state
+- ✅ `test_direct_url_navigation_reconnects` - URL-based reconnection
+- ✅ `test_invalid_game_id_shows_error` - Error handling for invalid IDs
+- ✅ `test_localStorage_persists_game_id` - localStorage verification
+- ✅ `test_quit_game_clears_localStorage` - Cleanup on quit
+- ✅ `test_refresh_at_showdown_preserves_state` - Showdown state preservation
+- ✅ `test_multiple_refresh_cycles` - Multiple refresh robustness
+- ✅ `test_url_navigation_after_quit_fails` - Post-quit navigation
+- **Test File**: `tests/e2e/test_browser_refresh.py` (8/8 passing in 23.51s)
 
 **Documentation**: See `docs/BROWSER_REFRESH_TESTING.md` for manual testing guide
 
