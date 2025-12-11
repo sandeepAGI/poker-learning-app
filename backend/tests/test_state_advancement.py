@@ -86,7 +86,11 @@ class TestAdvanceStateCore:
         game = PokerGame("TestPlayer", ai_count=1)
         game.start_new_hand(process_ai=False)
         game.current_state = GameState.RIVER
-        game.community_cards = ["As", "Ks", "Qs", "Js", "Ts"]
+        # Set community cards AND hole cards to avoid conflicts
+        game.community_cards = ["2h", "3h", "4h", "5h", "6h"]
+        # Manually set hole cards to avoid duplicates
+        game.players[0].hole_cards = ["7h", "8h"]  # Human
+        game.players[1].hole_cards = ["9h", "Th"]  # AI
 
         for player in game.players:
             player.has_acted = True
