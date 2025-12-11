@@ -264,26 +264,61 @@ export function PokerTable() {
         </motion.div>
       )}
 
-      {/* Main table */}
-      <div className="flex-1 flex flex-col">
-        {/* AI Players (top row) */}
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          {gameState.players
-            .filter((p) => !p.is_human)
-            .map((player) => (
-              <PlayerSeat
-                key={player.player_id}
-                player={player}
-                isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === player.player_id}
-                aiDecision={gameState.last_ai_decisions[player.player_id]}
-                showAiThinking={showAiThinking}
-                isShowdown={isShowdown}
-              />
-            ))}
-        </div>
+      {/* Main table - Circular Layout */}
+      <div className="flex-1 relative">
+        {/* Extract opponents into array for easier positioning */}
+        {(() => {
+          const opponents = gameState.players.filter((p) => !p.is_human);
 
-        {/* Community cards and pot (center) */}
-        <div className="flex-1 flex flex-col items-center justify-center">
+          return (
+            <>
+              {/* Opponent 1 - Top Center */}
+              {opponents[0] && (
+                <div className="absolute top-8 left-1/2 -translate-x-1/2">
+                  <PlayerSeat
+                    key={opponents[0].player_id}
+                    player={opponents[0]}
+                    isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === opponents[0].player_id}
+                    aiDecision={gameState.last_ai_decisions[opponents[0].player_id]}
+                    showAiThinking={showAiThinking}
+                    isShowdown={isShowdown}
+                  />
+                </div>
+              )}
+
+              {/* Opponent 2 - Left Side */}
+              {opponents[1] && (
+                <div className="absolute top-1/3 left-8">
+                  <PlayerSeat
+                    key={opponents[1].player_id}
+                    player={opponents[1]}
+                    isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === opponents[1].player_id}
+                    aiDecision={gameState.last_ai_decisions[opponents[1].player_id]}
+                    showAiThinking={showAiThinking}
+                    isShowdown={isShowdown}
+                  />
+                </div>
+              )}
+
+              {/* Opponent 3 - Right Side */}
+              {opponents[2] && (
+                <div className="absolute top-1/3 right-8">
+                  <PlayerSeat
+                    key={opponents[2].player_id}
+                    player={opponents[2]}
+                    isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === opponents[2].player_id}
+                    aiDecision={gameState.last_ai_decisions[opponents[2].player_id]}
+                    showAiThinking={showAiThinking}
+                    isShowdown={isShowdown}
+                  />
+                </div>
+              )}
+            </>
+          );
+        })()}
+
+        {/* Center Area - Community Cards and Pot */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
           {/* Pot */}
           <motion.div
             className="bg-yellow-500 text-white px-6 py-3 rounded-full text-2xl font-bold mb-4 shadow-lg"
@@ -310,8 +345,8 @@ export function PokerTable() {
           )}
         </div>
 
-        {/* Human player (bottom) */}
-        <div className="mb-4">
+        {/* Human Player - Bottom Center */}
+        <div className="absolute bottom-32 left-1/2 -translate-x-1/2">
           <PlayerSeat
             player={gameState.human_player}
             isCurrentTurn={isMyTurn}
@@ -320,8 +355,9 @@ export function PokerTable() {
           />
         </div>
 
-        {/* Action buttons */}
-        <div className="bg-gray-900 p-4 rounded-lg">
+        {/* Action buttons - Absolute positioned at bottom */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4">
+          <div className="bg-gray-900 p-4 rounded-lg">
           {/* Feature: Game over when eliminated - don't show controls */}
           {isEliminated ? (
             <div className="text-center py-4">
@@ -476,6 +512,7 @@ export function PokerTable() {
               {loading ? 'Processing...' : isAllIn ? "All-In! Waiting for hand to complete..." : "Waiting for other players..."}
             </div>
           )}
+          </div>
         </div>
       </div>
 
