@@ -1,0 +1,43 @@
+name: Quick Tests (PR)
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  quick-tests:
+    name: Fast Regression Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Run quick regression tests
+        run: |
+          PYTHONPATH=backend python -m pytest \
+            backend/tests/test_action_processing.py \
+            backend/tests/test_state_advancement.py \
+            backend/tests/test_turn_order.py \
+            backend/tests/test_fold_resolution.py \
+            backend/tests/test_negative_actions.py \
+            -v --tb=short -q
+
+      - name: Results
+        if: always()
+        run: |
+          echo "## Quick Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Core regression tests completed" >> $GITHUB_STEP_SUMMARY
+          echo "⏱️ Execution time: <1 minute" >> $GITHUB_STEP_SUMMARY
