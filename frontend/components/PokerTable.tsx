@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Card } from './Card';
 import { PlayerSeat } from './PlayerSeat';
 import { WinnerModal } from './WinnerModal';
@@ -50,6 +50,7 @@ export function PokerTable() {
   const [showWinnerModal, setShowWinnerModal] = useState(false);
   const [showAnalysisModal, setShowAnalysisModal] = useState(false);
   const [showGameOverModal, setShowGameOverModal] = useState(false);
+  const [showRaisePanel, setShowRaisePanel] = useState(false);
 
   // Check if player is all-in (has chips invested but stack = 0)
   const isAllIn = gameState.human_player.all_in ||
@@ -102,8 +103,14 @@ export function PokerTable() {
 
   // UX Phase 2: Handle analysis button click
   const handleAnalysisClick = async () => {
-    await getHandAnalysis();
-    // Only show modal if analysis was successfully fetched (checked in next useEffect)
+    try {
+      await getHandAnalysis();
+      // Only show modal if analysis was successfully fetched (checked in next useEffect)
+    } catch (error) {
+      // Error is already handled in store.ts (sets error state)
+      // This catch prevents Next.js error overlay in development mode
+      console.log('Analysis fetch handled by store');
+    }
   };
 
   // Show analysis modal when analysis is available (and not null)
@@ -340,112 +347,129 @@ export function PokerTable() {
               {loading ? 'Loading...' : 'Next Hand'}
             </button>
           ) : isMyTurn ? (
-            <div className="flex gap-4">
-              {/* Fold */}
-              <button
-                onClick={() => submitAction('fold')}
-                disabled={loading}
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-6 rounded-lg disabled:opacity-50"
-              >
-                Fold
-              </button>
+            <div className="flex flex-col gap-3">
+              {/* Primary Action Buttons - Simplified 3-button layout */}
+              <div className="flex gap-4">
+                {/* Fold */}
+                <button
+                  onClick={() => submitAction('fold')}
+                  disabled={loading}
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-5 px-6 rounded-lg text-xl disabled:opacity-50 transition-colors"
+                >
+                  Fold
+                </button>
 
-              {/* Call - Bug Fix #1: Use validated callAmount */}
-              <button
-                onClick={() => submitAction('call')}
-                disabled={loading || !canCall}
-                className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-lg disabled:opacity-50"
-                title={!canCall ? 'Not enough chips to call' : ''}
-              >
-                Call ${callAmount}
-              </button>
+                {/* Call */}
+                <button
+                  onClick={() => submitAction('call')}
+                  disabled={loading || !canCall}
+                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-5 px-6 rounded-lg text-xl disabled:opacity-50 transition-colors"
+                  title={!canCall ? 'Not enough chips to call' : ''}
+                >
+                  Call ${callAmount}
+                </button>
 
-              {/* Raise - Improved UX with slider + quick buttons */}
-              {canRaise ? (
-                <div className="flex-1 flex flex-col gap-2">
-                  {/* Quick bet buttons */}
-                  <div className="flex gap-1 justify-center">
-                    <button
-                      onClick={() => handleRaiseAmountChange(minRaise)}
-                      className="bg-gray-700 hover:bg-gray-600 text-white text-xs py-1 px-2 rounded"
-                    >
-                      Min
-                    </button>
-                    <button
-                      onClick={() => handleRaiseAmountChange(Math.floor(gameState.pot * 0.5))}
-                      className="bg-gray-700 hover:bg-gray-600 text-white text-xs py-1 px-2 rounded"
-                    >
-                      ½ Pot
-                    </button>
-                    <button
-                      onClick={() => handleRaiseAmountChange(gameState.pot)}
-                      className="bg-gray-700 hover:bg-gray-600 text-white text-xs py-1 px-2 rounded"
-                    >
-                      Pot
-                    </button>
-                    <button
-                      onClick={() => handleRaiseAmountChange(gameState.pot * 2)}
-                      className="bg-gray-700 hover:bg-gray-600 text-white text-xs py-1 px-2 rounded"
-                    >
-                      2x Pot
-                    </button>
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="flex-1 flex flex-col">
-                      <label className="text-white text-sm mb-1 font-semibold">Raise Amount:</label>
-                      {/* Slider */}
-                      <input
-                        type="range"
-                        value={raiseAmount}
-                        onChange={(e) => handleRaiseAmountChange(parseInt(e.target.value))}
-                        min={minRaise}
-                        max={maxRaise}
-                        step={gameState.big_blind || 10}
-                        disabled={loading}
-                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500"
-                      />
-                      {/* Number input for precise amounts */}
-                      <input
-                        type="number"
-                        value={raiseAmount}
-                        onChange={(e) => handleRaiseAmountChange(parseInt(e.target.value) || minRaise)}
-                        min={minRaise}
-                        max={maxRaise}
-                        disabled={loading}
-                        className="w-full mt-2 px-4 py-3 rounded-lg bg-gray-900 text-white text-xl font-bold border-2 border-green-400 focus:border-green-300 focus:outline-none text-center placeholder-gray-400 disabled:opacity-50"
-                        placeholder={`Min $${minRaise}`}
-                      />
-                      <div className="text-white text-xs mt-1 text-center">
-                        Min: ${minRaise} | Max: ${maxRaise}
+                {/* Raise - Opens expandable panel */}
+                {canRaise ? (
+                  <button
+                    onClick={() => setShowRaisePanel(!showRaisePanel)}
+                    disabled={loading}
+                    className={`flex-1 ${showRaisePanel ? 'bg-green-600' : 'bg-green-500'} hover:bg-green-600 text-white font-bold py-5 px-6 rounded-lg text-xl disabled:opacity-50 transition-colors`}
+                  >
+                    Raise {showRaisePanel ? '▲' : '▼'}
+                  </button>
+                ) : (
+                  <button
+                    disabled
+                    className="flex-1 bg-gray-700 text-gray-500 font-bold py-5 px-6 rounded-lg text-xl opacity-50 cursor-not-allowed"
+                    title={gameState.human_player.stack <= callAmount ? 'Not enough chips to raise' : 'Raise not available'}
+                  >
+                    Raise
+                  </button>
+                )}
+              </div>
+
+              {/* Expandable Raise Panel */}
+              <AnimatePresence>
+                {showRaisePanel && canRaise && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="bg-gray-800 rounded-lg p-4 space-y-4">
+                      {/* Quick bet buttons */}
+                      <div className="flex gap-2 justify-center flex-wrap">
+                        <button
+                          onClick={() => handleRaiseAmountChange(minRaise)}
+                          className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                        >
+                          Min ${minRaise}
+                        </button>
+                        <button
+                          onClick={() => handleRaiseAmountChange(Math.floor(gameState.pot * 0.5))}
+                          className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                        >
+                          ½ Pot ${Math.floor(gameState.pot * 0.5)}
+                        </button>
+                        <button
+                          onClick={() => handleRaiseAmountChange(gameState.pot)}
+                          className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                        >
+                          Pot ${gameState.pot}
+                        </button>
+                        <button
+                          onClick={() => handleRaiseAmountChange(gameState.pot * 2)}
+                          className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded"
+                        >
+                          2x Pot ${gameState.pot * 2}
+                        </button>
+                        <button
+                          onClick={handleAllIn}
+                          className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded"
+                        >
+                          All-In ${maxRaise}
+                        </button>
                       </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      {/* All-In button */}
+
+                      {/* Slider */}
+                      <div>
+                        <label className="text-white text-sm font-semibold mb-2 block">
+                          Raise Amount: ${raiseAmount}
+                        </label>
+                        <input
+                          type="range"
+                          value={raiseAmount}
+                          onChange={(e) => handleRaiseAmountChange(parseInt(e.target.value))}
+                          min={minRaise}
+                          max={maxRaise}
+                          step={gameState.big_blind || 10}
+                          disabled={loading}
+                          className="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500"
+                        />
+                        <div className="flex justify-between text-white text-xs mt-1">
+                          <span>Min: ${minRaise}</span>
+                          <span>Max: ${maxRaise}</span>
+                        </div>
+                      </div>
+
+                      {/* Confirm Raise Button */}
                       <button
-                        onClick={handleAllIn}
-                        disabled={loading}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded-lg disabled:opacity-50 whitespace-nowrap text-sm"
-                        title="Go all-in with your entire stack"
-                      >
-                        All-In ${maxRaise}
-                      </button>
-                      <button
-                        onClick={() => submitAction('raise', raiseAmount)}
+                        onClick={() => {
+                          submitAction('raise', raiseAmount);
+                          setShowRaisePanel(false);
+                        }}
                         disabled={loading || raiseAmount < minRaise || raiseAmount > maxRaise}
-                        className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg disabled:opacity-50"
+                        className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-lg text-lg disabled:opacity-50"
                       >
-                        Raise ${raiseAmount}
+                        Confirm Raise ${raiseAmount}
                       </button>
                     </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex-1 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 text-sm">
-                  {gameState.human_player.stack <= callAmount
-                    ? 'Call or fold only (not enough chips to raise)'
-                    : 'Raise not available'}
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           ) : (
             <div className="text-white text-center py-4">
