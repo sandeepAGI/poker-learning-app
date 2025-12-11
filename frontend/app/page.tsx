@@ -1,14 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PokerTable } from '../components/PokerTable';
 import { useGameStore } from '../lib/store';
 import { motion } from 'framer-motion';
 
 export default function Home() {
-  const { gameState, createGame, loading } = useGameStore();
+  const { gameState, createGame, loading, initializeFromStorage } = useGameStore();
   const [playerName, setPlayerName] = useState('Player');
   const [aiCount, setAiCount] = useState(3);
+
+  // Phase 7+: Check for existing game on mount (browser refresh recovery)
+  useEffect(() => {
+    initializeFromStorage();
+  }, [initializeFromStorage]);
 
   if (!gameState) {
     return (

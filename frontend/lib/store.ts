@@ -37,6 +37,10 @@ interface GameStore {
   // WebSocket actions (Phase 1.4)
   connectWebSocket: (gameId: string) => void;
   disconnectWebSocket: () => void;
+
+  // Browser refresh recovery (Phase 7 enhancement)
+  reconnectToGame: (gameId: string) => Promise<boolean>;
+  initializeFromStorage: () => void;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -65,8 +69,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const gameId = response.game_id;
       set({ gameId });
 
+      // Phase 7+: Persist gameId to localStorage for browser refresh recovery
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('poker_game_id', gameId);
+        localStorage.setItem('poker_player_name', playerName);
+      }
+
       // Connect to WebSocket for real-time updates
       get().connectWebSocket(gameId);
+
+      // Phase 7+: Navigate to game-specific URL
+      if (typeof window !== 'undefined') {
+        window.history.pushState({}, '', `/game/${gameId}`);
+      }
     } catch (error: any) {
       console.error('Error creating game:', error);
       set({
@@ -175,6 +190,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // Disconnect WebSocket (Phase 1.4)
     get().disconnectWebSocket();
 
+    // Phase 7+: Clear localStorage on quit
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('poker_game_id');
+      localStorage.removeItem('poker_player_name');
+      // Navigate back to home
+      window.history.pushState({}, '', '/');
+    }
+
     set({
       gameId: null,
       gameState: null,
@@ -260,6 +283,60 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (wsClient) {
       wsClient.disconnect();
       set({ wsClient: null, connectionState: ConnectionState.DISCONNECTED });
+    }
+  },
+
+  // Phase 7+: Reconnect to existing game (browser refresh recovery)
+  reconnectToGame: async (gameId: string): Promise<boolean> => {
+    console.log(`[Store] Attempting to reconnect to game ${gameId}`);
+    set({ loading: true, error: null });
+
+    try {
+      // Verify game still exists via REST API
+      const response = await pokerApi.getGameState(gameId);
+
+      if (response) {
+        console.log('[Store] Game found! Reconnecting...');
+        set({ gameId, gameState: response, loading: false });
+
+        // Connect to WebSocket
+        get().connectWebSocket(gameId);
+
+        return true;
+      } else {
+        console.log('[Store] Game not found');
+        // Game doesn't exist anymore, clear localStorage
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('poker_game_id');
+          localStorage.removeItem('poker_player_name');
+        }
+        set({ loading: false, error: 'Game session expired. Please start a new game.' });
+        return false;
+      }
+    } catch (error: any) {
+      console.error('[Store] Error reconnecting to game:', error);
+      // Clear localStorage on error
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('poker_game_id');
+        localStorage.removeItem('poker_player_name');
+      }
+      set({ loading: false, error: 'Failed to reconnect to game. Please start a new game.' });
+      return false;
+    }
+  },
+
+  // Phase 7+: Initialize from localStorage on app load
+  initializeFromStorage: () => {
+    if (typeof window === 'undefined') return;
+
+    const savedGameId = localStorage.getItem('poker_game_id');
+
+    if (savedGameId) {
+      console.log(`[Store] Found saved game ID: ${savedGameId}`);
+      // Attempt to reconnect
+      get().reconnectToGame(savedGameId);
+    } else {
+      console.log('[Store] No saved game found');
     }
   },
 }));
