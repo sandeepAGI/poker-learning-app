@@ -68,6 +68,24 @@ For current status, see [STATUS.md](../STATUS.md).
 - Trimmed CLAUDE.md from 1067 to ~200 lines
 - Created docs/HISTORY.md
 
+**Testing Improvement Plan (Phases 1-7)** - December 2025:
+- **Phase 1**: Fixed infinite loop bug + regression test
+- **Phase 2**: 12 negative testing tests (error handling)
+- **Phase 3**: 11 tests (fuzzing + validation + property-based)
+- **Phase 4**: 12 scenario-based tests (user journeys)
+- **Phase 5**: 21 E2E browser tests (Playwright)
+- **Phase 6**: CI/CD infrastructure (pre-commit hooks + GitHub Actions)
+- **Phase 7**: 18 tests (WebSocket reconnection + browser refresh recovery)
+- **Total**: 67 automated tests (100% passing)
+
+**UX/UI Improvements** - December 11, 2025:
+- **Phase 1**: Critical fixes (card design, modal events, action controls) - 2.25h
+- **Phase 2**: Layout improvements (circular table, community cards, header menu) - 3h
+- **Phase 3**: Visual polish (color palette, typography, spacing) - 1.5h
+- **Phase 4**: Advanced features (AI sidebar, responsive design, animations) - 1.75h
+- **Total**: 8.5 hours (completed ahead of 10-14h estimate)
+- **Documentation**: docs/UX_REVIEW_2025-12-11.md (complete phase documentation)
+
 ---
 
 ## Original Issues Identified

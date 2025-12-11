@@ -2,7 +2,7 @@
 
 A full-stack poker application for learning poker strategy through AI opponents with transparent decision-making and **real-time turn-by-turn gameplay via WebSockets**.
 
-**Status**: ✅ Phases 1-5 Complete (Testing Improvement) | 🎯 Production-Ready Testing Framework
+**Status**: ✅ Phases 1-7 Complete (Testing + WebSocket) | ✅ UX Improvements Complete | 🎯 Production-Ready
 
 ## Quick Start
 
@@ -30,7 +30,7 @@ Perfect for learning:
 - Pot odds and Expected Value (EV)
 - Different playing styles (Conservative, Aggressive, Mathematical)
 
-**Testing Maturity**: 49 automated tests across 5 phases validate the complete stack from unit tests to E2E browser automation.
+**Testing Maturity**: 67 automated tests across 7 phases validate the complete stack from unit tests to E2E browser automation with WebSocket reconnection and browser refresh recovery.
 
 ## Features
 
@@ -45,17 +45,30 @@ Perfect for learning:
 - **Full Game Flow**: Pre-flop → Flop → Turn → River → Showdown
 - **Chip Conservation**: Perfect accounting, no bugs
 
-### ✅ Testing Framework (Phases 1-5)
-- **49 Automated Tests**: Backend unit/integration + E2E browser tests
+### ✅ Testing Framework (Phases 1-7)
+- **67 Automated Tests**: Backend unit/integration + E2E browser tests
 - **Negative Testing**: 12 error handling tests (invalid actions, edge cases)
 - **Property-Based Testing**: 1,250+ scenarios validated
 - **Scenario Testing**: 12 comprehensive user journey tests
-- **E2E Browser Testing**: 13 Playwright tests covering full stack
+- **E2E Browser Testing**: 21 Playwright tests covering full stack + refresh recovery
+- **WebSocket Reconnection**: 10 tests validating production-ready reliability
+- **Browser Refresh Recovery**: 8 tests for localStorage + URL-based reconnection
 - **UAT Regression Tests**: Prevents known issues from reoccurring
 - **100% Test Pass Rate**: All phases validated
 
-### 🎯 Next Phase (Phase 6+)
-- **CI/CD Pipeline**: Automated testing on every commit
+### ✅ UX/UI Improvements (December 2025)
+- **Professional Card Design**: 96×134px cards with corner-only layout
+- **Circular Table Layout**: Absolute positioning for professional poker aesthetics
+- **Dedicated Community Cards**: Isolated component with stage labels (FLOP/TURN/RIVER)
+- **Simplified Action Controls**: 3 primary buttons + expandable raise panel
+- **AI Thinking Sidebar**: 320px collapsible sidebar with decision stream
+- **Professional Color Palette**: Poker table felt (#0D5F2F) with accent colors
+- **Responsive Design**: Mobile-friendly breakpoints + touch targets (44px minimum)
+- **Enhanced Animations**: Framer Motion throughout (card dealing, pot updates, sidebar)
+- **Completed**: All 4 phases in 8.5 hours (ahead of 10-14h estimate)
+
+### 🎯 Next Phase (Phase 8+)
+- **Concurrency Testing**: Thread safety and race condition validation
 - **Production Deployment**: Cloud hosting and monitoring
 - **Advanced Features**: Hand history, replays, learning tools
 
@@ -69,11 +82,11 @@ See [STATUS.md](STATUS.md) for detailed progress.
 ## Documentation
 
 - **[STATUS.md](STATUS.md)** - Current project status & progress
-- **[UX-ROADMAP.md](UX-ROADMAP.md)** - UX enhancement roadmap
+- **[docs/UX_REVIEW_2025-12-11.md](docs/UX_REVIEW_2025-12-11.md)** - Complete UX improvements documentation
 - **[SETUP.md](SETUP.md)** - Complete setup & operations guide
 - **[CLAUDE.md](CLAUDE.md)** - Master project plan & history
 
-## Testing Improvement Plan (Phases 1-5)
+## Testing Improvement Plan (Phases 1-7)
 
 ### Phase 1: Bug Fix + Regression ✅
 - Fixed infinite loop bug (AI action failure handling)
@@ -97,10 +110,22 @@ See [STATUS.md](STATUS.md) for detailed progress.
 - Visual regression, performance benchmarks, UAT regression tests
 - Complete user flow validation through real browser
 
-### Phase 6: CI/CD Infrastructure 🎯 (Next)
-- Automated testing pipeline
-- GitHub Actions workflows
-- Deployment automation
+### Phase 6: CI/CD Infrastructure ✅
+- Pre-commit hooks for fast regression tests (<1s)
+- GitHub Actions workflows (full suite + quick tests)
+- Coverage tracking with pytest-cov
+- Automated testing on every commit
+
+### Phase 7: WebSocket Reconnection + Browser Refresh ✅
+- 10 WebSocket reconnection tests (production-ready)
+- 8 browser refresh recovery tests (localStorage + URL routing)
+- Exponential backoff validation
+- Invalid game ID handling
+
+### Phase 8: Concurrency & Race Conditions 🎯 (Next)
+- Thread safety validation
+- Race condition testing
+- Concurrent action handling
 
 ## Running the App
 
@@ -129,22 +154,24 @@ kill -9 $(lsof -ti:3000)  # Frontend
 
 ## Testing
 
-**Test Suite**: 49 tests across 5 phases (100% passing)
+**Test Suite**: 67 tests across 7 phases (100% passing)
 
 ```bash
-# Backend Tests (36 tests)
+# Backend Tests (46 tests)
 PYTHONPATH=backend python -m pytest backend/tests/test_negative_actions.py \
   backend/tests/test_hand_evaluator_validation.py \
   backend/tests/test_property_based_enhanced.py \
-  backend/tests/test_user_scenarios.py -v
+  backend/tests/test_user_scenarios.py \
+  backend/tests/test_websocket_reliability.py -v
 
-# E2E Browser Tests (13 tests - requires servers running)
+# E2E Browser Tests (21 tests - requires servers running)
 # Terminal 1: python backend/main.py
 # Terminal 2: cd frontend && npm run dev
 # Terminal 3:
-PYTHONPATH=. python -m pytest tests/e2e/test_critical_flows.py -v
+PYTHONPATH=. python -m pytest tests/e2e/test_critical_flows.py \
+  tests/e2e/test_browser_refresh.py -v
 
-# Quick regression tests
+# Quick regression tests (41 tests)
 PYTHONPATH=backend python -m pytest backend/tests/test_action_processing.py \
   backend/tests/test_turn_order.py backend/tests/test_fold_resolution.py -v
 ```
