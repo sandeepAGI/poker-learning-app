@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PokerTable } from '../../../components/PokerTable';
+import { AISidebar } from '../../../components/AISidebar';
 import { useGameStore } from '../../../lib/store';
 import { motion } from 'framer-motion';
+import type { AIDecision } from '../../../lib/types';
 
 /**
  * Dynamic Game Page - Phase 7+ Browser Refresh Recovery
@@ -15,12 +17,28 @@ import { motion } from 'framer-motion';
  * 3. Invalid game ID handling
  * 4. Automatic reconnection to existing games
  */
-export default function GamePage({ params }: { params: { gameId: string } }) {
+interface AIDecisionEntry {
+  playerName: string;
+  playerId: string;
+  decision: AIDecision;
+  timestamp: number;
+}
+
+export default function GamePage({ params }: { params: Promise<{ gameId: string }> }) {
   const router = useRouter();
-  const { gameState, loading, error, reconnectToGame } = useGameStore();
-  const gameId = params.gameId;
+  const { gameState, loading, error, reconnectToGame, showAiThinking } = useGameStore();
+  const [gameId, setGameId] = useState<string>('');
+  const [decisionHistory, setDecisionHistory] = useState<AIDecisionEntry[]>([]);
+
+  // Await params in Next.js 15
+  useEffect(() => {
+    params.then(p => setGameId(p.gameId));
+  }, [params]);
 
   useEffect(() => {
+    // Only attempt reconnection if gameId is set
+    if (!gameId) return;
+
     // Attempt to reconnect to the game
     const attemptReconnect = async () => {
       const success = await reconnectToGame(gameId);
@@ -38,6 +56,42 @@ export default function GamePage({ params }: { params: { gameId: string } }) {
       attemptReconnect();
     }
   }, [gameId, gameState, reconnectToGame, router]);
+
+  // Track AI decisions and build history
+  useEffect(() => {
+    if (!gameState) return;
+
+    // Clear history when starting a new hand
+    if (gameState.state === 'pre_flop' && decisionHistory.length > 0) {
+      setDecisionHistory([]);
+      return;
+    }
+
+    // Add new AI decisions to history
+    const newDecisions: AIDecisionEntry[] = [];
+    Object.entries(gameState.last_ai_decisions).forEach(([playerId, decision]) => {
+      // Check if this decision is already in history
+      const alreadyExists = decisionHistory.some(
+        entry => entry.playerId === playerId && entry.decision.reasoning === decision.reasoning
+      );
+
+      if (!alreadyExists) {
+        const player = gameState.players.find(p => p.player_id === playerId);
+        if (player && !player.is_human) {
+          newDecisions.push({
+            playerName: player.name,
+            playerId,
+            decision,
+            timestamp: Date.now()
+          });
+        }
+      }
+    });
+
+    if (newDecisions.length > 0) {
+      setDecisionHistory(prev => [...newDecisions, ...prev]);
+    }
+  }, [gameState, decisionHistory]);
 
   // Show error state if reconnection failed
   if (error) {
@@ -86,6 +140,13 @@ export default function GamePage({ params }: { params: { gameId: string } }) {
     );
   }
 
-  // Render the poker table once reconnected
-  return <PokerTable />;
+  // Render the poker table with AI sidebar once reconnected
+  return (
+    <div className="flex h-screen overflow-hidden">
+      <div className="flex-1 overflow-auto">
+        <PokerTable />
+      </div>
+      <AISidebar isOpen={showAiThinking} decisions={decisionHistory} />
+    </div>
+  );
 }

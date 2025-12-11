@@ -64,29 +64,7 @@ export function PlayerSeat({ player, isCurrentTurn, aiDecision, showAiThinking, 
         )}
       </div>
 
-      {/* UX Phase 1: AI Decision reasoning - only show when showAiThinking is true */}
-      {aiDecision && showAiThinking && aiDecision.reasoning && (
-        <motion.div
-          className="mt-3 p-2 bg-blue-50 border border-blue-200 rounded text-xs"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="font-semibold mb-1">
-            Action: {aiDecision.action.toUpperCase()}{' '}
-            {aiDecision.amount > 0 && `$${aiDecision.amount}`}
-          </div>
-          <div className="text-gray-700 italic">
-            "{aiDecision.reasoning}"
-          </div>
-          {aiDecision.spr !== undefined && aiDecision.pot_odds !== undefined && aiDecision.hand_strength !== undefined && (
-            <div className="mt-1 text-gray-500 text-[10px]">
-              SPR: {aiDecision.spr.toFixed(1)} | Pot Odds: {(aiDecision.pot_odds * 100).toFixed(0)}% |
-              Hand: {(aiDecision.hand_strength * 100).toFixed(0)}%
-            </div>
-          )}
-        </motion.div>
-      )}
+      {/* UX Phase 4: AI reasoning now shown in sidebar instead of inline */}
     </motion.div>
   );
 }
