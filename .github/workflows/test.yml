@@ -42,6 +42,12 @@ jobs:
             backend/tests/test_user_scenarios.py \
             -v --tb=short
 
+      - name: Run Phase 7 WebSocket reliability tests
+        run: |
+          PYTHONPATH=backend python -m pytest \
+            backend/tests/test_websocket_reliability.py \
+            -v --tb=short
+
       - name: Run core regression tests
         run: |
           PYTHONPATH=backend python -m pytest \
@@ -158,9 +164,16 @@ jobs:
           timeout 30 bash -c 'until curl -f http://localhost:3000/ > /dev/null 2>&1; do sleep 1; done'
           echo "✅ Both servers are ready"
 
-      - name: Run E2E tests
+      - name: Run E2E critical flows tests
         run: |
           PYTHONPATH=. HEADLESS=true python -m pytest tests/e2e/test_critical_flows.py -v --tb=short
+        env:
+          FRONTEND_URL: http://localhost:3000
+          BACKEND_URL: http://localhost:8000
+
+      - name: Run E2E browser refresh tests
+        run: |
+          PYTHONPATH=. HEADLESS=true python -m pytest tests/e2e/test_browser_refresh.py -v --tb=short
         env:
           FRONTEND_URL: http://localhost:3000
           BACKEND_URL: http://localhost:8000
@@ -204,4 +217,6 @@ jobs:
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Total: 49 tests across 5 phases**" >> $GITHUB_STEP_SUMMARY
+          echo "**Total: 67 tests across 7 phases**" >> $GITHUB_STEP_SUMMARY
+          echo "- Backend: 46 tests (Phases 1-4, 7)" >> $GITHUB_STEP_SUMMARY
+          echo "- E2E: 21 tests (Phase 5 + browser refresh)" >> $GITHUB_STEP_SUMMARY
