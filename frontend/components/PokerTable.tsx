@@ -52,6 +52,7 @@ export function PokerTable() {
   const [showAnalysisModal, setShowAnalysisModal] = useState(false);
   const [showGameOverModal, setShowGameOverModal] = useState(false);
   const [showRaisePanel, setShowRaisePanel] = useState(false);
+  const [showSettingsMenu, setShowSettingsMenu] = useState(false);
 
   // Check if player is all-in (has chips invested but stack = 0)
   const isAllIn = gameState.human_player.all_in ||
@@ -151,6 +152,21 @@ export function PokerTable() {
     console.log('[PokerTable] stepMode changed to:', stepMode);
   }, [stepMode]);
 
+  // Phase 2C: Close settings menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showSettingsMenu) {
+        const target = event.target as HTMLElement;
+        if (!target.closest('.settings-menu-container')) {
+          setShowSettingsMenu(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showSettingsMenu]);
+
   return (
     <div className="flex flex-col h-screen bg-green-800 p-4">
       {/* Header */}
@@ -177,44 +193,8 @@ export function PokerTable() {
           </div>
         </div>
 
-        {/* UX Controls */}
-        <div className="flex gap-2">
-          {/* UX Phase 2: Analyze Last Hand button */}
-          <button
-            onClick={handleAnalysisClick}
-            disabled={loading}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold disabled:opacity-50"
-            title="Analyze your last hand to learn from your decisions"
-          >
-            📊 Analyze Hand
-          </button>
-
-          {/* UX Phase 1: Toggle AI Thinking */}
-          <button
-            onClick={toggleShowAiThinking}
-            className={`px-4 py-2 rounded-lg font-semibold ${
-              showAiThinking
-                ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                : 'bg-white text-green-800 hover:bg-gray-100'
-            }`}
-            title="Toggle AI reasoning visibility"
-          >
-            {showAiThinking ? '🤖 Hide AI Thinking' : '🤖 Show AI Thinking'}
-          </button>
-
-          {/* Phase 4: Step Mode toggle (UAT-1 fix) */}
-          <button
-            onClick={toggleStepMode}
-            className={`px-4 py-2 rounded-lg font-semibold ${
-              stepMode
-                ? 'bg-yellow-600 hover:bg-yellow-700 text-white'
-                : 'bg-white text-green-800 hover:bg-gray-100'
-            }`}
-            title="Pause after each AI action for better visibility"
-          >
-            {stepMode ? '⏸️ Step Mode ON' : '▶️ Step Mode OFF'}
-          </button>
-
+        {/* Header Controls - Consolidated */}
+        <div className="flex gap-3 items-center relative settings-menu-container">
           {/* Phase 4: Continue button (shown only in Step Mode when waiting) */}
           {awaitingContinue && (
             <motion.button
@@ -232,7 +212,65 @@ export function PokerTable() {
             </motion.button>
           )}
 
-          {/* Bug Fix #2: Quit Game button */}
+          {/* Settings Menu Button */}
+          <button
+            onClick={() => setShowSettingsMenu(!showSettingsMenu)}
+            className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
+            title="Game settings and options"
+          >
+            ⚙️ Settings
+          </button>
+
+          {/* Settings Dropdown Menu */}
+          {showSettingsMenu && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="absolute top-12 right-20 bg-gray-800 border-2 border-gray-600 rounded-lg shadow-2xl p-2 min-w-[250px] z-50"
+            >
+              {/* Analyze Hand */}
+              <button
+                onClick={() => {
+                  handleAnalysisClick();
+                  setShowSettingsMenu(false);
+                }}
+                disabled={loading}
+                className="w-full text-left px-4 py-3 hover:bg-gray-700 rounded-lg text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                📊 Analyze Hand
+              </button>
+
+              {/* Toggle AI Thinking */}
+              <button
+                onClick={() => {
+                  toggleShowAiThinking();
+                  setShowSettingsMenu(false);
+                }}
+                className="w-full text-left px-4 py-3 hover:bg-gray-700 rounded-lg text-white font-medium flex items-center gap-2"
+              >
+                <span className={showAiThinking ? 'text-blue-400' : 'text-gray-400'}>
+                  {showAiThinking ? '✓' : '○'}
+                </span>
+                🤖 Show AI Thinking
+              </button>
+
+              {/* Toggle Step Mode */}
+              <button
+                onClick={() => {
+                  toggleStepMode();
+                  setShowSettingsMenu(false);
+                }}
+                className="w-full text-left px-4 py-3 hover:bg-gray-700 rounded-lg text-white font-medium flex items-center gap-2"
+              >
+                <span className={stepMode ? 'text-yellow-400' : 'text-gray-400'}>
+                  {stepMode ? '✓' : '○'}
+                </span>
+                {stepMode ? '⏸️ Step Mode (ON)' : '▶️ Step Mode (OFF)'}
+              </button>
+            </motion.div>
+          )}
+
+          {/* Quit Game button */}
           <button
             onClick={quitGame}
             className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold"
