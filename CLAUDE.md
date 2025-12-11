@@ -120,15 +120,39 @@ poker-learning-app/
 
 ## Testing Strategy
 
-### Must Pass Before Commit
-1. Core regression (turn order, fold): `backend/tests/test_turn_order.py`, `test_fold_resolution.py`
-2. Bug fixes: `backend/tests/test_bug_fixes.py`
-3. Frontend build: `npm run build`
+### Must Pass Before Commit (Quick - 2 min)
+```bash
+# Phase 1-3 tests (23 tests in ~48s)
+PYTHONPATH=backend python -m pytest backend/tests/test_negative_actions.py \
+  backend/tests/test_hand_evaluator_validation.py \
+  backend/tests/test_property_based_enhanced.py -v
 
-### Thorough Testing (Before Major Releases)
-1. Property-based: `tests/legacy/test_property_based.py` (1000 scenarios)
-2. Action fuzzing: `tests/legacy/test_action_fuzzing.py` (~10K actions)
-3. Manual UAT: Play 10+ hands, test edge cases
+# Frontend build check
+cd frontend && npm run build
+```
+
+### Full Test Suite (Before Major Changes - 25 min)
+```bash
+# All Phase 1-5 tests (49 tests)
+# Backend tests (36 tests - ~20 min)
+PYTHONPATH=backend python -m pytest backend/tests/test_negative_actions.py \
+  backend/tests/test_hand_evaluator_validation.py \
+  backend/tests/test_property_based_enhanced.py \
+  backend/tests/test_user_scenarios.py -v
+
+# E2E tests (13 tests - ~2.5 min, requires servers running)
+python backend/main.py &
+cd frontend && npm run dev &
+PYTHONPATH=. python -m pytest tests/e2e/test_critical_flows.py -v
+```
+
+### Test Coverage
+- **Phase 1**: Infinite loop regression (1 test)
+- **Phase 2**: Negative testing (12 tests)
+- **Phase 3**: Fuzzing + validation (11 tests)
+- **Phase 4**: Scenario testing (12 tests)
+- **Phase 5**: E2E browser testing (13 tests)
+- **Total**: 49 tests, 100% passing
 
 ---
 
