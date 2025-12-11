@@ -13,7 +13,7 @@ import asyncio
 import json
 
 from game.poker_engine import PokerGame, GameState
-from websocket_manager import manager, process_ai_turns_with_events, serialize_game_state
+from websocket_manager import manager, thread_safe_manager, process_ai_turns_with_events, serialize_game_state
 
 # FastAPI app
 app = FastAPI(title="Poker Learning App API", version="2.0")
@@ -373,21 +373,31 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
                     })
                     continue
 
-                # Submit human action (process_ai=False: let WebSocket handle AI turns)
-                success = game.submit_human_action(action, amount, process_ai=False)
+                # Phase 8: Thread-safe action processing
+                # Wrap action in lock to prevent race conditions
+                async def execute_human_action():
+                    # Submit human action (process_ai=False: let WebSocket handle AI turns)
+                    success = game.submit_human_action(action, amount, process_ai=False)
+
+                    if not success:
+                        await manager.send_event(game_id, {
+                            "type": "error",
+                            "data": {"message": "Invalid action or not your turn"}
+                        })
+                        return False
+
+                    # Broadcast state after human action
+                    await manager.broadcast_state(game_id, game, show_ai_thinking)
+
+                    # Process AI turns in background task (so we can continue receiving messages)
+                    asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking, step_mode))
+                    return True
+
+                # Execute action with lock (only one action per game at a time)
+                success = await thread_safe_manager.execute_action(game_id, execute_human_action)
 
                 if not success:
-                    await manager.send_event(game_id, {
-                        "type": "error",
-                        "data": {"message": "Invalid action or not your turn"}
-                    })
                     continue
-
-                # Broadcast state after human action
-                await manager.broadcast_state(game_id, game, show_ai_thinking)
-
-                # Process AI turns in background task (so we can continue receiving messages)
-                asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking, step_mode))
 
             elif message_type == "next_hand":
                 # Start next hand
@@ -436,11 +446,13 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
                 })
 
     except WebSocketDisconnect:
-        manager.disconnect(game_id)
+        # Phase 8: Pass specific websocket to disconnect
+        manager.disconnect(game_id, websocket)
         print(f"[WebSocket] Client disconnected from game {game_id}")
     except Exception as e:
         print(f"[WebSocket] Error in game {game_id}: {e}")
-        manager.disconnect(game_id)
+        # Phase 8: Pass specific websocket to disconnect
+        manager.disconnect(game_id, websocket)
         try:
             await websocket.close(code=1011, reason="Internal server error")
         except:

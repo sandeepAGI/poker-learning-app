@@ -1,36 +1,107 @@
 """
 WebSocket Manager for Real-Time Game Updates
 Phase 1: WebSocket infrastructure for smooth AI turn visibility
+Phase 8: Thread-safe game action processing (concurrency & race conditions)
 """
 from fastapi import WebSocket, WebSocketDisconnect
-from typing import Dict, Any
+from typing import Dict, Any, Callable, Awaitable
 import json
 import asyncio
 from game.poker_engine import PokerGame, GameState, Player, AIStrategy
+
+
+class ThreadSafeGameManager:
+    """
+    Thread-safe game action manager using asyncio.Lock.
+
+    Prevents race conditions when multiple WebSocket connections
+    send actions simultaneously to the same game.
+
+    Phase 8.3: Critical for production reliability.
+    """
+
+    def __init__(self):
+        # Store locks per game: {game_id: asyncio.Lock}
+        self.locks: Dict[str, asyncio.Lock] = {}
+
+    async def execute_action(self, game_id: str, action_fn: Callable[[], Awaitable[Any]]) -> Any:
+        """
+        Execute action with exclusive lock for this game.
+
+        Only one action per game can execute at a time.
+        This prevents race conditions from simultaneous actions.
+
+        Args:
+            game_id: Game identifier
+            action_fn: Async function to execute (action logic)
+
+        Returns:
+            Result from action_fn
+        """
+        # Create lock for this game if doesn't exist
+        if game_id not in self.locks:
+            self.locks[game_id] = asyncio.Lock()
+
+        print(f"[ThreadSafe] Waiting for lock: game={game_id[:8]}")
+
+        # Acquire lock and execute action
+        async with self.locks[game_id]:
+            print(f"[ThreadSafe] Lock acquired: game={game_id[:8]}")
+            # Only one concurrent action per game allowed
+            result = await action_fn()
+            print(f"[ThreadSafe] Lock released: game={game_id[:8]}")
+            return result
+
+    def cleanup_lock(self, game_id: str):
+        """Remove lock for game (call when game is deleted)"""
+        if game_id in self.locks:
+            del self.locks[game_id]
+            print(f"[ThreadSafe] Cleaned up lock for game {game_id}")
 
 
 class ConnectionManager:
     """Manages WebSocket connections for active games"""
 
     def __init__(self):
-        # Store active connections: {game_id: WebSocket}
-        self.active_connections: Dict[str, WebSocket] = {}
+        # Store active connections: {game_id: List[WebSocket]} - Phase 8: Support multiple connections
+        self.active_connections: Dict[str, List[WebSocket]] = {}
         # Store step mode state: {game_id: continue_event}
         self.step_mode_events: Dict[str, asyncio.Event] = {}
 
     async def connect(self, game_id: str, websocket: WebSocket):
         """Accept a new WebSocket connection for a game"""
         await websocket.accept()
-        self.active_connections[game_id] = websocket
-        print(f"[WebSocket] Client connected to game {game_id}")
 
-    def disconnect(self, game_id: str):
+        # Phase 8: Support multiple WebSocket connections per game
+        if game_id not in self.active_connections:
+            self.active_connections[game_id] = []
+
+        self.active_connections[game_id].append(websocket)
+        connection_count = len(self.active_connections[game_id])
+        print(f"[WebSocket] Client connected to game {game_id} (total connections: {connection_count})")
+
+    def disconnect(self, game_id: str, websocket: WebSocket = None):
         """Remove a WebSocket connection"""
         if game_id in self.active_connections:
-            del self.active_connections[game_id]
-            print(f"[WebSocket] Client disconnected from game {game_id}")
-        # Clean up step mode event if exists
-        if game_id in self.step_mode_events:
+            if websocket:
+                # Phase 8: Remove specific websocket from list
+                try:
+                    self.active_connections[game_id].remove(websocket)
+                    remaining = len(self.active_connections[game_id])
+                    print(f"[WebSocket] Client disconnected from game {game_id} (remaining: {remaining})")
+
+                    # Clean up empty list
+                    if remaining == 0:
+                        del self.active_connections[game_id]
+                except ValueError:
+                    pass  # WebSocket not in list
+            else:
+                # Legacy behavior: remove all connections
+                del self.active_connections[game_id]
+                print(f"[WebSocket] All clients disconnected from game {game_id}")
+
+        # Clean up step mode event if exists and no more connections
+        if game_id not in self.active_connections and game_id in self.step_mode_events:
             del self.step_mode_events[game_id]
 
     def signal_continue(self, game_id: str):
@@ -40,13 +111,20 @@ class ConnectionManager:
             print(f"[WebSocket] Continue signal received for game {game_id}")
 
     async def send_event(self, game_id: str, event: Dict[str, Any]):
-        """Send an event to a specific game's WebSocket"""
+        """Send an event to all WebSocket connections for a game"""
         if game_id in self.active_connections:
-            try:
-                await self.active_connections[game_id].send_json(event)
-            except Exception as e:
-                print(f"[WebSocket] Error sending to game {game_id}: {e}")
-                self.disconnect(game_id)
+            # Phase 8: Send to ALL connections for this game
+            dead_connections = []
+            for ws in self.active_connections[game_id]:
+                try:
+                    await ws.send_json(event)
+                except Exception as e:
+                    print(f"[WebSocket] Error sending to game {game_id}: {e}")
+                    dead_connections.append(ws)
+
+            # Clean up dead connections
+            for ws in dead_connections:
+                self.disconnect(game_id, ws)
 
     async def broadcast_state(self, game_id: str, game: PokerGame, show_ai_thinking: bool = False):
         """Broadcast current game state to connected client"""
@@ -59,6 +137,9 @@ class ConnectionManager:
 
 # Global connection manager instance
 manager = ConnectionManager()
+
+# Global thread-safe game manager (Phase 8: Concurrency)
+thread_safe_manager = ThreadSafeGameManager()
 
 
 def serialize_game_state(game: PokerGame, show_ai_thinking: bool = False) -> Dict[str, Any]:
