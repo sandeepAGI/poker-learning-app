@@ -26,7 +26,7 @@ jobs:
           cd backend
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest-cov
+          pip install pytest-cov pytest-asyncio
 
       - name: Run Phase 1-3 tests (fast)
         run: |
@@ -130,6 +130,7 @@ jobs:
         run: |
           cd backend
           pip install -r requirements.txt
+          pip install pytest-asyncio
 
       - name: Install frontend dependencies
         run: |
