@@ -311,9 +311,9 @@ export function PokerTable() {
 
           return (
             <>
-              {/* Opponent 1 - Top Center */}
+              {/* Opponent 1 - Left Side (clockwise from human) */}
               {opponents[0] && (
-                <div className="absolute top-8 left-1/2 -translate-x-1/2">
+                <div className="absolute top-1/3 left-8">
                   <PlayerSeat
                     key={opponents[0].player_id}
                     player={opponents[0]}
@@ -325,9 +325,9 @@ export function PokerTable() {
                 </div>
               )}
 
-              {/* Opponent 2 - Left Side */}
+              {/* Opponent 2 - Top Center (clockwise from opponent 1) */}
               {opponents[1] && (
-                <div className="absolute top-1/3 left-8">
+                <div className="absolute top-8 left-1/2 -translate-x-1/2">
                   <PlayerSeat
                     key={opponents[1].player_id}
                     player={opponents[1]}
@@ -339,7 +339,7 @@ export function PokerTable() {
                 </div>
               )}
 
-              {/* Opponent 3 - Right Side */}
+              {/* Opponent 3 - Right Side (clockwise from opponent 2) */}
               {opponents[2] && (
                 <div className="absolute top-1/3 right-8">
                   <PlayerSeat

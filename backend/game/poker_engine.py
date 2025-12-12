@@ -1012,8 +1012,12 @@ class PokerGame:
             active_players = [p for p in self.players if p.is_active]
             if len(active_players) <= 1:
                 triggers_showdown = True
+                pot_awarded = 0
+                winner_id = None
                 if len(active_players) == 1:
                     winner = active_players[0]
+                    winner_id = winner.player_id
+                    pot_awarded = self.pot
                     winner.stack += self.pot
                     # Clear all-in flag if winner now has chips
                     if winner.stack > 0 and winner.all_in:
@@ -1021,6 +1025,10 @@ class PokerGame:
                     self._log_hand_event("pot_award", winner.player_id, "win_by_fold",
                                        self.pot, 0.0, f"{winner.name} wins ${self.pot} (all others folded)")
                     self.pot = 0
+
+                # Save hand for analysis (early end - fold in apply_action)
+                self._save_hand_on_early_end(winner_id, pot_awarded)
+
                 # Advance to showdown
                 self.current_state = GameState.SHOWDOWN
                 self.current_player_index = None
@@ -1486,6 +1494,8 @@ class PokerGame:
 
         except Exception as e:
             print(f"Warning: Failed to save early-end hand for analysis: {e}")
+            import traceback
+            traceback.print_exc()
 
     def _save_completed_hand(self, pots: List[Dict], pot_size: int):
         """Save completed hand for later analysis. UX Phase 2."""
@@ -1554,6 +1564,8 @@ class PokerGame:
         except Exception as e:
             # Don't fail the game if hand saving fails
             print(f"Warning: Failed to save hand for analysis: {e}")
+            import traceback
+            traceback.print_exc()
 
     def analyze_last_hand(self) -> Optional[Dict]:
         """

@@ -2,18 +2,64 @@
 
 import { useState, useEffect } from 'react';
 import { PokerTable } from '../components/PokerTable';
+import { AISidebar } from '../components/AISidebar';
 import { useGameStore } from '../lib/store';
 import { motion } from 'framer-motion';
+import type { AIDecision } from '../lib/types';
+
+interface AIDecisionEntry {
+  playerName: string;
+  playerId: string;
+  decision: AIDecision;
+  timestamp: number;
+}
 
 export default function Home() {
-  const { gameState, createGame, loading, initializeFromStorage } = useGameStore();
+  const { gameState, createGame, loading, initializeFromStorage, showAiThinking } = useGameStore();
   const [playerName, setPlayerName] = useState('Player');
   const [aiCount, setAiCount] = useState(3);
+  const [decisionHistory, setDecisionHistory] = useState<AIDecisionEntry[]>([]);
 
   // Phase 7+: Check for existing game on mount (browser refresh recovery)
   useEffect(() => {
     initializeFromStorage();
   }, [initializeFromStorage]);
+
+  // Track AI decisions and build history
+  useEffect(() => {
+    if (!gameState) return;
+
+    // Clear history when starting a new hand
+    if (gameState.state === 'pre_flop' && decisionHistory.length > 0) {
+      setDecisionHistory([]);
+      return;
+    }
+
+    // Add new AI decisions to history
+    const newDecisions: AIDecisionEntry[] = [];
+    Object.entries(gameState.last_ai_decisions).forEach(([playerId, decision]) => {
+      // Check if this decision is already in history
+      const alreadyExists = decisionHistory.some(
+        entry => entry.playerId === playerId && entry.decision.reasoning === decision.reasoning
+      );
+
+      if (!alreadyExists) {
+        const player = gameState.players.find(p => p.player_id === playerId);
+        if (player && !player.is_human) {
+          newDecisions.push({
+            playerName: player.name,
+            playerId,
+            decision,
+            timestamp: Date.now()
+          });
+        }
+      }
+    });
+
+    if (newDecisions.length > 0) {
+      setDecisionHistory(prev => [...newDecisions, ...prev]);
+    }
+  }, [gameState, decisionHistory]);
 
   if (!gameState) {
     return (
@@ -82,5 +128,12 @@ export default function Home() {
     );
   }
 
-  return <PokerTable />;
+  return (
+    <div className="flex h-screen overflow-hidden">
+      <div className="flex-1 overflow-auto">
+        <PokerTable />
+      </div>
+      <AISidebar isOpen={showAiThinking} decisions={decisionHistory} />
+    </div>
+  );
 }

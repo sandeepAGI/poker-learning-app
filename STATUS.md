@@ -1,14 +1,14 @@
 # Poker Learning App - Current Status
 
 **Last Updated**: December 11, 2025
-**Version**: 9.0 (Phase 8 Complete - Concurrency Testing)
+**Version**: 9.1 (Bug Fixes - AI Thinking, Analyze Hand, Seating)
 **Branch**: `main`
 
 ---
 
 ## Current State
 
-✅ **PHASES 1-8 COMPLETE** | 🎉 **TIER 1 DONE** - Production-ready concurrency
+✅ **PHASES 1-8 COMPLETE** | 🎉 **TIER 1 DONE** | ✅ **3 CRITICAL BUGS FIXED**
 - **264+ tests** collected across 34 test files
 - **All Phase 1-8 tests passing** (75/75 tests)
   - Phase 1-7 core: 67 tests
@@ -42,6 +42,106 @@
 | **Phase 8**: Concurrency & Races | ✅ COMPLETE | 8 tests | Thread safety |
 
 **Old testing docs archived** to `archive/docs/testing-history-2025-12/`
+
+---
+
+## Bug Fixes (December 11, 2025)
+
+### Bug Fix 1: "Show AI Thinking" Not Displaying ✅ FIXED
+
+**Severity**: Medium
+**Discovered**: User gameplay testing
+**Root Cause**: `AISidebar` component only rendered on `/game/[gameId]` route, not on main `/` route
+
+**Impact**: Users could toggle "Show AI Thinking" ON but no AI reasoning would appear
+
+**Files Modified**:
+- `frontend/app/page.tsx` - Added AISidebar component with decision tracking
+
+**Fix Details**:
+- Added `AISidebar` import and `AIDecisionEntry` interface
+- Added `decisionHistory` state to track AI decisions
+- Added `useEffect` to populate history from `gameState.last_ai_decisions`
+- Updated return to include `<AISidebar isOpen={showAiThinking} decisions={decisionHistory} />`
+
+**Result**: ✅ AI thinking sidebar now displays correctly when toggled ON
+
+---
+
+### Bug Fix 2: "Analyze Hand" Always Failing ✅ FIXED
+
+**Severity**: High
+**Discovered**: User gameplay testing (404 error in console)
+**Root Cause**: Missing `_save_hand_on_early_end()` call in `apply_action()` method (lines 1011-1027)
+
+**Impact**: Hand analysis feature completely broken - always returned "No completed hands to analyze yet"
+
+**Why Tests Missed It**: Tests had `pytest.skip()` clauses that hid failures instead of failing properly
+
+**Investigation Process**:
+1. Found test file `backend/tests/test_analysis.py` with 2/3 tests SKIPPING
+2. Traced execution - hand reached SHOWDOWN but `last_hand_summary` was still `None`
+3. Added debug logging - discovered save methods were never called
+4. Found TWO code paths for early termination:
+   - ✅ `_advance_state_core()` lines 1273-1298 - HAS save call
+   - ❌ `apply_action()` lines 1011-1027 - MISSING save call (THE BUG!)
+
+**Files Modified**:
+- `backend/game/poker_engine.py` lines 1011-1034 - Added missing save call
+
+**Fix Details**:
+```python
+# Save hand for analysis (early end - fold in apply_action)
+self._save_hand_on_early_end(winner_id, pot_awarded)
+```
+
+**Additional Improvements**:
+- Enhanced exception handling with `traceback.print_exc()` in both save methods
+- Added proper variable tracking for `pot_awarded` and `winner_id`
+
+**Result**: ✅ Hand analysis now works correctly after completing hands
+
+---
+
+### Bug Fix 3: Blinds Sitting Across From Each Other ✅ FIXED
+
+**Severity**: High (Poker rule violation)
+**Discovered**: User gameplay observation via screenshot
+**Root Cause**: Visual layout didn't match backend player array order
+
+**Impact**: Small Blind and Big Blind appeared on opposite sides of table instead of adjacent
+
+**Backend**: ✅ Correct - blinds ARE consecutive in player array
+**Frontend**: ❌ Incorrect - visual positions didn't preserve clockwise order
+
+**Before (WRONG)**:
+```
+       [AI #1 - Top]
+[AI #2 - Left]  [AI #3 - Right]  ← SB and BB on opposite sides!
+     [Human - Bottom]
+```
+
+**After (CORRECT)**:
+```
+[AI #1 - Left]  [AI #2 - Top]
+                [AI #3 - Right]  ← SB and BB adjacent clockwise!
+    [Human - Bottom]
+```
+
+**Files Modified**:
+- `frontend/components/PokerTable.tsx` lines 312-356
+
+**Fix Details**:
+- `opponents[0]` → Left side (9 o'clock)
+- `opponents[1]` → Top center (12 o'clock)
+- `opponents[2]` → Right side (3 o'clock)
+- Human → Bottom (6 o'clock)
+
+**Clockwise seating**: Human → AI #1 → AI #2 → AI #3 → back to Human
+
+**Result**: ✅ Players now sit in correct clockwise poker table order
+
+---
 
 ### Phase 1: Fix Infinite Loop Bug ✅
 
