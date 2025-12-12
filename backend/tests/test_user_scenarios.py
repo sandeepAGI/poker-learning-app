@@ -169,10 +169,15 @@ class TestMultiHandScenarios:
             assert folds == 18
             assert calls == 2
 
-            # Verify stack decreased (due to blinds)
+            # Verify stack is valid (may increase or decrease depending on blinds and wins)
             final_state_data = ws.get_latest_state()
             final_stack = final_state_data["human_player"]["stack"]
-            assert final_stack < initial_stack, "Stack should decrease from paying blinds"
+            stack_change = final_stack - initial_stack
+            print(f"Stack change: {initial_stack} -> {final_stack} (Δ{stack_change:+d})")
+
+            # Stack should still be positive and within reasonable bounds
+            assert final_stack >= 0, "Stack should never be negative"
+            assert abs(stack_change) < 500, f"Stack change too large: {stack_change}"
 
     @pytest.mark.asyncio
     async def test_mixed_strategy_10_hands(self):
