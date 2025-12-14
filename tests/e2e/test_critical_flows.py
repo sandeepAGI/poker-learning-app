@@ -191,9 +191,10 @@ class TestCriticalUserFlows:
         # Create game
         create_game(page)
 
-        # Click All-In button
+        # Wait for player's turn, then click All-In button
+        # Note: Button only appears when it's player's turn (race condition in CI)
+        page.wait_for_selector("button:has-text('All-In')", timeout=10000)
         all_in_button = page.locator("button:has-text('All-In')")
-        assert all_in_button.is_visible(), "All-In button not visible"
         all_in_button.click()
         time.sleep(1)
 
@@ -316,6 +317,10 @@ class TestCriticalUserFlows:
         # Take screenshot before interaction
         page.screenshot(path=f"{SCREENSHOT_DIR}/test4-before-raise.png")
 
+        # Wait for player's turn (Raise button only appears when it's player's turn)
+        # Note: Race condition in CI - AI might go first after game creation
+        page.wait_for_selector("button:has-text('Raise $')", timeout=10000)
+
         # Click "Pot" preset button (exact match to avoid "½ Pot" and "2x Pot")
         try:
             pot_button = page.get_by_role("button", name="Pot", exact=True)
@@ -328,7 +333,6 @@ class TestCriticalUserFlows:
 
         # Click Raise button
         raise_button = page.locator("button:has-text('Raise $')")
-        assert raise_button.is_visible(), "Raise button not visible"
         raise_button.click()
         time.sleep(1)
 
