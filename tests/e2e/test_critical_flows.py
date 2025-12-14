@@ -191,11 +191,13 @@ class TestCriticalUserFlows:
         # Create game
         create_game(page)
 
-        # Wait for player's turn, then click All-In button
-        # Note: Button only appears when it's player's turn (race condition in CI)
-        page.wait_for_selector("button:has-text('All-In')", timeout=10000)
+        # Wait for player's turn (any action button appears)
+        # Note: Button availability depends on game state in CI
+        page.wait_for_selector("button:has-text('Call'), button:has-text('Fold')", timeout=10000)
+
+        # Click All-In button (will auto-wait if it appears)
         all_in_button = page.locator("button:has-text('All-In')")
-        all_in_button.click()
+        all_in_button.click(timeout=10000)
         time.sleep(1)
 
         # Wait for hand to complete (this is the critical test - should not hang)
@@ -317,9 +319,8 @@ class TestCriticalUserFlows:
         # Take screenshot before interaction
         page.screenshot(path=f"{SCREENSHOT_DIR}/test4-before-raise.png")
 
-        # Wait for player's turn (Raise button only appears when it's player's turn)
-        # Note: Race condition in CI - AI might go first after game creation
-        page.wait_for_selector("button:has-text('Raise $')", timeout=10000)
+        # Wait for player's turn (any action button appears)
+        page.wait_for_selector("button:has-text('Call'), button:has-text('Fold')", timeout=10000)
 
         # Click "Pot" preset button (exact match to avoid "½ Pot" and "2x Pot")
         try:
@@ -331,9 +332,9 @@ class TestCriticalUserFlows:
             # If Pot button not found, just proceed with default raise
             pass
 
-        # Click Raise button
+        # Click Raise button (will auto-wait if it appears)
         raise_button = page.locator("button:has-text('Raise $')")
-        raise_button.click()
+        raise_button.click(timeout=10000)
         time.sleep(1)
 
         # Verify action was processed (pot should increase or game should progress)
