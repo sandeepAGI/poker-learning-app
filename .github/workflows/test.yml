@@ -58,22 +58,24 @@ jobs:
             backend/tests/test_fold_resolution.py \
             -v --tb=short
 
-      - name: Generate coverage report
-        run: |
-          PYTHONPATH=backend python -m pytest \
-            backend/tests/ \
-            --cov=backend/game \
-            --cov=backend/main \
-            --cov-report=xml \
-            --cov-report=html \
-            --cov-report=term-missing
-
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage.xml
-          flags: backend
-          name: backend-coverage
+      # Coverage report disabled - all tests already run in previous steps
+      # Re-running all tests with coverage adds 25+ minutes to CI
+      # - name: Generate coverage report
+      #   run: |
+      #     PYTHONPATH=backend python -m pytest \
+      #       backend/tests/ \
+      #       --cov=backend/game \
+      #       --cov=backend/main \
+      #       --cov-report=xml \
+      #       --cov-report=html \
+      #       --cov-report=term-missing
+      #
+      # - name: Upload coverage reports
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     file: ./coverage.xml
+      #     flags: backend
+      #     name: backend-coverage
 
   frontend-build:
     name: Frontend Build
