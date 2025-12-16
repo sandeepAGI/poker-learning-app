@@ -60,3 +60,14 @@ export interface SubmitActionRequest {
   action: 'fold' | 'call' | 'raise';
   amount?: number;
 }
+
+/**
+ * AI Decision Entry in history
+ * Tracks when AI players make decisions with their reasoning
+ */
+export interface AIDecisionEntry {
+  playerName: string;
+  playerId: string;
+  decision: AIDecision;
+  timestamp: number;
+}

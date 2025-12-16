@@ -6,7 +6,6 @@ import { PokerTable } from '../../../components/PokerTable';
 import { AISidebar } from '../../../components/AISidebar';
 import { useGameStore } from '../../../lib/store';
 import { motion } from 'framer-motion';
-import { useAIDecisionHistory } from '../../../lib/hooks/useAIDecisionHistory';
 
 /**
  * Dynamic Game Page - Phase 7+ Browser Refresh Recovery
@@ -20,7 +19,7 @@ import { useAIDecisionHistory } from '../../../lib/hooks/useAIDecisionHistory';
 
 export default function GamePage({ params }: { params: Promise<{ gameId: string }> }) {
   const router = useRouter();
-  const { gameState, loading, error, reconnectToGame, showAiThinking } = useGameStore();
+  const { gameState, loading, error, reconnectToGame, showAiThinking, decisionHistory } = useGameStore();
   const [gameId, setGameId] = useState<string>('');
 
   // Await params in Next.js 15
@@ -49,9 +48,6 @@ export default function GamePage({ params }: { params: Promise<{ gameId: string 
       attemptReconnect();
     }
   }, [gameId, gameState, reconnectToGame, router]);
-
-  // Phase 2: Use custom hook for AI decision history tracking
-  const decisionHistory = useAIDecisionHistory(gameState);
 
   // Show error state if reconnection failed
   if (error) {

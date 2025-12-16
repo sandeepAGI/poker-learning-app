@@ -1,7 +1,7 @@
 // Zustand store for game state management
 
 import { create } from 'zustand';
-import { GameState } from './types';
+import { GameState, AIDecisionEntry } from './types';
 import { pokerApi } from './api';
 import { PokerWebSocket, ConnectionState } from './websocket';
 
@@ -23,6 +23,9 @@ interface GameStore {
   connectionState: ConnectionState;
   aiActionQueue: any[]; // Queue of AI actions for animations
 
+  // Phase 3: AI Decision History (React infinite loop fix)
+  decisionHistory: AIDecisionEntry[];
+
   // Actions
   createGame: (playerName: string, aiCount: number) => Promise<void>;
   submitAction: (action: 'fold' | 'call' | 'raise', amount?: number) => void;
@@ -41,6 +44,11 @@ interface GameStore {
   // Browser refresh recovery (Phase 7 enhancement)
   reconnectToGame: (gameId: string) => Promise<boolean>;
   initializeFromStorage: () => void;
+
+  // Phase 3: AI Decision History management
+  addAIDecision: (decision: AIDecisionEntry) => void;
+  clearDecisionHistory: () => void;
+  _processAIDecisions: (gameState: GameState) => void;
 }
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -60,6 +68,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   wsClient: null,
   connectionState: ConnectionState.DISCONNECTED,
   aiActionQueue: [],
+
+  // Phase 3: AI Decision History
+  decisionHistory: [],
 
   // Create a new game (Phase 1.4: Now uses WebSocket)
   createGame: async (playerName: string, aiCount: number) => {
@@ -206,7 +217,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       loading: false,
       aiActionQueue: [],
       awaitingContinue: false,  // Phase 4: Reset step mode state
-      stepMode: false  // Phase 4: Reset step mode
+      stepMode: false,  // Phase 4: Reset step mode
+      decisionHistory: []  // Phase 3: Clear decision history on quit
     });
   },
 
@@ -226,6 +238,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const wsClient = new PokerWebSocket(gameId, {
       onStateUpdate: (gameState: GameState) => {
         set({ gameState, loading: false });
+        // Phase 3: Process AI decisions when state updates
+        get()._processAIDecisions(gameState);
       },
 
       onAIAction: (aiAction: any) => {
@@ -299,6 +313,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
         console.log('[Store] Game found! Reconnecting...');
         set({ gameId, gameState: response, loading: false });
 
+        // Phase 3: Process AI decisions from reconnected state
+        get()._processAIDecisions(response);
+
         // Connect to WebSocket
         get().connectWebSocket(gameId);
 
@@ -337,6 +354,58 @@ export const useGameStore = create<GameStore>((set, get) => ({
       get().reconnectToGame(savedGameId);
     } else {
       console.log('[Store] No saved game found');
+    }
+  },
+
+  // Phase 3: AI Decision History Management
+  // Add a single AI decision to history (manual addition)
+  addAIDecision: (decision: AIDecisionEntry) => {
+    set(state => ({
+      decisionHistory: [decision, ...state.decisionHistory]
+    }));
+  },
+
+  // Clear all decision history (e.g., on new hand)
+  clearDecisionHistory: () => {
+    set({ decisionHistory: [] });
+  },
+
+  // Internal: Process AI decisions from game state
+  // Called automatically when game state updates
+  _processAIDecisions: (gameState: GameState) => {
+    const currentHistory = get().decisionHistory;
+
+    // Clear history when starting a new hand
+    if (gameState.state === 'pre_flop' && currentHistory.length > 0) {
+      set({ decisionHistory: [] });
+      return;
+    }
+
+    // Add new AI decisions to history
+    const newDecisions: AIDecisionEntry[] = [];
+    Object.entries(gameState.last_ai_decisions).forEach(([playerId, decision]) => {
+      // Check if this decision is already in history
+      const alreadyExists = currentHistory.some(
+        entry => entry.playerId === playerId && entry.decision.reasoning === decision.reasoning
+      );
+
+      if (!alreadyExists) {
+        const player = gameState.players.find(p => p.player_id === playerId);
+        if (player && !player.is_human) {
+          newDecisions.push({
+            playerName: player.name,
+            playerId,
+            decision,
+            timestamp: Date.now()
+          });
+        }
+      }
+    });
+
+    if (newDecisions.length > 0) {
+      set(state => ({
+        decisionHistory: [...newDecisions, ...state.decisionHistory]
+      }));
     }
   },
 }));

@@ -5,10 +5,9 @@ import { PokerTable } from '../components/PokerTable';
 import { AISidebar } from '../components/AISidebar';
 import { useGameStore } from '../lib/store';
 import { motion } from 'framer-motion';
-import { useAIDecisionHistory } from '../lib/hooks/useAIDecisionHistory';
 
 export default function Home() {
-  const { gameState, createGame, loading, initializeFromStorage, showAiThinking } = useGameStore();
+  const { gameState, createGame, loading, initializeFromStorage, showAiThinking, decisionHistory } = useGameStore();
   const [playerName, setPlayerName] = useState('Player');
   const [aiCount, setAiCount] = useState(3);
 
@@ -16,9 +15,6 @@ export default function Home() {
   useEffect(() => {
     initializeFromStorage();
   }, [initializeFromStorage]);
-
-  // Phase 2: Use custom hook for AI decision history tracking
-  const decisionHistory = useAIDecisionHistory(gameState);
 
   if (!gameState) {
     return (
