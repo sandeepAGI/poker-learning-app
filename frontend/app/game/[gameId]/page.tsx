@@ -6,7 +6,7 @@ import { PokerTable } from '../../../components/PokerTable';
 import { AISidebar } from '../../../components/AISidebar';
 import { useGameStore } from '../../../lib/store';
 import { motion } from 'framer-motion';
-import type { AIDecision } from '../../../lib/types';
+import { useAIDecisionHistory } from '../../../lib/hooks/useAIDecisionHistory';
 
 /**
  * Dynamic Game Page - Phase 7+ Browser Refresh Recovery
@@ -17,18 +17,11 @@ import type { AIDecision } from '../../../lib/types';
  * 3. Invalid game ID handling
  * 4. Automatic reconnection to existing games
  */
-interface AIDecisionEntry {
-  playerName: string;
-  playerId: string;
-  decision: AIDecision;
-  timestamp: number;
-}
 
 export default function GamePage({ params }: { params: Promise<{ gameId: string }> }) {
   const router = useRouter();
   const { gameState, loading, error, reconnectToGame, showAiThinking } = useGameStore();
   const [gameId, setGameId] = useState<string>('');
-  const [decisionHistory, setDecisionHistory] = useState<AIDecisionEntry[]>([]);
 
   // Await params in Next.js 15
   useEffect(() => {
@@ -57,44 +50,8 @@ export default function GamePage({ params }: { params: Promise<{ gameId: string 
     }
   }, [gameId, gameState, reconnectToGame, router]);
 
-  // Track AI decisions and build history
-  useEffect(() => {
-    if (!gameState) return;
-
-    setDecisionHistory(prev => {
-      // Clear history when starting a new hand
-      if (gameState.state === 'pre_flop' && prev.length > 0) {
-        return [];
-      }
-
-      // Add new AI decisions to history
-      const newDecisions: AIDecisionEntry[] = [];
-      Object.entries(gameState.last_ai_decisions).forEach(([playerId, decision]) => {
-        // Check if this decision is already in history (check against prev)
-        const alreadyExists = prev.some(
-          entry => entry.playerId === playerId && entry.decision.reasoning === decision.reasoning
-        );
-
-        if (!alreadyExists) {
-          const player = gameState.players.find(p => p.player_id === playerId);
-          if (player && !player.is_human) {
-            newDecisions.push({
-              playerName: player.name,
-              playerId,
-              decision,
-              timestamp: Date.now()
-            });
-          }
-        }
-      });
-
-      if (newDecisions.length > 0) {
-        return [...newDecisions, ...prev];
-      }
-
-      return prev;
-    });
-  }, [gameState]);
+  // Phase 2: Use custom hook for AI decision history tracking
+  const decisionHistory = useAIDecisionHistory(gameState);
 
   // Show error state if reconnection failed
   if (error) {
