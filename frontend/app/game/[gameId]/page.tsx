@@ -61,37 +61,40 @@ export default function GamePage({ params }: { params: Promise<{ gameId: string 
   useEffect(() => {
     if (!gameState) return;
 
-    // Clear history when starting a new hand
-    if (gameState.state === 'pre_flop' && decisionHistory.length > 0) {
-      setDecisionHistory([]);
-      return;
-    }
-
-    // Add new AI decisions to history
-    const newDecisions: AIDecisionEntry[] = [];
-    Object.entries(gameState.last_ai_decisions).forEach(([playerId, decision]) => {
-      // Check if this decision is already in history
-      const alreadyExists = decisionHistory.some(
-        entry => entry.playerId === playerId && entry.decision.reasoning === decision.reasoning
-      );
-
-      if (!alreadyExists) {
-        const player = gameState.players.find(p => p.player_id === playerId);
-        if (player && !player.is_human) {
-          newDecisions.push({
-            playerName: player.name,
-            playerId,
-            decision,
-            timestamp: Date.now()
-          });
-        }
+    setDecisionHistory(prev => {
+      // Clear history when starting a new hand
+      if (gameState.state === 'pre_flop' && prev.length > 0) {
+        return [];
       }
-    });
 
-    if (newDecisions.length > 0) {
-      setDecisionHistory(prev => [...newDecisions, ...prev]);
-    }
-  }, [gameState, decisionHistory]);
+      // Add new AI decisions to history
+      const newDecisions: AIDecisionEntry[] = [];
+      Object.entries(gameState.last_ai_decisions).forEach(([playerId, decision]) => {
+        // Check if this decision is already in history (check against prev)
+        const alreadyExists = prev.some(
+          entry => entry.playerId === playerId && entry.decision.reasoning === decision.reasoning
+        );
+
+        if (!alreadyExists) {
+          const player = gameState.players.find(p => p.player_id === playerId);
+          if (player && !player.is_human) {
+            newDecisions.push({
+              playerName: player.name,
+              playerId,
+              decision,
+              timestamp: Date.now()
+            });
+          }
+        }
+      });
+
+      if (newDecisions.length > 0) {
+        return [...newDecisions, ...prev];
+      }
+
+      return prev;
+    });
+  }, [gameState]);
 
   // Show error state if reconnection failed
   if (error) {
