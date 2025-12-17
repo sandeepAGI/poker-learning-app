@@ -92,7 +92,8 @@ class TestMultipleAllInsSidePots:
 
         for scenario in range(50):
             try:
-                player_count = random.choice([3, 4, 5])
+                # Valid AI counts are 1-3, so total players can be 2-4
+                player_count = random.choice([3, 4])
                 game = PokerGame("P1", ai_count=player_count - 1)
 
                 # Random stacks
@@ -404,7 +405,8 @@ class TestFoldCascadeScenarios:
 
         for _ in range(30):
             try:
-                player_count = random.choice([3, 4, 5])
+                # Valid AI counts are 1-3, so total players can be 2-4
+                player_count = random.choice([3, 4])
                 game = PokerGame("P1", ai_count=player_count - 1)
                 game.start_new_hand(process_ai=False)
 
@@ -459,7 +461,8 @@ class TestChipConservationEdgeCases:
 
         for scenario in range(100):
             try:
-                player_count = random.choice([2, 3, 4, 5])
+                # Valid AI counts are 1-3, so total players can be 2-4
+                player_count = random.choice([2, 3, 4])
                 game = PokerGame("P1", ai_count=player_count - 1)
 
                 # Random stacks
