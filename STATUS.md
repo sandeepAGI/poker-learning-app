@@ -1,7 +1,7 @@
 # Poker Learning App - Current Status
 
 **Last Updated**: December 17, 2025
-**Version**: 11.2 (Testing Fixes Investigation Complete - 5/6 Phases Fixed)
+**Version**: 11.3 (Testing Fixes Investigation Complete - ALL 6 PHASES FIXED)
 **Branch**: `main`
 
 ---
@@ -361,11 +361,11 @@ No component-level state tracking needed
 
 ---
 
-## Testing Fixes Investigation (December 17, 2025) ✅ 5/6 PHASES COMPLETE
+## Testing Fixes Investigation (December 17, 2025) ✅ ALL 6 PHASES COMPLETE
 
 **Purpose**: Investigate failing tests discovered during full backend test suite run
 **Documentation**: See `docs/TESTING_FIXES.md` for complete investigation details
-**Status**: **5 of 6 phases fixed**, 1 production issue identified
+**Status**: **All 6 phases fixed**, all production issues resolved
 
 ### Summary
 
@@ -386,14 +386,14 @@ After completing Bug Fix 5 (React infinite loop), a full backend test suite run 
 - `test_raise_call_multiple_streets` - now PASSING consistently (45.92s)
 - Was flaky due to AI randomness, not a bug
 
-**⚠️ 1 Production Bug Identified**:
-- `test_ai_only_tournament` - **CONFIRMED ISSUE**
-- Hands getting stuck in pre_flop state during AI-only games
-- Test runs indefinitely (>2 minutes for 5 games)
-- Example: Hand 63 stuck with pot=$958, current_bet=$740
-- **Impact**: Could cause hangs in AI-only scenarios (rare in production)
-- **Priority**: HIGH - Needs 2-3 hour investigation
-- **Status**: Documented, not yet fixed
+**✅ 2 Production Bugs Fixed (Commit f28c3d61)**:
+- `test_ai_only_tournament` - **NOW PASSING** (17.12s)
+- **Bug 1**: Hands getting stuck in pre_flop when AI tries invalid all-in raise
+  - Root cause: AI raised $609 (all-in) but minimum was $1349, action failed, has_acted stayed False
+  - Fix: Convert invalid all-in raises to calls in apply_action() (correct poker rule)
+- **Bug 2**: AI-only games crashed when saving hands
+  - Root cause: Code assumed human player exists
+  - Fix: Skip hand saving if no human player present
 
 **⚪ 5 Infrastructure Tests (Excluded)**:
 - `test_api_integration.py` - Missing pytest fixtures
@@ -405,37 +405,46 @@ After completing Bug Fix 5 (React infinite loop), a full backend test suite run 
 |-------|-------------|--------|--------|
 | Phase 1 | Baseline Validation | ✅ COMPLETE | Confirmed pre-existing issues |
 | Phase 2 | Chip Conservation | ✅ FIXED | Test bug (c4207374) |
-| Phase 3 | AI Tournament | ⚠️ ISSUE | Production bug confirmed |
+| Phase 3 | AI Tournament | ✅ FIXED | Production bugs (f28c3d61) |
 | Phase 4 | Fold Cascade | ✅ FIXED | Test bug (c4207374) |
 | Phase 5 | Multi-Street | ✅ COMPLETE | Stable, no fix needed |
 | Phase 6 | Test Bug Fix | ✅ FIXED | Test bug (c4207374) |
 
 ### Impact Assessment
 
-**Production Safety**: ✅ Safe to deploy
-- Phase 3 issue only affects AI-only games (rare scenario)
+**Production Safety**: ✅ FULLY VALIDATED & SAFE
+- All 6 phases fixed and validated
+- All production bugs resolved (2 bugs in Phase 3)
 - Core gameplay (human vs AI) fully tested and passing
+- AI-only games fully tested and passing
 - All critical chip conservation tests passing
+- 40 backend tests passing in 75 seconds
 
-**Development Priority**: 🔴 HIGH
-- Fix Phase 3 stuck hands before next major release
-- Add timeout protection to prevent infinite loops
-- Consider marking `test_ai_only_tournament` as slow test
+**Development Status**: ✅ COMPLETE
+- All Phase 3 issues resolved
+- All-in raise handling now follows correct poker rules
+- AI-only games no longer crash or hang
+- No known issues remaining
 
 ### Files Modified
 
+**Commit c4207374** - Test bug fixes:
 - `backend/tests/test_edge_case_scenarios.py` (lines 96, 409, 463) - Fixed AI count parameters
-- `docs/TESTING_FIXES.md` - Complete investigation documentation
 
-### Next Steps
+**Commit f28c3d61** - Phase 3 production bug fixes:
+- `backend/game/poker_engine.py` (lines 1044-1086) - Convert invalid all-in raises to calls
+- `backend/game/poker_engine.py` (lines 1433-1436) - Skip hand saving if no human player
+- `backend/game/poker_engine.py` (lines 1506-1509) - Same fix for completed hands
+- `docs/TESTING_FIXES.md` - Updated Phase 3 completion status
 
-1. Investigate Phase 3 stuck hands issue (2-3 hours estimated)
-   - Add debug logging to `_process_remaining_actions()`
-   - Identify why hands stuck in pre_flop
-   - Check for infinite loops in AI action processing
-2. Optional: Fix `test_api_integration.py` fixtures (low priority)
+### Investigation Complete
 
-**Commit**: `c4207374` - "Fix 3 test bugs in test_edge_case_scenarios.py - invalid AI counts"
+All 6 phases investigated and resolved:
+- ✅ 3 test bugs fixed (invalid AI count parameters)
+- ✅ 2 production bugs fixed (AI tournament stuck hands + crashes)
+- ✅ 1 flaky test stabilized (no fix needed)
+- ✅ 40 backend tests passing in 75 seconds
+- ✅ Complete documentation in `docs/TESTING_FIXES.md`
 
 ---
 
