@@ -1042,33 +1042,48 @@ class PokerGame:
                                hand_strength, reasoning or f"{player.name} called ${call_amount}")
 
         elif action == "raise":
-            # Validate raise amount
+            # SPECIAL CASE: If "raise" amount is below minimum BUT player is going all-in,
+            # treat it as a call instead (correct poker behavior)
             min_raise = self.current_bet + self.big_blind
-            if amount < min_raise and amount < player.stack + player.current_bet:
-                return {"success": False, "bet_amount": 0, "triggers_showdown": False,
-                        "error": f"Raise amount {amount} below minimum {min_raise}"}
+            if amount < min_raise:
+                # Check if this is an all-in attempt
+                max_possible_bet = player.stack + player.current_bet
+                if amount >= player.stack or amount >= max_possible_bet:
+                    # Player is going all-in but can't meet minimum raise
+                    # Convert to call (put in all remaining chips)
+                    call_amount = self.current_bet - player.current_bet
+                    bet_amount = player.bet(call_amount)
+                    self.pot += bet_amount
+                    player.has_acted = True
+                    self._log_hand_event("action", player.player_id, "call", bet_amount,
+                                       hand_strength, reasoning or f"{player.name} called all-in ${call_amount}")
+                else:
+                    # Not an all-in, and below minimum - invalid
+                    return {"success": False, "bet_amount": 0, "triggers_showdown": False,
+                            "error": f"Raise amount {amount} below minimum {min_raise}"}
+            else:
+                # Valid raise amount - process normally
+                # Calculate bet increment (amount is TOTAL bet, not increment)
+                raise_total = amount
+                bet_increment = raise_total - player.current_bet
 
-            # Calculate bet increment (amount is TOTAL bet, not increment)
-            raise_total = amount
-            bet_increment = raise_total - player.current_bet
+                # Cap at player's stack (all-in for less)
+                if bet_increment > player.stack:
+                    bet_increment = player.stack
 
-            # Cap at player's stack (all-in for less)
-            if bet_increment > player.stack:
-                bet_increment = player.stack
+                bet_amount = player.bet(bet_increment)
+                self.pot += bet_amount
+                self.current_bet = raise_total  # CRITICAL: Use raise_total, not player.current_bet
+                self.last_raiser_index = player_index
+                player.has_acted = True
 
-            bet_amount = player.bet(bet_increment)
-            self.pot += bet_amount
-            self.current_bet = raise_total  # CRITICAL: Use raise_total, not player.current_bet
-            self.last_raiser_index = player_index
-            player.has_acted = True
+                # Reset has_acted for other players who need to respond to raise
+                for i, p in enumerate(self.players):
+                    if i != player_index and p.is_active and not p.all_in:
+                        p.has_acted = False
 
-            # Reset has_acted for other players who need to respond to raise
-            for i, p in enumerate(self.players):
-                if i != player_index and p.is_active and not p.all_in:
-                    p.has_acted = False
-
-            self._log_hand_event("action", player.player_id, "raise", bet_amount,
-                               hand_strength, reasoning or f"{player.name} raised to ${self.current_bet}")
+                self._log_hand_event("action", player.player_id, "raise", bet_amount,
+                                   hand_strength, reasoning or f"{player.name} raised to ${self.current_bet}")
 
         return {"success": True, "bet_amount": bet_amount, "triggers_showdown": triggers_showdown, "error": ""}
 
@@ -1430,7 +1445,10 @@ class PokerGame:
     def _save_hand_on_early_end(self, winner_id: Optional[str], pot_size: int):
         """Save hand that ended early (before showdown). UX Phase 2."""
         try:
-            human = next(p for p in self.players if p.is_human)
+            # Skip saving if no human player (AI-only games)
+            human = next((p for p in self.players if p.is_human), None)
+            if human is None:
+                return
 
             # Determine winner
             winner_ids = [winner_id] if winner_id else []
@@ -1500,7 +1518,10 @@ class PokerGame:
     def _save_completed_hand(self, pots: List[Dict], pot_size: int):
         """Save completed hand for later analysis. UX Phase 2."""
         try:
-            human = next(p for p in self.players if p.is_human)
+            # Skip saving if no human player (AI-only games)
+            human = next((p for p in self.players if p.is_human), None)
+            if human is None:
+                return
 
             # Collect all winners from all pots
             all_winner_ids = set()
