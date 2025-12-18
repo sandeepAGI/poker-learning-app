@@ -126,8 +126,9 @@ game.current_player_index = ...  # Moves to next player even if action failed
 
 ## What Replaced These Plans
 
-**New Documents** (in `/docs`):
-1. **TESTING_IMPROVEMENT_PLAN.md** - Comprehensive 11-phase plan (112 hours) addressing all gaps
+**Completed Documents** (archived in this directory as of December 18, 2025):
+1. **TESTING_IMPROVEMENT_PLAN.md** - ✅ COMPLETED - All 11 phases (112 hours) fully executed
+2. **TESTING_FIXES.md** - ✅ COMPLETED - All 6 phases of testing fixes investigation
 
 **Analysis Documents** (archived in this directory):
 1. **TESTING_FAILURES_ANALYSIS.md** - Root cause analysis of testing failures

@@ -1,7 +1,7 @@
 """
 Negative Testing Suite - Error Handling Path Tests
 
-Phase 1 of Testing Improvement Plan (docs/TESTING_IMPROVEMENT_PLAN.md)
+Phase 1 of Testing Improvement Plan (archive/docs/testing-history-2025-12/TESTING_IMPROVEMENT_PLAN.md)
 
 CRITICAL: These tests validate error handling paths that were previously UNTESTED.
 The infinite loop bug existed because we never tested what happens when apply_action() fails.

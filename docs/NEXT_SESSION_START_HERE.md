@@ -34,11 +34,9 @@ The infinite loop bug lives in error handling code that **was never tested**:
 
 ### Documentation
 **Active** (in `docs/`):
-1. **TESTING_IMPROVEMENT_PLAN.md** - Comprehensive 11-phase plan (112 hours)
-   - Tier 1 (78h): Pre-production testing (negative tests, fuzzing, E2E, reconnection, concurrency)
-   - Tier 2 (34h): Production hardening (RNG fairness, load testing, network simulation)
-2. HISTORY.md - Project history
-3. SETUP.md - Operational guide
+1. HISTORY.md - Project history
+2. SETUP.md - Operational guide
+3. **TESTING_IMPROVEMENT_PLAN.md** - Archived to `archive/docs/testing-history-2025-12/` (completed 11-phase plan)
 
 **Archived** (in `archive/docs/testing-history-2025-12/`):
 - 12 old planning/analysis documents (9 plans + 3 analysis docs) with comprehensive README
@@ -90,7 +88,7 @@ game.current_player_index = ...  # Moves to next player even if action failed
 
 **Goal**: Fix bug using test-driven development approach
 
-**Reference**: `docs/TESTING_IMPROVEMENT_PLAN.md` Phase 1 (lines 150-178)
+**Reference**: `archive/docs/testing-history-2025-12/TESTING_IMPROVEMENT_PLAN.md` Phase 1 (lines 150-178) - COMPLETED
 
 ### Step 1: Write Failing Test (30 min)
 
@@ -170,7 +168,7 @@ python -m pytest backend/tests/test_websocket_integration.py -v
 git add backend/tests/test_negative_actions.py backend/websocket_manager.py
 git commit -m "Fix infinite loop bug: Check apply_action() success before continuing
 
-Phase 1 of testing improvement plan (docs/TESTING_IMPROVEMENT_PLAN.md)
+Phase 1 of testing improvement plan (archive/docs/testing-history-2025-12/TESTING_IMPROVEMENT_PLAN.md)
 
 Bug: WebSocket AI processing didn't check if apply_action() succeeded
 Impact: Failed actions left has_acted=False, causing infinite loop
@@ -223,7 +221,7 @@ Once Phase 1 is complete, continue with remaining phases from the **11-phase pla
 - Phase 10: Load Testing (12h) - Concurrent games, performance benchmarks
 - Phase 11: Network Failure (10h) - High latency, packet loss, intermittent connectivity
 
-See `docs/TESTING_IMPROVEMENT_PLAN.md` for full details on all phases.
+See `archive/docs/testing-history-2025-12/TESTING_IMPROVEMENT_PLAN.md` for full details on all phases (COMPLETED).
 
 ---
 

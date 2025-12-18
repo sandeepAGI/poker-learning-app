@@ -279,4 +279,4 @@ When testing, you should see these console logs:
 
 ---
 
-**Questions?** See `STATUS.md` or `TESTING_IMPROVEMENT_PLAN.md` for overall project status.
+**Questions?** See `STATUS.md` or `archive/docs/testing-history-2025-12/TESTING_IMPROVEMENT_PLAN.md` for overall project status.

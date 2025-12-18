@@ -1,7 +1,7 @@
 # Poker Learning App - Current Status
 
-**Last Updated**: December 17, 2025
-**Version**: 11.3 (Testing Fixes Investigation Complete - ALL 6 PHASES FIXED)
+**Last Updated**: December 18, 2025
+**Version**: 11.4 (Documentation Cleanup - Testing Docs Archived)
 **Branch**: `main`
 
 ---
@@ -32,7 +32,7 @@
 **Progress**: 100% COMPLETE - ALL 11 PHASES DONE! (112/112 hours) 🎊🎉🏆
 
 **Status**: **PRODUCTION-READY** - Full 11-phase testing plan complete!
-- See `docs/TESTING_IMPROVEMENT_PLAN.md` for complete testing journey
+- See `archive/docs/testing-history-2025-12/TESTING_IMPROVEMENT_PLAN.md` for complete testing journey (archived)
 
 ### Testing Improvement Plan Progress
 
@@ -364,7 +364,7 @@ No component-level state tracking needed
 ## Testing Fixes Investigation (December 17, 2025) ✅ ALL 6 PHASES COMPLETE
 
 **Purpose**: Investigate failing tests discovered during full backend test suite run
-**Documentation**: See `docs/TESTING_FIXES.md` for complete investigation details
+**Documentation**: See `archive/docs/testing-history-2025-12/TESTING_FIXES.md` for complete investigation details (archived)
 **Status**: **All 6 phases fixed**, all production issues resolved
 
 ### Summary
@@ -435,7 +435,7 @@ After completing Bug Fix 5 (React infinite loop), a full backend test suite run 
 - `backend/game/poker_engine.py` (lines 1044-1086) - Convert invalid all-in raises to calls
 - `backend/game/poker_engine.py` (lines 1433-1436) - Skip hand saving if no human player
 - `backend/game/poker_engine.py` (lines 1506-1509) - Same fix for completed hands
-- `docs/TESTING_FIXES.md` - Updated Phase 3 completion status
+- `archive/docs/testing-history-2025-12/TESTING_FIXES.md` - Updated Phase 3 completion status (archived)
 
 ### Investigation Complete
 
@@ -444,7 +444,7 @@ All 6 phases investigated and resolved:
 - ✅ 2 production bugs fixed (AI tournament stuck hands + crashes)
 - ✅ 1 flaky test stabilized (no fix needed)
 - ✅ 40 backend tests passing in 75 seconds
-- ✅ Complete documentation in `docs/TESTING_FIXES.md`
+- ✅ Complete documentation in `archive/docs/testing-history-2025-12/TESTING_FIXES.md` (archived)
 
 ---
 
@@ -1471,7 +1471,8 @@ While the testing improvement plan is 100% complete, optional future enhancement
 
 ### References
 
-- Complete testing plan: `docs/TESTING_IMPROVEMENT_PLAN.md`
+- Complete testing plan: `archive/docs/testing-history-2025-12/TESTING_IMPROVEMENT_PLAN.md` (archived)
+- Testing fixes investigation: `archive/docs/testing-history-2025-12/TESTING_FIXES.md` (archived)
 - Development history: `docs/HISTORY.md`
 - Pre-commit hooks: `.git/hooks/pre-commit`
 - GitHub Actions workflow: `.github/workflows/test.yml`
