@@ -10,9 +10,21 @@ interface PlayerSeatProps {
   aiDecision?: AIDecision;
   showAiThinking: boolean; // UX Phase 1: Control AI reasoning visibility
   isShowdown?: boolean;
+  isDealer?: boolean;         // Phase 0.5: Dealer button indicator
+  isSmallBlind?: boolean;     // Phase 0.5: Small blind indicator
+  isBigBlind?: boolean;       // Phase 0.5: Big blind indicator
 }
 
-export function PlayerSeat({ player, isCurrentTurn, aiDecision, showAiThinking, isShowdown = false }: PlayerSeatProps) {
+export function PlayerSeat({
+  player,
+  isCurrentTurn,
+  aiDecision,
+  showAiThinking,
+  isShowdown = false,
+  isDealer = false,
+  isSmallBlind = false,
+  isBigBlind = false
+}: PlayerSeatProps) {
   return (
     <motion.div
       className={`relative p-4 rounded-lg ${
@@ -23,6 +35,25 @@ export function PlayerSeat({ player, isCurrentTurn, aiDecision, showAiThinking, 
       }}
       transition={{ duration: 0.2 }}
     >
+      {/* Phase 0.5: Button Indicators */}
+      {isDealer && (
+        <div className="absolute -top-3 -right-3 w-10 h-10 bg-white rounded-full border-4 border-amber-500 flex items-center justify-center text-sm font-bold shadow-lg z-10">
+          D
+        </div>
+      )}
+
+      {isSmallBlind && (
+        <div className="absolute -top-3 -left-3 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg z-10">
+          SB
+        </div>
+      )}
+
+      {isBigBlind && (
+        <div className="absolute -top-3 left-8 w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg z-10">
+          BB
+        </div>
+      )}
+
       {/* Player name and personality */}
       <div className="flex items-center gap-2 mb-2">
         <div className="font-semibold text-sm">{player.name}</div>

@@ -213,6 +213,24 @@ def serialize_game_state(game: PokerGame, show_ai_thinking: bool = False) -> Dic
                     }
                 break
 
+    # Calculate button positions (for educational UI indicators)
+    # Dealer button position
+    dealer_position = game.dealer_index
+
+    # Small blind position (next player with chips after dealer)
+    sb_position = (game.dealer_index + 1) % len(game.players)
+    for _ in range(len(game.players)):
+        if game.players[sb_position].stack > 0:
+            break
+        sb_position = (sb_position + 1) % len(game.players)
+
+    # Big blind position (next player with chips after SB)
+    bb_position = (sb_position + 1) % len(game.players)
+    for _ in range(len(game.players)):
+        if game.players[bb_position].stack > 0:
+            break
+        bb_position = (bb_position + 1) % len(game.players)
+
     return {
         "state": game.current_state.value,
         "pot": game.pot,
@@ -225,7 +243,10 @@ def serialize_game_state(game: PokerGame, show_ai_thinking: bool = False) -> Dic
         "winner_info": winner_info,
         "small_blind": game.small_blind,
         "big_blind": game.big_blind,
-        "hand_count": game.hand_count
+        "hand_count": game.hand_count,
+        "dealer_position": dealer_position,
+        "small_blind_position": sb_position,
+        "big_blind_position": bb_position
     }
 
 

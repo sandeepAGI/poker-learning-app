@@ -45,6 +45,9 @@ export interface GameState {
   small_blind: number;
   big_blind: number;
   hand_count: number;
+  dealer_position: number;
+  small_blind_position: number;
+  big_blind_position: number;
 }
 
 export interface CreateGameRequest {

@@ -9,6 +9,7 @@ import { AnalysisModal } from './AnalysisModal';
 import { GameOverModal } from './GameOverModal';
 import { useGameStore } from '../lib/store';
 import { useState, useEffect } from 'react';
+import type { Player } from '../lib/types'; // Phase 0.5: For button indicator helper
 
 export function PokerTable() {
   const {
@@ -309,6 +310,11 @@ export function PokerTable() {
         {(() => {
           const opponents = gameState.players.filter((p) => !p.is_human);
 
+          // Phase 0.5: Helper function to check button positions
+          const getPlayerIndex = (player: Player) => {
+            return gameState.players.findIndex(p => p.player_id === player.player_id);
+          };
+
           return (
             <>
               {/* Opponent 1 - Left Side (clockwise from human) */}
@@ -321,6 +327,9 @@ export function PokerTable() {
                     aiDecision={gameState.last_ai_decisions[opponents[0].player_id]}
                     showAiThinking={showAiThinking}
                     isShowdown={isShowdown}
+                    isDealer={getPlayerIndex(opponents[0]) === gameState.dealer_position}
+                    isSmallBlind={getPlayerIndex(opponents[0]) === gameState.small_blind_position}
+                    isBigBlind={getPlayerIndex(opponents[0]) === gameState.big_blind_position}
                   />
                 </div>
               )}
@@ -335,6 +344,9 @@ export function PokerTable() {
                     aiDecision={gameState.last_ai_decisions[opponents[1].player_id]}
                     showAiThinking={showAiThinking}
                     isShowdown={isShowdown}
+                    isDealer={getPlayerIndex(opponents[1]) === gameState.dealer_position}
+                    isSmallBlind={getPlayerIndex(opponents[1]) === gameState.small_blind_position}
+                    isBigBlind={getPlayerIndex(opponents[1]) === gameState.big_blind_position}
                   />
                 </div>
               )}
@@ -349,6 +361,9 @@ export function PokerTable() {
                     aiDecision={gameState.last_ai_decisions[opponents[2].player_id]}
                     showAiThinking={showAiThinking}
                     isShowdown={isShowdown}
+                    isDealer={getPlayerIndex(opponents[2]) === gameState.dealer_position}
+                    isSmallBlind={getPlayerIndex(opponents[2]) === gameState.small_blind_position}
+                    isBigBlind={getPlayerIndex(opponents[2]) === gameState.big_blind_position}
                   />
                 </div>
               )}
@@ -388,6 +403,9 @@ export function PokerTable() {
             isCurrentTurn={isMyTurn}
             showAiThinking={showAiThinking}
             isShowdown={isShowdown}
+            isDealer={gameState.players.findIndex(p => p.is_human) === gameState.dealer_position}
+            isSmallBlind={gameState.players.findIndex(p => p.is_human) === gameState.small_blind_position}
+            isBigBlind={gameState.players.findIndex(p => p.is_human) === gameState.big_blind_position}
           />
         </div>
 
