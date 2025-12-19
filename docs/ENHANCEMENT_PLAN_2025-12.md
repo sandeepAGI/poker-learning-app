@@ -365,7 +365,7 @@ PYTHONPATH=backend python -m pytest backend/tests/ -v
 - [x] Updated `backend/game/poker_engine.py` (personality cycling fix - modulo operator)
 - [x] Regression tests pass (23/23 tests, 49.93s)
 - [x] TypeScript compilation succeeds
-- [ ] Git commit: "Phase 1: Simplify player count to 4 or 6 players"
+- [x] Git commit: "Phase 1: Simplify player count to 4 or 6 players" (fdd39891)
 
 **Implementation Summary** (2024-12-18):
 - Changed dropdown from "1-3 AI" to "4 or 6 Players" with clear labels
