@@ -594,7 +594,7 @@ cd frontend && npm run build  # Verify no TypeScript errors
 - [x] Updated `frontend/components/PokerTable.tsx` (help button opens guide in new tab)
 - [x] Regression tests pass (23/23 tests, 46.26s)
 - [x] TypeScript compilation succeeds
-- [ ] Git commit: "Phase 2: Add Texas Hold'em tutorial and game guide"
+- [x] Git commit: "Phase 2: Add Texas Hold'em tutorial and game guide" (9f803da9)
 
 **Implementation Summary** (2024-12-18):
 - Created comprehensive tutorial with hand rankings, basic strategy, and AI decision guide
