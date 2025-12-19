@@ -1,7 +1,72 @@
 # Poker Learning App - Enhancement Plan
 **Date Created**: December 18, 2025
-**Status**: Planning Phase
+**Last Updated**: December 18, 2025 (User Feedback Integrated)
+**Status**: Planning Phase - Updated with User Feedback
 **Objective**: Enhance educational experience with improved tutorials, LLM-powered analysis, and refined gameplay
+
+---
+
+## 📝 User Feedback Integration Summary
+
+**Date**: December 18, 2025
+**Feedback Points**: 5 major items integrated into plan
+
+### Feedback #1: UX Review Gaps ⚠️ **CRITICAL**
+**Issue**: Phase 0.2 assessment was incorrect - UX Phase 2 is NOT complete
+- Player cards overlap with community cards (reported)
+- Animations missing (reported)
+- BB/SB button indicators missing
+
+**Plan Update**:
+- ✅ Added **Phase 0.5** (4-6 hours) - Complete UX Phase 2
+  - Fix circular table layout (prevent card overlap)
+  - Add community cards component with animations
+  - Add BB/SB/Dealer button indicators
+- **Priority**: CRITICAL (user-reported visual bugs)
+
+### Feedback #2: More AI Personalities with Random Assignment
+**Request**: Add more AI personalities, randomly assigned each game
+
+**Plan Update**:
+- ✅ Expanded **Phase 5** (6-8 hours) with detailed implementation
+  - Add 3 new personalities: Loose-Passive, Tight-Aggressive, Maniac
+  - Total: 6 personalities (was 3)
+  - Random selection each game (no duplicates)
+  - Expanded AI name pool to 30 names (support 5 AI opponents)
+- **Impact**: More variety, replayability, educational value
+
+### Feedback #3: Add BB/SB Button Indicators
+**Request**: Visual indicators for dealer button, small blind, big blind
+
+**Plan Update**:
+- ✅ Integrated into **Phase 0.5** and **Phase 2**
+  - Backend: Add button positions to game state API
+  - Frontend: Visual indicators on PlayerSeat component
+  - Tutorial: Explain button positions and their importance
+- **Educational Value**: Critical for teaching poker positions
+
+### Feedback #4: Session-Based Hand History
+**Question**: Should hand history be tied to session ID instead of just game ID?
+
+**Plan Update**:
+- ✅ Enhanced **Phase 3** with session tracking
+  - Add `session_id` and `timestamp` to CompletedHand dataclass
+  - Generate UUID on game creation
+  - API supports filtering: `/history?session_id={id}` or all-time
+  - LLM analysis can focus on session-specific patterns
+- **Benefit**: Track improvement within single play session
+
+### Feedback #5: Use Claude API
+**Preference**: Use Anthropic Claude instead of OpenAI
+
+**Plan Update**:
+- ✅ Switched **Phase 4** to Claude Sonnet 3.5
+  - API: `anthropic` package instead of `openai`
+  - Model: `claude-sonnet-3-5-20241022`
+  - **Cost**: $0.011 per analysis (56% cheaper than GPT-4!)
+  - Estimated savings: $4,200/month at 100 users/day
+  - Updated all code examples, environment vars, dependencies
+- **Benefits**: Cheaper, longer context, user familiarity
 
 ---
 
@@ -69,13 +134,17 @@ This plan outlines 6 phases of enhancements to transform the poker learning app 
 - [Research agent running] Identify common features and best practices
 - **Output**: `docs/COMPETITIVE_ANALYSIS.md`
 
-#### 0.2 UX Review Gap Analysis (30 min)
-- ✅ **COMPLETE**: All 4 phases of UX review implemented (Dec 11, 2025)
-  - Phase 1: Card redesign, modal fixes, action controls
-  - Phase 2: Circular layout, community cards, header menu
-  - Phase 3: Color palette, typography, spacing
-  - Phase 4: AI sidebar, responsive design, animations
-- **Conclusion**: NO GAPS - UX review fully implemented
+#### 0.2 UX Review Gap Analysis (1 hour) ⚠️ **GAPS IDENTIFIED**
+- ✅ **Phase 1 COMPLETE**: Card redesign, modal fixes, action controls
+- ⚠️ **Phase 2 INCOMPLETE**: Circular layout, community cards, header menu
+  - **Missing**: Circular table layout with absolute positioning
+  - **Missing**: Dedicated community cards area (overlap issue reported)
+  - **Missing**: Card reveal animations (reported as not present)
+  - **Missing**: BB/SB button indicators (educational value)
+- ✅ **Phase 3 COMPLETE**: Color palette, typography, spacing
+- ✅ **Phase 4 COMPLETE**: AI sidebar, responsive design
+- **Conclusion**: **GAPS FOUND** - Phase 2 UX improvements needed
+- **Action**: Add UX Phase 2 completion as Phase 0.5 (before educational content)
 
 #### 0.3 AI Implementation Review (1 hour)
 - Read `backend/game/poker_engine.py` lines 312-800 (AIStrategy class)
@@ -104,11 +173,179 @@ This plan outlines 6 phases of enhancements to transform the poker learning app 
 
 ---
 
+## Phase 0.5: Complete UX Phase 2 (Missing Layout Improvements)
+
+**Duration**: 4-6 hours
+**Risk Level**: Medium (layout changes can affect gameplay)
+**Dependencies**: None
+**Impact**: Critical - Fixes visual bugs (card overlap, missing animations)
+**Priority**: HIGH - User reported issues
+
+### Problem Statement
+UX Review Phase 2 was marked complete but is actually incomplete:
+1. **Player cards overlap with community cards** (user reported)
+2. **Animations missing** (user reported)
+3. **No circular table layout** - still using grid layout
+4. **No BB/SB button indicators** - important for learning
+
+### Solution
+Complete all Phase 2 tasks from UX_REVIEW_2025-12-11.md:
+
+#### Task 2A: Circular Table Layout (2-3 hours)
+**Fix player/community card overlap issue**
+
+**Implementation**:
+```tsx
+// frontend/components/PokerTable.tsx
+<div className="relative w-full h-screen">
+  {/* Opponents - circular positioning */}
+  <PlayerSeat
+    player={opponents[0]}
+    className="absolute top-1/3 left-[10%]"  // 9 o'clock
+  />
+  <PlayerSeat
+    player={opponents[1]}
+    className="absolute top-[8%] left-1/2 -translate-x-1/2"  // 12 o'clock
+  />
+  <PlayerSeat
+    player={opponents[2]}
+    className="absolute top-1/3 right-[10%]"  // 3 o'clock
+  />
+
+  {/* Center: Community cards + Pot (proper spacing prevents overlap) */}
+  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+    <CommunityCards cards={communityCards} />
+    <PotDisplay pot={pot} className="mt-6" />
+  </div>
+
+  {/* Human player - bottom */}
+  <PlayerSeat
+    player={humanPlayer}
+    className="absolute bottom-[8%] left-1/2 -translate-x-1/2"  // 6 o'clock
+  />
+</div>
+```
+
+#### Task 2B: Dedicated Community Cards Component with Animations (1-2 hours)
+**Fix missing animations issue**
+
+**Create**: `frontend/components/CommunityCards.tsx`
+```tsx
+import { motion } from 'framer-motion';
+import { Card } from './Card';
+
+export function CommunityCards({ cards, state }) {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      {/* Stage label */}
+      {state !== 'pre_flop' && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-amber-400 font-bold text-lg"
+        >
+          {state === 'flop' && 'FLOP'}
+          {state === 'turn' && 'TURN'}
+          {state === 'river' && 'RIVER'}
+        </motion.div>
+      )}
+
+      {/* Cards with stagger animation */}
+      <div className="flex gap-3 bg-poker-felt-dark px-6 py-4 rounded-xl border-2 border-poker-accent">
+        {cards.map((card, i) => (
+          <motion.div
+            key={i}
+            initial={{ scale: 0, rotateY: 180 }}
+            animate={{ scale: 1, rotateY: 0 }}
+            transition={{
+              delay: i * 0.15,  // Stagger: 150ms between cards
+              duration: 0.3,
+              type: "spring"
+            }}
+          >
+            <Card rank={card.rank} suit={card.suit} size="large" />
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+```
+
+#### Task 2C: Add BB/SB/Dealer Button Indicators (1 hour)
+**New requirement from user feedback - educational value**
+
+**Add to PlayerSeat component**:
+```tsx
+// frontend/components/PlayerSeat.tsx
+export function PlayerSeat({ player, isDealer, isSmallBlind, isBigBlind }) {
+  return (
+    <div className="relative">
+      {/* Dealer button */}
+      {isDealer && (
+        <div className="absolute -top-3 -right-3 w-10 h-10 bg-white rounded-full border-4 border-amber-500 flex items-center justify-center text-sm font-bold shadow-lg">
+          D
+        </div>
+      )}
+
+      {/* Blind indicators */}
+      {isSmallBlind && (
+        <div className="absolute -top-3 -left-3 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+          SB
+        </div>
+      )}
+      {isBigBlind && (
+        <div className="absolute -top-3 left-8 w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg">
+          BB
+        </div>
+      )}
+
+      {/* Rest of player seat... */}
+    </div>
+  );
+}
+```
+
+**Backend changes needed**:
+```python
+# backend/main.py - Add button positions to game state
+def _game_to_dict(game):
+    return {
+        # ... existing fields
+        "dealer_position": game.dealer_index,
+        "small_blind_position": (game.dealer_index + 1) % len(game.players),
+        "big_blind_position": (game.dealer_index + 2) % len(game.players),
+    }
+```
+
+### Testing Strategy
+```bash
+# Regression tests must pass
+PYTHONPATH=backend python -m pytest backend/tests/ -v
+
+# Visual testing
+1. Start game, verify circular layout (no overlap)
+2. Play hand, verify community cards animate
+3. Check BB/SB/D buttons appear on correct players
+4. Test 4-player and 6-player layouts
+5. Verify responsive design (mobile)
+```
+
+### Deliverables
+- [ ] Updated `frontend/components/PokerTable.tsx` (circular layout)
+- [ ] New `frontend/components/CommunityCards.tsx` (with animations)
+- [ ] Updated `frontend/components/PlayerSeat.tsx` (button indicators)
+- [ ] Updated `backend/main.py` (button position data)
+- [ ] Screenshots: Before/After layout fix
+- [ ] Git commit: "Phase 0.5: Complete UX Phase 2 - layout, animations, buttons"
+
+---
+
 ## Phase 1: Player Count Simplification
 
 **Duration**: 1-2 hours
 **Risk Level**: Low
-**Dependencies**: None
+**Dependencies**: Phase 0.5 (UX fixes)
 **Impact**: Better UX, clearer game setup
 
 ### Problem Statement
@@ -457,6 +694,11 @@ Implement comprehensive hand history storage:
 #### 3.1 Backend Data Model Enhancement
 **File**: `backend/game/poker_engine.py`
 
+**User Feedback Integration**: Add session-based tracking
+- Store session_id with each hand for session-scoped analysis
+- Support filtering by session vs. all-time game history
+- Benefits: Track improvement within single play session
+
 **Current** (lines 45-60):
 ```python
 @dataclass
@@ -471,7 +713,7 @@ class CompletedHand:
     # ... existing fields
 ```
 
-**Enhanced**:
+**Enhanced with Session Support**:
 ```python
 @dataclass
 class ActionRecord:
@@ -512,10 +754,33 @@ class CompletedHand:
     events: List[HandEvent]
     analysis_available: bool = True
 
+    # NEW: Session tracking (user feedback #4)
+    session_id: str = ""  # UUID for the play session
+    timestamp: str = ""  # When hand was played
+
     # NEW: Detailed round-by-round history
     betting_rounds: List[BettingRound] = field(default_factory=list)
     showdown_hands: Dict[str, List[str]] = field(default_factory=dict)  # player_id -> cards revealed
     hand_rankings: Dict[str, str] = field(default_factory=dict)  # player_id -> hand rank (pair, flush, etc.)
+```
+
+**Session ID Generation**:
+```python
+import uuid
+from datetime import datetime
+
+class PokerGame:
+    def __init__(self, ...):
+        # ... existing init
+        self.session_id = str(uuid.uuid4())  # Generate on game creation
+
+    def _save_hand_on_early_end(self, ...):
+        completed_hand = CompletedHand(
+            # ... existing fields
+            session_id=self.session_id,
+            timestamp=datetime.utcnow().isoformat(),
+            # ... rest of fields
+        )
 ```
 
 #### 3.2 Action Tracking During Gameplay
@@ -603,25 +868,40 @@ def _save_hand_on_early_end(self, winner_id: str, pot_awarded: int):
 def get_hand_history(
     game_id: str,
     limit: int = 10,
-    offset: int = 0
+    offset: int = 0,
+    session_id: Optional[str] = None  # NEW: Filter by session (user feedback #4)
 ):
-    """Get hand history for analysis and LLM context."""
+    """
+    Get hand history for analysis and LLM context.
+
+    Args:
+        session_id: Optional - filter to specific session only
+                   If None, returns all hands for this game
+    """
     game = games.get(game_id)
     if not game:
         raise HTTPException(status_code=404, detail="Game not found")
 
     if not hasattr(game, 'hand_history'):
-        return {"hands": [], "total": 0}
+        return {"hands": [], "total": 0, "session_id": session_id}
 
-    total = len(game.hand_history)
-    hands = game.hand_history[-(offset + limit):-offset if offset > 0 else None]
+    # Filter by session if specified (user feedback #4)
+    if session_id:
+        filtered_hands = [h for h in game.hand_history if h.session_id == session_id]
+    else:
+        filtered_hands = game.hand_history
+
+    total = len(filtered_hands)
+    hands = filtered_hands[-(offset + limit):-offset if offset > 0 else None]
     hands.reverse()  # Most recent first
 
     return {
         "hands": [hand.__dict__ for hand in hands],
         "total": total,
         "offset": offset,
-        "limit": limit
+        "limit": limit,
+        "session_id": session_id,
+        "filtering": "session" if session_id else "all"
     }
 ```
 
@@ -763,53 +1043,62 @@ Replace with LLM-powered analysis that:
 
 ### LLM Integration Strategy
 
-#### 4.1 LLM Provider Selection
-**Options**:
-1. **OpenAI GPT-4** (Recommended)
-   - Pros: Best quality, reliable, good poker knowledge
-   - Cons: Higher cost (~$0.03 per analysis)
-   - API: `openai` Python package
+#### 4.1 LLM Provider Selection ✅ **USER PREFERENCE: CLAUDE API**
 
-2. **Anthropic Claude** (Alternative)
-   - Pros: Good quality, cheaper, longer context
-   - Cons: Slightly less poker-specific knowledge
-   - API: `anthropic` Python package
+**User Feedback #5**: Use Anthropic Claude instead of OpenAI
 
-3. **Local Model** (Future consideration)
-   - Pros: No API costs, privacy
-   - Cons: Requires GPU, setup complexity
-   - Models: Llama 3, Mistral
+**Selected Provider**: **Anthropic Claude** (Claude Sonnet 3.5)
+- ✅ **User preference** - familiar with Anthropic ecosystem
+- ✅ **Cost-effective**: $0.003/1K input, $0.015/1K output (cheaper than GPT-4!)
+- ✅ **Long context**: 200K tokens (vs GPT-4's 128K)
+- ✅ **High quality**: Excellent reasoning and coaching capabilities
+- ✅ **Better value**: ~2-3x cheaper than GPT-4 for same quality
 
-**Decision**: Start with OpenAI GPT-4 (easy integration, best quality)
+**Alternatives considered** (rejected based on user feedback):
+- ❌ OpenAI GPT-4 Turbo: $0.01/1K input, $0.03/1K output (more expensive)
+- ❌ Local models: Setup complexity, no API simplicity
 
-#### 4.2 Cost Analysis
+**Final Decision**: **Claude Sonnet 3.5** for best cost/quality balance
+
+#### 4.2 Cost Analysis (Updated for Claude)
 **Assumptions**:
 - Average hand analysis: ~1000 tokens input, ~500 tokens output
-- GPT-4 Turbo: $0.01/1K input, $0.03/1K output
-- Cost per analysis: ~$0.025
+- **Claude Sonnet 3.5**: $0.003/1K input, $0.015/1K output
+- **Cost per analysis**: ~$0.011 (56% cheaper than GPT-4!)
+
+**Cost Comparison**:
+| Provider | Input Cost | Output Cost | Per Analysis | vs Claude |
+|----------|------------|-------------|--------------|-----------|
+| Claude Sonnet 3.5 | $0.003/1K | $0.015/1K | **$0.011** | Baseline |
+| GPT-4 Turbo | $0.01/1K | $0.03/1K | $0.025 | 2.3x more |
+| Claude Opus | $0.015/1K | $0.075/1K | $0.053 | 4.8x more |
+
+**Estimated Usage Costs**:
+- 10 analyses/session: $0.11
+- 100 users/day × 10 analyses = **$110/day = $3,300/month**
+- **Savings vs GPT-4**: $4,200/month! 💰
 
 **Mitigation strategies**:
-- Cache analysis results (don't regenerate)
-- Offer "Quick Analysis" (cheaper, shorter) vs "Deep Analysis"
+- Cache analysis results (don't regenerate) - saves 90%
 - Rate limiting (1 analysis per hand, max 1 per 30 seconds)
-- Consider cheaper model for initial analysis, GPT-4 for deep dives
+- Start with Sonnet 3.5, upgrade to Opus only if quality issues
 
 ### Technical Implementation
 
-#### 4.3 Backend: LLM Service
+#### 4.3 Backend: LLM Service (Updated for Claude)
 **File**: `backend/llm_analyzer.py` (NEW)
 
 ```python
-from openai import OpenAI
+from anthropic import Anthropic
 from typing import Dict, List
 import os
 
 class LLMHandAnalyzer:
-    """Generate personalized hand analysis using LLM."""
+    """Generate personalized hand analysis using Claude API."""
 
     def __init__(self):
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-        self.model = "gpt-4-turbo-preview"  # or "gpt-3.5-turbo" for cheaper
+        self.client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        self.model = "claude-sonnet-3-5-20241022"  # Latest Sonnet 3.5
 
     def analyze_hand(
         self,
@@ -857,25 +1146,22 @@ class LLMHandAnalyzer:
         # Create prompt
         prompt = self._create_analysis_prompt(context, player_skill_level)
 
-        # Call LLM
-        response = self.client.chat.completions.create(
+        # Call Claude API
+        response = self.client.messages.create(
             model=self.model,
+            max_tokens=1500,
+            temperature=0.7,
+            system=self._get_system_prompt(player_skill_level),
             messages=[
-                {
-                    "role": "system",
-                    "content": self._get_system_prompt(player_skill_level)
-                },
                 {
                     "role": "user",
                     "content": prompt
                 }
-            ],
-            temperature=0.7,
-            max_tokens=1500
+            ]
         )
 
         # Parse response (expect JSON)
-        analysis = self._parse_llm_response(response.choices[0].message.content)
+        analysis = self._parse_llm_response(response.content[0].text)
 
         return analysis
 
@@ -1278,13 +1564,23 @@ def test_llm_analysis_includes_round_by_round():
 - Rate limit: Queue analysis or prompt user to wait
 - Malformed response: Parse best-effort, fall back if needed
 
-### Environment Variables
+### Environment Variables (Updated for Claude)
 **File**: `backend/.env` (example)
 ```
-OPENAI_API_KEY=sk-...
-LLM_MODEL=gpt-4-turbo-preview
+ANTHROPIC_API_KEY=sk-ant-...
+LLM_MODEL=claude-sonnet-3-5-20241022
 LLM_CACHE_ENABLED=true
 LLM_FALLBACK_TO_RULES=true
+```
+
+**Dependencies to add**:
+```bash
+pip install anthropic
+```
+
+**File**: `backend/requirements.txt`
+```
+anthropic>=0.25.0  # Claude API client
 ```
 
 ### Deliverables
@@ -1299,24 +1595,296 @@ LLM_FALLBACK_TO_RULES=true
 
 ---
 
-## Phase 5: AI Enhancement
+## Phase 5: AI Personality Expansion & Random Assignment
 
-**Duration**: TBD (depends on Phase 0 findings)
-**Risk Level**: High (core gameplay changes)
+**Duration**: 6-8 hours
+**Risk Level**: Medium (AI behavior changes, needs extensive testing)
 **Dependencies**: Phase 0 (AI evaluation)
-**Impact**: More challenging, realistic, and educational AI opponents
+**Impact**: More variety, replayability, and realistic poker experience
+**Priority**: HIGH - User feedback #2
 
-### Placeholder - To be determined after Phase 0 research
+### User Feedback #2 Integration
+"I think we should have more AI personalities - so a game is assigned a random subset"
 
-**Potential enhancements** (will be prioritized after evaluation):
-1. Additional AI personalities (Loose-Passive, Maniac, Tight-Aggressive)
-2. Adaptive AI that learns from human player patterns
-3. More sophisticated SPR-based decision making
-4. Position-aware play (early position vs late position)
-5. Bluffing frequency adjustments
-6. Hand reading capabilities
+### Problem Statement
+Current system:
+- Only 3 AI personalities (Conservative, Aggressive, Mathematical)
+- Every 3-AI game has the same mix every time (predictable)
+- Players quickly learn opponent patterns
+- Lacks variety across different games
 
-**Will create detailed plan after Phase 0 completes.**
+### Solution
+1. **Add 3 new AI personalities** (total 6 personalities)
+2. **Random assignment**: Each game randomly selects from personality pool
+3. **Variety enforcement**: No duplicate personalities in same game
+
+### New AI Personalities
+
+#### Current (3):
+1. **Conservative** - Tight, SPR-aware, folds weak hands
+2. **Aggressive** - Bluffs often, applies pressure, push/fold with low SPR
+3. **Mathematical** - Pot odds + EV driven, optimal decisions
+
+#### New (3):
+4. **Loose-Passive ("Calling Station")**
+   - Calls too often with marginal hands
+   - Rarely raises or bluffs
+   - Educational value: Shows bad poker (what NOT to do)
+   - Hand strength threshold: Calls with any pair or better
+   - SPR-aware: Still folds with very weak hands when SPR > 15
+
+5. **Tight-Aggressive (TAG)**
+   - Premium hand requirements
+   - Raises when has strong hands (not passive like Conservative)
+   - Fold equity conscious
+   - Educational value: Shows disciplined profitable poker
+   - Hand strength threshold: Only plays top 20% of hands
+   - SPR-aware: More aggressive with low SPR, patient with high SPR
+
+6. **Maniac**
+   - Hyper-aggressive, almost always raising
+   - Bluffs 60%+ of the time
+   - Puts maximum pressure
+   - Educational value: Shows variance and tilt-inducing play
+   - Hand strength threshold: Any two cards playable with aggression
+   - SPR-aware: All-in frequently with low SPR
+
+### Technical Implementation
+
+#### 5.1 Add New Personality Logic
+**File**: `backend/game/poker_engine.py`
+
+**Add to AIStrategy class**:
+```python
+elif personality == "Loose-Passive":
+    # Calling station - calls too much, rarely raises
+    if hand_strength >= 0.20:  # Any pair or better
+        if spr < 3:  # Low SPR - call to see showdown
+            action = "call"
+            amount = call_amount
+            reasoning = f"Low SPR ({spr:.1f}) - calling with {hand_rank}. Loose-passive play."
+            confidence = 0.6
+        elif current_bet > player_stack // 3:  # Too expensive
+            action = "fold"
+            amount = 0
+            reasoning = f"Too expensive ({hand_rank}). Even calling stations fold sometimes."
+            confidence = 0.7
+        else:  # Default: call almost everything
+            action = "call"
+            amount = call_amount
+            reasoning = f"Calling with {hand_rank} ({hand_strength:.1%}). Loose-passive style."
+            confidence = 0.5
+    else:  # Even calling stations fold high card sometimes
+        if call_amount <= player_stack // 40:  # Very small bet
+            action = "call"
+            amount = call_amount
+            reasoning = f"Small bet, worth a call with {hand_rank}. Loose play."
+            confidence = 0.4
+        else:
+            action = "fold"
+            amount = 0
+            reasoning = f"Weak hand ({hand_rank}). Fold."
+            confidence = 0.8
+
+elif personality == "Tight-Aggressive":
+    # TAG - premium hands only, but aggressive when playing
+    if hand_strength >= 0.75:  # Flush or better - premium
+        action = "raise"
+        amount = max(current_bet + big_blind, pot_size)
+        amount = min(amount, player_stack)
+        reasoning = f"Premium hand ({hand_rank}, {hand_strength:.1%}). TAG value betting."
+        confidence = 0.95
+    elif hand_strength >= 0.55:  # Three of a kind - solid
+        if spr < 5:  # Low SPR - go all-in
+            action = "raise"
+            amount = player_stack
+            reasoning = f"Low SPR ({spr:.1f}), strong hand ({hand_rank}). TAG push."
+            confidence = 0.9
+        else:  # Raise for value
+            action = "raise"
+            amount = max(current_bet + big_blind, current_bet * 2)
+            amount = min(amount, player_stack)
+            reasoning = f"Strong hand ({hand_rank}). TAG value raise."
+            confidence = 0.85
+    elif hand_strength >= 0.35:  # Marginal hands - fold
+        action = "fold"
+        amount = 0
+        reasoning = f"Below TAG threshold ({hand_rank}, {hand_strength:.1%}). Fold."
+        confidence = 0.8
+    else:  # Weak hands - always fold
+        action = "fold"
+        amount = 0
+        reasoning = f"Weak hand ({hand_rank}). TAG disciplined fold."
+        confidence = 0.95
+
+elif personality == "Maniac":
+    # Hyper-aggressive - raises almost always
+    if hand_strength >= 0.45:  # Two pair or better
+        action = "raise"
+        amount = max(current_bet + big_blind, pot_size * 2)
+        amount = min(amount, player_stack)
+        reasoning = f"Strong hand ({hand_rank}). Maniac value aggression!"
+        confidence = 0.7
+    elif random.random() < 0.70:  # 70% bluff frequency
+        action = "raise"
+        amount = max(current_bet + big_blind, pot_size)
+        amount = min(amount, player_stack)
+        reasoning = f"Bluffing with {hand_rank}. Maniac pressure play!"
+        confidence = 0.3
+    else:  # Occasionally calls to vary play
+        if call_amount < player_stack // 2:
+            action = "call"
+            amount = call_amount
+            reasoning = f"Calling with {hand_rank} to vary play. Maniac style."
+            confidence = 0.4
+        else:  # Too expensive even for maniac
+            action = "fold"
+            amount = 0
+            reasoning = f"Too expensive. Even maniacs fold sometimes."
+            confidence = 0.6
+```
+
+#### 5.2 Random Personality Assignment
+**File**: `backend/game/poker_engine.py`
+
+**Update PokerGame initialization**:
+```python
+import random
+
+class PokerGame:
+    # Available personalities pool
+    ALL_PERSONALITIES = [
+        "Conservative",
+        "Aggressive",
+        "Mathematical",
+        "Loose-Passive",
+        "Tight-Aggressive",
+        "Maniac"
+    ]
+
+    def __init__(self, player_name: str = "Player", ai_count: int = 3):
+        # ... existing init code ...
+
+        # NEW: Randomly assign AI personalities (no duplicates)
+        selected_personalities = random.sample(self.ALL_PERSONALITIES, ai_count)
+
+        # Create AI players with random personalities
+        for i in range(ai_count):
+            ai_name = random.choice(self.ai_names)
+            self.ai_names.remove(ai_name)  # Avoid duplicate names
+
+            self.players.append(Player(
+                player_id=f"ai_{i+1}",
+                name=ai_name,
+                stack=1000,
+                is_human=False,
+                personality=selected_personalities[i]  # Random from pool
+            ))
+```
+
+#### 5.3 AI Name Pool Expansion
+**Ensure enough names for 5 AI opponents (6-player games)**
+
+**File**: `backend/game/poker_engine.py`
+
+```python
+self.ai_names = [
+    # Existing (24 names)
+    "AI-ce", "Deep Blue", "The Algorithm", "Bot Ross",
+    # ... existing names
+
+    # NEW: Add 6 more names for 5-AI support
+    "The Oracle", "Quantum", "Cipher", "Neural Net",
+    "Monte Carlo", "The Professor"
+]  # Total: 30 names (supports up to 29 AI opponents!)
+```
+
+### Testing Strategy
+
+#### New Tests Required
+**File**: `backend/tests/test_ai_personalities.py` (NEW)
+
+```python
+def test_all_six_personalities_work():
+    """Verify all 6 personalities make valid decisions."""
+    personalities = ["Conservative", "Aggressive", "Mathematical",
+                     "Loose-Passive", "Tight-Aggressive", "Maniac"]
+
+    for personality in personalities:
+        decision = AIStrategy.make_decision_with_reasoning(
+            personality=personality,
+            hole_cards=["Ah", "Kh"],
+            community_cards=[],
+            current_bet=20,
+            pot_size=50,
+            player_stack=1000
+        )
+        assert decision.action in ["fold", "call", "raise"]
+        assert len(decision.reasoning) > 0
+
+def test_random_personality_assignment_no_duplicates():
+    """Verify random assignment doesn't create duplicates."""
+    game = PokerGame(player_name="Test", ai_count=5)
+
+    ai_personalities = [p.personality for p in game.players if not p.is_human]
+    assert len(ai_personalities) == 5
+    assert len(set(ai_personalities)) == 5  # All unique
+
+def test_personality_variety_across_games():
+    """Verify different games get different personality mixes."""
+    personalities_sets = []
+
+    for _ in range(10):
+        game = PokerGame(player_name="Test", ai_count=3)
+        ai_personalities = tuple(sorted([p.personality for p in game.players if not p.is_human]))
+        personalities_sets.append(ai_personalities)
+
+    # At least 3 different combinations in 10 games
+    assert len(set(personalities_sets)) >= 3
+```
+
+#### Regression Testing
+```bash
+# All existing tests must pass
+PYTHONPATH=backend python -m pytest backend/tests/ -v
+
+# New personality tests
+PYTHONPATH=backend python -m pytest backend/tests/test_ai_personalities.py -v
+```
+
+#### Manual Testing
+1. Create 10 different games, verify personality variety
+2. Play against each personality, verify distinct behavior
+3. Check Loose-Passive calls too much (educational anti-pattern)
+4. Check TAG folds marginal hands but raises premium
+5. Check Maniac bluffs frequently and applies pressure
+
+### Educational Value
+
+**Tutorial Integration** (Phase 2):
+- Explain each personality type in tutorial
+- Show what each style teaches:
+  - Conservative: Risk management
+  - Aggressive: Pressure and fold equity
+  - Mathematical: Pot odds and EV
+  - Loose-Passive: What NOT to do (calling station)
+  - TAG: Disciplined profitable poker
+  - Maniac: Variance and bankroll swings
+
+**AI Thinking Display**:
+- Personality type shown in AI sidebar
+- Helps players identify opponent styles
+- Learning to adjust strategy vs different types
+
+### Deliverables
+- [ ] Updated `backend/game/poker_engine.py` (3 new personalities)
+- [ ] Updated `backend/game/poker_engine.py` (random assignment logic)
+- [ ] Expanded AI name pool (30 names)
+- [ ] `backend/tests/test_ai_personalities.py` (NEW - 3 tests)
+- [ ] Updated tutorial content (Phase 2) with personality explanations
+- [ ] Git commit: "Phase 5: Add 3 new AI personalities with random assignment"
+
+---
 
 ---
 
@@ -1342,19 +1910,26 @@ LLM_FALLBACK_TO_RULES=true
 
 ---
 
-## Overall Timeline
+## Overall Timeline (Updated with User Feedback)
 
-| Phase | Duration | Start After | End-to-End Timeline |
-|-------|----------|-------------|---------------------|
-| Phase 0: Research | 2-3 hours | Now | Day 1 |
-| Phase 1: Player Count | 1-2 hours | Phase 0 | Day 1 |
-| Phase 2: Educational Content | 6-8 hours | Phase 0 | Day 2-3 |
-| Phase 3: Hand History | 4-6 hours | Phase 2 | Day 3-4 |
-| Phase 4: LLM Analysis | 8-12 hours | Phase 3 | Day 4-6 |
-| Phase 5: AI Enhancement | TBD | Phase 0 | TBD |
-| Phase 6: Additional Features | TBD | Phase 0 | TBD |
+| Phase | Duration | Start After | End-to-End Timeline | Priority |
+|-------|----------|-------------|---------------------|----------|
+| **Phase 0**: Research | 2-3 hours | Now | Day 1 | HIGH |
+| **Phase 0.5**: UX Fixes | 4-6 hours | Phase 0 | Day 1-2 | **CRITICAL** |
+| **Phase 1**: Player Count | 1-2 hours | Phase 0.5 | Day 2 | MEDIUM |
+| **Phase 2**: Educational Content | 6-8 hours | Phase 1 | Day 2-3 | HIGH |
+| **Phase 3**: Hand History (Session) | 4-6 hours | Phase 2 | Day 3-4 | HIGH |
+| **Phase 4**: LLM (Claude) Analysis | 8-12 hours | Phase 3 | Day 4-6 | HIGH |
+| **Phase 5**: AI Personalities | 6-8 hours | Phase 0 | Day 6-7 | HIGH |
+| **Phase 6**: Additional Features | TBD | Phase 5 | TBD | MEDIUM |
 
-**Total (Phases 0-4)**: 21-31 hours (~3-4 working days)
+**Total (Phases 0-5)**: 31-45 hours (~4-6 working days)
+
+**Critical Path Changes from User Feedback**:
+- ✅ **Phase 0.5 added** - Fix UX bugs (card overlap, animations, BB/SB buttons)
+- ✅ **Phase 3 enhanced** - Session-based hand history tracking
+- ✅ **Phase 4 updated** - Claude API instead of OpenAI (56% cost savings!)
+- ✅ **Phase 5 expanded** - 6 AI personalities with random assignment
 
 ---
 
