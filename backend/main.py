@@ -291,12 +291,17 @@ def next_hand(game_id: str):
 
 
 @app.get("/games/{game_id}/analysis")
-def get_hand_analysis(game_id: str):
+def get_hand_analysis(game_id: str, hand_number: Optional[int] = None):
     """
-    Get rule-based analysis of the last completed hand.
+    Get rule-based analysis of a completed hand.
     UX Phase 2 - Learning feature.
 
-    Returns insights, tips, and AI reasoning for the last hand.
+    Args:
+        game_id: Game ID
+        hand_number: Optional hand number to analyze (defaults to last hand)
+
+    Returns insights, tips, and AI reasoning for the specified hand.
+    Phase 3: Support for historical hand analysis via hand_number parameter.
     """
     if game_id not in games:
         raise HTTPException(status_code=404, detail="Game not found")
@@ -304,12 +309,73 @@ def get_hand_analysis(game_id: str):
     game, _ = games[game_id]
     games[game_id] = (game, time.time())  # Update access time
 
-    analysis = game.analyze_last_hand()
+    # Phase 3: Support analyzing specific hand by number
+    if hand_number is not None:
+        # Find hand in history
+        target_hand = None
+        for hand in game.hand_history:
+            if hand.hand_number == hand_number:
+                target_hand = hand
+                break
 
-    if not analysis:
-        raise HTTPException(status_code=404, detail="No completed hands to analyze yet")
+        if not target_hand:
+            raise HTTPException(status_code=404, detail=f"Hand #{hand_number} not found in history")
 
-    return analysis
+        # Temporarily set as last_hand_summary for analysis
+        original_last_hand = game.last_hand_summary
+        game.last_hand_summary = target_hand
+        analysis = game.analyze_last_hand()
+        game.last_hand_summary = original_last_hand
+
+        if not analysis:
+            raise HTTPException(status_code=500, detail="Failed to analyze hand")
+        return analysis
+    else:
+        # Default: analyze most recent hand
+        analysis = game.analyze_last_hand()
+        if not analysis:
+            raise HTTPException(status_code=404, detail="No completed hands to analyze yet")
+        return analysis
+
+
+@app.get("/games/{game_id}/history")
+def get_hand_history(game_id: str, limit: Optional[int] = 10):
+    """
+    Get hand history for a game session.
+    Phase 3: Hand History Infrastructure.
+
+    Args:
+        game_id: Game ID
+        limit: Maximum number of hands to return (default 10, max 100)
+
+    Returns:
+        List of completed hands with detailed round-by-round actions.
+    """
+    if game_id not in games:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    game, _ = games[game_id]
+    games[game_id] = (game, time.time())  # Update access time
+
+    # Validate and cap limit
+    if limit < 1:
+        limit = 10
+    elif limit > 100:
+        limit = 100
+
+    # Get most recent N hands
+    hands = game.hand_history[-limit:] if len(game.hand_history) > limit else game.hand_history
+
+    # Convert to JSON-serializable format
+    from dataclasses import asdict
+    hands_data = [asdict(hand) for hand in hands]
+
+    return {
+        "session_id": game.session_id,
+        "total_hands": len(game.hand_history),
+        "returned_hands": len(hands_data),
+        "hands": hands_data
+    }
 
 
 @app.websocket("/ws/{game_id}")

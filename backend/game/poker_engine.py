@@ -43,6 +43,28 @@ class AIDecision:
     spr: float = 0.0  # Stack-to-Pot Ratio for pot-relative decision making
 
 @dataclass
+class ActionRecord:
+    """Single action in a betting round - Phase 3."""
+    player_id: str
+    player_name: str
+    action: str  # fold, call, raise, check, all-in
+    amount: int
+    stack_before: int
+    stack_after: int
+    pot_before: int
+    pot_after: int
+    reasoning: str = ""  # AI reasoning if available
+
+@dataclass
+class BettingRound:
+    """All actions in a single betting round - Phase 3."""
+    round_name: str  # pre_flop, flop, turn, river
+    community_cards: List[str]  # Cards visible at this stage
+    actions: List[ActionRecord] = field(default_factory=list)
+    pot_at_start: int = 0
+    pot_at_end: int = 0
+
+@dataclass
 class CompletedHand:
     """Store completed hand for analysis."""
     hand_number: int
@@ -58,6 +80,13 @@ class CompletedHand:
     ai_decisions: Dict[str, AIDecision]  # player_id -> their decision
     events: List[HandEvent]  # All events in the hand
     analysis_available: bool = True
+
+    # Phase 3: Session tracking and detailed history
+    session_id: str = ""  # UUID for the play session
+    timestamp: str = ""  # When hand was played (ISO format)
+    betting_rounds: List[BettingRound] = field(default_factory=list)  # Round-by-round actions
+    showdown_hands: Dict[str, List[str]] = field(default_factory=dict)  # player_id -> cards revealed
+    hand_rankings: Dict[str, str] = field(default_factory=dict)  # player_id -> hand rank (pair, flush, etc.)
 
 @dataclass
 class Player:
@@ -651,6 +680,17 @@ class PokerGame:
         self.completed_hands: List[CompletedHand] = []
         self.last_hand_summary: Optional[CompletedHand] = None
 
+        # Phase 3: Hand history infrastructure
+        import uuid
+        from datetime import datetime
+        self.session_id = str(uuid.uuid4())  # Generate unique session ID
+        self.hand_history: List[CompletedHand] = []  # Store all hands (max 100)
+
+        # Phase 3: Current hand tracking for detailed history
+        self._current_round_actions: List[ActionRecord] = []
+        self._hand_betting_rounds: List[BettingRound] = []
+        self._pot_at_round_start = 0
+
         # QC: Enable runtime assertions for poker rule validation
         self.qc_enabled = True  # Set to False to disable for performance
         self.total_chips = sum(p.stack for p in self.players) + self.pot  # Track expected total
@@ -924,6 +964,11 @@ class PokerGame:
         self.current_hand_events = []
         self.last_ai_decisions = {}
 
+        # Phase 3: Reset hand history tracking for new hand
+        self._current_round_actions = []
+        self._hand_betting_rounds = []
+        self._pot_at_round_start = 0
+
         # Reset for new hand
         for player in self.players:
             player.reset_for_new_hand()
@@ -1186,6 +1231,21 @@ class PokerGame:
                 self._log_hand_event("action", player.player_id, "raise", bet_amount,
                                    hand_strength, reasoning or f"{player.name} raised to ${self.current_bet}")
 
+        # Phase 3: Track action for detailed hand history
+        if action != "fold":  # Track successful actions (fold already tracked separately)
+            action_record = ActionRecord(
+                player_id=player.player_id,
+                player_name=player.name,
+                action=action,
+                amount=bet_amount,
+                stack_before=player.stack + bet_amount,  # Stack before action
+                stack_after=player.stack,
+                pot_before=self.pot - bet_amount,
+                pot_after=self.pot,
+                reasoning=reasoning
+            )
+            self._current_round_actions.append(action_record)
+
         return {"success": True, "bet_amount": bet_amount, "triggers_showdown": triggers_showdown, "error": ""}
 
     def submit_human_action(self, action: str, amount: int = None, process_ai: bool = True) -> bool:
@@ -1439,6 +1499,18 @@ class PokerGame:
         if not self._betting_round_complete():
             return False  # Can't advance yet
 
+        # Phase 3: Save current betting round before advancing
+        if len(self._current_round_actions) > 0:
+            betting_round = BettingRound(
+                round_name=self.current_state.value,
+                community_cards=self.community_cards.copy(),
+                actions=self._current_round_actions.copy(),
+                pot_at_start=self._pot_at_round_start,
+                pot_at_end=self.pot
+            )
+            self._hand_betting_rounds.append(betting_round)
+            self._current_round_actions = []  # Reset for next round
+
         # Advance to next state and deal cards
         if self.current_state == GameState.PRE_FLOP:
             self.current_state = GameState.FLOP
@@ -1459,6 +1531,9 @@ class PokerGame:
             player.reset_for_new_round()
         self.current_bet = 0
         self.last_raiser_index = None
+
+        # Phase 3: Track pot at start of new round
+        self._pot_at_round_start = self.pot
 
         # First to act is after dealer
         first_to_act = self._get_next_active_player_index(self.dealer_index + 1)
@@ -1587,6 +1662,10 @@ class PokerGame:
                         human_pot_odds = call_amount / (event.pot_size + call_amount)
                     break
 
+            # Phase 3: Add session tracking and detailed history
+            from datetime import datetime
+            timestamp = datetime.utcnow().isoformat() + 'Z'
+
             # Create completed hand record
             completed_hand = CompletedHand(
                 hand_number=self.hand_count,
@@ -1600,14 +1679,25 @@ class PokerGame:
                 human_hand_strength=human_hand_strength,
                 human_pot_odds=human_pot_odds,
                 ai_decisions=self.last_ai_decisions.copy(),
-                events=self.current_hand_events.copy()
+                events=self.current_hand_events.copy(),
+                # Phase 3 fields
+                session_id=self.session_id,
+                timestamp=timestamp,
+                betting_rounds=self._hand_betting_rounds.copy(),
+                showdown_hands={},  # Early end - no showdown
+                hand_rankings={}  # Early end - no rankings
             )
 
             # Store
             self.last_hand_summary = completed_hand
             self.completed_hands.append(completed_hand)
 
-            # Keep only last 50 hands
+            # Phase 3: Also store in hand_history with 100-hand limit
+            self.hand_history.append(completed_hand)
+            if len(self.hand_history) > 100:
+                self.hand_history = self.hand_history[-100:]
+
+            # Keep only last 50 hands in completed_hands (legacy)
             if len(self.completed_hands) > 50:
                 self.completed_hands = self.completed_hands[-50:]
 
@@ -1659,6 +1749,20 @@ class PokerGame:
                         human_pot_odds = call_amount / (event.pot_size + call_amount)
                     break
 
+            # Phase 3: Collect showdown hands and rankings
+            from datetime import datetime
+            timestamp = datetime.utcnow().isoformat() + 'Z'
+            showdown_hands = {}
+            hand_rankings = {}
+
+            for player in self.players:
+                if player.hole_cards and len(player.hole_cards) == 2:
+                    # All players who reached showdown
+                    if player.is_active or player.all_in:
+                        showdown_hands[player.player_id] = player.hole_cards.copy()
+                        _, rank = self.hand_evaluator.evaluate_hand(player.hole_cards, self.community_cards)
+                        hand_rankings[player.player_id] = rank
+
             # Create completed hand record
             completed_hand = CompletedHand(
                 hand_number=self.hand_count,
@@ -1672,14 +1776,25 @@ class PokerGame:
                 human_hand_strength=human_hand_strength,
                 human_pot_odds=human_pot_odds,
                 ai_decisions=self.last_ai_decisions.copy(),
-                events=self.current_hand_events.copy()
+                events=self.current_hand_events.copy(),
+                # Phase 3 fields
+                session_id=self.session_id,
+                timestamp=timestamp,
+                betting_rounds=self._hand_betting_rounds.copy(),
+                showdown_hands=showdown_hands,
+                hand_rankings=hand_rankings
             )
 
             # Store as last hand and in history
             self.last_hand_summary = completed_hand
             self.completed_hands.append(completed_hand)
 
-            # Keep only last 50 hands to avoid memory issues
+            # Phase 3: Also store in hand_history with 100-hand limit
+            self.hand_history.append(completed_hand)
+            if len(self.hand_history) > 100:
+                self.hand_history = self.hand_history[-100:]
+
+            # Keep only last 50 hands to avoid memory issues (legacy)
             if len(self.completed_hands) > 50:
                 self.completed_hands = self.completed_hands[-50:]
 
