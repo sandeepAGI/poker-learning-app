@@ -513,13 +513,14 @@ class PokerGame:
         import random
         selected_names = random.sample(ai_name_pool, min(ai_count, len(ai_name_pool)))
 
+        # Phase 1: Cycle through personalities to support 5+ AI opponents
         personalities = ["Conservative", "Aggressive", "Mathematical"]
         for i in range(ai_count):
             self.players.append(
                 Player(
                     player_id=f"ai{i+1}",
                     name=selected_names[i],
-                    personality=personalities[i]
+                    personality=personalities[i % len(personalities)]  # Cycle through personalities
                 )
             )
 
