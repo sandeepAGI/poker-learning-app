@@ -457,6 +457,94 @@ class AIStrategy:
                 amount = 0
                 reasoning = f"Weak hand ({hand_rank}, {hand_strength:.1%}). Clear mathematical fold."
                 confidence = 0.95
+
+        elif personality == "Loose-Passive":
+            # Calling station - calls too much, rarely raises or bluffs
+            if hand_strength >= 0.20:  # Any pair or better
+                if spr < 3:  # Low SPR - call to see showdown
+                    action = "call"
+                    amount = call_amount
+                    reasoning = f"Low SPR ({spr:.1f}) - calling with {hand_rank}. Loose-passive play."
+                    confidence = 0.6
+                elif current_bet > player_stack // 3:  # Too expensive
+                    action = "fold"
+                    amount = 0
+                    reasoning = f"Too expensive ({hand_rank}). Even calling stations fold sometimes."
+                    confidence = 0.7
+                else:  # Default: call almost everything
+                    action = "call"
+                    amount = call_amount
+                    reasoning = f"Calling with {hand_rank} ({hand_strength:.1%}). Loose-passive style."
+                    confidence = 0.5
+            else:  # Even calling stations fold high card sometimes
+                if call_amount <= player_stack // 40:  # Very small bet
+                    action = "call"
+                    amount = call_amount
+                    reasoning = f"Small bet, worth a call with {hand_rank}. Loose play."
+                    confidence = 0.4
+                else:
+                    action = "fold"
+                    amount = 0
+                    reasoning = f"Weak hand ({hand_rank}). Fold."
+                    confidence = 0.8
+
+        elif personality == "Tight-Aggressive":
+            # TAG - premium hands only, but aggressive when playing
+            if hand_strength >= 0.75:  # Flush or better - premium
+                action = "raise"
+                amount = max(current_bet + big_blind, pot_size)
+                amount = min(amount, player_stack)
+                reasoning = f"Premium hand ({hand_rank}, {hand_strength:.1%}). TAG value betting."
+                confidence = 0.95
+            elif hand_strength >= 0.55:  # Three of a kind - solid
+                if spr < 5:  # Low SPR - go all-in
+                    action = "raise"
+                    amount = player_stack
+                    reasoning = f"Low SPR ({spr:.1f}), strong hand ({hand_rank}). TAG push."
+                    confidence = 0.9
+                else:  # Raise for value
+                    action = "raise"
+                    amount = max(current_bet + big_blind, current_bet * 2)
+                    amount = min(amount, player_stack)
+                    reasoning = f"Strong hand ({hand_rank}). TAG value raise."
+                    confidence = 0.85
+            elif hand_strength >= 0.35:  # Marginal hands - fold
+                action = "fold"
+                amount = 0
+                reasoning = f"Below TAG threshold ({hand_rank}, {hand_strength:.1%}). Fold."
+                confidence = 0.8
+            else:  # Weak hands - always fold
+                action = "fold"
+                amount = 0
+                reasoning = f"Weak hand ({hand_rank}). TAG disciplined fold."
+                confidence = 0.95
+
+        elif personality == "Maniac":
+            # Hyper-aggressive - raises almost always
+            if hand_strength >= 0.45:  # Two pair or better
+                action = "raise"
+                amount = max(current_bet + big_blind, pot_size * 2)
+                amount = min(amount, player_stack)
+                reasoning = f"Strong hand ({hand_rank}). Maniac value aggression!"
+                confidence = 0.7
+            elif random.random() < 0.70:  # 70% bluff frequency
+                action = "raise"
+                amount = max(current_bet + big_blind, pot_size)
+                amount = min(amount, player_stack)
+                reasoning = f"Bluffing with {hand_rank}. Maniac pressure play!"
+                confidence = 0.3
+            else:  # Occasionally calls to vary play
+                if call_amount < player_stack // 2:
+                    action = "call"
+                    amount = call_amount
+                    reasoning = f"Calling with {hand_rank} to vary play. Maniac style."
+                    confidence = 0.4
+                else:  # Too expensive even for maniac
+                    action = "fold"
+                    amount = 0
+                    reasoning = f"Too expensive. Even maniacs fold sometimes."
+                    confidence = 0.6
+
         else:
             # Default Conservative
             action = "call" if hand_strength > 0.4 else "fold"
@@ -494,7 +582,7 @@ class PokerGame:
         # Create human player
         self.players = [Player("human", human_player_name, is_human=True)]
 
-        # Add AI players dynamically with creative AI pun names (20+ names)
+        # Add AI players dynamically with creative AI pun names (30 names for 5-AI support)
         ai_name_pool = [
             # Classic AI puns
             "AI-ce", "AI-ron", "AI-nstein",
@@ -506,21 +594,33 @@ class PokerGame:
             "Bluff Master", "The Calculator", "Lady Luck", "Card Shark",
             # Personality themed
             "Cool Hand Luke", "The Professor", "Wild Card", "Stone Face",
-            "The Grinder", "Risk Taker", "The Rock", "Loose Lucy"
+            "The Grinder", "Risk Taker", "The Rock", "Loose Lucy",
+            # Phase 5: Added 2 more names for 30 total (supports 5 AI opponents)
+            "The Oracle", "Monte Carlo"
         ]
 
         # Randomly select unique names for AI players
         import random
         selected_names = random.sample(ai_name_pool, min(ai_count, len(ai_name_pool)))
 
-        # Phase 1: Cycle through personalities to support 5+ AI opponents
-        personalities = ["Conservative", "Aggressive", "Mathematical"]
+        # Phase 5: Random personality assignment from expanded pool (6 personalities)
+        all_personalities = [
+            "Conservative",
+            "Aggressive",
+            "Mathematical",
+            "Loose-Passive",
+            "Tight-Aggressive",
+            "Maniac"
+        ]
+        # Randomly assign personalities (no duplicates in same game)
+        selected_personalities = random.sample(all_personalities, min(ai_count, len(all_personalities)))
+
         for i in range(ai_count):
             self.players.append(
                 Player(
                     player_id=f"ai{i+1}",
                     name=selected_names[i],
-                    personality=personalities[i % len(personalities)]  # Cycle through personalities
+                    personality=selected_personalities[i]  # Random unique personality
                 )
             )
 

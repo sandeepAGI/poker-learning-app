@@ -1816,12 +1816,15 @@ PYTHONPATH=backend python -m pytest backend/tests/test_ai_personalities.py -v
 - Learning to adjust strategy vs different types
 
 ### Deliverables
-- [ ] Updated `backend/game/poker_engine.py` (3 new personalities)
-- [ ] Updated `backend/game/poker_engine.py` (random assignment logic)
-- [ ] Expanded AI name pool (30 names)
-- [ ] `backend/tests/test_ai_personalities.py` (NEW - 3 tests)
-- [ ] Updated tutorial content (Phase 2) with personality explanations
-- [ ] Git commit: "Phase 5: Add 3 new AI personalities with random assignment"
+- [x] Updated `backend/game/poker_engine.py` (3 new personalities)
+- [x] Updated `backend/game/poker_engine.py` (random assignment logic)
+- [x] Expanded AI name pool (30 names)
+- [x] `backend/tests/test_ai_personalities.py` (NEW - 8 tests)
+- [x] Updated tutorial content (Phase 2) with personality explanations
+- [x] All 8 new tests passing (0.22s)
+- [x] All 23 regression tests passing (47.30s)
+- [x] Frontend build succeeds
+- [x] Git commit: "Phase 5: Add 3 new AI personalities with random assignment"
 
 ---
 
