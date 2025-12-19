@@ -483,10 +483,10 @@ class PokerGame:
 
         Args:
             human_player_name: Name of the human player
-            ai_count: Number of AI opponents (1-3, default 3)
+            ai_count: Number of AI opponents (1-5, default 3 for 4-player table)
         """
-        if ai_count < 1 or ai_count > 3:
-            raise ValueError("AI count must be between 1 and 3")
+        if ai_count < 1 or ai_count > 5:
+            raise ValueError("AI count must be between 1 and 5")
 
         self.deck_manager = DeckManager()
         self.hand_evaluator = HandEvaluator()
