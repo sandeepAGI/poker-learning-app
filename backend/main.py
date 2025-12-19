@@ -67,7 +67,7 @@ async def startup_event():
 class CreateGameRequest(BaseModel):
     """Request to create a new game"""
     player_name: str = "Player"
-    ai_count: int = 3  # Number of AI opponents (1-3)
+    ai_count: int = 3  # Number of AI opponents (1-5, default 3)
 
 
 class GameActionRequest(BaseModel):
@@ -101,9 +101,9 @@ def create_game(request: CreateGameRequest):
     Create a new poker game
     Returns: {"game_id": "uuid"}
     """
-    # Validate AI count
-    if request.ai_count < 1 or request.ai_count > 3:
-        raise HTTPException(status_code=400, detail="AI count must be between 1 and 3")
+    # Phase 1: Validate AI count (updated to support 6-player tables)
+    if request.ai_count < 1 or request.ai_count > 5:
+        raise HTTPException(status_code=400, detail="AI count must be between 1 and 5")
 
     # Create game
     game_id = str(uuid.uuid4())

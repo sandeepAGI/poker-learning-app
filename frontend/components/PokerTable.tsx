@@ -376,6 +376,40 @@ export function PokerTable() {
                   />
                 </div>
               )}
+
+              {/* Opponent 4 - Top Left (for 6-player tables) */}
+              {opponents[3] && (
+                <div className="absolute top-8 left-[25%] -translate-x-1/2">
+                  <PlayerSeat
+                    key={opponents[3].player_id}
+                    player={opponents[3]}
+                    isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === opponents[3].player_id}
+                    aiDecision={gameState.last_ai_decisions[opponents[3].player_id]}
+                    showAiThinking={showAiThinking}
+                    isShowdown={isShowdown}
+                    isDealer={getPlayerIndex(opponents[3]) === gameState.dealer_position}
+                    isSmallBlind={getPlayerIndex(opponents[3]) === gameState.small_blind_position}
+                    isBigBlind={getPlayerIndex(opponents[3]) === gameState.big_blind_position}
+                  />
+                </div>
+              )}
+
+              {/* Opponent 5 - Top Right (for 6-player tables) */}
+              {opponents[4] && (
+                <div className="absolute top-8 left-[75%] -translate-x-1/2">
+                  <PlayerSeat
+                    key={opponents[4].player_id}
+                    player={opponents[4]}
+                    isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === opponents[4].player_id}
+                    aiDecision={gameState.last_ai_decisions[opponents[4].player_id]}
+                    showAiThinking={showAiThinking}
+                    isShowdown={isShowdown}
+                    isDealer={getPlayerIndex(opponents[4]) === gameState.dealer_position}
+                    isSmallBlind={getPlayerIndex(opponents[4]) === gameState.small_blind_position}
+                    isBigBlind={getPlayerIndex(opponents[4]) === gameState.big_blind_position}
+                  />
+                </div>
+              )}
             </>
           );
         })()}
