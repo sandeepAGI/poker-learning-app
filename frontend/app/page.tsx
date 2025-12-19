@@ -73,6 +73,23 @@ export default function Home() {
             </button>
           </div>
 
+          {/* Phase 2: Tutorial and Guide Links */}
+          <div className="mt-4 flex gap-3 justify-center">
+            <a
+              href="/tutorial"
+              className="text-sm text-green-600 hover:text-green-700 font-medium hover:underline"
+            >
+              📚 Learn Texas Hold'em
+            </a>
+            <span className="text-gray-400">•</span>
+            <a
+              href="/guide"
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline"
+            >
+              ❓ How to Use This App
+            </a>
+          </div>
+
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
             <h3 className="font-semibold text-sm text-gray-700 mb-2">AI Personalities:</h3>
             <p className="text-xs text-gray-600 mb-2">

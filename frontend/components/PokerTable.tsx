@@ -271,6 +271,15 @@ export function PokerTable() {
             </motion.div>
           )}
 
+          {/* Phase 2: Help button */}
+          <button
+            onClick={() => window.open('/guide', '_blank')}
+            className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-4 py-2 rounded-lg font-semibold mr-2"
+            title="Open game guide in new tab"
+          >
+            ❓ Help
+          </button>
+
           {/* Quit Game button */}
           <button
             onClick={quitGame}
