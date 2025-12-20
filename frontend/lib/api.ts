@@ -42,6 +42,31 @@ export const pokerApi = {
     return response.data;
   },
 
+  // Get LLM-powered hand analysis (Phase 4)
+  async getHandAnalysisLLM(
+    gameId: string,
+    options: {
+      depth?: 'quick' | 'deep',
+      handNumber?: number,
+      useCache?: boolean
+    } = {}
+  ): Promise<{
+    analysis: any,
+    model_used: string,
+    cost: number,
+    cached: boolean,
+    analysis_count: number,
+    error?: string
+  }> {
+    const params = new URLSearchParams();
+    if (options.depth) params.set('depth', options.depth);
+    if (options.handNumber) params.set('hand_number', options.handNumber.toString());
+    if (options.useCache !== undefined) params.set('use_cache', options.useCache.toString());
+
+    const response = await api.get(`/games/${gameId}/analysis-llm?${params}`);
+    return response.data;
+  },
+
   // Submit a player action
   async submitAction(
     gameId: string,

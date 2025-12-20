@@ -5,7 +5,7 @@ import { Card } from './Card';
 import { PlayerSeat } from './PlayerSeat';
 import { CommunityCards } from './CommunityCards';
 import { WinnerModal } from './WinnerModal';
-import { AnalysisModal } from './AnalysisModal';
+import { AnalysisModalLLM } from './AnalysisModalLLM'; // Phase 4: LLM-powered analysis
 import { GameOverModal } from './GameOverModal';
 import { useGameStore } from '../lib/store';
 import { useState, useEffect } from 'react';
@@ -14,6 +14,7 @@ import type { Player } from '../lib/types'; // Phase 0.5: For button indicator h
 export function PokerTable() {
   const {
     gameState,
+    gameId, // Phase 4: Get gameId for LLM analysis
     showAiThinking,
     handAnalysis,
     stepMode,
@@ -617,18 +618,21 @@ export function PokerTable() {
       {gameState.winner_info && (
         <WinnerModal
           isOpen={showWinnerModal}
-          winner={gameState.players.find(p => p.player_id === gameState.winner_info?.player_id) || null}
-          amount={gameState.winner_info.amount}
+          winnerInfo={gameState.winner_info}
+          players={gameState.players}
           onClose={handleWinnerModalClose}
         />
       )}
 
-      {/* UX Phase 2: Hand analysis modal */}
-      <AnalysisModal
-        isOpen={showAnalysisModal}
-        analysis={handAnalysis}
-        onClose={() => setShowAnalysisModal(false)}
-      />
+      {/* Phase 4: LLM-powered hand analysis modal */}
+      {gameId && (
+        <AnalysisModalLLM
+          isOpen={showAnalysisModal}
+          gameId={gameId}
+          ruleBasedAnalysis={handAnalysis} // Fallback to old rule-based
+          onClose={() => setShowAnalysisModal(false)}
+        />
+      )}
 
       {/* Game Over modal - shown when human player is eliminated */}
       <GameOverModal

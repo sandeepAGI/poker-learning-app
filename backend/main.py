@@ -2,18 +2,37 @@
 Poker Learning App - Enhanced FastAPI with WebSockets
 Phase 2: Minimal API layer with REST endpoints
 Phase 3: WebSocket support for real-time AI turn visibility
+Phase 4: LLM-powered hand analysis with Claude AI
 """
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+# Load environment variables from .env file (Phase 4: for ANTHROPIC_API_KEY)
+from dotenv import load_dotenv
+load_dotenv()
+
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional, Dict, Any, Tuple
+from typing import Optional, Dict, Any, Tuple, List
+from dataclasses import dataclass
+from datetime import datetime
 import uuid
 import time
 import asyncio
 import json
+import logging
 
 from game.poker_engine import PokerGame, GameState
 from websocket_manager import manager, thread_safe_manager, process_ai_turns_with_events, serialize_game_state
+
+# Phase 4: LLM Analysis imports
+try:
+    from llm_analyzer import LLMHandAnalyzer
+    llm_analyzer = LLMHandAnalyzer()
+    LLM_ENABLED = True
+except Exception as e:
+    logger = logging.getLogger(__name__)
+    logger.warning(f"LLM analysis disabled: {e}")
+    llm_analyzer = None
+    LLM_ENABLED = False
 
 # FastAPI app
 app = FastAPI(title="Poker Learning App API", version="2.0")
@@ -34,6 +53,25 @@ games: Dict[str, Tuple[PokerGame, float]] = {}
 # Memory management constants
 GAME_MAX_IDLE_SECONDS = 3600  # Remove games idle > 1 hour
 GAME_CLEANUP_INTERVAL_SECONDS = 300  # Clean up every 5 minutes
+
+# Phase 4: LLM Analysis - Caching and Metrics
+# Cache key format: "{game_id}_hand_{hand_number}_{depth}"
+analysis_cache: Dict[str, Dict] = {}
+
+# Metrics for cost tracking
+@dataclass
+class AnalysisMetrics:
+    timestamp: str
+    game_id: str
+    model_used: str
+    cost: float
+    analysis_count: int
+    success: bool
+
+analysis_metrics: List[AnalysisMetrics] = []
+
+# Rate limiting: track last analysis time per game
+last_analysis_time: Dict[str, float] = {}
 
 
 def cleanup_old_games(max_age_seconds: int = GAME_MAX_IDLE_SECONDS) -> int:
@@ -87,7 +125,7 @@ class GameResponse(BaseModel):
     current_player_index: Optional[int]  # None when all players all-in or folded
     human_player: dict
     last_ai_decisions: dict
-    winner_info: Optional[dict] = None  # Winner information at showdown
+    winner_info: Optional[Any] = None  # Winner(s) - dict for single winner, list for multiple (split/side pots)
     small_blind: int  # Issue #1 fix: Expose blind levels
     big_blind: int
     hand_count: int  # Current hand number
@@ -194,22 +232,28 @@ def get_game_state(game_id: str, show_ai_thinking: bool = False):
                 "amount": decision.amount
             }
 
-    # Find winner information if at showdown
+    # Find ALL winners if at showdown (handles split pots and side pots)
     winner_info = None
     if game.current_state == GameState.SHOWDOWN:
-        # Look for pot_award event in current hand events
-        for event in reversed(game.current_hand_events):
+        # Collect ALL pot_award events (not just the first one!)
+        winners = []
+        for event in game.current_hand_events:
             if event.event_type == "pot_award":
                 winner = next((p for p in game.players if p.player_id == event.player_id), None)
                 if winner:
-                    winner_info = {
+                    winners.append({
                         "player_id": winner.player_id,
                         "name": winner.name,
                         "amount": event.amount,
                         "is_human": winner.is_human,
                         "personality": winner.personality if not winner.is_human else None
-                    }
-                break
+                    })
+
+        # Return as list if multiple winners, single dict if only one
+        if len(winners) > 1:
+            winner_info = winners  # Multiple winners (split pot or side pots)
+        elif len(winners) == 1:
+            winner_info = winners[0]  # Single winner (backward compatibility)
 
     return GameResponse(
         game_id=game_id,
@@ -336,6 +380,204 @@ def get_hand_analysis(game_id: str, hand_number: Optional[int] = None):
         if not analysis:
             raise HTTPException(status_code=404, detail="No completed hands to analyze yet")
         return analysis
+
+
+@app.get("/games/{game_id}/analysis-llm")
+async def get_llm_hand_analysis(
+    game_id: str,
+    hand_number: Optional[int] = None,
+    depth: str = Query("quick", regex="^(quick|deep)$"),
+    use_cache: bool = True
+):
+    """
+    Get LLM-powered hand analysis using Claude AI (Haiku 4.5 or Sonnet 4.5).
+    Phase 4: LLM-Powered Hand Analysis
+
+    Args:
+        game_id: Game ID
+        hand_number: Optional hand number to analyze (defaults to last hand)
+        depth: "quick" (Haiku, $0.016) or "deep" (Sonnet, $0.029)
+        use_cache: Whether to use cached analysis (default: True)
+
+    Returns:
+        {
+            "analysis": {...},  # Full LLM analysis JSON
+            "model_used": str,  # "haiku-4.5" or "sonnet-4.5" or "rule-based-fallback"
+            "cost": float,      # Cost of this analysis
+            "cached": bool,     # Whether result was cached
+            "analysis_count": int  # Total analyses for this game
+        }
+    """
+    # Check if LLM is enabled
+    if not LLM_ENABLED:
+        raise HTTPException(
+            status_code=503,
+            detail="LLM analysis not available. Set ANTHROPIC_API_KEY environment variable."
+        )
+
+    # Check game exists
+    if game_id not in games:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    game, _ = games[game_id]
+    games[game_id] = (game, time.time())  # Update access time
+
+    # Rate limiting: 1 analysis per 30 seconds per game
+    now = time.time()
+    last_time = last_analysis_time.get(game_id, 0)
+    if use_cache and now - last_time < 30:
+        wait_time = int(30 - (now - last_time))
+        raise HTTPException(
+            status_code=429,
+            detail=f"Rate limit: Wait {wait_time}s before next analysis"
+        )
+
+    # Get target hand
+    if hand_number is not None and hasattr(game, 'hand_history'):
+        target_hand = next(
+            (h for h in game.hand_history if h.hand_number == hand_number),
+            None
+        )
+    else:
+        target_hand = game.last_hand_summary
+
+    if not target_hand:
+        raise HTTPException(status_code=404, detail="No hand to analyze")
+
+    # Check cache
+    cache_key = f"{game_id}_hand_{target_hand.hand_number}_{depth}"
+    if use_cache and cache_key in analysis_cache:
+        cached_result = analysis_cache[cache_key]
+        return {
+            **cached_result,
+            "cached": True
+        }
+
+    # Get analysis count for context management
+    analysis_count = getattr(game, 'analysis_count', 0)
+    game.analysis_count = analysis_count + 1
+
+    try:
+        # Get hand history
+        hand_history = game.hand_history if hasattr(game, 'hand_history') else []
+
+        # Call LLM analyzer
+        analysis = llm_analyzer.analyze_hand(
+            completed_hand=target_hand,
+            hand_history=hand_history,
+            analysis_count=analysis_count,
+            depth=depth,
+            skill_level="beginner"  # TODO: Track player skill
+        )
+
+        # Calculate cost (for monitoring)
+        model = "sonnet-4.5" if depth == "deep" else "haiku-4.5"
+        cost = 0.029 if depth == "deep" else 0.016
+
+        # Build response
+        result = {
+            "analysis": analysis,
+            "model_used": model,
+            "cost": cost,
+            "cached": False,
+            "analysis_count": analysis_count + 1
+        }
+
+        # Cache result
+        analysis_cache[cache_key] = result
+
+        # Update last analysis time
+        last_analysis_time[game_id] = now
+
+        # Track metrics (for cost monitoring)
+        _track_analysis_metrics(game_id, model, cost, analysis_count + 1, success=True)
+
+        return result
+
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"LLM analysis failed for game {game_id}: {e}")
+
+        # Track failed attempt
+        _track_analysis_metrics(game_id, "error", 0.0, analysis_count + 1, success=False)
+
+        # Fallback to rule-based analysis
+        fallback = game.analyze_last_hand() if hasattr(game, 'analyze_last_hand') else {
+            "error": "Analysis not available",
+            "details": str(e)
+        }
+
+        return {
+            "analysis": fallback,
+            "model_used": "rule-based-fallback",
+            "cost": 0.0,
+            "cached": False,
+            "error": str(e),
+            "analysis_count": analysis_count + 1
+        }
+
+
+def _track_analysis_metrics(game_id: str, model: str, cost: float, count: int, success: bool = True):
+    """Track analysis metrics for cost monitoring."""
+    metrics = AnalysisMetrics(
+        timestamp=datetime.utcnow().isoformat(),
+        game_id=game_id,
+        model_used=model,
+        cost=cost,
+        analysis_count=count,
+        success=success
+    )
+    analysis_metrics.append(metrics)
+
+    # Keep last 1000 metrics
+    if len(analysis_metrics) > 1000:
+        analysis_metrics[:] = analysis_metrics[-1000:]
+
+
+@app.get("/admin/analysis-metrics")
+async def get_analysis_metrics():
+    """
+    Get LLM analysis cost and usage metrics.
+    Phase 4: Cost Monitoring
+
+    Returns statistics about LLM analysis usage and costs.
+    """
+    if not analysis_metrics:
+        return {
+            "total_analyses": 0,
+            "total_cost": 0.0,
+            "haiku_analyses": 0,
+            "sonnet_analyses": 0,
+            "avg_cost": 0.0,
+            "cost_today": 0.0,
+            "alert": False
+        }
+
+    total_cost = sum(m.cost for m in analysis_metrics)
+    haiku_count = sum(1 for m in analysis_metrics if "haiku" in m.model_used)
+    sonnet_count = sum(1 for m in analysis_metrics if "sonnet" in m.model_used)
+    error_count = sum(1 for m in analysis_metrics if not m.success)
+
+    # Calculate daily cost
+    today = datetime.utcnow().date()
+    daily_metrics = [
+        m for m in analysis_metrics
+        if datetime.fromisoformat(m.timestamp).date() == today
+    ]
+    cost_today = sum(m.cost for m in daily_metrics)
+
+    return {
+        "total_analyses": len(analysis_metrics),
+        "successful_analyses": len(analysis_metrics) - error_count,
+        "failed_analyses": error_count,
+        "total_cost": round(total_cost, 2),
+        "haiku_analyses": haiku_count,
+        "sonnet_analyses": sonnet_count,
+        "avg_cost": round(total_cost / len(analysis_metrics), 4) if analysis_metrics else 0,
+        "cost_today": round(cost_today, 2),
+        "analyses_today": len(daily_metrics),
+        "alert": cost_today > 100.0  # Alert if >$100 spent today
+    }
 
 
 @app.get("/games/{game_id}/history")
