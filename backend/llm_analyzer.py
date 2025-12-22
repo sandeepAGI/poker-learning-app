@@ -371,9 +371,11 @@ class LLMHandAnalyzer:
             Exception: If LLM call fails (caller should handle fallback)
         """
         model = self.sonnet_model if depth == "deep" else self.haiku_model
-        max_tokens = 2000 if depth == "deep" else 1500
+        # Quick Analysis: 5000 tokens for complete JSON
+        # Deep Dive: 8000 tokens for comprehensive analysis
+        max_tokens = 8000 if depth == "deep" else 5000
 
-        logger.info(f"Calling {model} with {len(user_prompt)} chars input")
+        logger.info(f"Calling {model} with {len(user_prompt)} chars input, max_tokens={max_tokens}")
 
         try:
             response = self.client.messages.create(
@@ -392,7 +394,10 @@ class LLMHandAnalyzer:
             # Extract response text
             content = response.content[0].text
 
-            logger.debug(f"LLM response length: {len(content)} chars")
+            print(f"[LLM] Response length: {len(content)} chars (depth={depth}, max_tokens={max_tokens})")
+            print(f"[LLM] Last 100 chars: ...{content[-100:]}")
+            if len(content) < 100:
+                print(f"[LLM] WARNING: Response too short! Content: {content}")
 
             # Parse JSON response
             analysis = self._parse_response(content)

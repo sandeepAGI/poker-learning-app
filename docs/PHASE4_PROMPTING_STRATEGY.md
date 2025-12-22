@@ -460,25 +460,133 @@ class AnalysisMetrics:
 
 ---
 
-## 10. Future Enhancements (Post-Launch)
+## 10. Current Implementation Status
 
-### After we validate Haiku quality:
+**✅ Phase 4A Complete** (Dec 2025):
+- Hand Analysis with Haiku 4.5 ($0.016/analysis)
+- Deep Dive removed for individual hands (overkill for single-hand analysis)
+- Quality validation and fallback logic
+- Cost tracking and monitoring
 
-1. **Adaptive model selection**: Auto-use Sonnet for complex hands
-2. **Multi-hand batch analysis**: Session summaries with insights across multiple hands
-3. **Personalized coaching**: "Your pattern: You overvalue top pair. Here's why..."
-4. **Interactive follow-up**: User can ask questions about the analysis
-5. **Replay with commentary**: Animated replay with LLM narration
+**Key Findings**:
+- Quick Analysis (Haiku) provides excellent coaching value for individual hands
+- Deep Dive (Sonnet) is excessive for single hands
+- Session Analysis is where Deep Dive shines
+
+---
+
+## 11. Next Steps: Session Analysis (Phase 4.5)
+
+### Overview
+
+Analyze patterns across 10-20 completed hands instead of individual hands. This provides better ROI and deeper insights into player tendencies.
+
+### Implementation Plan
+
+**LOE**: 11-15 hours total
+
+#### Backend (6-8 hours):
+1. **New Endpoint** (1 hour):
+   ```python
+   GET /games/{game_id}/analysis-session?depth=quick|deep&hand_count=10-50
+   ```
+
+2. **Session Analysis Function** (2-3 hours):
+   - Aggregate stats across N hands (win rate, VPIP, PFR, aggression)
+   - Win rate by position/hand type
+   - Identify profitable plays and biggest leaks
+   - AI opponent pattern analysis
+
+3. **Session Prompts** (2-3 hours):
+   - `SESSION_ANALYSIS_QUICK_PROMPT` (Haiku)
+   - `SESSION_ANALYSIS_DEEP_PROMPT` (Sonnet)
+   - Different JSON schema (patterns vs individual decisions)
+
+4. **Testing** (1 hour)
+
+#### Frontend (4-5 hours):
+1. **Remove Deep Dive** from hand analysis (30 min)
+2. **SessionAnalysisModal Component** (2-3 hours)
+   - Stats dashboard, strengths/leaks sections
+   - Quick/Deep toggle
+   - "Analyze Last 10/20 Hands" selector
+3. **Integration** (1 hour)
+4. **Polish** (1 hour)
+
+### Session Analysis Output Schema
+
+**Quick Session Analysis (Haiku)**:
+```json
+{
+  "session_summary": "string",
+  "hands_analyzed": 20,
+  "overall_stats": {
+    "win_rate": 45.0,
+    "vpip": 28.5,
+    "pfr": 18.2,
+    "aggression_factor": 1.8
+  },
+  "top_3_strengths": ["Tight pre-flop selection", ...],
+  "top_3_leaks": ["Overvaluing top pair", ...],
+  "recommended_adjustments": [...],
+  "concepts_to_study": [...]
+}
+```
+
+**Deep Session Analysis (Sonnet) Adds**:
+- Detailed leak analysis with specific hand examples
+- Range construction advice
+- Exploitation strategies per AI personality
+- GTO baseline comparison
+- Win rate breakdown by position/hand type
+
+### Cost Analysis
+
+| Analysis Type | Model | Cost | Value |
+|---------------|-------|------|-------|
+| Hand (Quick) | Haiku | $0.016 | Single hand review |
+| ~~Hand (Deep)~~ | ~~Sonnet~~ | ~~$0.029~~ | **REMOVED** |
+| **Session (Quick)** | Haiku | $0.018 | 20 hands ($0.0009/hand) |
+| **Session (Deep)** | Sonnet | $0.032 | Deep leak analysis |
+
+**Session Analysis provides 94% cost savings** vs analyzing each hand individually!
+
+### Use Cases
+
+**When to Use Session Analysis**:
+- After 10-20 hands played
+- User wants to understand overall tendencies
+- Identify patterns and recurring mistakes
+- Get strategic adjustments for AI opponents
+- Monthly/weekly progress reviews
+
+**Quick vs Deep for Sessions**:
+- **Quick**: Overall stats, top 3 strengths/leaks, basic recommendations
+- **Deep**: Detailed leak analysis with hand examples, GTO comparison, exploitation strategies
+
+---
+
+## 12. Future Enhancements (Post-Session Analysis)
+
+1. **Skill Level Detection**: Auto-detect beginner/intermediate/advanced after 10 hands
+2. **Personalized Coaching Plans**: Custom study paths based on detected leaks
+3. **Interactive Follow-Up**: User can ask questions about analysis
+4. **Pattern Tracking**: Track improvement over time ("Your VPIP decreased from 35% to 22%")
+5. **Replay with Commentary**: Animated hand replays with AI narration
 
 ---
 
 ## Summary
 
-**Primary Model**: Haiku 4.5 ($0.016/analysis)
-**Optional Upgrade**: Sonnet 4.5 via "Deep Dive" ($0.029/analysis)
-**Teaching**: Hybrid Socratic + Directive, always encouraging
-**Context**: Full history (5-50 hands) with intelligent limiting
-**Quality**: Structured JSON, validated before display
-**Cost Control**: Caching, rate limiting, monitoring
+**Current Implementation**:
+- Hand Analysis: Haiku 4.5 only ($0.016/analysis)
+- Deep Dive removed for individual hands
+- Fallback to rule-based on errors
+- Cost tracking and monitoring
+
+**Next Priority**: Session Analysis (Quick + Deep)
+- Analyze 10-20 hands for patterns and leaks
+- Better ROI than per-hand analysis ($0.0009-$0.0016 per hand)
+- 11-15 hour implementation
 
 **Goal**: Help players learn poker through personalized, actionable, encouraging AI coaching at an affordable cost.
