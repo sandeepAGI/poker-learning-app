@@ -22,7 +22,14 @@ except ImportError:
     Anthropic = None  # Will be handled gracefully
 
 from game.poker_engine import CompletedHand, BettingRound, ActionRecord
-from llm_prompts import get_system_prompt, format_user_prompt, ANALYSIS_JSON_SCHEMA
+from llm_prompts import (
+    get_system_prompt,
+    format_user_prompt,
+    ANALYSIS_JSON_SCHEMA,
+    get_session_system_prompt,
+    format_session_user_prompt,
+    SESSION_JSON_SCHEMA
+)
 
 logger = logging.getLogger(__name__)
 
@@ -105,6 +112,66 @@ class LLMHandAnalyzer:
         analysis = self._call_llm(system_prompt, user_prompt, depth)
 
         logger.info(f"Analysis complete for hand #{completed_hand.hand_number}")
+        return analysis
+
+    def analyze_session(
+        self,
+        hand_history: List[CompletedHand],
+        starting_stack: int,
+        ending_stack: int,
+        depth: str = "quick",
+        skill_level: str = "beginner",
+        hand_count: Optional[int] = None
+    ) -> Dict:
+        """
+        Generate comprehensive session analysis across multiple hands.
+        Phase 4.5: Session Analysis
+
+        Args:
+            hand_history: All completed hands in the session
+            starting_stack: Starting bankroll
+            ending_stack: Ending bankroll
+            depth: "quick" (Haiku) or "deep" (Sonnet)
+            skill_level: "beginner", "intermediate", or "advanced"
+            hand_count: Optional limit on number of hands to analyze (default: all)
+
+        Returns:
+            {
+                "session_summary": str,
+                "hands_analyzed": int,
+                "overall_stats": Dict,
+                "top_3_strengths": List[Dict],
+                "top_3_leaks": List[Dict],
+                "win_rate_breakdown": Dict,
+                "opponent_insights": List[Dict],
+                "recommended_adjustments": List[Dict],
+                "concepts_to_study": List[Dict],
+                "study_plan": List[Dict],
+                "progress_tracking": Dict,
+                "overall_assessment": str,
+                "encouragement": str
+            }
+        """
+        # Limit hands if specified
+        hands_to_analyze = hand_history[-hand_count:] if hand_count else hand_history
+
+        logger.info(f"Analyzing session with {len(hands_to_analyze)} hands, depth={depth}, skill={skill_level}")
+
+        # 1. Build session context
+        context = self._build_session_context(
+            hands_to_analyze,
+            starting_stack,
+            ending_stack
+        )
+
+        # 2. Create prompts
+        system_prompt = get_session_system_prompt(depth, skill_level)
+        user_prompt = format_session_user_prompt(context, depth, skill_level)
+
+        # 3. Call LLM
+        analysis = self._call_llm(system_prompt, user_prompt, depth, schema=SESSION_JSON_SCHEMA)
+
+        logger.info(f"Session analysis complete for {len(hands_to_analyze)} hands")
         return analysis
 
     def _build_context(
@@ -342,6 +409,113 @@ class LLMHandAnalyzer:
             "stack_end": hand.human_final_stack
         }
 
+    def _build_session_context(
+        self,
+        hands: List[CompletedHand],
+        starting_stack: int,
+        ending_stack: int
+    ) -> Dict:
+        """
+        Build comprehensive session context from multiple hands.
+
+        Args:
+            hands: List of completed hands to analyze
+            starting_stack: Starting bankroll
+            ending_stack: Ending bankroll
+
+        Returns:
+            Dictionary with session context for prompt formatting
+        """
+        if not hands:
+            return {}
+
+        # Calculate aggregate statistics
+        hands_won = sum(1 for h in hands if h.winner_ids and "human" in h.winner_ids)
+        hands_lost = len(hands) - hands_won
+        win_rate = (hands_won / len(hands) * 100) if hands else 0
+
+        # Calculate VPIP (voluntarily put money in pot) - hands where human didn't fold pre-flop
+        vpip_count = 0
+        pfr_count = 0  # Pre-flop raise
+        for hand in hands:
+            if hand.betting_rounds and hand.betting_rounds[0].actions:
+                human_actions = [a for a in hand.betting_rounds[0].actions if a.player_name == "You"]
+                if human_actions:
+                    last_action = human_actions[-1]
+                    if last_action.action in ["call", "raise", "all_in"]:
+                        vpip_count += 1
+                        if last_action.action == "raise":
+                            pfr_count += 1
+
+        vpip = (vpip_count / len(hands) * 100) if hands else 0
+        pfr = (pfr_count / len(hands) * 100) if hands else 0
+
+        # Find biggest wins/losses
+        net_changes = []
+        for hand in hands:
+            if hand.winner_ids and "human" in hand.winner_ids:
+                net_changes.append(hand.pot_size // len(hand.winner_ids))
+            else:
+                human_player = next((p for p in hand.final_player_states if p["name"] == "You"), None)
+                if human_player:
+                    loss = human_player.get("stack_start", starting_stack) - hand.human_final_stack
+                    net_changes.append(-loss)
+
+        biggest_win = max(net_changes) if net_changes else 0
+        biggest_loss = min(net_changes) if net_changes else 0
+
+        # Aggregate stats text
+        aggregate_stats = f"""
+- Win rate: {win_rate:.1f}% ({hands_won}/{len(hands)} hands won)
+- VPIP: {vpip:.1f}% ({vpip_count}/{len(hands)} hands played)
+- PFR: {pfr:.1f}% ({pfr_count}/{len(hands)} hands raised pre-flop)
+- Biggest win: ${biggest_win}
+- Biggest loss: ${biggest_loss}
+- Net profit: ${ending_stack - starting_stack}
+"""
+
+        # Hands summary (compact)
+        hands_summary_lines = []
+        for hand in hands[:20]:  # Limit to last 20 hands for context
+            result = "Won" if hand.winner_ids and "human" in hand.winner_ids else "Lost"
+            hands_summary_lines.append(
+                f"Hand #{hand.hand_number}: {hand.hole_cards} - {result}"
+            )
+
+        hands_summary = "\n".join(hands_summary_lines)
+
+        # AI opponents summary
+        ai_opponents = {}
+        for hand in hands:
+            for player in hand.final_player_states:
+                if player["name"] != "You":
+                    if player["name"] not in ai_opponents:
+                        ai_opponents[player["name"]] = {"hands": 0, "personality": "Unknown"}
+                    ai_opponents[player["name"]]["hands"] += 1
+
+        ai_opponents_summary = "\n".join(
+            f"- {name}: {data['hands']} hands played"
+            for name, data in ai_opponents.items()
+        )
+
+        # Session timestamps
+        session_start = hands[0].timestamp if hands else "N/A"
+        session_end = hands[-1].timestamp if hands else "N/A"
+
+        return {
+            "hand_count": len(hands),
+            "session_start": session_start,
+            "session_end": session_end,
+            "human_name": "You",
+            "starting_stack": starting_stack,
+            "ending_stack": ending_stack,
+            "net_change": ending_stack - starting_stack,
+            "net_change_pct": ((ending_stack - starting_stack) / starting_stack * 100) if starting_stack > 0 else 0,
+            "aggregate_stats": aggregate_stats,
+            "hands_summary": hands_summary,
+            "ai_opponents_summary": ai_opponents_summary
+        }
+
     def _determine_result(self, hand: CompletedHand, human_player: Dict) -> str:
         """Determine hand result description."""
         if hand.winner_ids and "human" in hand.winner_ids:
@@ -354,7 +528,8 @@ class LLMHandAnalyzer:
         self,
         system_prompt: str,
         user_prompt: str,
-        depth: str
+        depth: str,
+        schema: str = None
     ) -> Dict:
         """
         Call Anthropic API with error handling and quality validation.
@@ -363,6 +538,7 @@ class LLMHandAnalyzer:
             system_prompt: System role prompt
             user_prompt: User prompt with hand context
             depth: "quick" or "deep"
+            schema: Optional JSON schema (defaults to ANALYSIS_JSON_SCHEMA for hand analysis)
 
         Returns:
             Parsed and validated analysis dictionary

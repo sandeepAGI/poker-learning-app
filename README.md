@@ -11,14 +11,21 @@ A full-stack poker application for learning poker strategy through AI opponents 
 cd backend && pip install -r requirements.txt
 cd ../frontend && npm install
 
-# 2. Start backend (Terminal 1)
+# 2. Set up API key for LLM analysis (optional but recommended)
+# Create backend/.env file with:
+echo "ANTHROPIC_API_KEY=your_api_key_here" > backend/.env
+# Get your key at: https://console.anthropic.com/
+
+# 3. Start backend (Terminal 1)
 cd backend && python main.py
 
-# 3. Start frontend (Terminal 2)
+# 4. Start frontend (Terminal 2)
 cd frontend && npm run dev
 
-# 4. Play! → http://localhost:3000
+# 5. Play! → http://localhost:3000
 ```
+
+**Note**: LLM-powered analysis requires an Anthropic API key. Without it, basic rule-based analysis will still work.
 
 ## What is This?
 
@@ -38,10 +45,12 @@ Perfect for learning:
 - **AI Opponents**: 3 distinct personalities with transparent reasoning
 - **Random AI Names**: 24 creative names (AI-ce, Deep Blue, The Algorithm, etc.)
 - **WebSocket Support**: Real-time AI turn streaming
-- **Hand Analysis**: Rule-based insights after each hand
+- **Hand Analysis**: LLM-powered insights with Claude AI (Haiku 4.5)
+- **Session Analysis**: Pattern detection across multiple hands (Quick/Deep modes)
+- **Blind Progression**: Doubles every 10 hands (5/10 → 10/20 → 20/40)
 - **Game Over Screen**: Shows stats when eliminated
 - **SPR-Aware AI**: Stack-to-pot ratio decision making
-- **Quit Anytime**: Return to lobby with one click
+- **Quit Anytime**: Return to lobby with optional session analysis
 - **Full Game Flow**: Pre-flop → Flop → Turn → River → Showdown
 - **Chip Conservation**: Perfect accounting, no bugs
 
@@ -208,7 +217,9 @@ Frontend (Next.js/TypeScript)
 - `GET /games/{id}` - Get game state (query: `show_ai_thinking`)
 - `POST /games/{id}/actions` - Submit player action
 - `POST /games/{id}/next` - Start next hand
-- `GET /games/{id}/analysis` - Get hand analysis
+- `GET /games/{id}/analysis` - Get rule-based hand analysis
+- `GET /games/{id}/analysis-llm` - Get LLM-powered hand analysis (Haiku 4.5)
+- `GET /games/{id}/analysis-session?depth=quick|deep` - Get session analysis across multiple hands
 
 ### WebSocket
 - `WS /ws/{game_id}` - Real-time game updates

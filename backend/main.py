@@ -386,24 +386,22 @@ def get_hand_analysis(game_id: str, hand_number: Optional[int] = None):
 async def get_llm_hand_analysis(
     game_id: str,
     hand_number: Optional[int] = None,
-    depth: str = Query("quick", regex="^(quick|deep)$"),
     use_cache: bool = True
 ):
     """
-    Get LLM-powered hand analysis using Claude AI (Haiku 4.5 or Sonnet 4.5).
-    Phase 4: LLM-Powered Hand Analysis
+    Get LLM-powered hand analysis using Claude AI (Haiku 4.5 only).
+    Phase 4: LLM-Powered Hand Analysis (Quick Analysis)
 
     Args:
         game_id: Game ID
         hand_number: Optional hand number to analyze (defaults to last hand)
-        depth: "quick" (Haiku, $0.016) or "deep" (Sonnet, $0.029)
         use_cache: Whether to use cached analysis (default: True)
 
     Returns:
         {
             "analysis": {...},  # Full LLM analysis JSON
-            "model_used": str,  # "haiku-4.5" or "sonnet-4.5" or "rule-based-fallback"
-            "cost": float,      # Cost of this analysis
+            "model_used": "haiku-4.5",
+            "cost": float,      # Cost of this analysis (~$0.016)
             "cached": bool,     # Whether result was cached
             "analysis_count": int  # Total analyses for this game
         }
@@ -444,8 +442,8 @@ async def get_llm_hand_analysis(
     if not target_hand:
         raise HTTPException(status_code=404, detail="No hand to analyze")
 
-    # Check cache
-    cache_key = f"{game_id}_hand_{target_hand.hand_number}_{depth}"
+    # Check cache (always use "quick" for single hands)
+    cache_key = f"{game_id}_hand_{target_hand.hand_number}_quick"
     if use_cache and cache_key in analysis_cache:
         cached_result = analysis_cache[cache_key]
         return {
@@ -461,18 +459,18 @@ async def get_llm_hand_analysis(
         # Get hand history
         hand_history = game.hand_history if hasattr(game, 'hand_history') else []
 
-        # Call LLM analyzer
+        # Call LLM analyzer (always use "quick" for single hands)
         analysis = llm_analyzer.analyze_hand(
             completed_hand=target_hand,
             hand_history=hand_history,
             analysis_count=analysis_count,
-            depth=depth,
+            depth="quick",
             skill_level="beginner"  # TODO: Track player skill
         )
 
-        # Calculate cost (for monitoring)
-        model = "sonnet-4.5" if depth == "deep" else "haiku-4.5"
-        cost = 0.029 if depth == "deep" else 0.016
+        # Calculate cost (for monitoring) - always Haiku for single hands
+        model = "haiku-4.5"
+        cost = 0.016
 
         # Build response
         result = {
@@ -514,6 +512,140 @@ async def get_llm_hand_analysis(
             "cached": False,
             "error": str(e),
             "analysis_count": analysis_count + 1
+        }
+
+
+@app.get("/games/{game_id}/analysis-session")
+async def get_session_analysis(
+    game_id: str,
+    depth: str = Query("quick", regex="^(quick|deep)$"),
+    hand_count: Optional[int] = None,
+    use_cache: bool = True
+):
+    """
+    Get LLM-powered session analysis across multiple hands.
+    Phase 4.5: Session Analysis
+
+    Args:
+        game_id: Game ID
+        depth: "quick" (Haiku, $0.018) or "deep" (Sonnet, $0.032)
+        hand_count: Number of recent hands to analyze (default: all hands)
+        use_cache: Whether to use cached analysis (default: True)
+
+    Returns:
+        {
+            "analysis": {...},  # Full session analysis JSON
+            "model_used": str,  # "haiku-4.5" or "sonnet-4.5"
+            "cost": float,      # Cost of this analysis
+            "cached": bool,     # Whether result was cached
+            "hands_analyzed": int  # Number of hands analyzed
+        }
+    """
+    # Check if LLM is enabled
+    if not LLM_ENABLED:
+        raise HTTPException(
+            status_code=503,
+            detail="LLM analysis not available. Set ANTHROPIC_API_KEY environment variable."
+        )
+
+    # Check game exists
+    if game_id not in games:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    game, _ = games[game_id]
+    games[game_id] = (game, time.time())  # Update access time
+
+    # Get hand history
+    hand_history = game.hand_history if hasattr(game, 'hand_history') else []
+
+    if not hand_history:
+        raise HTTPException(status_code=404, detail="No hands to analyze")
+
+    # Determine how many hands to analyze
+    hands_to_analyze = hand_count if hand_count else len(hand_history)
+
+    # Check cache
+    cache_key = f"{game_id}_session_{hands_to_analyze}_{depth}"
+    if use_cache and cache_key in analysis_cache:
+        cached_result = analysis_cache[cache_key]
+        return {
+            **cached_result,
+            "cached": True
+        }
+
+    # Rate limiting: 1 session analysis per 60 seconds per game
+    now = time.time()
+    last_time = last_analysis_time.get(f"{game_id}_session", 0)
+    if use_cache and now - last_time < 60:
+        wait_time = int(60 - (now - last_time))
+        raise HTTPException(
+            status_code=429,
+            detail=f"Rate limit: Wait {wait_time}s before next session analysis"
+        )
+
+    try:
+        # Get starting stack (from first hand or default)
+        starting_stack = 1000  # Default starting stack
+        if hand_history:
+            first_hand = hand_history[0]
+            if first_hand.final_player_states:
+                human_player = next((p for p in first_hand.final_player_states if p["name"] == "You"), None)
+                if human_player:
+                    # Estimate starting stack from first hand
+                    starting_stack = human_player.get("stack_start", 1000)
+
+        # Get current stack
+        ending_stack = game.human_stack
+
+        # Call LLM analyzer
+        analysis = llm_analyzer.analyze_session(
+            hand_history=hand_history,
+            starting_stack=starting_stack,
+            ending_stack=ending_stack,
+            depth=depth,
+            skill_level="beginner",  # TODO: Track player skill
+            hand_count=hand_count
+        )
+
+        # Calculate cost (for monitoring)
+        model = "sonnet-4.5" if depth == "deep" else "haiku-4.5"
+        # Session analysis uses more tokens than single hand
+        cost = 0.032 if depth == "deep" else 0.018
+
+        # Build response
+        result = {
+            "analysis": analysis,
+            "model_used": model,
+            "cost": cost,
+            "cached": False,
+            "hands_analyzed": hands_to_analyze
+        }
+
+        # Cache result
+        analysis_cache[cache_key] = result
+
+        # Update last analysis time
+        last_analysis_time[f"{game_id}_session"] = now
+
+        # Track metrics (for cost monitoring)
+        _track_analysis_metrics(game_id, f"{model}_session", cost, hands_to_analyze, success=True)
+
+        return result
+
+    except Exception as e:
+        logger = logging.getLogger(__name__)
+        logger.error(f"Session analysis failed for game {game_id}: {e}")
+
+        # Track failed attempt
+        _track_analysis_metrics(game_id, "error_session", 0.0, hands_to_analyze, success=False)
+
+        return {
+            "analysis": {"error": "Session analysis not available", "details": str(e)},
+            "model_used": "error",
+            "cost": 0.0,
+            "cached": False,
+            "error": str(e),
+            "hands_analyzed": hands_to_analyze
         }
 
 

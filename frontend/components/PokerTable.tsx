@@ -6,10 +6,12 @@ import { PlayerSeat } from './PlayerSeat';
 import { CommunityCards } from './CommunityCards';
 import { WinnerModal } from './WinnerModal';
 import { AnalysisModalLLM } from './AnalysisModalLLM'; // Phase 4: LLM-powered analysis
+import { SessionAnalysisModal } from './SessionAnalysisModal'; // Phase 4.5: Session analysis
 import { GameOverModal } from './GameOverModal';
 import { useGameStore } from '../lib/store';
 import { useState, useEffect } from 'react';
 import type { Player } from '../lib/types'; // Phase 0.5: For button indicator helper
+import { pokerApi } from '../lib/api'; // Phase 4.5: Session analysis API
 
 export function PokerTable() {
   const {
@@ -55,6 +57,15 @@ export function PokerTable() {
   const [showGameOverModal, setShowGameOverModal] = useState(false);
   const [showRaisePanel, setShowRaisePanel] = useState(false);
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
+
+  // Phase 4.5: Session Analysis Modal state
+  const [showSessionAnalysisModal, setShowSessionAnalysisModal] = useState(false);
+  const [sessionAnalysis, setSessionAnalysis] = useState<any>(null);
+  const [sessionAnalysisLoading, setSessionAnalysisLoading] = useState(false);
+  const [sessionAnalysisError, setSessionAnalysisError] = useState<string | null>(null);
+  const [sessionAnalysisDepth, setSessionAnalysisDepth] = useState<'quick' | 'deep'>('quick');
+  const [sessionHandsAnalyzed, setSessionHandsAnalyzed] = useState<number>(0);
+  const [showQuitConfirmation, setShowQuitConfirmation] = useState(false);
 
   // Check if player is all-in (has chips invested but stack = 0)
   const isAllIn = gameState.human_player.all_in ||
@@ -115,6 +126,62 @@ export function PokerTable() {
       // This catch prevents Next.js error overlay in development mode
       console.log('Analysis fetch handled by store');
     }
+  };
+
+  // Phase 4.5: Handle session analysis button click
+  const handleSessionAnalysisClick = async (depth: 'quick' | 'deep' = 'quick') => {
+    if (!gameId) return;
+
+    setSessionAnalysisLoading(true);
+    setSessionAnalysisError(null);
+    setSessionAnalysisDepth(depth);
+
+    try {
+      const result = await pokerApi.getSessionAnalysis(gameId, {
+        depth,
+        useCache: false
+      });
+
+      if (result.error) {
+        setSessionAnalysisError(result.error);
+      } else {
+        setSessionAnalysis(result.analysis);
+        setSessionHandsAnalyzed(result.hands_analyzed);
+        if (!showSessionAnalysisModal) {
+          setShowSessionAnalysisModal(true);
+        }
+      }
+    } catch (error: any) {
+      console.error('Session analysis error:', error);
+      setSessionAnalysisError(
+        error.response?.data?.detail ||
+        error.message ||
+        'Failed to fetch session analysis'
+      );
+    } finally {
+      setSessionAnalysisLoading(false);
+    }
+  };
+
+  // Phase 4.5: Handle quit with optional session analysis
+  const handleQuitClick = () => {
+    // Only show confirmation if multiple hands have been played
+    if (gameState.hand_count && gameState.hand_count >= 5) {
+      setShowQuitConfirmation(true);
+    } else {
+      quitGame();
+    }
+  };
+
+  const handleQuitWithAnalysis = async () => {
+    setShowQuitConfirmation(false);
+    await handleSessionAnalysisClick('quick');
+    // Don't quit yet - let user review analysis first
+  };
+
+  const handleQuitWithoutAnalysis = () => {
+    setShowQuitConfirmation(false);
+    quitGame();
   };
 
   // Show analysis modal when analysis is available (and not null)
@@ -242,6 +309,18 @@ export function PokerTable() {
                 📊 Analyze Hand
               </button>
 
+              {/* Phase 4.5: Session Analysis */}
+              <button
+                onClick={() => {
+                  handleSessionAnalysisClick('quick');
+                  setShowSettingsMenu(false);
+                }}
+                disabled={loading || sessionAnalysisLoading}
+                className="w-full text-left px-4 py-3 hover:bg-[#1F7A47] rounded-lg text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                📈 Session Analysis
+              </button>
+
               {/* Toggle AI Thinking */}
               <button
                 onClick={() => {
@@ -283,7 +362,7 @@ export function PokerTable() {
 
           {/* Quit Game button */}
           <button
-            onClick={quitGame}
+            onClick={handleQuitClick}
             className="bg-[#DC2626] hover:bg-[#B91C1C] text-white px-4 py-2 rounded-lg font-semibold"
             title="Quit game and return to lobby"
           >
@@ -633,6 +712,68 @@ export function PokerTable() {
           onClose={() => setShowAnalysisModal(false)}
         />
       )}
+
+      {/* Phase 4.5: Session Analysis modal */}
+      <SessionAnalysisModal
+        isOpen={showSessionAnalysisModal}
+        analysis={sessionAnalysis}
+        isLoading={sessionAnalysisLoading}
+        error={sessionAnalysisError}
+        onClose={() => setShowSessionAnalysisModal(false)}
+        onAnalyze={handleSessionAnalysisClick}
+        currentDepth={sessionAnalysisDepth}
+        handsAnalyzed={sessionHandsAnalyzed}
+      />
+
+      {/* Phase 4.5: Quit Confirmation Modal */}
+      <AnimatePresence>
+        {showQuitConfirmation && (
+          <motion.div
+            className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="absolute inset-0 bg-black bg-opacity-70 pointer-events-none" />
+            <motion.div
+              className="relative bg-gray-900 text-white rounded-2xl shadow-2xl max-w-md w-full mx-4 pointer-events-auto z-10"
+              initial={{ scale: 0.9, y: 50 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 50 }}
+            >
+              <div className="bg-gradient-to-r from-red-600 to-orange-600 p-6 rounded-t-2xl">
+                <h2 className="text-2xl font-bold">Quit Game?</h2>
+              </div>
+              <div className="p-6 space-y-4">
+                <p className="text-gray-300">
+                  You've played {gameState.hand_count} hands. Would you like to analyze your session before leaving?
+                </p>
+                <div className="space-y-2">
+                  <button
+                    onClick={handleQuitWithAnalysis}
+                    disabled={sessionAnalysisLoading}
+                    className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg disabled:opacity-50"
+                  >
+                    📈 Analyze Session First
+                  </button>
+                  <button
+                    onClick={handleQuitWithoutAnalysis}
+                    className="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg"
+                  >
+                    Just Quit
+                  </button>
+                  <button
+                    onClick={() => setShowQuitConfirmation(false)}
+                    className="w-full bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium py-2 px-6 rounded-lg"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Game Over modal - shown when human player is eliminated */}
       <GameOverModal

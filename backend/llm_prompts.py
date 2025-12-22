@@ -285,3 +285,246 @@ def format_user_prompt(context: dict, depth: str, skill_level: str = "beginner")
         schema=ANALYSIS_JSON_SCHEMA,
         **context
     )
+
+
+# =============================================================================
+# SESSION ANALYSIS PROMPTS (Phase 4.5)
+# =============================================================================
+
+SESSION_QUICK_SYSTEM_PROMPT = """You are an expert poker coach analyzing a session of Texas Hold'em hands for a {skill_level} player.
+
+YOUR ROLE:
+- Identify patterns and tendencies across multiple hands
+- Highlight the player's top strengths and biggest leaks
+- Provide actionable adjustments to improve win rate
+- Track progress and improvement areas
+
+TEACHING STYLE:
+- Pattern-focused: Look for recurring behaviors across hands
+- Data-driven: Use statistics to support observations
+- Encouraging: Celebrate improvements, frame leaks as opportunities
+- Actionable: Specific adjustments the player can make immediately
+
+ANALYSIS FOCUS:
+- Overall stats: Win rate, VPIP, PFR, aggression factor
+- Biggest strengths (what they're doing well consistently)
+- Biggest leaks (patterns that cost money)
+- Strategic adjustments needed
+- Concepts to study based on observed patterns
+
+OUTPUT FORMAT:
+Return valid JSON matching the provided schema. Be concise but comprehensive.
+Session analysis is about PATTERNS, not individual hand details.
+"""
+
+SESSION_DEEP_SYSTEM_PROMPT = """You are an expert poker coach providing DEEP SESSION ANALYSIS for a {skill_level} player.
+
+This is deep pattern analysis across multiple hands - go beyond surface-level observations.
+
+YOUR ROLE:
+- Analyze complex patterns in player tendencies
+- Provide detailed leak analysis with specific hand examples
+- Suggest exploitation strategies for AI opponents observed
+- Compare player stats to GTO/optimal baselines
+- Break down win rate by position, hand type, and situation
+
+TEACHING STYLE:
+- Strategic depth: Explain WHY patterns matter with EV impact
+- Evidence-based: Reference specific hands that demonstrate patterns
+- Theoretical grounding: Connect observations to poker theory
+- Actionable plans: Custom study recommendations based on detected patterns
+
+ADVANCED ANALYSIS INCLUDES:
+- Win rate breakdown by position (EP, MP, LP, Blinds)
+- Range construction advice based on observed tendencies
+- Detailed leak analysis with $ impact estimates
+- Opponent-specific exploitation strategies
+- GTO baseline comparison with adjustments needed
+
+OUTPUT FORMAT:
+Return valid JSON matching the provided schema with DEEP INSIGHTS:
+- Detailed pattern analysis (3-5 major patterns identified)
+- Leak analysis with specific hand examples
+- Win rate breakdown by position/situation
+- Custom study plan with priorities
+- Opponent exploitation strategies
+
+Keep focused on HIGH-IMPACT insights. Quality over quantity.
+"""
+
+SESSION_JSON_SCHEMA = """{
+  "session_summary": "One sentence overview of the session",
+  "hands_analyzed": 20,
+  "skill_level_detected": "beginner|intermediate|advanced",
+  "confidence_in_detection": 0.75,
+
+  "overall_stats": {
+    "win_rate": 45.0,
+    "hands_won": 9,
+    "hands_lost": 11,
+    "vpip": 28.5,
+    "pfr": 18.2,
+    "aggression_factor": 1.8,
+    "biggest_win": 250,
+    "biggest_loss": -180,
+    "net_profit": 120
+  },
+
+  "top_3_strengths": [
+    {
+      "strength": "Tight pre-flop hand selection",
+      "evidence": "VPIP 28% is optimal for this table",
+      "keep_doing": "Continue folding marginal hands in early position"
+    }
+  ],
+
+  "top_3_leaks": [
+    {
+      "leak": "Overvaluing top pair",
+      "evidence": "Called down 4 times with top pair vs aggressive betting",
+      "cost_estimate": -120,
+      "fix": "Fold top pair to multi-street aggression when SPR < 3",
+      "priority": 1
+    }
+  ],
+
+  "win_rate_breakdown": {
+    "by_position": {
+      "button": {"hands": 5, "win_rate": 60.0},
+      "cutoff": {"hands": 4, "win_rate": 50.0},
+      "middle": {"hands": 5, "win_rate": 40.0},
+      "early": {"hands": 3, "win_rate": 33.3},
+      "blinds": {"hands": 3, "win_rate": 33.3}
+    },
+    "by_hand_type": {
+      "premium_pairs": {"hands": 3, "win_rate": 66.7},
+      "broadway": {"hands": 5, "win_rate": 40.0},
+      "suited_connectors": {"hands": 2, "win_rate": 50.0},
+      "speculative": {"hands": 4, "win_rate": 25.0}
+    }
+  },
+
+  "opponent_insights": [
+    {
+      "opponent": "AI-lice (Conservative)",
+      "hands_against": 15,
+      "win_rate_vs": 40.0,
+      "key_pattern": "Only raises with top 15% of hands",
+      "exploitation_strategy": "Fold to their raises unless you have premium hands. Value bet wider because they call too much.",
+      "adjustments_needed": "Stop bluffing them - they don't fold enough"
+    }
+  ],
+
+  "recommended_adjustments": [
+    {
+      "adjustment": "Tighten up from early position",
+      "reason": "33% win rate from EP vs 60% from button",
+      "action": "Only play top 12% of hands from UTG/MP",
+      "priority": 1
+    }
+  ],
+
+  "concepts_to_study": [
+    {
+      "concept": "SPR and pot commitment",
+      "why_relevant": "Multiple hands where you called all-in with SPR < 2",
+      "priority": 1,
+      "tutorial_link": "/tutorial#spr"
+    }
+  ],
+
+  "study_plan": [
+    {
+      "topic": "Pot odds mastery",
+      "time_estimate": "30 minutes",
+      "resources": ["Tutorial: Pot Odds Calculator", "Practice: Call or Fold Quiz"],
+      "goal": "Make mathematically correct calls 95% of the time"
+    }
+  ],
+
+  "progress_tracking": {
+    "compared_to_last_session": "Win rate improved from 35% to 45%",
+    "improvement_areas": ["Tighter pre-flop", "Better position awareness"],
+    "areas_still_working_on": ["River decision-making", "Bluff frequency"]
+  },
+
+  "overall_assessment": "Solid session with clear improvement in pre-flop play. Focus on reducing river mistakes.",
+  "encouragement": "Great progress! Your VPIP dropped 10% and win rate improved 10%. Keep studying SPR!"
+}"""
+
+SESSION_USER_PROMPT_TEMPLATE = """Analyze this poker session and identify patterns, strengths, and leaks:
+
+SESSION CONTEXT:
+Total hands analyzed: {hand_count}
+Time period: {session_start} to {session_end}
+Player: {human_name}
+Starting bankroll: ${starting_stack}
+Ending bankroll: ${ending_stack}
+Net profit/loss: ${net_change} ({net_change_pct}%)
+
+AGGREGATE STATISTICS:
+{aggregate_stats}
+
+HANDS SUMMARY:
+{hands_summary}
+
+AI OPPONENTS FACED:
+{ai_opponents_summary}
+
+ANALYSIS REQUEST:
+Provide {analysis_type} session analysis in JSON format following the schema.
+
+FOCUS ON:
+1. Patterns across multiple hands (not individual hand details)
+2. Top 3 strengths the player demonstrated
+3. Top 3 leaks that cost money
+4. Win rate breakdown by position and hand type
+5. Opponent-specific patterns and exploitation strategies
+6. Recommended adjustments with priority
+7. Custom study plan based on observed leaks
+
+Adapt language/depth to {skill_level} level.
+Be specific, be data-driven, be encouraging.
+
+Return ONLY valid JSON matching this schema:
+{schema}
+"""
+
+
+def get_session_system_prompt(depth: str, skill_level: str = "beginner") -> str:
+    """
+    Get system prompt for session analysis based on depth and skill level.
+
+    Args:
+        depth: "quick" or "deep"
+        skill_level: "beginner", "intermediate", or "advanced"
+
+    Returns:
+        Formatted system prompt string
+    """
+    if depth == "deep":
+        return SESSION_DEEP_SYSTEM_PROMPT.format(skill_level=skill_level)
+    else:
+        return SESSION_QUICK_SYSTEM_PROMPT.format(skill_level=skill_level)
+
+
+def format_session_user_prompt(context: dict, depth: str, skill_level: str = "beginner") -> str:
+    """
+    Format user prompt for session analysis with session context.
+
+    Args:
+        context: Dictionary containing all session context
+        depth: "quick" or "deep"
+        skill_level: "beginner", "intermediate", or "advanced"
+
+    Returns:
+        Formatted user prompt string
+    """
+    analysis_type = "deep strategic" if depth == "deep" else "comprehensive"
+
+    return SESSION_USER_PROMPT_TEMPLATE.format(
+        analysis_type=analysis_type,
+        skill_level=skill_level,
+        schema=SESSION_JSON_SCHEMA,
+        **context
+    )

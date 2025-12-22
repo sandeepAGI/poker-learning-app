@@ -42,11 +42,10 @@ export const pokerApi = {
     return response.data;
   },
 
-  // Get LLM-powered hand analysis (Phase 4)
+  // Get LLM-powered hand analysis (Phase 4 - Haiku only)
   async getHandAnalysisLLM(
     gameId: string,
     options: {
-      depth?: 'quick' | 'deep',
       handNumber?: number,
       useCache?: boolean
     } = {}
@@ -59,11 +58,35 @@ export const pokerApi = {
     error?: string
   }> {
     const params = new URLSearchParams();
-    if (options.depth) params.set('depth', options.depth);
     if (options.handNumber) params.set('hand_number', options.handNumber.toString());
     if (options.useCache !== undefined) params.set('use_cache', options.useCache.toString());
 
     const response = await api.get(`/games/${gameId}/analysis-llm?${params}`);
+    return response.data;
+  },
+
+  // Get LLM-powered session analysis (Phase 4.5)
+  async getSessionAnalysis(
+    gameId: string,
+    options: {
+      depth?: 'quick' | 'deep',
+      handCount?: number,
+      useCache?: boolean
+    } = {}
+  ): Promise<{
+    analysis: any,
+    model_used: string,
+    cost: number,
+    cached: boolean,
+    hands_analyzed: number,
+    error?: string
+  }> {
+    const params = new URLSearchParams();
+    if (options.depth) params.set('depth', options.depth);
+    if (options.handCount) params.set('hand_count', options.handCount.toString());
+    if (options.useCache !== undefined) params.set('use_cache', options.useCache.toString());
+
+    const response = await api.get(`/games/${gameId}/analysis-session?${params}`);
     return response.data;
   },
 

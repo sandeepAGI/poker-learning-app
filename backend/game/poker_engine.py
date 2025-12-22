@@ -665,7 +665,7 @@ class PokerGame:
         # Blind escalation (Issue #1 fix)
         self.blind_escalation_enabled = True  # Enable/disable blind increases
         self.hands_per_blind_level = 10  # Increase blinds every 10 hands
-        self.blind_multiplier = 1.5  # Multiply by 1.5 each level
+        self.blind_multiplier = 2.0  # Double blinds each level (5/10 → 10/20 → 20/40)
 
         # Fixed: Bug #1 - Turn order tracking
         self.current_player_index = 0
