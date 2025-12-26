@@ -658,6 +658,8 @@ class PokerGame:
         self.current_bet = 0
         self.current_state = GameState.PRE_FLOP
         self.dealer_index = 0
+        self.small_blind_index: Optional[int] = None  # FIX-01: Track SB position for frontend
+        self.big_blind_index: Optional[int] = None    # FIX-01: Track BB position for frontend
         self.hand_count = 0
         self.big_blind = 10
         self.small_blind = 5
@@ -1103,6 +1105,10 @@ class PokerGame:
         # Current bet is the actual BB amount (might be less if BB went all-in)
         self.current_bet = bb_amount
         self.last_raiser_index = bb_index  # BB is last raiser pre-flop
+
+        # FIX-01: Store blind positions for frontend display
+        self.small_blind_index = sb_index
+        self.big_blind_index = bb_index
 
         return (sb_index, bb_index)
 

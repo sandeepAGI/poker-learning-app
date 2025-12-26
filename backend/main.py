@@ -129,6 +129,9 @@ class GameResponse(BaseModel):
     small_blind: int  # Issue #1 fix: Expose blind levels
     big_blind: int
     hand_count: int  # Current hand number
+    dealer_position: Optional[int] = None  # FIX-01: Which player index is dealer
+    small_blind_position: Optional[int] = None  # FIX-01: Which player index is SB
+    big_blind_position: Optional[int] = None  # FIX-01: Which player index is BB
 
 
 # API Endpoints
@@ -268,7 +271,10 @@ def get_game_state(game_id: str, show_ai_thinking: bool = False):
         winner_info=winner_info,
         small_blind=game.small_blind,
         big_blind=game.big_blind,
-        hand_count=game.hand_count
+        hand_count=game.hand_count,
+        dealer_position=game.dealer_index,  # FIX-01: Expose dealer position
+        small_blind_position=game.small_blind_index,  # FIX-01: Expose SB position
+        big_blind_position=game.big_blind_index  # FIX-01: Expose BB position
     )
 
 
