@@ -606,6 +606,109 @@ Cards and layout now use Tailwind responsive classes to scale appropriately acro
 
 ---
 
+### FIX-04: Z-Index Layering - Community Cards Hidden Behind Player Seats
+
+**Status**: FIXED ✅
+**Priority**: High (Core UI visibility issue)
+**Reported**: December 26, 2025
+
+**Problem Description**:
+After implementing FIX-03 (responsive sizing), community cards were still appearing incorrectly on user's screen. The issue was not card sizing but CSS stacking order - community cards were positioned BEHIND player seat containers, making them partially or fully hidden depending on viewport size.
+
+**Steps to Reproduce**:
+1. Start a game (any number of players)
+2. Play to flop/turn/river (show community cards)
+3. Observe: Community cards appear behind/underneath player card displays
+4. Some cards may be completely hidden or partially obscured
+
+**Expected Behavior**:
+- Community cards should appear ABOVE all player seats
+- Pot display should be clearly visible in center
+- Community cards should never be obscured by player UI
+
+**Actual Behavior** (Before Fix):
+- Community cards positioned at same z-index as player seats
+- Stacking order determined by DOM order (unpredictable)
+- Cards appear behind player containers on some viewports
+- User screenshots showed 3♥ partially hidden on left side
+
+**Visual Evidence** (User Screenshots):
+```
+Screenshot 1: Flop with Q♠, 4♦, 4♠
+- Community cards appear overlapped/hidden by other UI elements
+- Cards positioned correctly but in wrong stacking layer
+
+Screenshot 2: Shows 3♥ partially visible
+- Community cards container appears positioned BEHIND player UI
+- Z-index layering issue, NOT responsive sizing issue
+```
+
+**Root Cause Analysis**:
+
+All absolutely positioned elements (player seats AND community cards) had no explicit z-index values. CSS defaults to stacking in DOM order when z-index is not specified, which caused unpredictable layering.
+
+**Files Involved**:
+- `frontend/components/PokerTable.tsx` lines 410, 427, 444, 461, 478, 497, 522
+
+**Fix Implementation**:
+
+**Step 1**: Add z-20 to community cards container
+- File: `frontend/components/PokerTable.tsx` line 497
+- Changed from:
+  ```typescript
+  // OLD - No z-index specified
+  <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6">
+  ```
+- Changed to:
+  ```typescript
+  // NEW - Explicitly set z-20 for foreground layer
+  <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6 z-20">
+  ```
+
+**Step 2**: Add z-10 to all player seat containers
+- File: `frontend/components/PokerTable.tsx` lines 410, 427, 444, 461, 478, 522
+- Changed 6 player seat containers:
+  ```typescript
+  // Opponent 1 (Left)
+  <div className="absolute top-1/3 left-8 z-10">
+
+  // Opponent 2 (Top Center)
+  <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10">
+
+  // Opponent 3 (Right)
+  <div className="absolute top-1/3 right-8 z-10">
+
+  // Opponent 4 (Top Left - 6-player only)
+  <div className="absolute top-8 left-[25%] -translate-x-1/2 z-10">
+
+  // Opponent 5 (Top Right - 6-player only)
+  <div className="absolute top-8 left-[75%] -translate-x-1/2 z-10">
+
+  // Human Player (Bottom)
+  <div className="absolute bottom-44 left-1/2 -translate-x-1/2 z-10">
+  ```
+
+**Z-Index Hierarchy**:
+- z-10: Player seats (background layer)
+- z-20: Community cards + pot (foreground layer)
+- z-50: Modals and settings menu (top layer - existing)
+
+**Regression Check**:
+- ✅ Baseline tests: 23/23 passing (no regressions)
+- ✅ No new failures introduced
+- ✅ All card sizing from FIX-03 still working correctly
+
+**Resolution**:
+Established explicit z-index layering hierarchy to ensure community cards always appear above player seats. This is a pure CSS fix with no logic changes - simply making the visual stacking order explicit and predictable.
+
+**Verified**: ✅ COMPLETE
+
+**Before/After**:
+- Before: Community cards at same z-index as player seats (stacked by DOM order) ❌
+- After: Community cards at z-20, player seats at z-10 (always visible) ✅
+
+---
+
 ## Testing Commands Reference
 
 ### Backend Tests
@@ -642,8 +745,8 @@ cd frontend && npm run build
 
 ## Progress Summary
 
-**Total Issues**: 3
-**Fixed**: 3 (FIX-01, FIX-02, FIX-03)
+**Total Issues**: 4
+**Fixed**: 4 (FIX-01, FIX-02, FIX-03, FIX-04)
 **In Progress**: 0
 **Pending**: 0
 
@@ -668,6 +771,9 @@ Track all files changed during this fix session:
 - [x] `frontend/components/Card.tsx` (lines 30, 52, 59-73) - Responsive card sizing and text scaling
 - [x] `frontend/components/CommunityCards.tsx` (lines 40, 45) - Responsive gaps and padding
 - [x] `frontend/components/PlayerSeat.tsx` (lines 30, 68) - Responsive player layout
+
+**Frontend** (FIX-04):
+- [x] `frontend/components/PokerTable.tsx` (lines 410, 427, 444, 461, 478, 497, 522) - Z-index layering for visibility
 
 **Tests**:
 - [x] FIX-01 Unit tests: `backend/tests/test_fix01_blind_positions.py` (new file, 7 tests)

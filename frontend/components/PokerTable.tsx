@@ -407,7 +407,7 @@ export function PokerTable() {
             <>
               {/* Opponent 1 - Left Side (clockwise from human) */}
               {opponents[0] && (
-                <div className="absolute top-1/3 left-8">
+                <div className="absolute top-1/3 left-8 z-10">
                   <PlayerSeat
                     key={opponents[0].player_id}
                     player={opponents[0]}
@@ -424,7 +424,7 @@ export function PokerTable() {
 
               {/* Opponent 2 - Top Center (clockwise from opponent 1) */}
               {opponents[1] && (
-                <div className="absolute top-8 left-1/2 -translate-x-1/2">
+                <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10">
                   <PlayerSeat
                     key={opponents[1].player_id}
                     player={opponents[1]}
@@ -441,7 +441,7 @@ export function PokerTable() {
 
               {/* Opponent 3 - Right Side (clockwise from opponent 2) */}
               {opponents[2] && (
-                <div className="absolute top-1/3 right-8">
+                <div className="absolute top-1/3 right-8 z-10">
                   <PlayerSeat
                     key={opponents[2].player_id}
                     player={opponents[2]}
@@ -458,7 +458,7 @@ export function PokerTable() {
 
               {/* Opponent 4 - Top Left (for 6-player tables) */}
               {opponents[3] && (
-                <div className="absolute top-8 left-[25%] -translate-x-1/2">
+                <div className="absolute top-8 left-[25%] -translate-x-1/2 z-10">
                   <PlayerSeat
                     key={opponents[3].player_id}
                     player={opponents[3]}
@@ -475,7 +475,7 @@ export function PokerTable() {
 
               {/* Opponent 5 - Top Right (for 6-player tables) */}
               {opponents[4] && (
-                <div className="absolute top-8 left-[75%] -translate-x-1/2">
+                <div className="absolute top-8 left-[75%] -translate-x-1/2 z-10">
                   <PlayerSeat
                     key={opponents[4].player_id}
                     player={opponents[4]}
@@ -494,7 +494,7 @@ export function PokerTable() {
         })()}
 
         {/* Center Area - Community Cards and Pot */}
-        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6">
+        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6 z-20">
           {/* Pot */}
           <motion.div
             className="bg-[#D97706] text-white px-6 py-3 rounded-full text-3xl font-bold shadow-2xl"
@@ -519,7 +519,7 @@ export function PokerTable() {
         </div>
 
         {/* Human Player - Bottom (moved lower to avoid overlap) */}
-        <div className="absolute bottom-44 left-1/2 -translate-x-1/2">
+        <div className="absolute bottom-44 left-1/2 -translate-x-1/2 z-10">
           <PlayerSeat
             player={gameState.human_player}
             isCurrentTurn={isMyTurn}
