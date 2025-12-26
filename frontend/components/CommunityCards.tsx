@@ -37,12 +37,12 @@ export function CommunityCards({ cards, gameState }: CommunityCardsProps) {
 
       {/* Community Cards Container */}
       <motion.div
-        className="bg-[#0A4D26]/80 backdrop-blur-sm px-6 py-4 rounded-xl border-2 border-[#1F7A47]/60 shadow-2xl"
+        className="bg-[#0A4D26]/80 backdrop-blur-sm px-2 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 rounded-xl border-2 border-[#1F7A47]/60 shadow-2xl"
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="flex gap-3">
+        <div className="flex gap-1 sm:gap-2 md:gap-3">
           {cards.map((card, i) => (
             <motion.div
               key={i}

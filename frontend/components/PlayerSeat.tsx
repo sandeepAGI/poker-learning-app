@@ -27,7 +27,7 @@ export function PlayerSeat({
 }: PlayerSeatProps) {
   return (
     <motion.div
-      className={`relative p-4 rounded-lg ${
+      className={`relative p-2 sm:p-3 md:p-4 rounded-lg ${
         isCurrentTurn ? 'bg-yellow-100 border-4 border-yellow-400' : 'bg-gray-100 border-2 border-gray-300'
       } ${!player.is_active ? 'opacity-50' : ''}`}
       animate={{
@@ -65,7 +65,7 @@ export function PlayerSeat({
       </div>
 
       {/* Cards */}
-      <div className="flex gap-2 mb-3">
+      <div className="flex gap-1 sm:gap-1.5 md:gap-2 mb-2 sm:mb-2.5 md:mb-3">
         {player.hole_cards.length > 0 ? (
           player.hole_cards.map((card, i) => <Card key={i} card={card} />)
         ) : (

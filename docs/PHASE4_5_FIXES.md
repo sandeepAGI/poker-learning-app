@@ -441,6 +441,171 @@ Modal state management was waiting for API call to complete before showing UI. F
 
 ---
 
+### FIX-03: Responsive Design - Cards Cut Off on Small Screens
+
+**Status**: FIXED ✅
+**Priority**: High (UI unusable on mobile)
+**Reported**: December 26, 2025
+
+**Problem Description**:
+On small screens (mobile devices), community cards overflow the viewport and get cut off. On a 375px mobile screen with 5 river cards, only 3 cards are visible - the first and last cards are hidden off-screen.
+
+**Steps to Reproduce**:
+1. Open game on mobile device (375px width)
+2. Play to river (5 community cards)
+3. Observe: Only 3 of 5 cards visible, first and last cards cut off
+
+**Expected Behavior**:
+- All 5 community cards should be visible on all screen sizes
+- Cards should scale responsively (smaller on mobile, full size on desktop)
+- Layout should adapt to viewport width using Tailwind breakpoints
+
+**Actual Behavior** (Before Fix):
+- Cards: Fixed 96px width at ALL screen sizes
+- Gaps: Fixed 12px at ALL screen sizes
+- Padding: Fixed 24px at ALL screen sizes
+- Mobile (375px): Needs 576px total → 201px overflow!
+- Result: First and last cards cut off/hidden
+
+**Visual Evidence** (Before Fix):
+```
+Mobile (375px viewport):
+- 5 cards × 96px = 480px
+- 4 gaps × 12px = 48px
+- 2 padding × 24px = 48px
+- Total needed: 576px
+- Viewport: 375px
+- Overflow: 201px (53% overflow!)
+
+Card visibility:
+  Card 0: left=-84px ❌ CUT OFF
+  Card 1: left=24px ✅ Visible
+  Card 2: left=132px ✅ Visible
+  Card 3: left=240px ✅ Visible
+  Card 4: left=348px ❌ CUT OFF
+```
+
+**Root Cause Analysis**:
+
+1. **Card.tsx** (lines 30, 52): Fixed `w-24 h-32` (96×128px) - NO responsive classes
+2. **CommunityCards.tsx** (line 45): Fixed `gap-3` (12px) - NO responsive gap
+3. **CommunityCards.tsx** (line 40): Fixed `px-6 py-4` - NO responsive padding
+4. **PlayerSeat.tsx** (lines 30, 68): Fixed `p-4` and `gap-2` - NO responsive sizing
+
+**Files Involved**:
+- `frontend/components/Card.tsx` - Card sizing and text scaling
+- `frontend/components/CommunityCards.tsx` - Container padding and card gaps
+- `frontend/components/PlayerSeat.tsx` - Player card layout
+
+**Fix Implementation**:
+
+**Step 1**: Add responsive card sizing
+- File: `frontend/components/Card.tsx` lines 30, 52
+- Changed from:
+  ```typescript
+  // OLD - Fixed size at all screen widths
+  className="w-24 h-32 ..."
+  ```
+- Changed to:
+  ```typescript
+  // NEW - Responsive sizing with Tailwind breakpoints
+  className="w-16 h-24 sm:w-20 sm:h-28 md:w-24 md:h-32 ..."
+  ```
+- Sizes:
+  - Mobile (< 640px): 64×96px (67% of desktop size)
+  - Small (640-768px): 80×112px (83% of desktop size)
+  - Desktop (≥ 768px): 96×128px (full size)
+
+**Step 2**: Scale text to match card size
+- File: `frontend/components/Card.tsx` lines 59-73
+- Corner text: `text-base sm:text-lg md:text-xl` (was fixed `text-xl`)
+- Suit symbols: `text-lg sm:text-xl md:text-2xl` (was fixed `text-2xl`)
+- Center symbol: `text-4xl sm:text-5xl md:text-7xl` (was fixed `text-7xl`)
+- Positioning: `top-0.5 left-1 sm:top-1 sm:left-1.5` (scaled spacing)
+
+**Step 3**: Add responsive gaps and padding
+- File: `frontend/components/CommunityCards.tsx` lines 40, 45
+- Container padding: `px-2 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4` (was fixed `px-6 py-4`)
+- Card gaps: `gap-1 sm:gap-2 md:gap-3` (was fixed `gap-3`)
+- Gaps scale: 4px → 8px → 12px
+
+**Step 4**: Responsive player card layout
+- File: `frontend/components/PlayerSeat.tsx` lines 30, 68
+- Seat padding: `p-2 sm:p-3 md:p-4` (was fixed `p-4`)
+- Card gaps: `gap-1 sm:gap-1.5 md:gap-2` (was fixed `gap-2`)
+
+**Results After Fix**:
+
+**Mobile (375px):**
+```
+- 5 cards × 64px = 320px
+- 4 gaps × 4px = 16px
+- Total needed: 336px
+- Viewport: 375px
+- Margin: 39px (10% buffer) ✅ FITS!
+```
+
+**Tablet (768px):**
+```
+- 5 cards × 96px = 480px
+- 4 gaps × 12px = 48px
+- Total needed: 528px
+- Viewport: 768px
+- Margin: 240px (31% buffer) ✅ FITS!
+```
+
+**Desktop (1920px):**
+```
+- 5 cards × 96px = 480px
+- 4 gaps × 12px = 48px
+- Total needed: 528px
+- Viewport: 1920px
+- Margin: 1392px (72% buffer) ✅ FITS!
+```
+
+**E2E Tests**:
+- Test file: `tests/e2e/test_responsive_fix_verification.py` ✅ Created
+- Tests validated:
+  1. ✅ Mobile Small (375px): Cards 64px, 5 cards fit (336px needed)
+  2. ✅ Mobile Large (414px): Cards 64px, 5 cards fit
+  3. ✅ Tablet (768px): Cards 96px, 5 cards fit (528px needed)
+  4. ✅ Desktop (1920px): Cards 96px, 5 cards fit
+  5. ✅ All viewports: No overflow, all cards visible
+
+**Test Results**:
+```
+✅ ALL VIEWPORTS PASS - Responsive design working!
+Mobile Small: 5 cards fit ✅ (needs 336px, has 375px)
+Mobile Large: 5 cards fit ✅ (needs 336px, has 414px)
+Tablet: 5 cards fit ✅ (needs 528px, has 768px)
+Desktop: 5 cards fit ✅ (needs 528px, has 1920px)
+```
+
+**Regression Check**:
+- ✅ Baseline tests: 23/23 passing (no regressions)
+- ✅ No new failures introduced
+- ✅ Visual verification: All cards visible on all screen sizes
+- ✅ Cards scale smoothly across breakpoints
+
+**Resolution**:
+Cards and layout now use Tailwind responsive classes to scale appropriately across all screen sizes. Mobile devices get smaller 64px cards with tighter spacing, while desktop displays full 96px cards. All 5 river cards are now visible on even the smallest 375px mobile screens.
+
+**Verified**: ✅ COMPLETE
+
+**Before/After Card Sizing**:
+| Screen Size | Before | After | Improvement |
+|-------------|--------|-------|-------------|
+| Mobile (375px) | 96px (overflow!) | 64px | Fits perfectly |
+| Tablet (768px) | 96px | 96px | No change |
+| Desktop (1920px) | 96px | 96px | No change |
+
+**Before/After Viewport Usage**:
+- Mobile Before: 576px needed / 375px viewport = **154% (overflow!)**
+- Mobile After: 336px needed / 375px viewport = **90% (fits!)**
+- Improvement: **64px space savings** on mobile
+
+---
+
 ## Testing Commands Reference
 
 ### Backend Tests
@@ -477,8 +642,8 @@ cd frontend && npm run build
 
 ## Progress Summary
 
-**Total Issues**: 2
-**Fixed**: 2 (FIX-01, FIX-02)
+**Total Issues**: 3
+**Fixed**: 3 (FIX-01, FIX-02, FIX-03)
 **In Progress**: 0
 **Pending**: 0
 
@@ -499,10 +664,16 @@ Track all files changed during this fix session:
 - [x] `frontend/components/SessionAnalysisModal.tsx` (lines 27, 95, 276-277) - Time estimates & removed cost
 - [x] `frontend/components/AnalysisModalLLM.tsx` (line 129) - Time estimate for hand analysis
 
+**Frontend** (FIX-03):
+- [x] `frontend/components/Card.tsx` (lines 30, 52, 59-73) - Responsive card sizing and text scaling
+- [x] `frontend/components/CommunityCards.tsx` (lines 40, 45) - Responsive gaps and padding
+- [x] `frontend/components/PlayerSeat.tsx` (lines 30, 68) - Responsive player layout
+
 **Tests**:
 - [x] FIX-01 Unit tests: `backend/tests/test_fix01_blind_positions.py` (new file, 7 tests)
 - [x] FIX-01 E2E tests: `tests/e2e/test_fix01_blind_positions_e2e.py` (new file, 5 tests)
 - [x] FIX-02 E2E tests: `tests/test_final_session_analysis.py` (new file, 6 validations)
+- [x] FIX-03 E2E tests: `tests/e2e/test_responsive_fix_verification.py` (new file, 5 viewports)
 
 ---
 
