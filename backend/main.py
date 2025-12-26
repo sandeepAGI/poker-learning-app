@@ -592,16 +592,12 @@ async def get_session_analysis(
     try:
         # Get starting stack (from first hand or default)
         starting_stack = 1000  # Default starting stack
-        if hand_history:
-            first_hand = hand_history[0]
-            if first_hand.final_player_states:
-                human_player = next((p for p in first_hand.final_player_states if p["name"] == "You"), None)
-                if human_player:
-                    # Estimate starting stack from first hand
-                    starting_stack = human_player.get("stack_start", 1000)
+        # Note: We use a default since CompletedHand doesn't track starting stack per hand
+        # The human_final_stack only shows ending stack for that hand
 
-        # Get current stack
-        ending_stack = game.human_stack
+        # Get current stack - use the same pattern as rest of codebase
+        human_player = next(p for p in game.players if p.is_human)
+        ending_stack = human_player.stack
 
         # Call LLM analyzer
         analysis = llm_analyzer.analyze_session(

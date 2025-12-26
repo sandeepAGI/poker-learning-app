@@ -90,9 +90,9 @@ export function SessionAnalysisModal({
               {isLoading && (
                 <div className="text-center py-12">
                   <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
-                  <p className="mt-4 text-gray-400">Analyzing your session...</p>
+                  <p className="mt-4 text-gray-400">Analyzing your session with AI...</p>
                   <p className="text-sm text-gray-500 mt-2">
-                    {currentDepth === 'deep' ? 'Deep analysis may take 5-10 seconds' : 'This will take 2-3 seconds'}
+                    {currentDepth === 'deep' ? 'Deep analysis typically takes 30-40 seconds' : 'This typically takes 20-30 seconds'}
                   </p>
                 </div>
               )}
@@ -273,8 +273,8 @@ export function SessionAnalysisModal({
             {/* Footer */}
             <div className="bg-gray-800 p-4 rounded-b-2xl flex justify-between items-center">
               <div className="text-sm text-gray-400">
-                {currentDepth === 'quick' && '⚡ Quick Analysis (~2s, $0.02)'}
-                {currentDepth === 'deep' && '🔬 Deep Dive (~5s, $0.03)'}
+                {currentDepth === 'quick' && '⚡ Quick Analysis (~20-30s)'}
+                {currentDepth === 'deep' && '🔬 Deep Dive (~30-40s)'}
               </div>
               <button
                 onClick={onClose}

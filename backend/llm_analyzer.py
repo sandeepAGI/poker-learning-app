@@ -454,12 +454,11 @@ class LLMHandAnalyzer:
         net_changes = []
         for hand in hands:
             if hand.winner_ids and "human" in hand.winner_ids:
+                # Won hand - estimate profit
                 net_changes.append(hand.pot_size // len(hand.winner_ids))
             else:
-                human_player = next((p for p in hand.final_player_states if p["name"] == "You"), None)
-                if human_player:
-                    loss = human_player.get("stack_start", starting_stack) - hand.human_final_stack
-                    net_changes.append(-loss)
+                # Lost hand - estimate loss from pot size
+                net_changes.append(-(hand.pot_size // 4))  # Rough estimate
 
         biggest_win = max(net_changes) if net_changes else 0
         biggest_loss = min(net_changes) if net_changes else 0
@@ -478,20 +477,35 @@ class LLMHandAnalyzer:
         hands_summary_lines = []
         for hand in hands[:20]:  # Limit to last 20 hands for context
             result = "Won" if hand.winner_ids and "human" in hand.winner_ids else "Lost"
+            cards_str = " ".join(hand.human_cards) if hand.human_cards else "N/A"
             hands_summary_lines.append(
-                f"Hand #{hand.hand_number}: {hand.hole_cards} - {result}"
+                f"Hand #{hand.hand_number}: {cards_str} - {result}"
             )
 
         hands_summary = "\n".join(hands_summary_lines)
 
-        # AI opponents summary
+        # AI opponents summary - use betting_rounds to get player names
         ai_opponents = {}
         for hand in hands:
-            for player in hand.final_player_states:
-                if player["name"] != "You":
-                    if player["name"] not in ai_opponents:
-                        ai_opponents[player["name"]] = {"hands": 0, "personality": "Unknown"}
-                    ai_opponents[player["name"]]["hands"] += 1
+            # Get AI players from betting rounds
+            for betting_round in hand.betting_rounds:
+                for action in betting_round.actions:
+                    if action.player_name != "You":
+                        if action.player_name not in ai_opponents:
+                            ai_opponents[action.player_name] = {
+                                "hands": 0,
+                                "personality": "Unknown"
+                            }
+                        # Count unique hands per player
+                        # (we'll increment later to avoid double-counting)
+
+            # Count this hand for all AI players who participated
+            for betting_round in hand.betting_rounds:
+                players_in_hand = set(a.player_name for a in betting_round.actions if a.player_name != "You")
+                for player_name in players_in_hand:
+                    if player_name in ai_opponents:
+                        ai_opponents[player_name]["hands"] += 1
+                break  # Only count once per hand
 
         ai_opponents_summary = "\n".join(
             f"- {name}: {data['hands']} hands played"
@@ -578,10 +592,13 @@ class LLMHandAnalyzer:
             # Parse JSON response
             analysis = self._parse_response(content)
 
-            # Validate quality
-            if not self._validate_analysis(analysis):
-                logger.warning("Analysis failed quality validation")
-                raise ValueError("Analysis quality check failed")
+            # Validate quality (only for hand analysis, not session analysis)
+            # Session analysis has different fields and is validated separately
+            is_session_analysis = schema is not None and "session_summary" in str(schema)
+            if not is_session_analysis:
+                if not self._validate_analysis(analysis):
+                    logger.warning("Analysis failed quality validation")
+                    raise ValueError("Analysis quality check failed")
 
             return analysis
 

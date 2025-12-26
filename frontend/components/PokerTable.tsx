@@ -132,9 +132,11 @@ export function PokerTable() {
   const handleSessionAnalysisClick = async (depth: 'quick' | 'deep' = 'quick') => {
     if (!gameId) return;
 
+    // Set loading state and open modal immediately for user feedback
     setSessionAnalysisLoading(true);
     setSessionAnalysisError(null);
     setSessionAnalysisDepth(depth);
+    setShowSessionAnalysisModal(true);
 
     try {
       const result = await pokerApi.getSessionAnalysis(gameId, {
@@ -147,12 +149,9 @@ export function PokerTable() {
       } else {
         setSessionAnalysis(result.analysis);
         setSessionHandsAnalyzed(result.hands_analyzed);
-        if (!showSessionAnalysisModal) {
-          setShowSessionAnalysisModal(true);
-        }
       }
     } catch (error: any) {
-      console.error('Session analysis error:', error);
+      console.error('[Session Analysis] Error:', error);
       setSessionAnalysisError(
         error.response?.data?.detail ||
         error.message ||

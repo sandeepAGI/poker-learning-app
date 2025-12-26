@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * Enhanced Analysis Modal with LLM Support (Phase 4)
+ * Enhanced Analysis Modal with LLM Support (Phase 4.5)
  *
  * Features:
- * - Two-tier analysis: Quick and Deep Dive
+ * - Quick Analysis only (Haiku 4.5) - simplified from Phase 4
  * - Renders comprehensive LLM analysis (round-by-round, tips, concepts)
  * - Falls back to rule-based analysis
  * - Clean UX without cost/technical details
@@ -24,18 +24,16 @@ interface AnalysisModalLLMProps {
 export function AnalysisModalLLM({ isOpen, onClose, gameId, ruleBasedAnalysis }: AnalysisModalLLMProps) {
   const [llmAnalysis, setLlmAnalysis] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [depth, setDepth] = useState<'quick' | 'deep'>('quick');
   const [cost, setCost] = useState(0);
   const [modelUsed, setModelUsed] = useState('');
   const [error, setError] = useState('');
 
-  const handleAnalyze = async (analysisDepth: 'quick' | 'deep') => {
+  const handleAnalyze = async () => {
     setLoading(true);
-    setDepth(analysisDepth);
     setError('');
 
     try {
-      const result = await pokerApi.getHandAnalysisLLM(gameId, { depth: analysisDepth });
+      const result = await pokerApi.getHandAnalysisLLM(gameId);
 
       if (result.error) {
         setError(result.error);
@@ -98,23 +96,14 @@ export function AnalysisModalLLM({ isOpen, onClose, gameId, ruleBasedAnalysis }:
 
                     {/* Quick Analysis Button */}
                     <button
-                      onClick={() => handleAnalyze('quick')}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all"
+                      onClick={() => handleAnalyze()}
+                      className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white py-4 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all"
                     >
-                      ⚡ Quick Analysis
-                    </button>
-
-                    {/* Deep Dive Button */}
-                    <button
-                      onClick={() => handleAnalyze('deep')}
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all"
-                    >
-                      🔬 Deep Dive Analysis
+                      🎓 Analyze This Hand
                     </button>
 
                     <p className="text-sm text-gray-400 mt-4">
-                      <strong>Quick:</strong> Good for most hands, beginner-friendly explanations<br/>
-                      <strong>Deep Dive:</strong> Expert-level breakdown with GTO concepts & range analysis
+                      AI-powered analysis with round-by-round breakdown, tips for improvement, and concepts to study
                     </p>
                   </div>
 
@@ -134,10 +123,10 @@ export function AnalysisModalLLM({ isOpen, onClose, gameId, ruleBasedAnalysis }:
                 <div className="p-12 text-center">
                   <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-500 mx-auto mb-4"></div>
                   <p className="text-lg">
-                    {depth === 'deep' ? '🔬 Deep analyzing your hand...' : '⚡ Analyzing your hand...'}
+                    🎓 Analyzing your hand with AI...
                   </p>
                   <p className="text-sm text-gray-400 mt-2">
-                    This takes {depth === 'deep' ? '3-4' : '2-3'} seconds
+                    This typically takes 20-30 seconds
                   </p>
                 </div>
               )}
