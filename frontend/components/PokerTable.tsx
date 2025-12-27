@@ -518,8 +518,8 @@ export function PokerTable() {
           )}
         </div>
 
-        {/* Human Player - Bottom (moved lower to avoid overlap) */}
-        <div className="absolute bottom-44 left-1/2 -translate-x-1/2 z-10">
+        {/* Human Player - Bottom (viewport-relative positioning for proper scaling) */}
+        <div className="absolute bottom-[20vh] left-1/2 -translate-x-1/2 z-10">
           <PlayerSeat
             player={gameState.human_player}
             isCurrentTurn={isMyTurn}
