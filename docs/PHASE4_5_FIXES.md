@@ -29,24 +29,42 @@
 ### Phase 3: Test Creation/Update
 1. Create/update unit tests
 2. Create/update E2E tests (for UI issues)
-3. Tests must pass in isolation AND in full suite
+3. **CRITICAL FOR UI BUGS:** Test at MULTIPLE viewport sizes (1280x720, 1440x900, 1920x1080, 1920x1200)
+4. **CRITICAL FOR UI BUGS:** Test at ALL game states (PRE_FLOP, FLOP, TURN, RIVER, SHOWDOWN)
+5. Tests must pass in isolation AND in full suite
 
-### Phase 4: Regression Check
+### Phase 4: Regression Check - EXPANDED
 1. Compare current vs baseline test results
 2. Must pass ≥ same number of tests as baseline
-3. Visual regression check (before/after screenshots)
-4. Manual smoke test
+3. **Run ALL previous fix tests** - Verify FIX-01, FIX-02, FIX-03, etc. still work
+4. Visual regression check (before/after screenshots)
+5. **Manual smoke test at MULTIPLE screen sizes** (split-screen, windowed, fullscreen)
+6. **Test 4-player AND 6-player games** (if applicable)
 
-### Phase 5: Documentation & Commit
+### Phase 5: User Approval - MANDATORY
 1. Update this document with all findings
-2. Mark issue as FIXED with verification checkboxes
-3. Git commit only after all checks pass
+2. **STOP - DO NOT COMMIT**
+3. **Present fix to user for manual testing**
+4. User must test at multiple viewports and game states
+5. User provides approval OR feedback for further iteration
+6. **ONLY commit after explicit user approval**
+
+### Phase 6: Documentation & Commit (AFTER USER APPROVAL)
+1. Mark issue as FIXED with verification checkboxes
+2. Update STATUS.md if needed
+3. Git commit with comprehensive commit message
+4. Add regression test to automated test suite
 
 **RED FLAGS - STOP if:**
 - Making assumptions without verification
 - Tests that were passing now fail
 - Skipping any phase "to save time"
 - Not understanding why current code is wrong
+- **Committing without user approval and manual testing**
+- **Testing only one viewport size for UI bugs**
+- **Testing only one game state for UI bugs**
+- **Not running regression tests for ALL previous fixes**
+- **One fix breaks another fix (regression)**
 
 ---
 
@@ -743,12 +761,103 @@ cd frontend && npm run build
 
 ---
 
+### FIX-04: Viewport Scaling - Human Player Cards Cut Off
+
+**Status**: ❌ FAILED - MULTIPLE REGRESSIONS
+**Priority**: Critical (Core UX broken)
+**Reported**: December 27, 2025
+
+**Problem Description**:
+Human player cards at bottom cut off on desktop at 100% zoom. Issue worsened in fullscreen mode. User reported: "I believe the issue is absolute sizes vs. relative to browser size."
+
+**User Feedback Documented**:
+
+1. **404 Error on Game State** (Console error, unrelated to fix):
+   - AxiosError: Request failed with status code 404
+   - Location: `lib/api.ts:33` in `getGameState()`
+   - Likely pre-existing issue with localStorage having stale game ID
+
+2. **4-Player Version at Different Resolutions**:
+   - Screenshot 1 (Split-screen, PRE_FLOP): Cards FULLY visible ✅
+   - Screenshot 2 (Split-screen, FLOP): Cards BOTTOM CLIPPED ❌
+   - Screenshot 3 (Fullscreen, FLOP): Cards FULLY visible ✅
+   - **Issue**: Fix works in fullscreen but FAILS in windowed/split-screen mode
+
+3. **6-Player Version - FIX-01 REGRESSION**:
+   - SB badge on "Bluff Master" (position 3)
+   - BB badge on "Raise Rachel" (position 5) ❌ WRONG
+   - Dealer badge: **NOT VISIBLE** ❌
+   - **Critical**: SB and BB NOT consecutive (position between them)
+   - **FIX-01 COMPLETELY BROKEN** - Same issue as originally reported
+
+**Root Cause Analysis**:
+
+**Attempted Fix**:
+- Changed `bottom-44` (176px fixed) to `bottom-[20vh]` (20% viewport height)
+- Rationale: Viewport-relative units should scale better
+
+**Why It Failed**:
+1. **20vh insufficient in split-screen mode**:
+   - Split-screen ~900px height → 20vh = 180px
+   - PlayerSeat content ~248px
+   - Not enough clearance → cards clipped
+
+2. **Didn't test at multiple game states**:
+   - Tested PRE_FLOP only ✅
+   - FAILED at FLOP state ❌
+   - Why: Community cards + current bet text adds vertical space
+
+3. **Didn't run FIX-01 regression tests**:
+   - Changed ONLY PokerTable.tsx
+   - Assumed backend position data unaffected
+   - **WRONG**: Something broke FIX-01 (unclear how)
+
+4. **Committed without user approval**:
+   - Violated Phase 5 mandatory process
+   - User couldn't test before commit
+   - Wasted 2 days during holidays
+
+**Files Involved**:
+- `frontend/components/PokerTable.tsx` line 522 - Changed bottom positioning (REVERTED)
+
+**Current State**:
+- Commit 39c1b2d3 exists but NOT reverted (per user request)
+- User feedback: "going back now doesn't make sense without making sure that after each fix, we add regression tests"
+- **Action needed**: Create comprehensive test suite BEFORE attempting any fix
+
+**Lessons Learned**:
+1. ❌ Viewport units (vh/vw) don't solve absolute positioning issues
+2. ❌ Testing one game state is INSUFFICIENT
+3. ❌ Testing one viewport size is INSUFFICIENT
+4. ❌ Must run ALL previous fix regression tests
+5. ❌ NEVER commit without user manual testing and approval
+6. ⚠️  Fundamental issue: **Absolute positioning is fragile and hard to scale**
+
+**Next Steps** (NOT STARTED):
+1. Create comprehensive E2E test suite covering:
+   - All viewport sizes (1280x720, 1440x900, 1920x1080, 1920x1200)
+   - All game states (PRE_FLOP, FLOP, TURN, RIVER, SHOWDOWN)
+   - 4-player AND 6-player games
+   - All previous fixes (FIX-01, FIX-02, FIX-03)
+
+2. Research alternatives to absolute positioning:
+   - CSS Grid layout
+   - Flexbox layout
+   - Existing poker UI libraries
+
+3. Present options to user for approval BEFORE implementing
+
+**Verified**: ❌ FAILED - Multiple regressions, user approval not obtained
+
+---
+
 ## Progress Summary
 
 **Total Issues**: 4
-**Fixed**: 4 (FIX-01, FIX-02, FIX-03, FIX-04)
+**Fixed**: 3 (FIX-01, FIX-02, FIX-03)
+**Failed**: 1 (FIX-04 - Multiple regressions)
 **In Progress**: 0
-**Pending**: 0
+**Pending**: 1 (FIX-04 needs complete redesign)
 
 ---
 
@@ -772,24 +881,62 @@ Track all files changed during this fix session:
 - [x] `frontend/components/CommunityCards.tsx` (lines 40, 45) - Responsive gaps and padding
 - [x] `frontend/components/PlayerSeat.tsx` (lines 30, 68) - Responsive player layout
 
-**Frontend** (FIX-04):
+**Frontend** (FIX-04 - Z-Index Fix - COMPLETED):
 - [x] `frontend/components/PokerTable.tsx` (lines 410, 427, 444, 461, 478, 497, 522) - Z-index layering for visibility
+
+**Frontend** (FIX-04/FIX-05 - Viewport Fix - FAILED):
+- [ ] `frontend/components/PokerTable.tsx` (line 522) - Changed `bottom-44` to `bottom-[20vh]` (COMMITTED but FAILED)
+- Commit 39c1b2d3 - "FIX-05: Replace fixed pixel positioning with viewport-relative units"
+- **Multiple regressions**: Cards clipped in split-screen, FIX-01 broken
+- **NOT REVERTED**: Per user request to add regression tests first
 
 **Tests**:
 - [x] FIX-01 Unit tests: `backend/tests/test_fix01_blind_positions.py` (new file, 7 tests)
 - [x] FIX-01 E2E tests: `tests/e2e/test_fix01_blind_positions_e2e.py` (new file, 5 tests)
 - [x] FIX-02 E2E tests: `tests/test_final_session_analysis.py` (new file, 6 validations)
 - [x] FIX-03 E2E tests: `tests/e2e/test_responsive_fix_verification.py` (new file, 5 viewports)
+- [ ] FIX-04 Comprehensive regression tests: NOT CREATED (caused failure)
 
 ---
 
-## Commit Strategy
+## Commit Strategy - UPDATED
 
-After all fixes complete:
-1. Review all changes with `git diff`
-2. Run full test suite (backend + E2E)
-3. Single commit: "Phase 4.5 fixes: [summary]"
-4. Update STATUS.md if needed
+**New Mandatory Process (After FIX-04 Failure)**:
+
+1. **BEFORE any code changes**:
+   - Document issue in this file
+   - Get user confirmation issue exists
+   - Run baseline tests
+
+2. **BEFORE implementing fix**:
+   - Create comprehensive test suite
+   - Test all viewport sizes
+   - Test all game states
+   - Test all player counts
+   - Run ALL previous fix regression tests
+
+3. **AFTER implementing fix**:
+   - Run new tests
+   - Run regression tests for ALL previous fixes
+   - Verify no failures
+
+4. **User Approval - MANDATORY**:
+   - Present fix to user
+   - User manually tests multiple viewports/states
+   - User explicitly approves: "Approved to commit"
+   - ONLY THEN commit
+
+5. **Commit**:
+   - Review all changes with `git diff`
+   - Single commit with comprehensive message
+   - Update STATUS.md
+   - Add regression tests to automated CI
+
+**NEVER:**
+- Commit without user approval
+- Test only one viewport size
+- Test only one game state
+- Skip regression tests
 
 ---
 
