@@ -235,28 +235,110 @@ def get_game_state(game_id: str, show_ai_thinking: bool = False):
                 "amount": decision.amount
             }
 
-    # Find ALL winners if at showdown (handles split pots and side pots)
+    # Find ALL winners (handles showdown, fold wins, split pots, and side pots)
+    # FIX-09: Enhanced winner info with poker-accurate hand reveals
     winner_info = None
-    if game.current_state == GameState.SHOWDOWN:
+
+    # Check if there are any pot_award events (showdown or fold wins)
+    has_pot_award = any(event.event_type == "pot_award" for event in game.current_hand_events)
+
+    if has_pot_award:
+        # Determine if this is a showdown or fold win
+        # Showdown happened if there are showdown_hands recorded (not just based on game state)
+        is_showdown = (game.last_hand_summary is not None and
+                      len(game.last_hand_summary.showdown_hands) > 0)
+
         # Collect ALL pot_award events (not just the first one!)
         winners = []
         for event in game.current_hand_events:
             if event.event_type == "pot_award":
                 winner = next((p for p in game.players if p.player_id == event.player_id), None)
                 if winner:
+                    # Get hand rank and hole cards from last_hand_summary (only at showdown)
+                    hand_rank = None
+                    hole_cards = []
+                    if is_showdown and game.last_hand_summary:
+                        hand_rank = game.last_hand_summary.hand_rankings.get(winner.player_id)
+                        hole_cards = game.last_hand_summary.showdown_hands.get(winner.player_id, [])
+
                     winners.append({
                         "player_id": winner.player_id,
                         "name": winner.name,
                         "amount": event.amount,
                         "is_human": winner.is_human,
-                        "personality": winner.personality if not winner.is_human else None
+                        "personality": winner.personality if not winner.is_human else None,
+                        "won_by_fold": not is_showdown,  # True if won by fold, False if showdown
+                        "hand_rank": hand_rank,
+                        "hole_cards": hole_cards
                     })
 
+        # Build all_showdown_hands list (all players who revealed cards, ranked by hand strength)
+        # Only populate for showdown scenarios
+        all_showdown_hands = []
+        folded_players = []
+
+        if is_showdown and game.last_hand_summary:
+            # Get showdown participants (players who revealed cards)
+            from backend.game.poker_engine import HandEvaluator
+            evaluator = HandEvaluator()
+            showdown_participants = []
+
+            for player in game.players:
+                if player.player_id in game.last_hand_summary.showdown_hands:
+                    # This player went to showdown
+                    hole_cards = game.last_hand_summary.showdown_hands[player.player_id]
+                    hand_rank = game.last_hand_summary.hand_rankings.get(player.player_id, "Unknown")
+
+                    # Calculate score for ranking
+                    score = 9999  # Default high score
+                    if hole_cards and game.community_cards:
+                        score, _ = evaluator.evaluate_hand(hole_cards, game.community_cards)
+
+                    # Find amount won (if any)
+                    amount_won = 0
+                    for w in winners:
+                        if w["player_id"] == player.player_id:
+                            amount_won = w["amount"]
+                            break
+
+                    showdown_participants.append({
+                        "player_id": player.player_id,
+                        "name": player.name,
+                        "hand_rank": hand_rank,
+                        "hole_cards": hole_cards,
+                        "amount_won": amount_won,
+                        "is_human": player.is_human,
+                        "score": score  # For sorting (lower is better in Treys)
+                    })
+                else:
+                    # This player folded - don't show cards
+                    folded_players.append({
+                        "player_id": player.player_id,
+                        "name": player.name,
+                        "is_human": player.is_human
+                    })
+
+            # Sort by hand strength (lower score = better hand)
+            showdown_participants.sort(key=lambda x: x["score"])
+
+            # Remove score from final output (internal use only)
+            for participant in showdown_participants:
+                del participant["score"]
+
+            all_showdown_hands = showdown_participants
+
         # Return as list if multiple winners, single dict if only one
+        # Add showdown data to the response
         if len(winners) > 1:
-            winner_info = winners  # Multiple winners (split pot or side pots)
+            winner_info = {
+                "winners": winners,
+                "all_showdown_hands": all_showdown_hands,
+                "folded_players": folded_players
+            }
         elif len(winners) == 1:
-            winner_info = winners[0]  # Single winner (backward compatibility)
+            winner_info = winners[0]
+            winner_info["all_showdown_hands"] = all_showdown_hands
+            winner_info["folded_players"] = folded_players
 
     return GameResponse(
         game_id=game_id,

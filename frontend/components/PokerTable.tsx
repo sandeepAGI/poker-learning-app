@@ -758,6 +758,7 @@ export function PokerTable() {
           isOpen={showWinnerModal}
           winnerInfo={gameState.winner_info}
           players={gameState.players}
+          communityCards={gameState.community_cards}
           onClose={handleWinnerModalClose}
         />
       )}
