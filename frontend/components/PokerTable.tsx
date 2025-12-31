@@ -67,6 +67,19 @@ export function PokerTable() {
   const [sessionHandsAnalyzed, setSessionHandsAnalyzed] = useState<number>(0);
   const [showQuitConfirmation, setShowQuitConfirmation] = useState(false);
 
+  // FIX-06: Click-to-focus for ALL elements (learning app - simple & intuitive)
+  const [focusedElement, setFocusedElement] = useState<string | null>(null);
+
+  // Auto-dismiss focused element after 5 seconds
+  useEffect(() => {
+    if (focusedElement) {
+      const timer = setTimeout(() => {
+        setFocusedElement(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [focusedElement]);
+
   // Check if player is all-in (has chips invested but stack = 0)
   const isAllIn = gameState.human_player.all_in ||
                   (gameState.human_player.current_bet > 0 && gameState.human_player.stack === 0);
@@ -101,6 +114,21 @@ export function PokerTable() {
   const handleAllIn = () => {
     setRaiseAmount(maxRaise);
     submitAction('raise', maxRaise);
+    // Auto-reset raise panel after 3 seconds
+    setTimeout(() => {
+      setRaiseAmount(minRaise);
+      setShowRaisePanel(false);
+    }, 3000);
+  };
+
+  // FIX-07: Handle raise submission with auto-reset
+  const handleRaiseSubmit = () => {
+    submitAction('raise', raiseAmount);
+    // Auto-reset raise panel after 3 seconds
+    setTimeout(() => {
+      setRaiseAmount(minRaise);
+      setShowRaisePanel(false);
+    }, 3000);
   };
 
   // Show winner modal when winner_info is available
@@ -405,9 +433,13 @@ export function PokerTable() {
 
           return (
             <>
-              {/* Opponent 1 - Left Side (clockwise from human) */}
+              {/* Opponent 1 - Left Side (clickable) */}
               {opponents[0] && (
-                <div className="absolute top-1/3 left-8 z-10">
+                <div
+                  className={`absolute top-1/3 left-8 cursor-pointer transition-all ${focusedElement === 'opponent-0' ? 'z-50 scale-110' : 'z-10'}`}
+                  onClick={() => setFocusedElement(focusedElement === 'opponent-0' ? null : 'opponent-0')}
+                  title="Click to bring to front"
+                >
                   <PlayerSeat
                     key={opponents[0].player_id}
                     player={opponents[0]}
@@ -422,9 +454,13 @@ export function PokerTable() {
                 </div>
               )}
 
-              {/* Opponent 2 - Top Center (clockwise from opponent 1) */}
+              {/* Opponent 2 - Position depends on player count (clickable) */}
               {opponents[1] && (
-                <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10">
+                <div
+                  className={`${opponents.length === 3 ? "absolute top-8 left-1/2 -translate-x-1/2" : "absolute top-8 left-[25%] -translate-x-1/2"} cursor-pointer transition-all ${focusedElement === 'opponent-1' ? 'z-50 scale-110' : 'z-10'}`}
+                  onClick={() => setFocusedElement(focusedElement === 'opponent-1' ? null : 'opponent-1')}
+                  title="Click to bring to front"
+                >
                   <PlayerSeat
                     key={opponents[1].player_id}
                     player={opponents[1]}
@@ -439,9 +475,13 @@ export function PokerTable() {
                 </div>
               )}
 
-              {/* Opponent 3 - Right Side (clockwise from opponent 2) */}
+              {/* Opponent 3 - Position depends on player count (clickable) */}
               {opponents[2] && (
-                <div className="absolute top-1/3 right-8 z-10">
+                <div
+                  className={`${opponents.length === 3 ? "absolute top-1/3 right-8" : "absolute top-8 left-1/2 -translate-x-1/2"} cursor-pointer transition-all ${focusedElement === 'opponent-2' ? 'z-50 scale-110' : 'z-10'}`}
+                  onClick={() => setFocusedElement(focusedElement === 'opponent-2' ? null : 'opponent-2')}
+                  title="Click to bring to front"
+                >
                   <PlayerSeat
                     key={opponents[2].player_id}
                     player={opponents[2]}
@@ -456,9 +496,13 @@ export function PokerTable() {
                 </div>
               )}
 
-              {/* Opponent 4 - Top Left (for 6-player tables) */}
+              {/* Opponent 4 - Top Right (for 6-player tables, clickable) */}
               {opponents[3] && (
-                <div className="absolute top-8 left-[25%] -translate-x-1/2 z-10">
+                <div
+                  className={`absolute top-8 left-[75%] -translate-x-1/2 cursor-pointer transition-all ${focusedElement === 'opponent-3' ? 'z-50 scale-110' : 'z-10'}`}
+                  onClick={() => setFocusedElement(focusedElement === 'opponent-3' ? null : 'opponent-3')}
+                  title="Click to bring to front"
+                >
                   <PlayerSeat
                     key={opponents[3].player_id}
                     player={opponents[3]}
@@ -473,9 +517,13 @@ export function PokerTable() {
                 </div>
               )}
 
-              {/* Opponent 5 - Top Right (for 6-player tables) */}
+              {/* Opponent 5 - Right Side (for 6-player tables, clickable) */}
               {opponents[4] && (
-                <div className="absolute top-8 left-[75%] -translate-x-1/2 z-10">
+                <div
+                  className={`absolute top-1/3 right-8 cursor-pointer transition-all ${focusedElement === 'opponent-4' ? 'z-50 scale-110' : 'z-10'}`}
+                  onClick={() => setFocusedElement(focusedElement === 'opponent-4' ? null : 'opponent-4')}
+                  title="Click to bring to front"
+                >
                   <PlayerSeat
                     key={opponents[4].player_id}
                     player={opponents[4]}
@@ -493,8 +541,12 @@ export function PokerTable() {
           );
         })()}
 
-        {/* Center Area - Community Cards and Pot */}
-        <div className="absolute top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6 z-20">
+        {/* Center Area - Community Cards and Pot - Click to bring to foreground */}
+        <div
+          className={`absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-4 cursor-pointer transition-all ${focusedElement === 'community' ? 'z-50 scale-105' : 'z-20'}`}
+          onClick={() => setFocusedElement(focusedElement === 'community' ? null : 'community')}
+          title="Click to bring community cards to front"
+        >
           {/* Pot */}
           <motion.div
             className="bg-[#D97706] text-white px-6 py-3 rounded-full text-3xl font-bold shadow-2xl"
@@ -505,21 +557,20 @@ export function PokerTable() {
           </motion.div>
 
           {/* Community cards - Using new dedicated component */}
-          <CommunityCards
-            cards={gameState.community_cards}
-            gameState={gameState.state}
-          />
-
-          {/* Current bet */}
-          {gameState.current_bet > 0 && (
-            <div className="text-white text-lg font-semibold">
-              Current Bet: <span className="font-bold text-[#FCD34D]">${gameState.current_bet}</span>
-            </div>
-          )}
+          <div className={`transition-all rounded-xl ${focusedElement === 'community' ? 'ring-4 ring-yellow-400 shadow-lg shadow-yellow-400/50 p-2' : ''}`}>
+            <CommunityCards
+              cards={gameState.community_cards}
+              gameState={gameState.state}
+            />
+          </div>
         </div>
 
-        {/* Human Player - Bottom (viewport-relative positioning for proper scaling) */}
-        <div className="absolute bottom-[20vh] left-1/2 -translate-x-1/2 z-10">
+        {/* Human Player - Bottom (clickable) */}
+        <div
+          className={`absolute human-player-position left-1/2 -translate-x-1/2 cursor-pointer transition-all ${focusedElement === 'human' ? 'z-50 scale-110' : 'z-10'}`}
+          onClick={() => setFocusedElement(focusedElement === 'human' ? null : 'human')}
+          title="Click to bring to front"
+        >
           <PlayerSeat
             player={gameState.human_player}
             isCurrentTurn={isMyTurn}
@@ -531,9 +582,13 @@ export function PokerTable() {
           />
         </div>
 
-        {/* Action buttons - Absolute positioned at bottom */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4">
-          <div className="bg-[#0A4D26]/90 backdrop-blur-sm border-2 border-[#1F7A47] p-4 rounded-lg">
+        {/* Action buttons - Click to bring to foreground */}
+        <div
+          className={`absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 cursor-pointer transition-all ${focusedElement === 'actions' ? 'z-50' : 'z-30'}`}
+          onClick={() => setFocusedElement(focusedElement === 'actions' ? null : 'actions')}
+          title="Click to bring action buttons to front"
+        >
+          <div className={`bg-[#0A4D26]/90 backdrop-blur-sm border-2 p-3 rounded-lg transition-all ${focusedElement === 'actions' ? 'border-yellow-400 shadow-lg shadow-yellow-400/50' : 'border-[#1F7A47]'}`}>
           {/* Feature: Game over when eliminated - don't show controls */}
           {isEliminated ? (
             <div className="text-center py-4">
@@ -554,19 +609,27 @@ export function PokerTable() {
             <button
               onClick={() => nextHand()}
               disabled={loading}
-              className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-bold py-4 px-6 rounded-lg text-lg disabled:opacity-50"
+              className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-bold py-3 px-4 rounded-lg text-lg disabled:opacity-50"
             >
               {loading ? 'Loading...' : 'Next Hand'}
             </button>
           ) : isMyTurn ? (
             <div className="flex flex-col gap-3">
+              {/* FIX-07: Show current bet prominently in action area */}
+              {gameState.current_bet > 0 && (
+                <div className="bg-[#1F7A47] border-2 border-[#10B981] rounded-lg px-3 py-1.5 text-center">
+                  <span className="text-white text-sm font-medium">Current Bet: </span>
+                  <span className="text-[#FCD34D] text-lg font-bold">${gameState.current_bet}</span>
+                </div>
+              )}
+
               {/* Primary Action Buttons - Simplified 3-button layout */}
               <div className="flex gap-4">
                 {/* Fold */}
                 <button
                   onClick={() => submitAction('fold')}
                   disabled={loading}
-                  className="flex-1 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold py-4 sm:py-5 px-4 sm:px-6 rounded-lg text-xl sm:text-2xl disabled:opacity-50 transition-colors min-h-[44px]"
+                  className="flex-1 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]"
                 >
                   Fold
                 </button>
@@ -575,7 +638,7 @@ export function PokerTable() {
                 <button
                   onClick={() => submitAction('call')}
                   disabled={loading || !canCall}
-                  className="flex-1 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold py-4 sm:py-5 px-4 sm:px-6 rounded-lg text-xl sm:text-2xl disabled:opacity-50 transition-colors min-h-[44px]"
+                  className="flex-1 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]"
                   title={!canCall ? 'Not enough chips to call' : ''}
                 >
                   Call ${callAmount}
@@ -586,14 +649,14 @@ export function PokerTable() {
                   <button
                     onClick={() => setShowRaisePanel(!showRaisePanel)}
                     disabled={loading}
-                    className={`flex-1 ${showRaisePanel ? 'bg-[#059669]' : 'bg-[#10B981]'} hover:bg-[#059669] text-white font-bold py-4 sm:py-5 px-4 sm:px-6 rounded-lg text-xl sm:text-2xl disabled:opacity-50 transition-colors min-h-[44px]`}
+                    className={`flex-1 ${showRaisePanel ? 'bg-[#059669]' : 'bg-[#10B981]'} hover:bg-[#059669] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]`}
                   >
                     Raise {showRaisePanel ? '▲' : '▼'}
                   </button>
                 ) : (
                   <button
                     disabled
-                    className="flex-1 bg-[#1F7A47]/50 text-gray-400 font-bold py-4 sm:py-5 px-4 sm:px-6 rounded-lg text-xl sm:text-2xl opacity-50 cursor-not-allowed min-h-[44px]"
+                    className="flex-1 bg-[#1F7A47]/50 text-gray-400 font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl opacity-50 cursor-not-allowed min-h-[44px]"
                     title={gameState.human_player.stack <= callAmount ? 'Not enough chips to raise' : 'Raise not available'}
                   >
                     Raise
@@ -611,7 +674,7 @@ export function PokerTable() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg p-4 space-y-4">
+                    <div className="bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg p-3 space-y-3">
                       {/* Quick bet buttons */}
                       <div className="flex gap-2 justify-center flex-wrap">
                         <button
@@ -667,14 +730,11 @@ export function PokerTable() {
                         </div>
                       </div>
 
-                      {/* Confirm Raise Button */}
+                      {/* Confirm Raise Button - FIX-07: Auto-resets after 3 seconds */}
                       <button
-                        onClick={() => {
-                          submitAction('raise', raiseAmount);
-                          setShowRaisePanel(false);
-                        }}
+                        onClick={handleRaiseSubmit}
                         disabled={loading || raiseAmount < minRaise || raiseAmount > maxRaise}
-                        className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-bold py-4 px-6 rounded-lg text-lg disabled:opacity-50"
+                        className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-bold py-3 px-4 rounded-lg text-lg disabled:opacity-50"
                       >
                         Confirm Raise ${raiseAmount}
                       </button>
