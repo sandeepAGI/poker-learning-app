@@ -38,7 +38,12 @@ npm run dev  # Runs on http://localhost:3000
 
 4. **Update STATUS.md** if significant changes were made
 
-5. **Commit with descriptive message**:
+5. **Documentation audit**:
+   - Ensure no new `.md` files exist outside `README.md`, `STATUS.md`, `CLAUDE.md`, `docs/`, or `archive/`.
+   - Add/refresh entries in `docs/INDEX.md` for any active doc you touched.
+   - Move stale planning/test logs older than 14 days into `archive/`.
+
+6. **Commit with descriptive message**:
    ```bash
    git add .
    git commit -m "Brief description of changes"
@@ -99,22 +104,25 @@ poker-learning-app/
 
 ---
 
-## Documentation Policy
+## Documentation Policy (2024-12-26)
 
-**Maximum 5 .md files in root**:
-1. `README.md` - User quick start
-2. `STATUS.md` - Current status
-3. `CLAUDE.md` - This guide (max 200 lines)
+1. **Allowed locations**
+   - Root may only contain `README.md`, `STATUS.md`, `CLAUDE.md`.
+   - Active docs live under `docs/` and must be listed in `docs/INDEX.md`.
+   - Historical or deprecated content moves under `archive/`.
 
-**Additional docs in `/docs/`**:
-- `HISTORY.md` - Development history
-- `SETUP.md` - Detailed setup (if needed)
+2. **When updating functionality**
+   - Update `STATUS.md` (high-level progress) and append to `docs/HISTORY.md` as needed.
+   - Extend an existing topical doc (`docs/SETUP.md`, `docs/TESTING.md`, `docs/UX_GUIDE.md`, etc.) rather than creating new files.
+   - If a new doc is unavoidable, name it `docs/<topic>.md`, add it to `docs/INDEX.md` with a short description, and link it from `README.md` or `STATUS.md`.
 
-**Rules**:
-- No separate phase documentation
-- No TODO.md, NOTES.md, FINDINGS.md
-- Update history goes in docs/HISTORY.md
-- Keep CLAUDE.md under 200 lines
+3. **Lifecycle**
+   - Planning or testing notes older than 14 days must move to `archive/`.
+   - `docs/CURRENT_FIX_LOG.md` is the only “working” log; clear or archive it once the tracked fixes ship.
+
+4. **Before commit**
+   - Run the documentation audit (step 5 in the checklist above).
+   - Preview any modified `.md` to ensure links still point to existing files.
 
 ---
 

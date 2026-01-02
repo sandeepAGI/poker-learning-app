@@ -90,10 +90,12 @@ See [STATUS.md](STATUS.md) for detailed progress.
 
 ## Documentation
 
-- **[STATUS.md](STATUS.md)** - Current project status & progress
-- **[docs/UX_REVIEW_2025-12-11.md](docs/UX_REVIEW_2025-12-11.md)** - Complete UX improvements documentation
-- **[SETUP.md](SETUP.md)** - Complete setup & operations guide
-- **[CLAUDE.md](CLAUDE.md)** - Master project plan & history
+- **[STATUS.md](STATUS.md)** – Current project status & progress
+- **[CLAUDE.md](CLAUDE.md)** – Working agreement + commit checklist
+- **[docs/INDEX.md](docs/INDEX.md)** – Canonical list of active documentation
+- **[docs/SETUP.md](docs/SETUP.md)** – Detailed setup & operations guide
+- **[docs/UX_GUIDE.md](docs/UX_GUIDE.md)** – UX/visual guidelines from Phase 4.5
+- **[docs/TESTING.md](docs/TESTING.md)** – Testing strategy, suites, and instructions
 
 ## Testing Improvement Plan (Phases 1-7)
 

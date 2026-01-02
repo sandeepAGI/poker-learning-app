@@ -84,7 +84,7 @@ For current status, see [STATUS.md](../STATUS.md).
 - **Phase 3**: Visual polish (color palette, typography, spacing) - 1.5h
 - **Phase 4**: Advanced features (AI sidebar, responsive design, animations) - 1.75h
 - **Total**: 8.5 hours (completed ahead of 10-14h estimate)
-- **Documentation**: docs/UX_REVIEW_2025-12-11.md (complete phase documentation)
+- **Documentation**: docs/UX_GUIDE.md (complete phase documentation)
 
 ---
 

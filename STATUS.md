@@ -1182,7 +1182,7 @@ The random number generator:
 
 ## UX/UI Improvements (December 11, 2025) ✅ COMPLETE
 
-**Comprehensive UX Review**: `docs/UX_REVIEW_2025-12-11.md`
+**Comprehensive UX Review**: `docs/UX_GUIDE.md`
 - Playwright-based visual inspection
 - 10 critical UX issues identified
 - 4-phase improvement plan: **ALL PHASES COMPLETE**
@@ -1321,7 +1321,7 @@ The random number generator:
 - ✅ Next.js 15 compatibility verified
 
 **Documentation Updated**:
-- ✅ `docs/UX_REVIEW_2025-12-11.md` - Complete phase documentation
+- ✅ `docs/UX_GUIDE.md` - Complete phase documentation
 - ✅ `STATUS.md` - This file updated to Version 8.0
 
 **Result**: Production-ready UX improvements delivered **ahead of schedule** (8.5h vs 10-14h estimated)
@@ -1516,9 +1516,9 @@ PYTHONPATH=backend python -m pytest backend/tests/test_stress_ai_games.py -v
 
 ---
 
-## Phase 4.5 UX Fixes (December 27-30, 2025) ✅ 6 FIXED, 1 PENDING
+## Phase 4.5 UX Fixes (December 27-31, 2025) ✅ 8 FIXED, 1 PENDING
 
-**Status**: 6/7 fixes complete and tested
+**Status**: FIX-01, FIX-02, FIX-03, FIX-06, FIX-07, FIX-08, FIX-09, FIX-10 complete and verified; FIX-04 viewport scaling still pending follow-up work.
 
 ### FIX-06: Interactive Click-to-Focus ✅ COMPLETE (Dec 30)
 
@@ -1590,18 +1590,59 @@ PYTHONPATH=backend python -m pytest backend/tests/test_stress_ai_games.py -v
 
 ---
 
+### FIX-09: Poker-Accurate Winner Reveal ✅ COMPLETE (Dec 31)
+
+**Problem**: Winner modal only showed "Name + amount" and sometimes revealed cards that should have stayed hidden. Fold wins and multi-way pots lacked vital details, so players couldn’t see *why* someone won.
+
+**Solution**:
+- Backend (`backend/main.py`, `backend/websocket_manager.py`): rebuilt `winner_info` to include showdown awareness, ranked `all_showdown_hands`, folded-player lists, and `won_by_fold` flags. Applied the logic to both REST and WebSocket paths to keep parity.
+- Used Treys `HandEvaluator` to compute rankings; only showdown participants expose `hand_rank` and `hole_cards`.
+- Added multiple-winner support (split/side pots) with accurate amounts.
+
+**Impact**: Every showdown now shows ranked hands and keeps folded cards private. Fold wins remain mystery hands, satisfying poker etiquette while educating learners.
+
+**Validation**:
+- ✅ Backend unit suite (23/23 tests) after changes
+- ✅ Manual tests across fold wins and showdown pots (single + multiple winners)
+- ✅ WebSocket payload inspected via browser devtools for consistency with REST
+
+**Commit**: `34f0aaf6`
+
+---
+
+### FIX-10: Compact Winner Modal + Community Cards ✅ COMPLETE (Dec 31)
+
+**Problem**: After FIX-09, the rewritten modal was too tall (>1200px), hid the “Next Hand” button, and still lacked board context. User feedback: “Winner card is too big; we should see the community cards.”
+
+**Solution**:
+- `frontend/components/WinnerModal.tsx`: reduced headline/icon sizes, tightened spacing, capped height at 90vh with internal scroll, and shrank card renders (`scale-50/60`).
+- Added optional community-card display (50% scale) whenever showdown data is present; passed via `PokerTable.tsx`.
+- Ensured multi-winner sections remain readable in compact layout.
+
+**Impact**: Modal fits on all target resolutions, “Next Hand” button stays visible, and learners can see the full board when reviewing hands.
+
+**Validation**:
+- ✅ Frontend build + TypeScript check
+- ✅ Manual viewport tests (1280×720 → 1920×1200)
+- ✅ Confirmed buttons accessible via keyboard/mouse
+
+**Commit**: `34f0aaf6`
+
+---
+
 ### FIX-04: Viewport Scaling (PENDING)
 
-**Problem**: Cards overlap, UI doesn't scale properly across viewport sizes
+**Problem**: Cards can still overlap on extreme viewport configurations. Initial FIX-04 (z-index) and FIX-05 (viewport-relative sizing) uncovered regressions—especially breaking FIX-01 blind indicators in 6-player layouts.
 
-**Status**: PENDING - Awaiting user decision on current_bet visibility issue in subsequent rounds before implementing viewport scaling fix
-
-**Current Issue Identified**: "Current Bet:" badge only shows in first betting round, not in flop/turn/river rounds
+**Current Status**:
+- Z-index portion shipped in `fbc3aed4` (community cards now always on top).
+- Viewport scaling attempt `39c1b2d3` regressed blind logic → rolled back pending a safer approach.
+- FIX-07 already solved the Current Bet visibility issue, so remaining work focuses purely on responsive sizing that preserves blind badges and hit targets.
 
 **Next Steps**:
-1. Fix current_bet tracking in subsequent betting rounds
-2. Then implement viewport scaling solution
-3. Create comprehensive E2E regression tests
+1. Re-design responsive layout using CSS clamps + container queries; validate on 4- and 6-player tables.
+2. Add focused regression tests (Playwright + Jest snapshots) covering split-screen (900×700) and ultrawide (2560×1440).
+3. Only mark FIX-04 complete once viewport changes pass the mandatory regression plan and FIX-01 tests.
 
 ---
 
@@ -1609,4 +1650,3 @@ PYTHONPATH=backend python -m pytest backend/tests/test_stress_ai_games.py -v
 - Using 100k/200k tokens - plenty of room to continue
 - All changes follow mandatory user approval process
 - Ready to commit after documentation updates complete
-
