@@ -103,6 +103,32 @@ class TestBlindPositionTracking:
                 else:
                     break
 
+    def test_blind_rotation_skips_busted_players(self):
+        """Ensure busted players are never assigned blinds or dealer button."""
+        game = PokerGame(human_player_name="Human", ai_count=5)
+        game.qc_enabled = False  # This test manipulates stacks directly
+
+        # Simulate two busted AI players
+        busted_indices = [2, 4]
+        for idx in busted_indices:
+            game.players[idx].stack = 0
+            game.players[idx].is_active = False
+
+        for hand_num in range(6):
+            game.start_new_hand()
+
+            assert game.dealer_index not in busted_indices, \
+                f"Hand {hand_num + 1}: Dealer should skip busted players"
+            assert game.small_blind_index not in busted_indices, \
+                f"Hand {hand_num + 1}: SB assigned to busted player"
+            assert game.big_blind_index not in busted_indices, \
+                f"Hand {hand_num + 1}: BB assigned to busted player"
+
+            # Verify blinds remain consecutive among active seats
+            next_active = game._get_next_active_player_index(game.small_blind_index + 1)
+            assert next_active == game.big_blind_index, \
+                "SB and BB should remain consecutive among active players"
+
     def test_blind_positions_match_actual_bets_4_player(self):
         """Test that blind positions match who actually posted blinds (4-player)"""
         game = PokerGame(human_player_name="Human", ai_count=3)
