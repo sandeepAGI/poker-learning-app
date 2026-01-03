@@ -1140,6 +1140,168 @@ Track all files changed during this fix session:
 
 ---
 
+## FIX-11: Data Integrity - VPIP/PFR Calculation Bug (Session Analysis)
+
+**Date**: 2026-01-03
+**Reporter**: User (via Claude LLM error detection in Session Analysis)
+**Status**: ✅ FIXED
+**Priority**: CRITICAL
+
+### Problem
+
+Session Analysis showed mathematically impossible data:
+- VPIP: 0% (0/12 hands played pre-flop)
+- PFR: 0% (0/12 hands raised pre-flop)
+- Win Rate: 58% (7/12 hands won)
+
+**LLM Error Message**:
+```
+🔧 Areas to Improve
+DATA INTEGRITY ISSUE: 0% VPIP with 58% win rate is mathematically impossible
+Player shows 0/12 hands played pre-flop (VPIP) and 0/12 raised (PFR), yet won 7 hands.
+This indicates missing hand history data or tracking error.
+```
+
+### Root Cause Analysis
+
+**Layer**: Backend Data Processing (LLM Analyzer)
+**Files**: `backend/llm_analyzer.py`
+
+**Bug**: Hardcoded player name filter `"You"` instead of using `player_id == "human"`
+
+**3 Locations Found**:
+
+1. **Line 442** - VPIP/PFR calculation for session analysis:
+   ```python
+   human_actions = [a for a in hand.betting_rounds[0].actions if a.player_name == "You"]
+   ```
+   **Issue**: Filter never matches because actual player name is user-entered (e.g., "TestPlayer", "Sarah")
+   **Impact**: `vpip_count` and `pfr_count` always 0
+
+2. **Line 493** - AI opponent tracking:
+   ```python
+   if action.player_name != "You":
+   ```
+   **Impact**: AI opponent tracking broken (all players counted as AI)
+
+3. **Line 504** - AI hand counting:
+   ```python
+   players_in_hand = set(a.player_name for a in betting_round.actions if a.player_name != "You")
+   ```
+   **Impact**: Hand count for AI players incorrect
+
+### Fix Implementation
+
+**Changed**: `player_name` comparisons → `player_id` comparisons
+
+```python
+# Line 442 - BEFORE
+human_actions = [a for a in hand.betting_rounds[0].actions if a.player_name == "You"]
+
+# Line 442 - AFTER
+human_actions = [a for a in hand.betting_rounds[0].actions if a.player_id == "human"]
+
+# Line 493 - BEFORE
+if action.player_name != "You":
+
+# Line 493 - AFTER
+if action.player_id != "human":
+
+# Line 504 - BEFORE
+players_in_hand = set(a.player_name for a in betting_round.actions if a.player_name != "You")
+
+# Line 504 - AFTER
+players_in_hand = set(a.player_name for a in betting_round.actions if a.player_id != "human")
+```
+
+### Legitimate "You" Usages (Unchanged)
+
+**3 instances kept intentionally**:
+1. `backend/llm_prompts.py:152` - Example JSON in LLM prompt template
+2. `backend/llm_analyzer.py:407` - Display name for LLM analysis output
+3. `backend/llm_analyzer.py:523` - Display name in session context
+
+**Reason**: These are user-facing text in LLM responses, not logic/filtering.
+
+### Additional Fixes
+
+**Test Update**: `backend/tests/test_llm_analyzer_unit.py:25-26`
+- Updated expected model names to Claude 4.5 Haiku/Sonnet
+
+**UX Improvement**: `frontend/components/PokerTable.tsx:343`
+- Changed "📊 Analyze Hand" → "📊 Analyze Last Hand" for clarity
+
+### Tests
+
+**Unit Tests**:
+- ✅ `test_vpip_calculation` - PASSED (26/26 LLM analyzer tests)
+- ✅ 67/67 core unit tests PASSED
+- ✅ Action processing tests (20)
+- ✅ State advancement tests (13)
+- ✅ Turn order tests (3)
+- ✅ Fold resolution tests (2)
+
+**Impact Verification**:
+- ✅ No regressions detected
+- ✅ VPIP calculation now accurate
+- ✅ PFR calculation now accurate
+- ✅ AI opponent tracking fixed
+
+### Files Modified
+
+**Backend**:
+- [x] `backend/llm_analyzer.py` (lines 442, 493, 504) - Fixed player_id logic
+- [x] `backend/tests/test_llm_analyzer_unit.py` (lines 25-26) - Updated model names
+
+**Frontend**:
+- [x] `frontend/components/PokerTable.tsx` (line 343) - Clarified button text
+
+### Commit
+
+**Status**: Ready to commit
+**Commit Message**:
+```
+FIX-11: CRITICAL - VPIP/PFR data integrity bug in Session Analysis
+
+Root Cause:
+Session Analysis showed 0% VPIP/PFR with 58% win rate - mathematically
+impossible. The LLM correctly flagged this as a data integrity error.
+
+The bug was hardcoded player name filters using "You" instead of checking
+player_id == "human". Since players can enter custom names ("Sarah",
+"TestPlayer", etc.), the filter never matched, causing:
+- VPIP always 0% (should show % of hands played voluntarily)
+- PFR always 0% (should show % of hands raised pre-flop)
+- AI opponent tracking broken
+
+The Fix (3 locations in backend/llm_analyzer.py):
+1. Line 442: Changed VPIP/PFR filter from player_name == "You" to player_id == "human"
+2. Line 493: Changed AI tracking from player_name != "You" to player_id != "human"
+3. Line 504: Changed AI hand count from player_name != "You" to player_id != "human"
+
+Additional Fixes:
+- Updated test expectations for Claude 4.5 model names (Haiku/Sonnet)
+- UX: Changed "Analyze Hand" → "Analyze Last Hand" for clarity
+
+Verified No Regressions:
+- 67/67 core unit tests PASSED
+- 26/26 LLM analyzer tests PASSED
+- VPIP test specifically validates the fix
+
+Impact:
+Session Analysis now shows accurate VPIP/PFR statistics, enabling proper
+strategy analysis and player skill assessment.
+
+Files:
+- backend/llm_analyzer.py (lines 442, 493, 504)
+- backend/tests/test_llm_analyzer_unit.py (lines 25-26)
+- frontend/components/PokerTable.tsx (line 343)
+```
+
+---
+
 ## Notes
 
-[Any additional observations, patterns, or technical debt identified during fixes]
+**Pattern Identified**: Hardcoded player name "You" is a anti-pattern. Always use `player_id == "human"` for logic/filtering. Reserve "You" for user-facing display text only.
+
+**Detection Credit**: Claude LLM's analysis validation caught this bug by flagging the impossible statistics. This demonstrates value of LLM-powered data validation.

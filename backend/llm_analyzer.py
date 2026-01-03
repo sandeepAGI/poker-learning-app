@@ -439,7 +439,7 @@ class LLMHandAnalyzer:
         pfr_count = 0  # Pre-flop raise
         for hand in hands:
             if hand.betting_rounds and hand.betting_rounds[0].actions:
-                human_actions = [a for a in hand.betting_rounds[0].actions if a.player_name == "You"]
+                human_actions = [a for a in hand.betting_rounds[0].actions if a.player_id == "human"]
                 if human_actions:
                     last_action = human_actions[-1]
                     if last_action.action in ["call", "raise", "all_in"]:
@@ -490,7 +490,7 @@ class LLMHandAnalyzer:
             # Get AI players from betting rounds
             for betting_round in hand.betting_rounds:
                 for action in betting_round.actions:
-                    if action.player_name != "You":
+                    if action.player_id != "human":
                         if action.player_name not in ai_opponents:
                             ai_opponents[action.player_name] = {
                                 "hands": 0,
@@ -501,7 +501,7 @@ class LLMHandAnalyzer:
 
             # Count this hand for all AI players who participated
             for betting_round in hand.betting_rounds:
-                players_in_hand = set(a.player_name for a in betting_round.actions if a.player_name != "You")
+                players_in_hand = set(a.player_name for a in betting_round.actions if a.player_id != "human")
                 for player_name in players_in_hand:
                     if player_name in ai_opponents:
                         ai_opponents[player_name]["hands"] += 1

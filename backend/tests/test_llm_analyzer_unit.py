@@ -22,8 +22,8 @@ class TestLLMAnalyzerInitialization:
         """Test successful initialization with API key."""
         with patch('llm_analyzer.Anthropic'):
             analyzer = LLMHandAnalyzer()
-            assert analyzer.haiku_model == "claude-3-5-haiku-20241022"
-            assert analyzer.sonnet_model == "claude-3-5-sonnet-20241022"
+            assert analyzer.haiku_model == "claude-haiku-4-5"
+            assert analyzer.sonnet_model == "claude-sonnet-4-5-20250929"
 
     @patch.dict('os.environ', {}, clear=True)
     def test_initialization_without_api_key(self):

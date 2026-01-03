@@ -331,7 +331,7 @@ export function PokerTable() {
               animate={{ opacity: 1, y: 0 }}
               className="absolute top-12 right-20 bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg shadow-2xl p-2 min-w-[250px] z-50"
             >
-              {/* Analyze Hand */}
+              {/* Analyze Last Hand */}
               <button
                 onClick={() => {
                   handleAnalysisClick();
@@ -340,7 +340,7 @@ export function PokerTable() {
                 disabled={loading}
                 className="w-full text-left px-4 py-3 hover:bg-[#1F7A47] rounded-lg text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                📊 Analyze Hand
+                📊 Analyze Last Hand
               </button>
 
               {/* Phase 4.5: Session Analysis */}
