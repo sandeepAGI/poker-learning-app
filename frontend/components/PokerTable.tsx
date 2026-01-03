@@ -43,13 +43,18 @@ export function PokerTable() {
 
   // Bug Fix #1: Proper call amount calculation (prevent negative)
   const callAmount = Math.max(0, gameState.current_bet - gameState.human_player.current_bet);
-  const canCall = gameState.human_player.stack >= callAmount;
+
+  // FIX Issue #1: Allow call/raise when player has ANY chips (short-stack all-in)
+  // Backend handles capping to available stack, UI should not block valid actions
+  const canCall = gameState.human_player.stack > 0;  // Can call if have any chips
 
   // Bug Fix #1: Proper raise amount validation
   const minRaise = gameState.current_bet + (gameState.big_blind || 10);
   // Bug Fix: All-in must include current bet (e.g., big blind already posted)
   const maxRaise = gameState.human_player.stack + gameState.human_player.current_bet;
-  const canRaise = maxRaise >= minRaise && gameState.human_player.stack > callAmount;
+
+  // FIX Issue #1: Allow raise when player has ANY chips (all-in)
+  const canRaise = gameState.human_player.stack > 0;  // Can raise if have any chips
 
   const [raiseAmount, setRaiseAmount] = useState(minRaise);
   const [showWinnerModal, setShowWinnerModal] = useState(false);
@@ -639,9 +644,11 @@ export function PokerTable() {
                   onClick={() => submitAction('call')}
                   disabled={loading || !canCall}
                   className="flex-1 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]"
-                  title={!canCall ? 'Not enough chips to call' : ''}
+                  title={gameState.human_player.stack < callAmount ? 'Call All-In with remaining chips' : ''}
                 >
-                  Call ${callAmount}
+                  {gameState.human_player.stack < callAmount
+                    ? `Call All-In $${gameState.human_player.stack}`
+                    : `Call $${callAmount}`}
                 </button>
 
                 {/* Raise - Opens expandable panel */}

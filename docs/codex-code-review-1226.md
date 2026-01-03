@@ -44,11 +44,31 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 7. **Commit**: Git commit and push with descriptive message
 
 ### Progress Tracking
-- [ ] Issue #1: Short-Stack Call/Raise UI
+- [x] Issue #1: Short-Stack Call/Raise UI ✅ **FIXED**
 - [ ] Issue #2: Blind/Button Indicators Drift
 - [ ] Issue #3: AI Reasoning Sidebar Data Loss
 - [ ] Issue #4: Session Analysis Parameter Issues
 - [ ] Issue #5: Orphaned/Redundant Code
+
+---
+
+## FIXES COMPLETED
+
+### Issue #1: Short-Stack Call/Raise UI ✅
+
+**Problem**: UI disabled Call/Raise buttons when player stack < bet amount, even though backend supports all-in calls/raises.
+
+**Fix Applied**:
+- **File**: `frontend/components/PokerTable.tsx` (lines 47-57, 643-652)
+- **Changes**:
+  - `canCall`: Changed from `stack >= callAmount` to `stack > 0`
+  - `canRaise`: Changed from `maxRaise >= minRaise && stack > callAmount` to `stack > 0`
+  - Call button label: Shows "Call All-In $X" when `stack < callAmount`
+- **Backend Support**: Confirmed via `test_short_stack_actions.py` (2/2 tests pass)
+- **Regression**: All 23 quick tests pass
+- **Frontend Build**: ✅ Passes (2.8s)
+
+**Result**: Players can now call or raise all-in with any amount of chips, matching poker rules and backend behavior.
 
 ---
 
