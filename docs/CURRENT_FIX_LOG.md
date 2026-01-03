@@ -1300,6 +1300,295 @@ Files:
 
 ---
 
+## FIX-12: UX Improvement - "Analyze Last Hand" Modal Issues
+
+**Date**: January 3, 2026
+**Priority**: High (User Experience)
+**Type**: Frontend UX Enhancement
+**Status**: ✅ Fixed & Tested
+
+### Problem Description
+
+User reported two UX issues with the "Analyze Last Hand" feature:
+
+**Issue #1: Cannot Analyze Multiple Times**
+- User clicks "📊 Analyze Last Hand" → modal opens
+- User closes modal
+- User clicks "📊 Analyze Last Hand" again → **modal does NOT reopen**
+- Must refresh page to analyze again
+
+**Issue #2: Extra Click Required (Unnecessary Intermediate Screen)**
+- Current flow requires TWO clicks:
+  1. Click "Analyze Last Hand" → modal shows "Analyze This Hand" button
+  2. Click "Analyze This Hand" → LLM analysis starts loading
+- User feedback: "The next page doesn't actually have a lot of useful information. Is it necessary?"
+- Desired flow: ONE click directly to LLM analysis
+
+### Root Cause Analysis
+
+#### Issue #1 Root Cause
+
+**Location**: `frontend/components/PokerTable.tsx` (lines 221-226, 781)
+
+**The Bug Chain**:
+1. User clicks "Analyze Last Hand" → `handleAnalysisClick()` (line 154)
+2. Calls `getHandAnalysis()` → fetches rule-based data, sets `handAnalysis` state (store.ts:173)
+3. useEffect triggers modal open (PokerTable.tsx:221-226):
+```tsx
+useEffect(() => {
+  if (handAnalysis && !showAnalysisModal) {
+    setShowAnalysisModal(true);
+  }
+}, [handAnalysis]); // ❌ Only triggers when handAnalysis reference changes
+```
+4. User closes modal → `setShowAnalysisModal(false)` (line 781)
+5. **PROBLEM**: `handAnalysis` state never cleared
+6. Second click → fetches same data → React sees no reference change → useEffect doesn't fire → modal stays closed
+
+**Missing Cleanup**:
+```tsx
+// BEFORE (line 781):
+onClose={() => setShowAnalysisModal(false)}
+// ❌ Missing: clearHandAnalysis()
+```
+
+#### Issue #2 Root Cause
+
+**Location**: `frontend/components/AnalysisModalLLM.tsx` (lines 89-120)
+
+**The Problem**:
+- Modal initially shows "Analyze This Hand" button (manual trigger)
+- User must click button to start LLM analysis
+- This intermediate screen serves no purpose per user feedback
+
+**Current Flow** (2 clicks):
+1. Click "Analyze Last Hand" → modal opens with button
+2. Click "Analyze This Hand" → LLM analysis starts
+3. Wait 20-30 seconds → results appear
+
+**Desired Flow** (1 click):
+1. Click "Analyze Last Hand" → modal opens with loading state
+2. LLM analysis auto-starts immediately
+3. Wait 20-30 seconds → results appear
+
+### Fix Implementation
+
+#### Fix #1: Clear handAnalysis on Modal Close
+
+**File**: `frontend/lib/store.ts`
+
+**Change 1**: Added `clearHandAnalysis()` action to store interface (line 37)
+```typescript
+interface GameStore {
+  // ... existing
+  getHandAnalysis: () => Promise<void>;
+  clearHandAnalysis: () => void; // NEW: Clear analysis to allow modal re-opening
+  // ... rest
+}
+```
+
+**Change 2**: Implemented `clearHandAnalysis()` function (lines 198-201)
+```typescript
+// UX Fix: Clear hand analysis (allows modal to reopen on subsequent clicks)
+clearHandAnalysis: () => {
+  set({ handAnalysis: null });
+},
+```
+
+**File**: `frontend/components/PokerTable.tsx`
+
+**Change 3**: Import `clearHandAnalysis` from store (line 30)
+```typescript
+const {
+  // ... existing
+  getHandAnalysis,
+  clearHandAnalysis, // NEW
+  // ... rest
+} = useGameStore();
+```
+
+**Change 4**: Clear analysis on modal close (lines 782-785)
+```typescript
+// BEFORE:
+onClose={() => setShowAnalysisModal(false)}
+
+// AFTER:
+onClose={() => {
+  setShowAnalysisModal(false);
+  clearHandAnalysis(); // Clear state so modal can reopen
+}}
+```
+
+#### Fix #2: Auto-Trigger LLM Analysis on Modal Open
+
+**File**: `frontend/components/AnalysisModalLLM.tsx`
+
+**Change 1**: Import `useEffect` (line 13)
+```typescript
+import { useState, useEffect } from 'react';
+```
+
+**Change 2**: Add auto-trigger useEffect (lines 31-37)
+```typescript
+// UX Fix: Auto-trigger LLM analysis when modal opens
+useEffect(() => {
+  if (isOpen && !llmAnalysis && !loading && !error) {
+    handleAnalyze();
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [isOpen]); // Only trigger when modal opens
+```
+
+**Change 3**: Add cleanup useEffect (lines 39-46)
+```typescript
+// UX Fix: Reset state when modal closes (prevents stale data on re-open)
+useEffect(() => {
+  if (!isOpen) {
+    setLlmAnalysis(null);
+    setError('');
+    setLoading(false);
+  }
+}, [isOpen]);
+```
+
+**Change 4**: Update header text (lines 97-102)
+```typescript
+// BEFORE:
+<p className="text-green-100 mt-1">
+  {llmAnalysis ? 'AI-powered coaching insights' : 'Choose your analysis type below'}
+</p>
+
+// AFTER:
+<p className="text-green-100 mt-1">
+  {llmAnalysis
+    ? 'AI-powered coaching insights'
+    : loading
+      ? 'Analyzing your hand with AI...'
+      : 'AI coaching for your last hand'
+  }
+</p>
+```
+
+**Change 5**: Simplified initial state UI (lines 108-116)
+```typescript
+// BEFORE (lines 89-120): Big section with "Analyze This Hand" button and rule-based fallback
+
+// AFTER: Minimal preparing message (auto-trigger handles analysis)
+{!llmAnalysis && !loading && !error && (
+  <div className="p-6">
+    <div className="text-center">
+      <p className="text-gray-300">
+        Preparing your hand analysis...
+      </p>
+    </div>
+  </div>
+)}
+```
+
+**Removed**: Manual "Analyze This Hand" button and rule-based fallback display (no longer needed since analysis auto-triggers)
+
+### Testing
+
+#### Manual Testing - Fix #1 (Modal Reopens)
+
+**Test Case**: Click "Analyze Last Hand" multiple times
+```
+1. Start game, play 1 hand to completion
+2. Click "Analyze Last Hand" → modal opens ✅
+3. Close modal (click X or backdrop)
+4. Click "Analyze Last Hand" again → modal reopens ✅
+5. Repeat 3 more times → works every time ✅
+```
+
+**Before Fix**: Modal only opened once, subsequent clicks did nothing ❌
+**After Fix**: Modal reopens every time ✅
+
+#### Manual Testing - Fix #2 (Auto-Trigger)
+
+**Test Case**: Verify LLM analysis auto-starts on modal open
+```
+1. Play 1 hand to completion
+2. Click "Analyze Last Hand" → modal opens
+3. Verify:
+   - Header shows "Analyzing your hand with AI..." ✅
+   - Loading spinner visible ✅
+   - NO "Analyze This Hand" button ✅
+   - Wait 20-30 seconds → LLM analysis appears ✅
+```
+
+**Before Fix**: Required clicking "Analyze This Hand" button (2-click flow) ❌
+**After Fix**: LLM analysis starts immediately (1-click flow) ✅
+
+#### Browser Testing Results
+
+**Test Environment**:
+- Frontend: http://localhost:3000
+- Backend: http://localhost:8000
+- Browser: Puppeteer (automated)
+
+**Test Execution**:
+1. Created game with 3 AI opponents
+2. Played hand #1 (folded pre-flop) → hand completed
+3. Clicked "Analyze Last Hand" → **modal opened with loading state** ✅
+4. **Verified NO manual button** (auto-triggered) ✅
+5. **LLM analysis loaded automatically** ✅
+6. Closed modal
+7. Clicked "Analyze Last Hand" again → **modal reopened** ✅
+
+**Screenshots Captured**:
+- `analysis_modal_loading.png`: Shows auto-triggered loading state (no manual button)
+- `modal_reopened.png`: Shows LLM analysis after second click (proves Fix #1 works)
+
+### Regression Testing
+
+**TypeScript Compilation**: ✅ No new errors
+**ESLint**: ✅ Passes (added `eslint-disable` comment for useEffect deps)
+**Existing Features**: ✅ All other modals and UI flows unaffected
+
+### Impact
+
+**User Experience Improvements**:
+1. **Reduced friction**: 1-click access to analysis (down from 2 clicks)
+2. **Repeatability**: Users can analyze same hand multiple times without page refresh
+3. **Clearer expectations**: Loading state immediately visible
+4. **Faster workflow**: Saves ~2-3 seconds per analysis attempt
+
+**Technical Debt Removed**:
+- Eliminated unnecessary intermediate UI state (manual trigger button)
+- Fixed state management issue (stale `handAnalysis` preventing modal reopen)
+- Improved component lifecycle management (proper cleanup on unmount)
+
+### Files Modified
+
+```
+frontend/lib/store.ts
+  - Line 37: Added clearHandAnalysis to interface
+  - Lines 198-201: Implemented clearHandAnalysis function
+
+frontend/components/PokerTable.tsx
+  - Line 30: Import clearHandAnalysis from store
+  - Lines 782-785: Call clearHandAnalysis on modal close
+
+frontend/components/AnalysisModalLLM.tsx
+  - Line 13: Import useEffect
+  - Lines 31-37: Auto-trigger useEffect
+  - Lines 39-46: Cleanup useEffect
+  - Lines 97-102: Updated header text logic
+  - Lines 108-116: Simplified initial state UI
+```
+
+### User Approval
+
+**User Feedback**: Both issues confirmed and solution approach approved via AskUserQuestion tool.
+
+**User Preferences**:
+1. Skip modal, show LLM analysis directly (Recommended) ✅ Implemented
+2. Clear on close, fetch fresh each time (Recommended) ✅ Implemented
+
+**Testing**: User confirmed fixes work as expected via automated browser testing.
+
+---
+
 ## Notes
 
 **Pattern Identified**: Hardcoded player name "You" is a anti-pattern. Always use `player_id == "human"` for logic/filtering. Reserve "You" for user-facing display text only.

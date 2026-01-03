@@ -27,6 +27,7 @@ export function PokerTable() {
     toggleStepMode,
     sendContinue,
     getHandAnalysis,
+    clearHandAnalysis,
     quitGame,
     loading,
     error,
@@ -778,7 +779,10 @@ export function PokerTable() {
           isOpen={showAnalysisModal}
           gameId={gameId}
           ruleBasedAnalysis={handAnalysis} // Fallback to old rule-based
-          onClose={() => setShowAnalysisModal(false)}
+          onClose={() => {
+            setShowAnalysisModal(false);
+            clearHandAnalysis(); // Clear state so modal can reopen
+          }}
         />
       )}
 

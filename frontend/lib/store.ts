@@ -34,6 +34,7 @@ interface GameStore {
   toggleStepMode: () => void; // Phase 4: Toggle step mode
   sendContinue: () => void; // Phase 4: Send continue signal
   getHandAnalysis: () => Promise<void>; // UX Phase 2: Fetch analysis (still uses REST)
+  clearHandAnalysis: () => void; // UX Fix: Clear analysis to allow modal re-opening
   quitGame: () => void; // Bug fix: Allow player to quit
   setError: (error: string | null) => void;
 
@@ -192,6 +193,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
         handAnalysis: null  // Clear any stale analysis
       });
     }
+  },
+
+  // UX Fix: Clear hand analysis (allows modal to reopen on subsequent clicks)
+  clearHandAnalysis: () => {
+    set({ handAnalysis: null });
   },
 
   // Bug fix: Quit game and return to lobby

@@ -10,7 +10,7 @@
  * - Clean UX without cost/technical details
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { pokerApi } from '../lib/api';
 
@@ -27,6 +27,23 @@ export function AnalysisModalLLM({ isOpen, onClose, gameId, ruleBasedAnalysis }:
   const [cost, setCost] = useState(0);
   const [modelUsed, setModelUsed] = useState('');
   const [error, setError] = useState('');
+
+  // UX Fix: Auto-trigger LLM analysis when modal opens
+  useEffect(() => {
+    if (isOpen && !llmAnalysis && !loading && !error) {
+      handleAnalyze();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]); // Only trigger when modal opens
+
+  // UX Fix: Reset state when modal closes (prevents stale data on re-open)
+  useEffect(() => {
+    if (!isOpen) {
+      setLlmAnalysis(null);
+      setError('');
+      setLoading(false);
+    }
+  }, [isOpen]);
 
   const handleAnalyze = async () => {
     setLoading(true);
@@ -79,43 +96,22 @@ export function AnalysisModalLLM({ isOpen, onClose, gameId, ruleBasedAnalysis }:
               <p className="text-green-100 mt-1">
                 {llmAnalysis
                   ? 'AI-powered coaching insights'
-                  : 'Choose your analysis type below'
+                  : loading
+                    ? 'Analyzing your hand with AI...'
+                    : 'AI coaching for your last hand'
                 }
               </p>
             </div>
 
             {/* Content */}
             <div className="overflow-y-auto max-h-[calc(90vh-180px)]">
-              {!llmAnalysis && !loading && (
-                <div className="p-6 space-y-4">
-                  {/* Analysis Type Selection */}
-                  <div className="text-center space-y-4">
-                    <p className="text-gray-300 mb-4">
-                      Get personalized AI coaching to improve your poker skills
-                    </p>
-
-                    {/* Quick Analysis Button */}
-                    <button
-                      onClick={() => handleAnalyze()}
-                      className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white py-4 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all"
-                    >
-                      🎓 Analyze This Hand
-                    </button>
-
-                    <p className="text-sm text-gray-400 mt-4">
-                      AI-powered analysis with round-by-round breakdown, tips for improvement, and concepts to study
+              {!llmAnalysis && !loading && !error && (
+                <div className="p-6">
+                  <div className="text-center">
+                    <p className="text-gray-300">
+                      Preparing your hand analysis...
                     </p>
                   </div>
-
-                  {/* Rule-based fallback */}
-                  {ruleBasedAnalysis && (
-                    <div className="mt-8 pt-6 border-t border-gray-700">
-                      <h3 className="text-lg font-semibold mb-3 text-gray-400">
-                        Or view rule-based analysis:
-                      </h3>
-                      <RuleBasedAnalysisSection analysis={ruleBasedAnalysis} />
-                    </div>
-                  )}
                 </div>
               )}
 
