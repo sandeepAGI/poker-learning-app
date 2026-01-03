@@ -47,7 +47,7 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - [x] Issue #1: Short-Stack Call/Raise UI ✅ **FIXED**
 - [x] Issue #2: Blind/Button Indicators Drift ✅ **FIXED**
 - [x] Issue #3: AI Reasoning Sidebar Data Loss ✅ **FIXED**
-- [ ] Issue #4: Session Analysis Parameter Issues
+- [x] Issue #4: Session Analysis Parameter Issues ✅ **FIXED**
 - [ ] Issue #5: Orphaned/Redundant Code
 
 ---
@@ -102,6 +102,31 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - **Frontend Build**: ✅ Passes (1.4s)
 
 **Result**: AI decisions now have unique IDs. Toggling AI thinking preserves data. Educational feature works reliably.
+
+### Issue #4: Session Analysis Parameter Issues ✅
+
+**Problem**: Two parameter handling issues in session analysis endpoint caused inefficiency and rate limit bypass.
+
+**Problem 1**: `hand_count` parameter ignored - always sent full `hand_history` to LLM analyzer, causing:
+- Excessive token usage
+- Inconsistent caching (cache key used `hands_to_analyze` but sent full history)
+- Misleading `hands_analyzed` count in response
+
+**Problem 2**: Rate limiting only enforced when `use_cache=true`. Frontend always sent `use_cache: false`, allowing users to spam analyses without throttle.
+
+**Fix Applied**:
+- **File**: `backend/main.py` (lines 652-690)
+- **Changes**:
+  - Line 656: Slice `hand_history` BEFORE calling analyzer: `sliced_history = hand_history[-hands_to_analyze:]`
+  - Line 690: Pass `sliced_history` to analyzer (not full `hand_history`)
+  - Line 671: Remove `use_cache` condition from rate limiting check (apply unconditionally)
+- **Tests**: New `test_session_analysis_params.py` (3/3 tests pass)
+  - `test_hand_count_parameter_slices_history`: Verifies analyzer receives only requested hands
+  - `test_rate_limiting_enforced_regardless_of_cache_flag`: Verifies rate limit applies with `use_cache=false`
+  - `test_hands_analyzed_count_matches_actual_sliced_history`: Verifies reported count matches actual
+- **Regression**: All 23 quick tests pass
+
+**Result**: Session analysis now respects `hand_count` parameter, reducing token costs. Rate limiting enforced unconditionally, preventing API abuse.
 
 ---
 

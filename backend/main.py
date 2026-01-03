@@ -649,8 +649,11 @@ async def get_session_analysis(
     if not hand_history:
         raise HTTPException(status_code=404, detail="No hands to analyze")
 
+    # FIX Issue #4: Slice hand_history BEFORE calling analyzer
     # Determine how many hands to analyze
     hands_to_analyze = hand_count if hand_count else len(hand_history)
+    # Slice to only the requested number of hands (last N hands)
+    sliced_history = hand_history[-hands_to_analyze:] if hands_to_analyze < len(hand_history) else hand_history
 
     # Check cache
     cache_key = f"{game_id}_session_{hands_to_analyze}_{depth}"
@@ -661,10 +664,11 @@ async def get_session_analysis(
             "cached": True
         }
 
+    # FIX Issue #4: Rate limiting should apply regardless of use_cache flag
     # Rate limiting: 1 session analysis per 60 seconds per game
     now = time.time()
     last_time = last_analysis_time.get(f"{game_id}_session", 0)
-    if use_cache and now - last_time < 60:
+    if now - last_time < 60:
         wait_time = int(60 - (now - last_time))
         raise HTTPException(
             status_code=429,
@@ -681,9 +685,9 @@ async def get_session_analysis(
         human_player = next(p for p in game.players if p.is_human)
         ending_stack = human_player.stack
 
-        # Call LLM analyzer
+        # Call LLM analyzer with SLICED history (not full history)
         analysis = llm_analyzer.analyze_session(
-            hand_history=hand_history,
+            hand_history=sliced_history,
             starting_stack=starting_stack,
             ending_stack=ending_stack,
             depth=depth,
