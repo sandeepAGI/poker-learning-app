@@ -10,7 +10,8 @@ interface GameStore {
   gameId: string | null;
   gameState: GameState | null;
   loading: boolean;
-  error: string | null;
+  error: string | null; // Action/validation errors (won't kick user out)
+  connectionError: string | null; // Issue #3: Connection errors (triggers reconnect screen)
   showAiThinking: boolean; // UX Phase 1: Control AI reasoning visibility
   handAnalysis: any | null; // UX Phase 2: Store hand analysis
 
@@ -54,6 +55,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   gameState: null,
   loading: false,
   error: null,
+  connectionError: null, // Issue #3: Separate connection errors
   showAiThinking: false, // UX Phase 1: Hidden by default for cleaner UI
   handAnalysis: null, // UX Phase 2: No analysis initially
 
@@ -210,6 +212,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       gameState: null,
       handAnalysis: null,
       error: null,
+      connectionError: null, // Issue #3: Clear connection errors too
       loading: false,
       awaitingContinue: false,  // Phase 4: Reset step mode state
       stepMode: false,  // Phase 4: Reset step mode
@@ -238,7 +241,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       },
 
       onError: (error: string) => {
-        set({ error });
+        set({ connectionError: error }); // Issue #3: WebSocket errors are connection errors
       },
 
       onGameOver: () => {
@@ -291,7 +294,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // Phase 7+: Reconnect to existing game (browser refresh recovery)
   reconnectToGame: async (gameId: string): Promise<boolean> => {
     console.log(`[Store] Attempting to reconnect to game ${gameId}`);
-    set({ loading: true, error: null });
+    set({ loading: true, error: null, connectionError: null }); // Issue #3: Clear both error types
 
     try {
       // Verify game still exists via REST API
@@ -315,7 +318,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
           localStorage.removeItem('poker_game_id');
           localStorage.removeItem('poker_player_name');
         }
-        set({ loading: false, error: 'Game session expired. Please start a new game.' });
+        set({ loading: false, connectionError: 'Game session expired. Please start a new game.' }); // Issue #3
         return false;
       }
     } catch (error: any) {
@@ -325,7 +328,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         localStorage.removeItem('poker_game_id');
         localStorage.removeItem('poker_player_name');
       }
-      set({ loading: false, error: 'Failed to reconnect to game. Please start a new game.' });
+      set({ loading: false, connectionError: 'Failed to reconnect to game. Please start a new game.' }); // Issue #3
       return false;
     }
   },

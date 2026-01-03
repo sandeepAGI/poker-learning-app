@@ -19,7 +19,7 @@ import { motion } from 'framer-motion';
 
 export default function GamePage({ params }: { params: Promise<{ gameId: string }> }) {
   const router = useRouter();
-  const { gameState, loading, error, reconnectToGame, showAiThinking, decisionHistory } = useGameStore();
+  const { gameState, loading, error, connectionError, reconnectToGame, showAiThinking, decisionHistory } = useGameStore();
   const [gameId, setGameId] = useState<string>('');
 
   // Await params in Next.js 15
@@ -49,8 +49,8 @@ export default function GamePage({ params }: { params: Promise<{ gameId: string 
     }
   }, [gameId, gameState, reconnectToGame, router]);
 
-  // Show error state if reconnection failed
-  if (error) {
+  // Show error state if reconnection failed (Issue #3: Only for connection errors)
+  if (connectionError) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-red-700 to-red-900">
         <motion.div
@@ -64,7 +64,7 @@ export default function GamePage({ params }: { params: Promise<{ gameId: string 
             Unable to Reconnect
           </h1>
           <p className="text-gray-600 mb-6">
-            {error}
+            {connectionError}
           </p>
           <p className="text-sm text-gray-500">
             Redirecting to home in 3 seconds...
