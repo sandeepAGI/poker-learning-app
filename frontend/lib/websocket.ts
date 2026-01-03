@@ -14,7 +14,7 @@ import { GameState } from './types';
 
 // WebSocket message types from backend
 export interface WSMessage {
-  type: 'state_update' | 'ai_action' | 'error' | 'game_over' | 'awaiting_continue';
+  type: 'state_update' | 'ai_action' | 'error' | 'game_over' | 'awaiting_continue' | 'auto_resumed';
   data: any;
 }
 
@@ -26,6 +26,7 @@ export interface WebSocketCallbacks {
   onConnect: () => void;
   onDisconnect: () => void;
   onAwaitingContinue?: (playerName: string, action: string) => void; // Phase 4: Step Mode
+  onAutoResumed?: (reason: string) => void; // Issue #4: Step Mode auto-resume notification
 }
 
 // Connection states
@@ -153,6 +154,13 @@ export class PokerWebSocket {
             message.data.player_name,
             message.data.action
           );
+        }
+        break;
+
+      case 'auto_resumed':
+        // Issue #4: Step Mode auto-resumed after timeout
+        if (this.callbacks.onAutoResumed) {
+          this.callbacks.onAutoResumed(message.data.reason);
         }
         break;
 

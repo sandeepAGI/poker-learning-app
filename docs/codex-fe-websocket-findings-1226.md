@@ -118,8 +118,8 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 1. ✅ Issue #1 (Critical) - Mixed Import Paths - **COMPLETE** - Fixed and committed
 2. ✅ Issue #2 (High) - Minimum Raise Calculation - **COMPLETE** - Fixed and committed
 3. ✅ Issue #5 (Medium) - Decision History Deduplication - **COMPLETE** - Fixed and committed
-4. ⏳ Issue #3 (Medium) - Reconnect Screen Errors - **PENDING**
-5. ⏳ Issue #4 (Medium) - Step Mode Banner - **PENDING**
+4. ✅ Issue #3 (Medium) - Reconnect Screen Errors - **COMPLETE** - Fixed and committed
+5. ✅ Issue #4 (Medium) - Step Mode Banner - **COMPLETE** - Fixed, ready to commit
 6. ⏳ Issue #6 (Low) - WebSocket URL Builder - **PENDING**
 
 ### Issue #1: Mixed Import Paths [COMPLETE ✅]
@@ -196,11 +196,51 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 **Files Changed**:
 - backend/main.py (lines 230, 238 - added decision_id to both cases)
 
-### Issue #3: Reconnect Screen Errors [PENDING]
-**Status**: Not started
+### Issue #3: Reconnect Screen Errors [COMPLETE ✅]
+**Status**: Fixed and tested
+- ✅ Step 1 (Fix): Separated `connectionError` from `error` in store.ts
+- ✅ Step 2 (Fix): Updated page.tsx to check `connectionError` for reconnect screen
+- ✅ Step 3 (Regression): All tests passing
+- ✅ Step 4 (Commit): Committed `352288ef`
 
-### Issue #4: Step Mode Banner [PENDING]
-**Status**: Not started
+**The Bug**:
+- Single `error` field used for both connection and action errors
+- Invalid raise or analysis request triggered reconnect screen
+- Kicked user out of active hand for minor validation errors
+
+**The Fix**:
+- Added `connectionError` field for connection-specific errors
+- Kept `error` field for action/validation errors
+- Only `connectionError` triggers reconnect screen
+- Page.tsx checks `connectionError` instead of `error`
+
+**Files Changed**:
+- frontend/lib/store.ts (added connectionError field, lines 14, 58, 243, 296, 320, 330)
+- frontend/app/game/[gameId]/page.tsx (check connectionError, lines 22, 53, 67)
+
+### Issue #4: Step Mode Banner [COMPLETE ✅]
+**Status**: Fixed and tested
+- ✅ Step 1 (Fix): Added `auto_resumed` event emission in backend after timeout
+- ✅ Step 2 (Fix): Updated frontend WebSocket client to handle `auto_resumed` event
+- ✅ Step 3 (Fix): Added store handler to clear `awaitingContinue` flag
+- ⏳ Step 4 (Commit): Ready to commit
+
+**The Bug**:
+- `awaitingContinue` flag set on `awaiting_continue` event
+- Only cleared when user clicks Continue button
+- Backend auto-resumes after 60s timeout without notifying frontend
+- Yellow "Paused" banner stays visible even though game is progressing
+
+**The Fix**:
+- Backend emits `auto_resumed` event after timeout (websocket_manager.py:517-525)
+- Frontend WebSocket client handles `auto_resumed` event (websocket.ts:160-165)
+- Store clears `awaitingContinue` flag on `auto_resumed` (store.ts:280-285)
+- Continue button disappears when backend auto-resumes
+
+**Files Changed**:
+- backend/websocket_manager.py (emit auto_resumed event, lines 517-525)
+- frontend/lib/websocket.ts (add auto_resumed type and handler, lines 17, 29, 160-165)
+- frontend/lib/store.ts (handle auto_resumed, lines 280-285)
 
 ### Issue #6: WebSocket URL Builder [PENDING]
 **Status**: Not started
@@ -237,5 +277,22 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - ✅ Now matches WebSocket schema exactly
 - ✅ Fixes duplicate AI decisions after page refresh
 - ✅ Smoke tests passing
-- 📝 Ready to commit
+- ✅ Committed: `c623dc2a`
 
+### 2026-01-02: Issue #3 Complete
+
+- ✅ Separated `connectionError` from `error` in store.ts
+- ✅ Updated page.tsx to check `connectionError` for reconnect screen
+- ✅ Only connection errors trigger reconnect screen now
+- ✅ Action/validation errors stay on game page with error banner
+- ✅ All regression tests passing (41/41)
+- ✅ Committed: `352288ef`
+
+### 2026-01-02: Issue #4 Complete
+
+- ✅ Backend emits `auto_resumed` event after 60s timeout
+- ✅ Frontend WebSocket client handles `auto_resumed` event
+- ✅ Store clears `awaitingContinue` flag when auto-resumed
+- ✅ Continue button now disappears when backend auto-resumes
+- ✅ Fixes misleading "Paused" banner after timeout
+- 📝 Ready to commit

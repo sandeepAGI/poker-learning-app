@@ -514,6 +514,15 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
                 print(f"[WebSocket] Post-continue delay done (0.3s), continuing loop (t={after_delay - start_time:.2f}s)")
             except asyncio.TimeoutError:
                 print(f"[WebSocket] Step mode: Timeout waiting for continue (proceeding anyway)")
+                # Issue #4: Notify frontend that we auto-resumed after timeout
+                await manager.send_event(game_id, {
+                    "type": "auto_resumed",
+                    "data": {
+                        "reason": "timeout",
+                        "timeout_seconds": 60
+                    }
+                })
+                print(f"[WebSocket] 📤 Sent 'auto_resumed' event after timeout")
         else:
             # Non-step mode: Small delay for better UX visibility
             await asyncio.sleep(0.5)

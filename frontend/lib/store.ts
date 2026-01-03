@@ -275,6 +275,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         console.log(`[Store] Step mode: Waiting for continue after ${playerName} ${action}`);
         set({ awaitingContinue: true });
         console.log('[Store] awaitingContinue set to TRUE - Continue button should appear');
+      },
+
+      // Issue #4: Handle auto_resumed event (Step Mode auto-resume after timeout)
+      onAutoResumed: (reason: string) => {
+        console.log(`[Store] Step mode auto-resumed: ${reason}`);
+        set({ awaitingContinue: false });
+        console.log('[Store] awaitingContinue set to FALSE - Continue button should disappear');
       }
     });
 
