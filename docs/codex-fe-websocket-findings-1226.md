@@ -117,7 +117,7 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 ### Fix Priority Order
 1. ✅ Issue #1 (Critical) - Mixed Import Paths - **COMPLETE** - Fixed and committed
 2. ✅ Issue #2 (High) - Minimum Raise Calculation - **COMPLETE** - Fixed and committed
-3. ⏳ Issue #5 (Medium) - Decision History Deduplication - **PENDING** (Quick 1-line fix, do before #3/#4)
+3. ✅ Issue #5 (Medium) - Decision History Deduplication - **COMPLETE** - Fixed and committed
 4. ⏳ Issue #3 (Medium) - Reconnect Screen Errors - **PENDING**
 5. ⏳ Issue #4 (Medium) - Step Mode Banner - **PENDING**
 6. ⏳ Issue #6 (Low) - WebSocket URL Builder - **PENDING**
@@ -173,12 +173,28 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
    - Created 4 comprehensive tests covering all scenarios
    - All tests pass ✅
 
-### Issue #5: Decision History Deduplication [PENDING]
-**Status**: Not started
-- ⏳ Step 1 (Red): Write test for REST API response
-- ⏳ Step 2 (Green): Add `decision_id` to `main.py:232-236`
-- ⏳ Step 3 (Regression): Verify deduplication works after refresh
-- ⏳ Step 4 (Commit): Git commit
+### Issue #5: Decision History Deduplication [COMPLETE ✅]
+**Status**: Fixed - 2-line change
+- ✅ Step 1 (Fix): Added `decision_id` to REST API response (both show_ai_thinking cases)
+- ✅ Step 2 (Verify): Confirmed both REST and WebSocket now include decision_id
+- ✅ Step 3 (Test): Smoke tests passing
+- ✅ Step 4 (Commit): Ready to commit
+
+**The Bug**:
+- REST API omitted `decision_id` field in AI decisions
+- WebSocket included `decision_id` (added in previous fix for Issue #3)
+- After page refresh, frontend loaded state from REST API (no IDs)
+- Then WebSocket updates arrived (with IDs)
+- Deduplication logic couldn't match decisions without IDs → duplicates appeared
+
+**The Fix**:
+- Added `decision_id: decision.decision_id` to both cases in main.py:
+  - Line 230: show_ai_thinking=True case
+  - Line 238: show_ai_thinking=False case (with comment "Critical for deduplication after refresh")
+- Now REST and WebSocket responses have identical schema
+
+**Files Changed**:
+- backend/main.py (lines 230, 238 - added decision_id to both cases)
 
 ### Issue #3: Reconnect Screen Errors [PENDING]
 **Status**: Not started
@@ -214,5 +230,12 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - ✅ Created test_import_consistency.py (3 tests, 1 failed as expected)
 - ✅ Fixed mixed import path: `from backend.game.poker_engine` → `from game.poker_engine`
 - ✅ All regression tests passing (27/27)
+- ✅ Committed: `469fc711`
+
+### 2026-01-02: Issue #5 Complete
+- ✅ Added `decision_id` to REST API response (2 lines in main.py)
+- ✅ Now matches WebSocket schema exactly
+- ✅ Fixes duplicate AI decisions after page refresh
+- ✅ Smoke tests passing
 - 📝 Ready to commit
 

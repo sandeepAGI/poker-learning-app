@@ -226,14 +226,16 @@ def get_game_state(game_id: str, show_ai_thinking: bool = False):
                 "hand_strength": decision.hand_strength,
                 "pot_odds": decision.pot_odds,
                 "confidence": decision.confidence,
-                "spr": decision.spr
+                "spr": decision.spr,
+                "decision_id": decision.decision_id  # Issue #5: Add for deduplication
             }
     else:
         # Only show action, not reasoning (cleaner UX by default)
         for player_id, decision in game.last_ai_decisions.items():
             ai_decisions_data[player_id] = {
                 "action": decision.action,
-                "amount": decision.amount
+                "amount": decision.amount,
+                "decision_id": decision.decision_id  # Issue #5: Critical for deduplication after refresh
             }
 
     # Find ALL winners (handles showdown, fold wins, split pots, and side pots)
