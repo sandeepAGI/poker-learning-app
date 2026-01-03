@@ -102,8 +102,23 @@ class TestMultiHandScenarios:
 
                 hands_played += 1
 
+                # Check if player was eliminated during this hand (after showdown)
+                final_human = final_state.get("human_player", {})
+                if final_human.get("stack", 0) == 0:
+                    print(f"Player eliminated after hand {hand_num + 1}")
+                    player_eliminated = True
+                    # Don't send next_hand - game is over
+                    break
+
+                # Check if game_over event was received
+                game_over_event = next((e for e in events if e.get("type") == "game_over"), None)
+                if game_over_event:
+                    print(f"Game over event received after hand {hand_num + 1}")
+                    player_eliminated = True
+                    break
+
                 # If not eliminated and not the last hand, start next hand
-                if hand_num < 9 and not player_eliminated:
+                if hand_num < 9:
                     if final_state["state"] == "showdown":
                         await ws.send_next_hand()
                         await asyncio.sleep(0.5)  # Brief pause
