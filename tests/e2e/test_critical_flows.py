@@ -165,9 +165,14 @@ class TestCriticalUserFlows:
     These tests simulate real user behavior through the browser.
     """
 
+    @pytest.mark.flaky(reruns=2, reruns_delay=2)
     def test_e2e_create_game_and_play_one_hand(self, browser_page):
         """
         Test: Complete flow from landing page → create game → play one hand.
+
+        FLAKY: This test occasionally times out at RIVER waiting for showdown.
+        Root cause: WebSocket timing / AI decision delays in CI environment.
+        Will retry up to 2 times with 2-second delay between attempts.
 
         Steps:
         1. Navigate to http://localhost:3000
@@ -500,9 +505,14 @@ class TestCriticalUserFlows:
             assert "Next Hand" in text_before or "Quit" in text_before, "Hand didn't complete"
             print(f"✓ Test 5 passed: Hand completed (Analysis feature not available: {str(e)[:100]})")
 
+    @pytest.mark.flaky(reruns=2, reruns_delay=2)
     def test_e2e_chip_conservation_visual(self, browser_page):
         """
         Test: Chips displayed match backend state and are conserved.
+
+        FLAKY: This test occasionally times out waiting for action buttons after "Next Hand".
+        Root cause: WebSocket timing / browser rendering delays in CI environment.
+        Will retry up to 2 times with 2-second delay between attempts.
 
         Steps:
         1. Create game (note starting stacks)

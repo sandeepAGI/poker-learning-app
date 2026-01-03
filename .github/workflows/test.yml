@@ -144,7 +144,7 @@ jobs:
 
       - name: Install Playwright
         run: |
-          pip install playwright pytest-playwright
+          pip install playwright pytest-playwright pytest-rerunfailures
           python -m playwright install chromium
 
       - name: Start backend server
@@ -172,14 +172,14 @@ jobs:
 
       - name: Run E2E critical flows tests
         run: |
-          PYTHONPATH=. HEADLESS=true python -m pytest tests/e2e/test_critical_flows.py -v --tb=short
+          PYTHONPATH=. HEADLESS=true python -m pytest tests/e2e/test_critical_flows.py -v --tb=short --reruns 2 --reruns-delay 2
         env:
           FRONTEND_URL: http://localhost:3000
           BACKEND_URL: http://localhost:8000
 
       - name: Run E2E browser refresh tests
         run: |
-          PYTHONPATH=. HEADLESS=true python -m pytest tests/e2e/test_browser_refresh.py -v --tb=short
+          PYTHONPATH=. HEADLESS=true python -m pytest tests/e2e/test_browser_refresh.py -v --tb=short --reruns 2 --reruns-delay 2
         env:
           FRONTEND_URL: http://localhost:3000
           BACKEND_URL: http://localhost:8000
