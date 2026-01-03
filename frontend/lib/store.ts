@@ -21,7 +21,6 @@ interface GameStore {
   // WebSocket state (Phase 1.4)
   wsClient: PokerWebSocket | null;
   connectionState: ConnectionState;
-  aiActionQueue: any[]; // Queue of AI actions for animations
 
   // Phase 3: AI Decision History (React infinite loop fix)
   decisionHistory: AIDecisionEntry[];
@@ -45,9 +44,7 @@ interface GameStore {
   reconnectToGame: (gameId: string) => Promise<boolean>;
   initializeFromStorage: () => void;
 
-  // Phase 3: AI Decision History management
-  addAIDecision: (decision: AIDecisionEntry) => void;
-  clearDecisionHistory: () => void;
+  // Phase 3: AI Decision History management (internal)
   _processAIDecisions: (gameState: GameState) => void;
 }
 
@@ -67,7 +64,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   // WebSocket state (Phase 1.4)
   wsClient: null,
   connectionState: ConnectionState.DISCONNECTED,
-  aiActionQueue: [],
 
   // Phase 3: AI Decision History
   decisionHistory: [],
@@ -215,7 +211,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
       handAnalysis: null,
       error: null,
       loading: false,
-      aiActionQueue: [],
       awaitingContinue: false,  // Phase 4: Reset step mode state
       stepMode: false,  // Phase 4: Reset step mode
       decisionHistory: []  // Phase 3: Clear decision history on quit
@@ -240,13 +235,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
         set({ gameState, loading: false });
         // Phase 3: Process AI decisions when state updates
         get()._processAIDecisions(gameState);
-      },
-
-      onAIAction: (aiAction: any) => {
-        // Add AI action to queue for animations (Phase 2)
-        set(state => ({
-          aiActionQueue: [...state.aiActionQueue, aiAction]
-        }));
       },
 
       onError: (error: string) => {
@@ -358,18 +346,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   // Phase 3: AI Decision History Management
-  // Add a single AI decision to history (manual addition)
-  addAIDecision: (decision: AIDecisionEntry) => {
-    set(state => ({
-      decisionHistory: [decision, ...state.decisionHistory]
-    }));
-  },
-
-  // Clear all decision history (e.g., on new hand)
-  clearDecisionHistory: () => {
-    set({ decisionHistory: [] });
-  },
-
   // Internal: Process AI decisions from game state
   // Called automatically when game state updates
   _processAIDecisions: (gameState: GameState) => {

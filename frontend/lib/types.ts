@@ -60,11 +60,6 @@ export interface CreateGameResponse {
   game_id: string;
 }
 
-export interface SubmitActionRequest {
-  action: 'fold' | 'call' | 'raise';
-  amount?: number;
-}
-
 /**
  * AI Decision Entry in history
  * Tracks when AI players make decisions with their reasoning

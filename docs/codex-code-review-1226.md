@@ -48,7 +48,7 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - [x] Issue #2: Blind/Button Indicators Drift ✅ **FIXED**
 - [x] Issue #3: AI Reasoning Sidebar Data Loss ✅ **FIXED**
 - [x] Issue #4: Session Analysis Parameter Issues ✅ **FIXED**
-- [ ] Issue #5: Orphaned/Redundant Code
+- [x] Issue #5: Orphaned/Redundant Code ✅ **FIXED**
 
 ---
 
@@ -127,6 +127,35 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - **Regression**: All 23 quick tests pass
 
 **Result**: Session analysis now respects `hand_count` parameter, reducing token costs. Rate limiting enforced unconditionally, preventing API abuse.
+
+### Issue #5: Orphaned/Redundant Code ✅
+
+**Problem**: Dead code paths added noise, potential confusion, and unused bundle weight after WebSocket migration.
+
+**Dead Code Identified**:
+1. **`frontend/lib/api.ts`**: REST API methods `submitAction()` and `nextHand()` - replaced by WebSocket equivalents
+2. **`frontend/components/AnalysisModal.tsx`**: Legacy rule-based analysis modal - replaced by `AnalysisModalLLM`
+3. **`frontend/lib/store.ts`**: AI action queue scaffolding - populated but never consumed
+   - `aiActionQueue` array
+   - `addAIDecision()` method
+   - `clearDecisionHistory()` method
+4. **`frontend/lib/websocket.ts`**:
+   - `AIActionData` interface
+   - `onAIAction` callback
+   - `ai_action` message handler
+5. **`frontend/lib/types.ts`**: `SubmitActionRequest` interface
+
+**Fix Applied**:
+- **Files Modified**:
+  - `frontend/lib/api.ts`: Removed `submitAction()`, `nextHand()`, and `SubmitActionRequest` import
+  - `frontend/lib/types.ts`: Removed `SubmitActionRequest` interface
+  - `frontend/components/AnalysisModal.tsx`: **DELETED** (entire file)
+  - `frontend/lib/store.ts`: Removed `aiActionQueue`, `addAIDecision()`, `clearDecisionHistory()`, and `onAIAction` handler
+  - `frontend/lib/websocket.ts`: Removed `AIActionData` interface, `onAIAction` callback, and `ai_action` message handler
+- **Verification**: Frontend build passes (1.5s)
+- **Bundle Impact**: Tree-shaking will remove dead code, reducing bundle size
+
+**Result**: Codebase is cleaner and easier to maintain. No confusion about which code paths are active. All WebSocket-based flows clearly delineated.
 
 ---
 

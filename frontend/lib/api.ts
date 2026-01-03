@@ -5,7 +5,6 @@ import {
   GameState,
   CreateGameRequest,
   CreateGameResponse,
-  SubmitActionRequest,
 } from './types';
 
 // Get API URL from environment variable or default to localhost
@@ -87,25 +86,6 @@ export const pokerApi = {
     if (options.useCache !== undefined) params.set('use_cache', options.useCache.toString());
 
     const response = await api.get(`/games/${gameId}/analysis-session?${params}`);
-    return response.data;
-  },
-
-  // Submit a player action
-  async submitAction(
-    gameId: string,
-    action: 'fold' | 'call' | 'raise',
-    amount?: number
-  ): Promise<GameState> {
-    const response = await api.post<GameState>(`/games/${gameId}/actions`, {
-      action,
-      amount,
-    } as SubmitActionRequest);
-    return response.data;
-  },
-
-  // Start next hand
-  async nextHand(gameId: string): Promise<GameState> {
-    const response = await api.post<GameState>(`/games/${gameId}/next`);
     return response.data;
   },
 

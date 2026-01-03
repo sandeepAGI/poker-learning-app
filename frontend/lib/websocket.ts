@@ -18,20 +18,9 @@ export interface WSMessage {
   data: any;
 }
 
-export interface AIActionData {
-  player_id: string;
-  player_name: string;
-  action: string;
-  amount: number;
-  reasoning?: string;
-  stack_after: number;
-  pot_after: number;
-}
-
 // WebSocket client callbacks
 export interface WebSocketCallbacks {
   onStateUpdate: (state: GameState) => void;
-  onAIAction: (action: AIActionData) => void;
   onError: (error: string) => void;
   onGameOver: () => void;
   onConnect: () => void;
@@ -147,10 +136,6 @@ export class PokerWebSocket {
     switch (message.type) {
       case 'state_update':
         this.callbacks.onStateUpdate(message.data);
-        break;
-
-      case 'ai_action':
-        this.callbacks.onAIAction(message.data);
         break;
 
       case 'error':
