@@ -115,18 +115,33 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 ## PROGRESS TRACKING
 
 ### Fix Priority Order
-1. ✅ Issue #1 (Critical) - Mixed Import Paths - **SKIPPED** - Already fixed in previous commits
-2. ✅ Issue #2 (High) - Minimum Raise Calculation - **COMPLETE** - Tests pass, ready to commit
+1. ✅ Issue #1 (Critical) - Mixed Import Paths - **COMPLETE** - Fixed and committed
+2. ✅ Issue #2 (High) - Minimum Raise Calculation - **COMPLETE** - Fixed and committed
 3. ⏳ Issue #5 (Medium) - Decision History Deduplication - **PENDING** (Quick 1-line fix, do before #3/#4)
 4. ⏳ Issue #3 (Medium) - Reconnect Screen Errors - **PENDING**
 5. ⏳ Issue #4 (Medium) - Step Mode Banner - **PENDING**
 6. ⏳ Issue #6 (Low) - WebSocket URL Builder - **PENDING**
 
-### Issue #1: Mixed Import Paths [SKIPPED]
-**Status**: Already fixed in codebase
-- ✅ Verified `main.py:282` uses `from game.poker_engine import HandEvaluator` (not `from backend.game...`)
-- ✅ All imports in `main.py` and `websocket_manager.py` use consistent `from game...` pattern
-- ✅ No action needed
+### Issue #1: Mixed Import Paths [COMPLETE ✅]
+**Status**: Fixed and tested
+- ✅ Step 1 (Red): Created test_import_consistency.py with 3 tests (import check failed as expected)
+- ✅ Step 2 (Green): Fixed line 283 in main.py: `from backend.game.poker_engine` → `from game.poker_engine`
+- ✅ Step 3 (Regression): All 27 tests passing
+- ✅ Step 4 (Commit): Ready to commit
+
+**The Bug**:
+- Line 283 in `main.py` used: `from backend.game.poker_engine import HandEvaluator`
+- All other imports used: `from game.poker_engine import ...`
+- This caused `ModuleNotFoundError` when running `uvicorn backend.main:app` from repo root
+- Bug triggered on every hand that reached showdown (high frequency)
+
+**The Fix**:
+- Changed line 283 to use consistent import path: `from game.poker_engine import HandEvaluator`
+- Now all imports in main.py use the same `from game...` pattern
+
+**Files Changed**:
+- backend/main.py (line 283 - fixed import)
+- backend/tests/test_import_consistency.py (new test file)
 
 ### Issue #2: Minimum Raise Calculation [COMPLETE ✅]
 **Status**: Fixed and tested
@@ -191,6 +206,13 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - ✅ Updated all AI decision logic (9 locations)
 - ✅ Exposed `last_raise_amount` in REST and WebSocket APIs
 - ✅ Updated frontend calculation and TypeScript types
+- ✅ All regression tests passing (27/27)
+- ✅ Committed: `0500f5ad`
+
+### 2026-01-02: Issue #1 Complete
+- ✅ Deep review confirmed bug exists (line 283 in main.py)
+- ✅ Created test_import_consistency.py (3 tests, 1 failed as expected)
+- ✅ Fixed mixed import path: `from backend.game.poker_engine` → `from game.poker_engine`
 - ✅ All regression tests passing (27/27)
 - 📝 Ready to commit
 

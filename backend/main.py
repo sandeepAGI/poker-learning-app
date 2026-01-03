@@ -280,7 +280,7 @@ def get_game_state(game_id: str, show_ai_thinking: bool = False):
 
         if is_showdown and game.last_hand_summary:
             # Get showdown participants (players who revealed cards)
-            from backend.game.poker_engine import HandEvaluator
+            from game.poker_engine import HandEvaluator
             evaluator = HandEvaluator()
             showdown_participants = []
 
