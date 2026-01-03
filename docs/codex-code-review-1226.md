@@ -65,3 +65,6 @@ This document captures the issues uncovered during a full-stack review (backend 
 
 ---
 For each fix, add regression coverage where feasible (unit tests for backend logic, integration/e2e tests for UI changes) and verify via manual gameplay that backend/ frontend stay synchronized across websockets and REST calls.
+
+## Fuzz Test Status (2025-12-26)
+Efforts to run the full backend suite revealed that `backend/tests/test_action_fuzzing.py` still hard-fails in CI-like environments because it insists on driving a live HTTP/WebSocket server. Even after allowing the port to be configurable, the tests either hung or kept logging `httpx.ConnectError` when the FastAPI app wasn’t listening on the expected port. Running the module with reduced iteration counts works when a server is up, but exercising the default 1000/500/100/50 iterations inside the main suite is impractical (long runtime + requires an external server). We need to either (a) spin up uvicorn on the test port before running pytest, or (b) refactor these fuzz tests to use in-process clients/mocks so they don’t depend on live sockets.

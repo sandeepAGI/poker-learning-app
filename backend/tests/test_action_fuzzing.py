@@ -12,6 +12,7 @@ Strategy:
 Phase 3 of Testing Improvement Plan (10 hours total, 4 hours for fuzzing)
 """
 
+import os
 import pytest
 import random
 import asyncio
@@ -21,9 +22,15 @@ import websockets
 from typing import Dict, Any, List
 
 
-# Use port 8003 to avoid conflict with other tests
-BASE_URL = "http://127.0.0.1:8003"
-WS_BASE = "ws://127.0.0.1:8003"
+# Default to the standard backend port unless tests override via env vars
+_default_port = os.getenv("TEST_BACKEND_PORT", "8000")
+BASE_URL = os.getenv("TEST_API_BASE_URL", f"http://127.0.0.1:{_default_port}")
+WS_BASE = os.getenv("TEST_WS_BASE_URL", f"ws://127.0.0.1:{_default_port}")
+
+RAISE_ITERATIONS = int(os.getenv("TEST_FUZZ_RAISE_ITERATIONS", "1000"))
+SEQUENCE_ITERATIONS = int(os.getenv("TEST_FUZZ_SEQUENCE_ITERATIONS", "500"))
+INVALID_ITERATIONS = int(os.getenv("TEST_FUZZ_INVALID_ITERATIONS", "100"))
+EXTREME_ITERATIONS = int(os.getenv("TEST_FUZZ_EXTREME_ITERATIONS", "50"))
 
 
 class WebSocketTestClient:
@@ -113,7 +120,7 @@ class TestActionFuzzing:
         Invalid: negative, zero, too small, too large
         Valid: random amounts within valid range
         """
-        print("\n[FUZZ] Starting 1000 raise amount fuzzing iterations...")
+        print(f"\n[FUZZ] Starting {RAISE_ITERATIONS} raise amount fuzzing iterations...")
 
         stats = {
             "total": 0,
@@ -124,7 +131,7 @@ class TestActionFuzzing:
             "crashes": 0
         }
 
-        for i in range(1000):
+        for i in range(RAISE_ITERATIONS):
             try:
                 game_id = await create_test_game()
                 async with WebSocketTestClient(game_id) as ws:
@@ -202,7 +209,7 @@ class TestActionFuzzing:
         Generates random sequences like: raise→fold, call→raise→call, etc.
         Verifies game completes correctly regardless of action order.
         """
-        print("\n[FUZZ] Starting 500 action sequence fuzzing iterations...")
+        print(f"\n[FUZZ] Starting {SEQUENCE_ITERATIONS} action sequence fuzzing iterations...")
 
         stats = {
             "total_games": 0,
@@ -211,7 +218,7 @@ class TestActionFuzzing:
             "errors": 0
         }
 
-        for i in range(500):
+        for i in range(SEQUENCE_ITERATIONS):
             try:
                 game_id = await create_test_game()
                 async with WebSocketTestClient(game_id) as ws:
@@ -286,7 +293,7 @@ class TestActionFuzzing:
         Sends garbage like: "check", "bet", "allin", "FOLD", "rAiSe", "", None, 123
         Verifies game rejects gracefully without crashing.
         """
-        print("\n[FUZZ] Starting 100 invalid action type fuzzing iterations...")
+        print(f"\n[FUZZ] Starting {INVALID_ITERATIONS} invalid action type fuzzing iterations...")
 
         stats = {
             "total": 0,
@@ -303,7 +310,7 @@ class TestActionFuzzing:
             "f", "c", "r",                                      # Abbreviated
         ]
 
-        for i in range(100):
+        for i in range(INVALID_ITERATIONS):
             try:
                 game_id = await create_test_game()
                 async with WebSocketTestClient(game_id) as ws:
@@ -350,7 +357,7 @@ class TestActionFuzzing:
         Tests: INT_MAX, INT_MIN, very large floats, special values
         Verifies robust handling of edge case inputs.
         """
-        print("\n[FUZZ] Starting 50 extreme value fuzzing iterations...")
+        print(f"\n[FUZZ] Starting {EXTREME_ITERATIONS} extreme value fuzzing iterations...")
 
         stats = {
             "total": 0,
@@ -368,7 +375,7 @@ class TestActionFuzzing:
             1,                      # Minimum
         ]
 
-        for i in range(50):
+        for i in range(EXTREME_ITERATIONS):
             try:
                 game_id = await create_test_game()
                 async with WebSocketTestClient(game_id) as ws:
