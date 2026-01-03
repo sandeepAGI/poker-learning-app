@@ -80,12 +80,18 @@ export class PokerWebSocket {
 
   /**
    * Get WebSocket URL (handles http/https → ws/wss conversion)
+   * Issue #6: Properly handles APIs behind path prefixes (e.g., https://example.com/api)
    */
   private getWebSocketUrl(): string {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    const wsProtocol = apiUrl.startsWith('https') ? 'wss' : 'ws';
-    const host = apiUrl.replace(/^https?:\/\//, '');
-    return `${wsProtocol}://${host}/ws/${this.gameId}`;
+
+    // Parse URL to extract protocol and host, dropping any path prefix
+    const url = new URL(apiUrl);
+    const wsProtocol = url.protocol === 'https:' ? 'wss' : 'ws';
+
+    // Use only host (no pathname) to avoid issues with reverse proxy prefixes
+    // e.g., https://example.com/api → wss://example.com/ws/{gameId}
+    return `${wsProtocol}://${url.host}/ws/${this.gameId}`;
   }
 
   /**

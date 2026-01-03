@@ -119,8 +119,10 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 2. ✅ Issue #2 (High) - Minimum Raise Calculation - **COMPLETE** - Fixed and committed
 3. ✅ Issue #5 (Medium) - Decision History Deduplication - **COMPLETE** - Fixed and committed
 4. ✅ Issue #3 (Medium) - Reconnect Screen Errors - **COMPLETE** - Fixed and committed
-5. ✅ Issue #4 (Medium) - Step Mode Banner - **COMPLETE** - Fixed, ready to commit
-6. ⏳ Issue #6 (Low) - WebSocket URL Builder - **PENDING**
+5. ✅ Issue #4 (Medium) - Step Mode Banner - **COMPLETE** - Fixed and committed
+6. ✅ Issue #6 (Low) - WebSocket URL Builder - **COMPLETE** - Fixed, ready to commit
+
+**ALL 6 ISSUES COMPLETE! 🎉**
 
 ### Issue #1: Mixed Import Paths [COMPLETE ✅]
 **Status**: Fixed and tested
@@ -242,8 +244,29 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - frontend/lib/websocket.ts (add auto_resumed type and handler, lines 17, 29, 160-165)
 - frontend/lib/store.ts (handle auto_resumed, lines 280-285)
 
-### Issue #6: WebSocket URL Builder [PENDING]
-**Status**: Not started
+### Issue #6: WebSocket URL Builder [COMPLETE ✅]
+**Status**: Fixed
+- ✅ Step 1 (Fix): Used `new URL()` to properly parse API URL
+- ✅ Step 2 (Fix): Extract only protocol and host, drop pathname
+- ⏳ Step 3 (Commit): Ready to commit
+
+**The Bug**:
+- Frontend URL builder used simple string replace: `apiUrl.replace(/^https?:\/\//, '')`
+- If `NEXT_PUBLIC_API_URL = 'https://example.com/api'` (behind reverse proxy)
+- Result: `host = 'example.com/api'`
+- WebSocket URL: `wss://example.com/api/ws/{gameId}` ❌
+- But FastAPI serves at `/ws/{gameId}`, not `/api/ws/{gameId}`
+- Connection fails with 404/403 in production deployments
+
+**The Fix**:
+- Use `new URL()` API to properly parse the URL
+- Extract `url.protocol` and `url.host` only
+- Drop `url.pathname` to avoid prefix issues
+- Example: `https://example.com/api` → `wss://example.com/ws/{gameId}` ✅
+- Localhost continues to work: `http://localhost:8000` → `ws://localhost:8000/ws/{gameId}` ✅
+
+**Files Changed**:
+- frontend/lib/websocket.ts (lines 85-94 - use new URL() parser)
 
 ---
 
@@ -295,4 +318,37 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - ✅ Store clears `awaitingContinue` flag when auto-resumed
 - ✅ Continue button now disappears when backend auto-resumes
 - ✅ Fixes misleading "Paused" banner after timeout
+- ✅ All regression tests passing (41/41)
+- ✅ Committed: `b16412e1`
+
+### 2026-01-02: Issue #6 Complete
+
+- ✅ Used `new URL()` API to properly parse WebSocket URL
+- ✅ Extract only protocol and host, drop pathname
+- ✅ Fixes WebSocket connections behind reverse proxy prefixes
+- ✅ Example: `https://example.com/api` → `wss://example.com/ws/{gameId}`
+- ✅ Localhost still works: `http://localhost:8000` → `ws://localhost:8000/ws/{gameId}`
 - 📝 Ready to commit
+
+### 2026-01-02: ALL 6 ISSUES COMPLETE! 🎉
+
+**Issues Fixed**:
+1. ✅ Issue #1 (Critical) - Mixed Import Paths - Commit: `469fc711`
+2. ✅ Issue #2 (High) - Minimum Raise Calculation - Commit: `0500f5ad`
+3. ✅ Issue #5 (Medium) - Decision History Deduplication - Commit: `c623dc2a`
+4. ✅ Issue #3 (Medium) - Reconnect Screen Errors - Commit: `352288ef`
+5. ✅ Issue #4 (Medium) - Step Mode Banner - Commit: `b16412e1`
+6. ✅ Issue #6 (Low) - WebSocket URL Builder - Ready to commit
+
+**Impact**:
+- Critical crash on showdown fixed
+- Texas Hold'em rules now correct
+- AI decision deduplication works after refresh
+- Connection vs action errors properly separated
+- Step mode banner clears on timeout
+- Production deployments behind reverse proxies now supported
+
+**Test Results**:
+- All 41 backend tests passing
+- All frontend builds successful
+- All commits tested with pre-commit hook
