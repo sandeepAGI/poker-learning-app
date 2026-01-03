@@ -346,11 +346,14 @@ class AIStrategy:
     @staticmethod
     def make_decision_with_reasoning(personality: str, hole_cards: List[str], community_cards: List[str],
                                    current_bet: int, pot_size: int, player_stack: int, player_bet: int = 0,
-                                   big_blind: int = 10) -> AIDecision:
+                                   big_blind: int = 10, last_raise_amount: Optional[int] = None) -> AIDecision:
         """
         Make AI decision with full reasoning for transparency.
-        Fixed: Uses big_blind for minimum raise calculation
+        Fixed: Uses last_raise_amount for correct minimum raise calculation per Texas Hold'em rules
         """
+
+        # Calculate minimum raise increment (Texas Hold'em rule)
+        min_raise_increment = last_raise_amount if last_raise_amount is not None else big_blind
 
         # Hand strength calculation
         evaluator = HandEvaluator()
@@ -371,7 +374,7 @@ class AIStrategy:
             # SPR-aware Conservative: Tighter with deep stacks, more committed with shallow stacks
             if spr < 3 and hand_strength >= 0.45:  # Low SPR - pot-committed with two pair+
                 action = "raise" if random.random() > 0.3 else "call"
-                amount = max(current_bet + big_blind, player_stack) if action == "raise" else call_amount
+                amount = max(current_bet + min_raise_increment, player_stack) if action == "raise" else call_amount
                 amount = min(amount, player_stack)
                 reasoning = f"Low SPR ({spr:.1f}) - pot committed with {hand_rank} ({hand_strength:.1%})"
                 confidence = 0.85
@@ -382,7 +385,7 @@ class AIStrategy:
                 confidence = 0.8
             elif hand_strength >= 0.75:  # Flush or better
                 action = "raise" if random.random() > 0.3 else "call"
-                amount = max(current_bet + big_blind, current_bet * 2) if action == "raise" else call_amount
+                amount = max(current_bet + min_raise_increment, current_bet * 2) if action == "raise" else call_amount
                 amount = min(amount, player_stack)
                 reasoning = f"Premium hand ({hand_rank}, {hand_strength:.1%}). Conservative value betting."
                 confidence = 0.9
@@ -413,7 +416,7 @@ class AIStrategy:
                 bluff_chance = 0.4 if call_amount <= player_stack // 20 else 0.2
                 if random.random() < bluff_chance:
                     action = "raise"
-                    amount = max(current_bet + big_blind, current_bet * 2)
+                    amount = max(current_bet + min_raise_increment, current_bet * 2)
                     amount = min(amount, player_stack)
                     reasoning = f"High SPR ({spr:.1f}) - applying pressure with weak {hand_rank}. Bluff play."
                     confidence = 0.4
@@ -424,14 +427,14 @@ class AIStrategy:
                     confidence = 0.7
             elif hand_strength >= 0.55:  # Three of a kind or better
                 action = "raise" if random.random() > 0.2 else "call"
-                amount = max(current_bet + big_blind, current_bet * 3) if action == "raise" else call_amount
+                amount = max(current_bet + min_raise_increment, current_bet * 3) if action == "raise" else call_amount
                 amount = min(amount, player_stack)
                 reasoning = f"Strong hand ({hand_rank}, {hand_strength:.1%}). Aggressive value betting."
                 confidence = 0.8
             elif hand_strength >= 0.25:  # Any pair
                 if random.random() > 0.4:
                     action = "raise" if random.random() > 0.6 else "call"
-                    amount = max(current_bet + big_blind, current_bet * 2) if action == "raise" else call_amount
+                    amount = max(current_bet + min_raise_increment, current_bet * 2) if action == "raise" else call_amount
                     amount = min(amount, player_stack)
                     reasoning = f"Playable hand ({hand_rank}, {hand_strength:.1%}). Aggressive play to build pot."
                     confidence = 0.6
@@ -443,7 +446,7 @@ class AIStrategy:
             else:  # High card
                 if random.random() > 0.7 and call_amount <= player_stack // 40:
                     action = "raise"
-                    amount = max(current_bet + big_blind, current_bet * 2)
+                    amount = max(current_bet + min_raise_increment, current_bet * 2)
                     amount = min(amount, player_stack)
                     reasoning = f"Weak hand ({hand_rank}) but bluffing for fold equity. Aggressive move."
                     confidence = 0.3
@@ -464,7 +467,7 @@ class AIStrategy:
                 confidence = 0.85
             elif hand_strength >= 0.65:  # Straight or better
                 action = "raise"
-                amount = max(current_bet + big_blind, current_bet * 2)
+                amount = max(current_bet + min_raise_increment, current_bet * 2)
                 amount = min(amount, player_stack)
                 reasoning = f"Strong hand ({hand_rank}, {hand_strength:.1%}). Mathematical value betting."
                 confidence = 0.9
@@ -523,7 +526,7 @@ class AIStrategy:
             # TAG - premium hands only, but aggressive when playing
             if hand_strength >= 0.75:  # Flush or better - premium
                 action = "raise"
-                amount = max(current_bet + big_blind, pot_size)
+                amount = max(current_bet + min_raise_increment, pot_size)
                 amount = min(amount, player_stack)
                 reasoning = f"Premium hand ({hand_rank}, {hand_strength:.1%}). TAG value betting."
                 confidence = 0.95
@@ -535,7 +538,7 @@ class AIStrategy:
                     confidence = 0.9
                 else:  # Raise for value
                     action = "raise"
-                    amount = max(current_bet + big_blind, current_bet * 2)
+                    amount = max(current_bet + min_raise_increment, current_bet * 2)
                     amount = min(amount, player_stack)
                     reasoning = f"Strong hand ({hand_rank}). TAG value raise."
                     confidence = 0.85
@@ -554,13 +557,13 @@ class AIStrategy:
             # Hyper-aggressive - raises almost always
             if hand_strength >= 0.45:  # Two pair or better
                 action = "raise"
-                amount = max(current_bet + big_blind, pot_size * 2)
+                amount = max(current_bet + min_raise_increment, pot_size * 2)
                 amount = min(amount, player_stack)
                 reasoning = f"Strong hand ({hand_rank}). Maniac value aggression!"
                 confidence = 0.7
             elif random.random() < 0.70:  # 70% bluff frequency
                 action = "raise"
-                amount = max(current_bet + big_blind, pot_size)
+                amount = max(current_bet + min_raise_increment, pot_size)
                 amount = min(amount, player_stack)
                 reasoning = f"Bluffing with {hand_rank}. Maniac pressure play!"
                 confidence = 0.3
@@ -675,6 +678,7 @@ class PokerGame:
         # Fixed: Bug #1 - Turn order tracking
         self.current_player_index = 0
         self.last_raiser_index = None
+        self.last_raise_amount = None  # Track size of last raise for minimum raise calculation
 
         # Learning features
         self.hand_events: List[HandEvent] = []
@@ -983,6 +987,7 @@ class PokerGame:
         self.current_bet = 0
         self.current_state = GameState.PRE_FLOP
         self.last_raiser_index = None
+        self.last_raise_amount = None
 
         # Reset deck
         self.deck_manager.reset()
@@ -1108,6 +1113,8 @@ class PokerGame:
         # Current bet is the actual BB amount (might be less if BB went all-in)
         self.current_bet = bb_amount
         self.last_raiser_index = bb_index  # BB is last raiser pre-flop
+        # For pre-flop, the first raise must be at least big_blind (from bb_amount to bb_amount + big_blind)
+        self.last_raise_amount = self.big_blind
 
         # FIX-01: Store blind positions for frontend display
         self.small_blind_index = sb_index
@@ -1199,7 +1206,10 @@ class PokerGame:
         elif action == "raise":
             # SPECIAL CASE: If "raise" amount is below minimum BUT player is going all-in,
             # treat it as a call instead (correct poker behavior)
-            min_raise = self.current_bet + self.big_blind
+            # Texas Hold'em rule: Min raise = current_bet + (size of previous raise)
+            # First raise in a round uses big_blind as the minimum increment
+            min_raise_increment = self.last_raise_amount if self.last_raise_amount is not None else self.big_blind
+            min_raise = self.current_bet + min_raise_increment
             if amount < min_raise:
                 # Check if this is an all-in attempt
                 max_possible_bet = player.stack + player.current_bet
@@ -1228,7 +1238,11 @@ class PokerGame:
 
                 bet_amount = player.bet(bet_increment)
                 self.pot += bet_amount
+
+                # Track the raise amount for next player's minimum raise calculation
+                previous_bet = self.current_bet
                 self.current_bet = raise_total  # CRITICAL: Use raise_total, not player.current_bet
+                self.last_raise_amount = raise_total - previous_bet  # Store size of this raise
                 self.last_raiser_index = player_index
                 player.has_acted = True
 
@@ -1369,7 +1383,8 @@ class PokerGame:
         """
         ai_decision = AIStrategy.make_decision_with_reasoning(
             player.personality, player.hole_cards, self.community_cards,
-            self.current_bet, self.pot, player.stack, player.current_bet, self.big_blind
+            self.current_bet, self.pot, player.stack, player.current_bet, self.big_blind,
+            self.last_raise_amount
         )
 
         # Store decision for frontend
@@ -1540,6 +1555,7 @@ class PokerGame:
             player.reset_for_new_round()
         self.current_bet = 0
         self.last_raiser_index = None
+        self.last_raise_amount = None  # Reset min raise to big_blind for new round
 
         # Phase 3: Track pot at start of new round
         self._pot_at_round_start = self.pot

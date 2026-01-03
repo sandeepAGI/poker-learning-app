@@ -49,6 +49,7 @@ export interface GameState {
   dealer_position: number;
   small_blind_position: number;
   big_blind_position: number;
+  last_raise_amount: number | null;  // Issue #2: Minimum raise tracking
 }
 
 export interface CreateGameRequest {

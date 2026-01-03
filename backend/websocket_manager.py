@@ -325,7 +325,8 @@ def serialize_game_state(game: PokerGame, show_ai_thinking: bool = False) -> Dic
         "hand_count": game.hand_count,
         "dealer_position": dealer_position,
         "small_blind_position": sb_position,
-        "big_blind_position": bb_position
+        "big_blind_position": bb_position,
+        "last_raise_amount": game.last_raise_amount  # Issue #2: Minimum raise tracking
     }
 
 

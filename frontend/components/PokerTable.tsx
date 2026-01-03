@@ -49,7 +49,9 @@ export function PokerTable() {
   const canCall = gameState.human_player.stack > 0;  // Can call if have any chips
 
   // Bug Fix #1: Proper raise amount validation
-  const minRaise = gameState.current_bet + (gameState.big_blind || 10);
+  // Issue #2: Use last_raise_amount for minimum raise (Texas Hold'em rule)
+  const minRaiseIncrement = gameState.last_raise_amount ?? gameState.big_blind ?? 10;
+  const minRaise = gameState.current_bet + minRaiseIncrement;
   // Bug Fix: All-in must include current bet (e.g., big blind already posted)
   const maxRaise = gameState.human_player.stack + gameState.human_player.current_bet;
 
