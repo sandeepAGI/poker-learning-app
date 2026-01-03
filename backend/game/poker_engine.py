@@ -374,7 +374,8 @@ class AIStrategy:
             # SPR-aware Conservative: Tighter with deep stacks, more committed with shallow stacks
             if spr < 3 and hand_strength >= 0.45:  # Low SPR - pot-committed with two pair+
                 action = "raise" if random.random() > 0.3 else "call"
-                amount = max(current_bet + min_raise_increment, player_stack) if action == "raise" else call_amount
+                # FIX: Don't use max with player_stack, just calculate min raise and cap it
+                amount = (current_bet + min_raise_increment) if action == "raise" else call_amount
                 amount = min(amount, player_stack)
                 reasoning = f"Low SPR ({spr:.1f}) - pot committed with {hand_rank} ({hand_strength:.1%})"
                 confidence = 0.85
