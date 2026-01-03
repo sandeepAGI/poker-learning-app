@@ -46,7 +46,7 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 ### Progress Tracking
 - [x] Issue #1: Short-Stack Call/Raise UI ✅ **FIXED**
 - [x] Issue #2: Blind/Button Indicators Drift ✅ **FIXED**
-- [ ] Issue #3: AI Reasoning Sidebar Data Loss
+- [x] Issue #3: AI Reasoning Sidebar Data Loss ✅ **FIXED**
 - [ ] Issue #4: Session Analysis Parameter Issues
 - [ ] Issue #5: Orphaned/Redundant Code
 
@@ -84,6 +84,24 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - **Regression**: All 23 quick tests pass
 
 **Result**: WebSocket and REST API now return identical blind positions. Button indicators stay fixed during hands, matching poker rules.
+
+### Issue #3: AI Reasoning Sidebar Data Loss ✅
+
+**Problem**: When `show_ai_thinking=false`, server stripped reasoning/metrics. Frontend deduped by reasoning text, causing data loss when toggling sidebar.
+
+**Fix Applied**:
+- **Backend Files**:
+  - `backend/game/poker_engine.py`: Added `decision_id` field to AIDecision, generate UUID on creation
+  - `backend/websocket_manager.py`: Always include `decision_id` in serialized output
+- **Frontend Files**:
+  - `frontend/lib/types.ts`: Made AI metrics optional, added required `decision_id`
+  - `frontend/lib/store.ts`: Dedupe by `decision_id` instead of reasoning text
+  - `frontend/components/AISidebar.tsx`: Handle optional fields gracefully
+- **Tests**: New `test_ai_decision_persistence.py` (5/5 tests pass)
+- **Regression**: All 23 quick tests pass
+- **Frontend Build**: ✅ Passes (1.4s)
+
+**Result**: AI decisions now have unique IDs. Toggling AI thinking preserves data. Educational feature works reliably.
 
 ---
 

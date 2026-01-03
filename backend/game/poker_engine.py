@@ -2,6 +2,7 @@
 # Fixed: Turn order, fold resolution, raise validation, raise accounting, side pots
 import random
 import json
+import uuid  # FIX Issue #3: Generate unique IDs for AI decisions
 from typing import List, Dict, Optional, Tuple
 from enum import Enum
 from dataclasses import dataclass, field
@@ -41,6 +42,7 @@ class AIDecision:
     pot_odds: float
     confidence: float
     spr: float = 0.0  # Stack-to-Pot Ratio for pot-relative decision making
+    decision_id: str = ""  # FIX Issue #3: Unique ID for deduplication (generated on creation)
 
 @dataclass
 class ActionRecord:
@@ -588,7 +590,8 @@ class AIStrategy:
             hand_strength=hand_strength,
             pot_odds=pot_odds,
             confidence=confidence,
-            spr=spr
+            spr=spr,
+            decision_id=str(uuid.uuid4())  # FIX Issue #3: Unique ID for reliable deduplication
         )
 
 class PokerGame:

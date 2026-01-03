@@ -177,7 +177,7 @@ def serialize_game_state(game: PokerGame, show_ai_thinking: bool = False) -> Dic
         "is_current_turn": game.get_current_player() == human_player if game.get_current_player() else False
     }
 
-    # AI decisions data
+    # FIX Issue #3: AI decisions data - always include decision_id for deduplication
     ai_decisions_data = {}
     if show_ai_thinking:
         for player_id, decision in game.last_ai_decisions.items():
@@ -188,13 +188,16 @@ def serialize_game_state(game: PokerGame, show_ai_thinking: bool = False) -> Dic
                 "hand_strength": decision.hand_strength,
                 "pot_odds": decision.pot_odds,
                 "confidence": decision.confidence,
-                "spr": decision.spr
+                "spr": decision.spr,
+                "decision_id": decision.decision_id  # Always include for deduplication
             }
     else:
+        # Even with thinking hidden, include decision_id for reliable deduplication
         for player_id, decision in game.last_ai_decisions.items():
             ai_decisions_data[player_id] = {
                 "action": decision.action,
-                "amount": decision.amount
+                "amount": decision.amount,
+                "decision_id": decision.decision_id  # Critical for deduplication
             }
 
     # FIX-09: Enhanced winner info with poker-accurate hand reveals (same as main.py)

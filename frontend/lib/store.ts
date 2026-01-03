@@ -384,9 +384,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // Add new AI decisions to history
     const newDecisions: AIDecisionEntry[] = [];
     Object.entries(gameState.last_ai_decisions).forEach(([playerId, decision]) => {
-      // Check if this decision is already in history
+      // FIX Issue #3: Deduplicate based on decision_id instead of reasoning text
+      // This prevents data loss when reasoning is hidden (show_ai_thinking=false)
       const alreadyExists = currentHistory.some(
-        entry => entry.playerId === playerId && entry.decision.reasoning === decision.reasoning
+        entry => entry.playerId === playerId && entry.decision.decision_id === decision.decision_id
       );
 
       if (!alreadyExists) {

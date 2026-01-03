@@ -69,27 +69,27 @@ export function AISidebar({ isOpen, decisions }: AISidebarProps) {
 
                     {/* Reasoning */}
                     <div className="text-gray-200 text-xs italic mb-2 leading-relaxed">
-                      "{entry.decision.reasoning}"
+                      "{entry.decision.reasoning || 'Thinking...'}"
                     </div>
 
-                    {/* Metrics */}
+                    {/* Metrics - FIX Issue #3: Handle optional fields */}
                     <div className="grid grid-cols-3 gap-2 text-[10px] text-gray-300">
                       <div className="bg-[#0A4D26]/60 rounded px-2 py-1">
                         <div className="text-gray-400">SPR</div>
                         <div className="font-bold text-[#FCD34D]">
-                          {entry.decision.spr.toFixed(1)}
+                          {entry.decision.spr?.toFixed(1) ?? '-'}
                         </div>
                       </div>
                       <div className="bg-[#0A4D26]/60 rounded px-2 py-1">
                         <div className="text-gray-400">Pot Odds</div>
                         <div className="font-bold text-[#FCD34D]">
-                          {(entry.decision.pot_odds * 100).toFixed(0)}%
+                          {entry.decision.pot_odds !== undefined ? (entry.decision.pot_odds * 100).toFixed(0) + '%' : '-'}
                         </div>
                       </div>
                       <div className="bg-[#0A4D26]/60 rounded px-2 py-1">
                         <div className="text-gray-400">Hand</div>
                         <div className="font-bold text-[#FCD34D]">
-                          {(entry.decision.hand_strength * 100).toFixed(0)}%
+                          {entry.decision.hand_strength !== undefined ? (entry.decision.hand_strength * 100).toFixed(0) + '%' : '-'}
                         </div>
                       </div>
                     </div>

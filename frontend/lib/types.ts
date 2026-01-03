@@ -16,11 +16,12 @@ export interface Player {
 export interface AIDecision {
   action: string;
   amount: number;
-  reasoning: string;
-  hand_strength: number;
-  pot_odds: number;
-  confidence: number;
-  spr: number;
+  reasoning?: string;  // Optional when show_ai_thinking=false
+  hand_strength?: number;  // Optional when show_ai_thinking=false
+  pot_odds?: number;  // Optional when show_ai_thinking=false
+  confidence?: number;  // Optional when show_ai_thinking=false
+  spr?: number;  // Optional when show_ai_thinking=false
+  decision_id: string;  // FIX Issue #3: Always present for deduplication
 }
 
 export interface WinnerInfo {
