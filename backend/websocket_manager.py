@@ -300,23 +300,12 @@ def serialize_game_state(game: PokerGame, show_ai_thinking: bool = False) -> Dic
             winner_info["all_showdown_hands"] = all_showdown_hands
             winner_info["folded_players"] = folded_players
 
-    # Calculate button positions (for educational UI indicators)
-    # Dealer button position
+    # FIX Issue #2: Use stored blind positions (don't recompute)
+    # Blind positions are set at the start of the hand and should not change
+    # even if a blind poster busts mid-hand. This matches REST API behavior.
     dealer_position = game.dealer_index
-
-    # Small blind position (next player with chips after dealer)
-    sb_position = (game.dealer_index + 1) % len(game.players)
-    for _ in range(len(game.players)):
-        if game.players[sb_position].stack > 0:
-            break
-        sb_position = (sb_position + 1) % len(game.players)
-
-    # Big blind position (next player with chips after SB)
-    bb_position = (sb_position + 1) % len(game.players)
-    for _ in range(len(game.players)):
-        if game.players[bb_position].stack > 0:
-            break
-        bb_position = (bb_position + 1) % len(game.players)
+    sb_position = game.small_blind_index
+    bb_position = game.big_blind_index
 
     return {
         "state": game.current_state.value,

@@ -45,7 +45,7 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 
 ### Progress Tracking
 - [x] Issue #1: Short-Stack Call/Raise UI ✅ **FIXED**
-- [ ] Issue #2: Blind/Button Indicators Drift
+- [x] Issue #2: Blind/Button Indicators Drift ✅ **FIXED**
 - [ ] Issue #3: AI Reasoning Sidebar Data Loss
 - [ ] Issue #4: Session Analysis Parameter Issues
 - [ ] Issue #5: Orphaned/Redundant Code
@@ -69,6 +69,21 @@ For each issue, we follow the TDD Red-Green-Refactor cycle:
 - **Frontend Build**: ✅ Passes (2.8s)
 
 **Result**: Players can now call or raise all-in with any amount of chips, matching poker rules and backend behavior.
+
+### Issue #2: Blind/Button Indicators Drift ✅
+
+**Problem**: WebSocket recomputed blind positions by skipping busted players, while REST API used stored indexes. This caused UI to show conflicting button markers.
+
+**Fix Applied**:
+- **File**: `backend/websocket_manager.py` (lines 303-308)
+- **Changes**:
+  - Removed blind position recomputation logic (15 lines → 3 lines)
+  - Use stored `game.small_blind_index` and `game.big_blind_index`
+  - Matches REST API behavior (already correct)
+- **Tests**: New `test_blind_position_consistency.py` (3/3 unit tests pass)
+- **Regression**: All 23 quick tests pass
+
+**Result**: WebSocket and REST API now return identical blind positions. Button indicators stay fixed during hands, matching poker rules.
 
 ---
 
