@@ -536,12 +536,13 @@ class TestEdgeCaseScenarios:
     @pytest.mark.asyncio
     async def test_play_until_elimination(self):
         """
-        Test playing until human player is eliminated.
+        Test playing until human player or all AI players are eliminated.
 
         Tests:
         - Game handles player running out of chips
         - Elimination is detected correctly
         - No crashes on $0 stack
+        - Handles both human elimination and all-AI elimination
         """
         game_id = await create_test_game(ai_count=3)
 
@@ -550,20 +551,65 @@ class TestEdgeCaseScenarios:
 
             max_hands = 50  # Limit to prevent infinite loop
             hands_played = 0
+            game_over = False
 
             for hand_num in range(max_hands):
+                # Check for game_over event in recent messages
+                for msg in ws.received_messages[-5:]:
+                    if msg.get("type") == "game_over":
+                        game_over = True
+                        print(f"✅ Game over detected after {hands_played} hands")
+                        break
+
+                if game_over:
+                    break
+
                 # Get current state (might already be our turn)
                 current_state_data = ws.get_latest_state()
-                if not current_state_data or not current_state_data.get("human_player", {}).get("is_current_turn"):
+                if not current_state_data:
+                    # Try to get one more event, but don't fail if game is over
+                    try:
+                        state_event = await ws.wait_for_event("state_update", timeout=10.0)
+                        current_state_data = state_event["data"]
+                    except TimeoutError:
+                        # Check if game_over was sent
+                        for msg in ws.received_messages[-5:]:
+                            if msg.get("type") == "game_over":
+                                game_over = True
+                                break
+                        if game_over:
+                            print(f"✅ Game over detected (timeout waiting for state)")
+                            break
+                        raise
+
+                if not current_state_data.get("human_player", {}).get("is_current_turn"):
                     # Wait for our turn if it's not already
-                    state_event = await ws.wait_for_event("state_update", timeout=10.0)
-                    current_state_data = state_event["data"]
+                    try:
+                        state_event = await ws.wait_for_event("state_update", timeout=10.0)
+                        current_state_data = state_event["data"]
+                    except TimeoutError:
+                        # Check if game_over was sent
+                        for msg in ws.received_messages[-5:]:
+                            if msg.get("type") == "game_over":
+                                game_over = True
+                                break
+                        if game_over:
+                            print(f"✅ Game over detected (timeout waiting for turn)")
+                            break
+                        raise
 
                 human_player = current_state_data["human_player"]
 
-                # Check if eliminated
+                # Check if human eliminated
                 if human_player["stack"] == 0:
-                    print(f"✅ Player eliminated after {hands_played} hands")
+                    print(f"✅ Human player eliminated after {hands_played} hands")
+                    break
+
+                # Check if all AI players eliminated
+                ai_players = [p for p in current_state_data["players"] if not p.get("is_human")]
+                all_ai_eliminated = all(p["stack"] == 0 for p in ai_players)
+                if all_ai_eliminated:
+                    print(f"✅ All AI players eliminated after {hands_played} hands")
                     break
 
                 # Go all-in to speed up elimination
@@ -574,7 +620,7 @@ class TestEdgeCaseScenarios:
                 hands_played += 1
 
                 final_state = ws.get_latest_state()
-                if final_state["state"] == "showdown" and hand_num < max_hands - 1:
+                if final_state and final_state.get("state") == "showdown" and hand_num < max_hands - 1:
                     await ws.send_next_hand()
                     await asyncio.sleep(0.3)
 

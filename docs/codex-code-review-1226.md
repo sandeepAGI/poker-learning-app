@@ -2,6 +2,56 @@
 
 This document captures the issues uncovered during a full-stack review (backend + frontend), along with recommended fixes and verification ideas.
 
+---
+
+## BASELINE TEST RESULTS (2026-01-02)
+
+**Initial**: 34/35 PASSED (97%)
+- ✗ `test_play_until_elimination` - TimeoutError after 40 hands (22min)
+
+**Fix Applied**: Handle `game_over` event in elimination test
+- File: `backend/tests/test_user_scenarios.py::test_play_until_elimination`
+- Changes: Check for `game_over` event, handle all-AI elimination, graceful timeout handling
+- Result: ✅ Test now PASSES in 11.5 minutes
+
+**Final Baseline**: 35/35 PASSED (100%) ✅
+- ✓ All negative action tests (12/12)
+- ✓ All hand evaluator validation tests (5/5)
+- ✓ All property-based tests (6/6, including 1000 random scenarios)
+- ✓ All user scenario tests (12/12)
+- ✓ Frontend build (2.5s)
+
+---
+
+## FIX PROTOCOL (Test-Driven Development)
+
+For each issue, we follow the TDD Red-Green-Refactor cycle:
+
+1. **Review**: Analyze issue and confirm agreement on the problem
+2. **Red - Write Failing Test**: Write a test that demonstrates the bug/issue
+   - Test should FAIL, proving the issue exists
+   - Test should be specific to the issue being fixed
+3. **Green - Implement Fix**: Write minimal code to make the test pass
+   - Make the failing test pass
+   - Don't over-engineer or add extra features
+4. **Refactor**: Clean up code if needed while keeping tests green
+   - Improve code quality without changing behavior
+   - Ensure all tests still pass
+5. **Regression**: Run full test suite (unit + integration + e2e)
+   - Confirm all existing tests still pass
+   - Confirm new test passes
+6. **Document**: Update progress tracking below
+7. **Commit**: Git commit and push with descriptive message
+
+### Progress Tracking
+- [ ] Issue #1: Short-Stack Call/Raise UI
+- [ ] Issue #2: Blind/Button Indicators Drift
+- [ ] Issue #3: AI Reasoning Sidebar Data Loss
+- [ ] Issue #4: Session Analysis Parameter Issues
+- [ ] Issue #5: Orphaned/Redundant Code
+
+---
+
 ## 1. Short-Stack Call/Raise UI Blocks Valid Actions
 - **Location**: `frontend/components/PokerTable.tsx` lines 44-54.
 - **Problem**: The UI disables the Call button when `stack < current_bet - current_bet_posted` and disables Raise unless `stack > callAmount`, even though the backend (`Player.bet` and `PokerGame.apply_action`) supports calling or shoving for less. Human players are forced to fold whenever they have fewer chips than the current bet, diverging from actual poker rules and backend behavior.
