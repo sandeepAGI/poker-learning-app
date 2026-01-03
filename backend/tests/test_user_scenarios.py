@@ -267,26 +267,66 @@ class TestComplexBettingSequences:
             # Wait for AI actions and flop
             events = await ws.drain_events(max_events=50, timeout=10.0)
 
-            # Flop: Call
+            # FIX: Handle multiple AI re-raises (limit to 5 to avoid infinite loops)
+            for re_raise_count in range(5):
+                current_state = ws.get_latest_state()
+                if current_state["state"] == "pre_flop" and current_state.get("human_player", {}).get("is_current_turn"):
+                    print(f"Pre-flop: AI re-raised (attempt {re_raise_count + 1}), calling")
+                    await ws.send_action("call")
+                    events = await ws.drain_events(max_events=50, timeout=10.0)
+                else:
+                    break
+
+            # Flop: Call (or handle re-raise)
             flop_state = ws.get_latest_state()
             if flop_state["state"] == "flop":
                 print("Flop: Calling")
                 await ws.send_action("call")
                 events = await ws.drain_events(max_events=50, timeout=10.0)
 
-            # Turn: Call
+                # Handle multiple AI re-raises on flop
+                for re_raise_count in range(5):
+                    current_state = ws.get_latest_state()
+                    if current_state["state"] == "flop" and current_state.get("human_player", {}).get("is_current_turn"):
+                        print(f"Flop: AI re-raised (attempt {re_raise_count + 1}), calling again")
+                        await ws.send_action("call")
+                        events = await ws.drain_events(max_events=50, timeout=10.0)
+                    else:
+                        break
+
+            # Turn: Call (or handle re-raise)
             turn_state = ws.get_latest_state()
             if turn_state["state"] == "turn":
                 print("Turn: Calling")
                 await ws.send_action("call")
                 events = await ws.drain_events(max_events=50, timeout=10.0)
 
-            # River: Call
+                # Handle multiple AI re-raises on turn
+                for re_raise_count in range(5):
+                    current_state = ws.get_latest_state()
+                    if current_state["state"] == "turn" and current_state.get("human_player", {}).get("is_current_turn"):
+                        print(f"Turn: AI re-raised (attempt {re_raise_count + 1}), calling again")
+                        await ws.send_action("call")
+                        events = await ws.drain_events(max_events=50, timeout=10.0)
+                    else:
+                        break
+
+            # River: Call (or handle re-raise)
             river_state = ws.get_latest_state()
             if river_state["state"] == "river":
                 print("River: Calling")
                 await ws.send_action("call")
                 events = await ws.drain_events(max_events=50, timeout=10.0)
+
+                # Handle multiple AI re-raises on river
+                for re_raise_count in range(5):
+                    current_state = ws.get_latest_state()
+                    if current_state["state"] == "river" and current_state.get("human_player", {}).get("is_current_turn"):
+                        print(f"River: AI re-raised (attempt {re_raise_count + 1}), calling again")
+                        await ws.send_action("call")
+                        events = await ws.drain_events(max_events=50, timeout=10.0)
+                    else:
+                        break
 
             # Should reach showdown
             final_state = ws.get_latest_state()
