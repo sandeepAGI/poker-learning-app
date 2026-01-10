@@ -10,7 +10,7 @@ jobs:
   backend-tests:
     name: Backend Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 50
 
     steps:
       - name: Checkout code
@@ -35,6 +35,16 @@ jobs:
             backend/tests/test_negative_actions.py \
             backend/tests/test_hand_evaluator_validation.py \
             backend/tests/test_property_based_enhanced.py \
+            -v --tb=short
+
+      - name: Run critical poker logic tests
+        run: |
+          PYTHONPATH=backend python -m pytest \
+            backend/tests/test_side_pots.py \
+            backend/tests/test_all_in_scenarios.py \
+            backend/tests/test_bb_option.py \
+            backend/tests/test_raise_validation.py \
+            backend/tests/test_heads_up.py \
             -v --tb=short
 
       - name: Run Phase 4 scenario tests
@@ -223,6 +233,6 @@ jobs:
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Total: 67 tests across 7 phases**" >> $GITHUB_STEP_SUMMARY
-          echo "- Backend: 46 tests (Phases 1-4, 7)" >> $GITHUB_STEP_SUMMARY
+          echo "**Total: 102 tests across 7 phases**" >> $GITHUB_STEP_SUMMARY
+          echo "- Backend: 81 tests (Phases 1-4, 7 + critical poker logic)" >> $GITHUB_STEP_SUMMARY
           echo "- E2E: 21 tests (Phase 5 + browser refresh)" >> $GITHUB_STEP_SUMMARY

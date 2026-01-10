@@ -56,13 +56,14 @@ git commit -m "Your message" --no-verify
 ### 2.1 Full Test Suite (`test.yml`)
 
 **Triggers**: Push to main/develop, Pull Requests
-**Runtime**: ~25 minutes
+**Runtime**: ~27 minutes
 **Jobs**:
 
-#### Job 1: Backend Tests (20 min)
+#### Job 1: Backend Tests (22 min)
 - Phase 1-3 tests (23 tests)
+- Critical poker logic tests (35 tests) - **NEW**
 - Phase 4 scenario tests (12 tests)
-- Core regression tests (41 tests)
+- Core regression tests (11 tests)
 - Coverage report generation
 
 #### Job 2: Frontend Build (2 min)
@@ -80,7 +81,14 @@ git commit -m "Your message" --no-verify
 - Display pass/fail status
 - Generate GitHub summary
 
-**Total**: 49 tests across all phases
+**Critical Poker Logic Tests (35 tests):**
+- test_side_pots.py (4 tests) - side pot distribution
+- test_all_in_scenarios.py (10 tests) - all-in edge cases
+- test_bb_option.py (4 tests) - Big Blind option rule
+- test_raise_validation.py (4 tests) - minimum raise enforcement
+- test_heads_up.py (13 tests) - 2-player special rules
+
+**Total**: 81 backend tests + 21 E2E = 102 tests across all phases
 
 ### 2.2 Quick Tests (`quick-tests.yml`)
 
