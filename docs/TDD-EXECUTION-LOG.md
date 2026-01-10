@@ -172,8 +172,81 @@
 - backend/tests/test_hand_evaluator_validation.py (+47 lines)
 - docs/TDD-EXECUTION-LOG.md
 
-**Remaining Work:**
-Gap 2 completed. Gaps 1, 3, 4, 5 require additional 4-6 hours for test development and potential implementation. These gaps are documented in test-suite-optimization-plan.md Phase 4 for future implementation.
+**Remaining Work - Phase 4 Continuation:**
+
+### TDD Plan for Remaining Gaps (Execution Order)
+
+**Gap 3: Board Plays (30 min - No implementation needed)**
+- Red: Write test for board plays split pot
+- Green: Verify treys handles correctly
+- Commit: Gap 3 tests
+
+**Gap 4: All-In No Reopen Betting (45 min - Verify existing)**
+- Red: Write test for all-in for less scenario
+- Green: Verify betting round completes correctly
+- Commit: Gap 4 tests
+
+**Gap 5: Dead Button Rule (1 hour - May need implementation)**
+- Red: Write test for dealer rotation after elimination
+- Green: Implement if needed, or verify existing
+- Commit: Gap 5 tests
+
+**Gap 1: Odd Chip Distribution (1.5 hours - Likely needs implementation)**
+- Red: Write test for odd chip split pot
+- Green: Implement odd chip logic in hand_evaluator
+- Refactor: Clean up implementation
+- Commit: Gap 1 tests + implementation
+
+**Total Estimated Time:** 3-4 hours
+
+---
+
+## Gap Execution Log
+
+### Gap 3: Board Plays Edge Cases
+**Status:** ✅ COMPLETED
+**Started:** January 10, 2026
+**Completed:** January 10, 2026
+
+**Actions Taken:**
+- ✅ Created backend/tests/test_board_plays.py
+- ✅ Red: Wrote 5 tests for board plays scenarios
+- ✅ Green: Fixed test logic, all tests pass
+- ✅ No implementation needed (treys handles correctly)
+
+**Tests Added:**
+- test_board_plays_split_pot_straight: Board straight splits pot
+- test_board_plays_split_pot_quads: Board quads splits pot
+- test_board_flush_kicker_matters: Flush kicker determines winner
+- test_board_full_house_kicker_matters: Trips with better kicker wins
+- test_board_pair_multiple_kickers: Board pair splits when no improvement
+
+**Test Results:**
+- ✅ All 5 tests PASSED (0.05s)
+
+**Texas Hold'em Rule Validated:**
+- When best 5 cards are on board, hole cards irrelevant → pot splits
+- When board has 4 flush cards, hole card kicker matters
+- Kickers always matter in tie scenarios
+
+**Files Modified:**
+- Created backend/tests/test_board_plays.py (+134 lines)
+- docs/TDD-EXECUTION-LOG.md
+
+### Gap 4: All-In No Reopen Betting
+**Status:** PENDING
+**Started:** TBD
+**Completed:** TBD
+
+### Gap 5: Dead Button Rule
+**Status:** PENDING
+**Started:** TBD
+**Completed:** TBD
+
+### Gap 1: Odd Chip Distribution
+**Status:** PENDING
+**Started:** TBD
+**Completed:** TBD
 
 ---
 
