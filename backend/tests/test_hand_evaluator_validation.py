@@ -515,3 +515,50 @@ class TestHandEvaluatorValidation:
 
         assert len(failures) == 0, f"score_to_strength validation failed: {failures}"
         print(f"✅ All {len(test_cases)} score→strength mappings correct")
+
+
+    def test_wrap_around_straight_rejection(self):
+        """
+        Test that K-A-2-3-4 is NOT recognized as a valid straight.
+
+        Ace can be high (10-J-Q-K-A) or low (A-2-3-4-5), but cannot wrap around.
+        K-A-2-3-4 should be evaluated as Ace-high (high card), not a straight.
+        """
+        print("\n[EDGE CASE] Testing wrap-around straight rejection...")
+        evaluator = HandEvaluator()
+
+        # K-A-2-3-4 is NOT valid (Ace can't wrap)
+        hole = ["Kh", "Ah"]
+        board = ["2c", "3d", "4s", "9h", "Jc"]
+        score, rank = evaluator.evaluate_hand(hole, board)
+
+        # Should NOT be a straight
+        assert rank != "Straight", f"K-A-2-3-4 should NOT be a straight, got {rank}"
+        assert rank == "High Card", f"K-A-2-3-4 should be Ace high card, got {rank}"
+        print(f"  ✅ K-A-2-3-4 correctly rejected as straight (got {rank})")
+
+
+    def test_wheel_straight_valid(self):
+        """Test that A-2-3-4-5 (wheel) IS a valid straight."""
+        print("\n[EDGE CASE] Testing wheel straight validity...")
+        evaluator = HandEvaluator()
+
+        hole = ["Ah", "2h"]
+        board = ["3c", "4d", "5s", "9h", "Jc"]
+        score, rank = evaluator.evaluate_hand(hole, board)
+
+        assert rank == "Straight", f"A-2-3-4-5 (wheel) should be a straight, got {rank}"
+        print(f"  ✅ A-2-3-4-5 (wheel) correctly recognized as straight")
+
+
+    def test_broadway_straight_valid(self):
+        """Test that 10-J-Q-K-A (broadway) IS a valid straight."""
+        print("\n[EDGE CASE] Testing broadway straight validity...")
+        evaluator = HandEvaluator()
+
+        hole = ["Ah", "Kh"]
+        board = ["Qc", "Jd", "10s", "2h", "3c"]
+        score, rank = evaluator.evaluate_hand(hole, board)
+
+        assert rank == "Straight", f"10-J-Q-K-A (broadway) should be a straight, got {rank}"
+        print(f"  ✅ 10-J-Q-K-A (broadway) correctly recognized as straight")
