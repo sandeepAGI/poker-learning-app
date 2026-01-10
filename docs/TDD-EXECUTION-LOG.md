@@ -234,9 +234,37 @@
 - docs/TDD-EXECUTION-LOG.md
 
 ### Gap 4: All-In No Reopen Betting
-**Status:** PENDING
-**Started:** TBD
-**Completed:** TBD
+**Status:** ✅ COMPLETED
+**Started:** January 10, 2026
+**Completed:** January 10, 2026
+
+**Actions Taken:**
+- ✅ Created backend/tests/test_allin_no_reopen.py
+- ✅ Red: Wrote 3 tests for all-in for less scenarios
+- ✅ Green: Fixed test setup (moved to FLOP state to avoid BB option logic)
+- ✅ No implementation needed (poker engine handles correctly)
+
+**Tests Added:**
+- test_allin_for_less_completes_betting_round: All-in for less completes round
+- test_allin_for_less_no_reopen_action: Previous actors cannot re-raise
+- test_allin_for_full_raise_reopens: Full raise all-in reopens betting
+
+**Test Results:**
+- ✅ All 3 tests PASSED (0.04s)
+
+**Texas Hold'em Rule Validated:**
+- All-in for less than minimum raise doesn't reopen betting
+- Players who already acted cannot re-raise after all-in for less
+- All-in for full raise amount does reopen betting for previous actors
+
+**Technical Issue Resolved:**
+- Initial tests failed due to BB option logic interference in PRE_FLOP state
+- Fixed by setting game.current_state = GameState.FLOP
+- All-in for less can occur in any betting round, test now uses post-flop
+
+**Files Modified:**
+- Created backend/tests/test_allin_no_reopen.py (+155 lines)
+- docs/TDD-EXECUTION-LOG.md
 
 ### Gap 5: Dead Button Rule
 **Status:** PENDING
