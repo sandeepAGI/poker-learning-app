@@ -1,0 +1,80 @@
+name: Nightly Stress Tests
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 2 AM UTC daily
+  workflow_dispatch:      # Allow manual trigger
+
+jobs:
+  stress-tests:
+    name: Long-Running Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest-asyncio requests
+
+      - name: Run Phase 4 user scenarios (slow - 19 min)
+        run: |
+          PYTHONPATH=backend python -m pytest \
+            backend/tests/test_user_scenarios.py \
+            -v
+
+      - name: Run edge case scenarios
+        run: |
+          PYTHONPATH=backend python -m pytest \
+            backend/tests/test_edge_case_scenarios.py \
+            -v
+
+      - name: Run stress tests
+        run: |
+          PYTHONPATH=backend python -m pytest \
+            backend/tests/test_stress_ai_games.py \
+            -v
+
+      - name: Run RNG fairness tests
+        run: |
+          PYTHONPATH=backend python -m pytest \
+            backend/tests/test_rng_fairness.py \
+            -v
+
+      - name: Run performance benchmarks
+        run: |
+          PYTHONPATH=backend python -m pytest \
+            backend/tests/test_performance.py \
+            -v
+
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "## Nightly Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Long-running tests completed**" >> $GITHUB_STEP_SUMMARY
+          echo "- User scenarios: Phase 4" >> $GITHUB_STEP_SUMMARY
+          echo "- Edge cases: 350+ scenarios" >> $GITHUB_STEP_SUMMARY
+          echo "- Stress tests: AI game marathon" >> $GITHUB_STEP_SUMMARY
+          echo "- RNG fairness: Statistical validation" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-test-results
+          path: |
+            htmlcov/
+            pytest-results.xml
+          retention-days: 7
