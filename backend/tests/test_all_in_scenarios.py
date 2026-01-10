@@ -108,6 +108,10 @@ class TestAllInScenarios:
 
     def test_both_players_all_in_goes_to_showdown(self):
         """When all active players are all-in, game should advance to showdown."""
+        # Seed random to ensure consistent AI behavior (prevents flaky test)
+        import random
+        random.seed(42)
+
         game, human = setup_game_with_human_to_act()
         if game is None:
             pytest.skip("Could not set up game with human to act")
@@ -131,10 +135,14 @@ class TestAllInScenarios:
             if current.is_active and not current.all_in:
                 game._process_single_ai_action(current, game.current_player_index)
 
-            game.current_player_index = game._get_next_active_player_index(
-                game.current_player_index + 1
-            )
+            # Advance state first (may set current_player_index to None)
             game._maybe_advance_state()
+
+            # Then update current_player_index only if it's not None
+            if game.current_player_index is not None:
+                game.current_player_index = game._get_next_active_player_index(
+                    game.current_player_index + 1
+                )
 
         # Verify chip conservation
         total = sum(p.stack for p in game.players) + game.pot
@@ -303,10 +311,14 @@ class TestWebSocketAllInFlow:
             if current.is_active and not current.all_in:
                 game._process_single_ai_action(current, game.current_player_index)
 
-            game.current_player_index = game._get_next_active_player_index(
-                game.current_player_index + 1
-            )
+            # Advance state first (may set current_player_index to None)
             game._maybe_advance_state()
+
+            # Then update current_player_index only if it's not None
+            if game.current_player_index is not None:
+                game.current_player_index = game._get_next_active_player_index(
+                    game.current_player_index + 1
+                )
 
         # Step 4: Get final state
         state2 = game.get_game_state()

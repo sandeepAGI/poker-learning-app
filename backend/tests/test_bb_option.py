@@ -17,6 +17,10 @@ class TestBigBlindOption(unittest.TestCase):
 
     def test_bb_gets_option_when_all_call(self):
         """BB must get option to act again when all players call pre-flop."""
+        # Seed random to ensure consistent AI behavior (prevents flaky test)
+        import random
+        random.seed(42)
+
         game = PokerGame("Player1")
         # Position dealer so human (index 0) is BB after start_new_hand
         # dealer moves from 1 to 2, so BB = (2+2)%4 = 0 = human
@@ -63,8 +67,12 @@ class TestBigBlindOption(unittest.TestCase):
                             f"Should be pre-flop, got {game.current_state}")
 
                         # Try to raise (BB should be allowed to)
-                        # Raise amount must be >= current_bet + big_blind
-                        min_raise = game.current_bet + game.big_blind
+                        # Raise amount must be >= current_bet + last_raise_amount
+                        # If AI raised before us, last_raise_amount will be set correctly
+                        if game.last_raise_amount is not None:
+                            min_raise = game.current_bet + game.last_raise_amount
+                        else:
+                            min_raise = game.current_bet + game.big_blind
                         success = game.submit_human_action("raise", min_raise)
 
                         self.assertTrue(success,
