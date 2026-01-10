@@ -1610,13 +1610,25 @@ class PokerGame:
         pot_difference = original_pot - calculated_pot_total
 
         # Distribute winnings with proper remainder handling
+        # Texas Hold'em Rule: Odd chips go to players closest to dealer's left (earliest position)
         total_awarded = 0
         for pot_info in pots:
             num_winners = len(pot_info['winners'])
             split_amount = pot_info['amount'] // num_winners
             remainder = pot_info['amount'] % num_winners
 
-            for i, winner_id in enumerate(pot_info['winners']):
+            # Sort winners by position clockwise from dealer's left
+            # Odd chips go to players earliest (closest to dealer's left)
+            def position_from_dealer(player_id):
+                player_idx = next(i for i, p in enumerate(self.players) if p.player_id == player_id)
+                # Calculate distance clockwise from dealer's LEFT (first position after dealer)
+                # offset 0 = first player left of dealer, 1 = second left, etc.
+                offset = (player_idx - self.dealer_index - 1) % len(self.players)
+                return offset
+
+            sorted_winner_ids = sorted(pot_info['winners'], key=position_from_dealer)
+
+            for i, winner_id in enumerate(sorted_winner_ids):
                 winner = next(p for p in self.players if p.player_id == winner_id)
                 award_amount = split_amount + (1 if i < remainder else 0)
 
