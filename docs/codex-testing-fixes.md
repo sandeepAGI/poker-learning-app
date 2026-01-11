@@ -367,72 +367,145 @@ This plan addresses critical testing gaps identified in the codex review. Fixes 
 ## Execution Log
 
 ### Phase 1: Critical Backend Poker Rules
-**Status:** ⏸️ Not Started
-**Started:** TBD
-**Completed:** TBD
+**Status:** ✅ COMPLETED
+**Started:** January 11, 2026
+**Completed:** January 11, 2026
+
+**Test Results:** 17/17 tests PASSING
+- All backend tests passing
+- 1 bug fixed (short stack activation threshold)
+- All pre-commit tests passing
+- Changes committed: da2af221
 
 #### 1.1: Minimum Raise Reset Across Streets
-**Status:** ⏸️ Not Started
+**Status:** ✅ COMPLETED
+**Tests Added:** 4 tests in `test_minimum_raise_across_streets.py`
+- test_last_raise_amount_resets_on_flop()
+- test_last_raise_amount_resets_on_turn()
+- test_last_raise_amount_resets_on_river()
+- test_multi_street_raise_sequence_full_hand()
 
 #### 1.2: Odd Chip Distribution 3+ Way
-**Status:** ⏸️ Not Started
+**Status:** ✅ COMPLETED
+**Tests Added:** 3 tests in `test_odd_chip_distribution.py`
+- test_three_way_split_odd_pot()
+- test_four_way_split_two_odd_chips()
+- test_three_way_split_with_side_pot_odd_chips()
 
 #### 1.3: Folded Players in Side Pots
-**Status:** ⏸️ Not Started
+**Status:** ✅ COMPLETED
+**Tests Added:** 3 tests in `test_side_pots.py`
+- test_folded_player_chips_stay_in_pot()
+- test_folded_player_not_eligible_for_side_pot()
+- test_multi_fold_side_pot_distribution()
 
 #### 1.4: Short Stack Next-Hand
-**Status:** ⏸️ Not Started
+**Status:** ✅ COMPLETED + BUG FIX
+**Tests Added:** 3 tests in `test_short_stack_actions.py`
+- test_short_stack_can_post_partial_blind_next_hand()
+- test_very_short_stack_all_in_blind()
+- test_short_stack_remains_active_across_hands()
+**Bug Fix:** `poker_engine.py:131` changed from `stack >= 5` to `stack > 0`
 
 #### 1.5: Table Collapse
-**Status:** ⏸️ Not Started
+**Status:** ✅ COMPLETED
+**Tests Added:** 4 tests in `test_game_ending.py`
+- test_game_ends_when_one_player_remains()
+- test_post_blinds_skipped_with_insufficient_players()
+- test_no_crash_when_all_but_one_eliminated()
+- test_heads_up_after_eliminations()
 
 ---
 
 ### Phase 2: Frontend Component Tests
-**Status:** ⏸️ Not Started
-**Started:** TBD
-**Completed:** TBD
+**Status:** 🚫 BLOCKED - Infrastructure Required
+**Started:** January 11, 2026
+**Blocked Reason:** No testing framework configured for frontend
+
+**Infrastructure Required:**
+1. Jest + React Testing Library setup for Next.js 15
+2. Test configuration (jest.config.js)
+3. Mock setup for Zustand store and WebSocket
+4. Add test scripts to package.json
+
+**Current State:**
+- Only 1 unit test exists (`short-stack-logic.test.ts`) - pure logic, no component rendering
+- No `jest.config.js` or test runner configured
+- Cannot run React Testing Library tests
+
+**Recommended Next Steps:**
+1. Set up Jest + RTL for Next.js 15 (see Next.js testing docs)
+2. Create test utilities for mocking game state
+3. Then proceed with component tests as outlined in Phase 2.1-2.4
 
 #### 2.1: PokerTable Action Buttons
-**Status:** ⏸️ Not Started
+**Status:** ⏸️ Blocked by infrastructure
 
 #### 2.2: Raise Slider Constraints
-**Status:** ⏸️ Not Started
+**Status:** ⏸️ Blocked by infrastructure
 
 #### 2.3: WinnerModal Split Pot
-**Status:** ⏸️ Not Started
+**Status:** ⏸️ Blocked by infrastructure
 
 #### 2.4: WebSocket Store Step Mode
-**Status:** ⏸️ Not Started
+**Status:** ⏸️ Blocked by infrastructure
 
 ---
 
 ### Phase 3: Frontend E2E Tests
-**Status:** ⏸️ Not Started
-**Started:** TBD
-**Completed:** TBD
+**Status:** 🚫 BLOCKED - Test Files Don't Exist
+**Started:** January 11, 2026
+**Blocked Reason:** E2E test files referenced in codex review don't exist
+
+**Infrastructure Required:**
+1. Playwright setup (or Puppeteer, per codex review references)
+2. Create E2E test directory structure
+3. Add backend test endpoint for state manipulation
+4. Write E2E tests from scratch
+
+**Current State:**
+- No `tests/e2e/` directory exists
+- Files referenced in codex review (`test_short_stack_ui_fix.py`, `test_responsive_design.py`, `test_card_sizing.py`) not found in filesystem or git history
+- Would need to create all E2E infrastructure + tests
+
+**Recommended Next Steps:**
+1. Set up Playwright for Next.js
+2. Add backend `POST /test/set_game_state` endpoint (test mode only)
+3. Create E2E tests as outlined in Phase 3.1-3.3
 
 #### 3.1: Short-Stack E2E
-**Status:** ⏸️ Not Started
+**Status:** ⏸️ Blocked - test files don't exist
 
 #### 3.2: Winner Modal Split Pot E2E
-**Status:** ⏸️ Not Started
+**Status:** ⏸️ Blocked - test files don't exist
 
 #### 3.3: Step Mode E2E
-**Status:** ⏸️ Not Started
+**Status:** ⏸️ Blocked - test files don't exist
 
 ---
 
 ### Phase 4: Visual Test Assertions
-**Status:** ⏸️ Not Started
-**Started:** TBD
-**Completed:** TBD
+**Status:** 🚫 BLOCKED - Depends on Phase 3
+**Started:** January 11, 2026
+**Blocked Reason:** Visual tests (referenced in codex review) don't exist
+
+**Infrastructure Required:**
+1. Depends on Phase 3 E2E tests existing
+2. Would need to create visual regression tests from scratch
+
+**Current State:**
+- No visual test files exist
+- Would need E2E framework first
+
+**Recommended Next Steps:**
+1. Complete Phase 3 first
+2. Add visual assertions to E2E tests
 
 #### 4.1: Responsive Design Assertions
-**Status:** ⏸️ Not Started
+**Status:** ⏸️ Blocked - test files don't exist
 
 #### 4.2: Card Sizing Assertions
-**Status:** ⏸️ Not Started
+**Status:** ⏸️ Blocked - test files don't exist
 
 ---
 
@@ -446,5 +519,45 @@ This plan addresses critical testing gaps identified in the codex review. Fixes 
 
 ---
 
+## Final Summary
+
+**Date Completed:** January 11, 2026
+
+### Phases Completed
+
+- ✅ **Phase 1:** 17/17 backend tests implemented and passing
+  - All critical poker rules now have test coverage
+  - 1 bug fixed (short stack activation)
+  - Committed: da2af221
+
+### Phases Blocked
+
+- 🚫 **Phase 2:** Requires Jest + RTL setup for Next.js 15
+- 🚫 **Phase 3:** Requires Playwright setup + E2E test creation
+- 🚫 **Phase 4:** Depends on Phase 3
+
+### Overall Results
+
+- **Tests Added:** 17 backend tests
+- **Bugs Fixed:** 1 (poker_engine.py:131 activation threshold)
+- **Test Pass Rate:** 100% (17/17)
+- **Pre-commit Tests:** All passing (41/41)
+
+### Infrastructure Gaps Identified
+
+1. **Frontend Unit Testing:** No Jest/RTL configured for component tests
+2. **E2E Testing:** No Playwright/Puppeteer setup, test files don't exist
+3. **Visual Regression:** No infrastructure for visual testing
+
+### Recommended Follow-up
+
+1. **Short-term:** Set up Jest + RTL for Next.js 15, add Phase 2 tests
+2. **Medium-term:** Set up Playwright, create E2E test suite (Phase 3)
+3. **Long-term:** Add visual regression testing (Phase 4)
+
+**Note:** The codex-testing-review.md referenced test files that don't exist in the codebase. Phases 2-4 require creating testing infrastructure from scratch, which is beyond the scope of adding tests to existing frameworks.
+
+---
+
 **Last Updated:** January 11, 2026
-**Next Action:** Begin Phase 1.1 - Minimum Raise Reset Across Streets
+**Phase 1 Completed:** January 11, 2026
