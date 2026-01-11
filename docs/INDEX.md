@@ -12,8 +12,7 @@
 | `docs/CURRENT_FIX_LOG.md` | Active issue/fix log (Phase 4.5 work) | 2024-12-25 |
 | `docs/codex-code-review-1226.md` | Latest backend/frontend code review findings | 2024-12-26 |
 | `docs/codex-fe-websocket-findings-1226.md` | Frontend/WebSocket review findings | 2024-12-26 |
-| `docs/codex-testing-review.md` | Testing coverage gap analysis (backend + frontend) | 2026-01-11 |
-| `docs/codex-testing-fixes.md` | TDD execution plan for testing gaps (4 phases, 42 tests) | 2026-01-11 |
+| `docs/frontend-testing-roadmap.md` | Infrastructure requirements for Phases 2-4 (Jest, Playwright, visual tests) | 2026-01-11 |
 | `docs/ux-review-findings-0103.md` | Hands-on UX testing report with Puppeteer | 2025-01-03 |
 | `docs/test-suite-optimization-plan.md` | Comprehensive test audit & implementation plan | 2026-01-10 |
 | `docs/TDD-EXECUTION-LOG.md` | Test suite optimization execution log (Phases 1-4 completed) | 2026-01-10 |
