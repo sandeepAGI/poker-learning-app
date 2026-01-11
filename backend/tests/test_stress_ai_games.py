@@ -326,15 +326,17 @@ class TestStressAIGames:
 
         assert stats.chip_violations == 0
 
-    def test_run_500_ai_games_varied_players(self):
+    def test_run_200_ai_games_varied_players(self):
         """
-        TIER 2: Regression test with 500 games and varied player counts.
-        Runtime: ~10 minutes (local), 90+ minutes (CI - GitHub Actions ubuntu-latest).
+        TIER 2: Regression test with 200 games and varied player counts.
+        Runtime: ~4 minutes (local), ~65 minutes (CI - GitHub Actions ubuntu-latest).
 
-        Note: CI environment runs 8-9x slower than local. This is expected due to:
-        - Shared CI runner resources
-        - 4-player games creating more complex scenarios
-        - Varied player counts increasing average game complexity
+        Note: CI environment runs 8-9x slower than local (~19.5 sec/game observed).
+        Reduced from 500 to 200 games to fit within 180-minute nightly timeout.
+        Full suite (all 6 tests) takes ~157 minutes, leaves 23-minute buffer.
+
+        Coverage: 200 games with varied player counts (2-4 players) still provides
+        excellent stress testing alongside other tests (total: 530 games).
         """
         # Temporarily enable player count variation
         global VARY_PLAYER_COUNT
@@ -343,7 +345,7 @@ class TestStressAIGames:
 
         try:
             stats = StressTestStats()
-            num_games = 500
+            num_games = 200
 
             print(f"\n{'='*70}")
             print(f"TIER 2 REGRESSION TEST: {num_games} games with varied player counts")
@@ -352,8 +354,8 @@ class TestStressAIGames:
             for game_num in range(1, num_games + 1):
                 play_full_game(game_num, stats)
 
-                # Progress indicator every 50 games
-                if game_num % 50 == 0:
+                # Progress indicator every 25 games (4 updates for 200 games)
+                if game_num % 25 == 0:
                     print(f"  Progress: {game_num}/{num_games} games ({stats.games_completed} completed, {stats.games_crashed} crashed)")
 
             print(stats.report())
