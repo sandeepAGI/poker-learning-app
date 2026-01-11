@@ -50,6 +50,17 @@ app.add_middleware(
 # Format: {game_id: (PokerGame, last_access_timestamp)}
 games: Dict[str, Tuple[PokerGame, float]] = {}
 
+# Test mode flag - ONLY enable in test environments
+import os
+TEST_MODE = os.getenv("TEST_MODE") == "1"
+
+# Setup logging
+logger = logging.getLogger(__name__)
+
+if TEST_MODE:
+    logger.warning("⚠️  TEST_MODE is ENABLED - Test endpoints are active")
+    logger.warning("⚠️  NEVER deploy to production with TEST_MODE=1")
+
 # Memory management constants
 GAME_MAX_IDLE_SECONDS = 3600  # Remove games idle > 1 hour
 GAME_CLEANUP_INTERVAL_SECONDS = 300  # Clean up every 5 minutes
@@ -989,6 +1000,139 @@ async def websocket_endpoint(websocket: WebSocket, game_id: str):
             await websocket.close(code=1011, reason="Internal server error")
         except:
             pass
+
+
+# ============================================================================
+# TEST ENDPOINTS (Only available when TEST_MODE=1)
+# ============================================================================
+
+if TEST_MODE:
+    @app.post("/test/set_game_state")
+    async def set_game_state_for_testing(request: dict):
+        """
+        Manipulate game state for E2E testing.
+
+        WARNING: Only available when TEST_MODE=1 env var set.
+        NEVER deploy to production with TEST_MODE enabled.
+
+        Example payload:
+        {
+            "game_id": "test-game-123",
+            "player_stacks": {"human": 30, "ai1": 1000, "ai2": 1000},
+            "dealer_position": 0,
+            "current_bet": 80,
+            "pot": 0,
+            "state": "pre_flop",
+            "community_cards": ["Ah", "Kh", "Qh"]
+        }
+
+        Returns: Updated game state (serialized)
+        """
+        game_id = request.get("game_id")
+
+        if not game_id:
+            raise HTTPException(status_code=400, detail="game_id required")
+
+        if game_id not in games:
+            raise HTTPException(status_code=404, detail="Game not found")
+
+        game, _ = games[game_id]
+
+        # Apply state modifications with validation
+        if "player_stacks" in request:
+            for player_name, stack in request["player_stacks"].items():
+                # Validate stack is non-negative
+                if stack < 0:
+                    raise HTTPException(status_code=400, detail=f"Invalid stack: {stack}")
+
+                # Find player by name (case-insensitive)
+                player = next(
+                    (p for p in game.players if p.name.lower() == player_name.lower()),
+                    None
+                )
+                if player:
+                    player.stack = stack
+                    logger.info(f"[TEST] Set {player.name} stack to ${stack}")
+                else:
+                    logger.warning(f"[TEST] Player not found: {player_name}")
+
+        if "dealer_position" in request:
+            game.dealer_index = request["dealer_position"]
+            logger.info(f"[TEST] Set dealer position to {game.dealer_index}")
+
+        if "current_bet" in request:
+            game.current_bet = request["current_bet"]
+            logger.info(f"[TEST] Set current bet to ${game.current_bet}")
+
+        if "pot" in request:
+            game.pot = request["pot"]
+            logger.info(f"[TEST] Set pot to ${game.pot}")
+
+        if "state" in request:
+            game.current_state = GameState(request["state"])
+            logger.info(f"[TEST] Set game state to {game.current_state}")
+
+        if "community_cards" in request:
+            import re
+            cards = request["community_cards"]
+
+            # Validate card format (e.g., "Ah", "Kd", "2c")
+            for card in cards:
+                if not re.match(r'^[2-9TJQKA][hdsc]$', card):
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"Invalid card format: {card}. Expected format: rank[2-9TJQKA] + suit[hdsc]"
+                    )
+
+            game.community_cards = cards
+            logger.info(f"[TEST] Set community cards to {game.community_cards}")
+
+        if "current_player_index" in request:
+            game.current_player_index = request["current_player_index"]
+            logger.info(f"[TEST] Set current player index to {game.current_player_index}")
+
+        # Recalculate total chips for conservation check
+        game.total_chips = sum(p.stack for p in game.players) + game.pot
+
+        # Update access time
+        games[game_id] = (game, time.time())
+
+        # Serialize and return new state
+        state = serialize_game_state(game, show_ai_thinking=False)
+
+        # Broadcast state update to all connected WebSocket clients
+        await manager.broadcast_state(game_id, game)
+
+        return {
+            "success": True,
+            "game_id": game_id,
+            "game_state": state
+        }
+
+    @app.get("/test/health")
+    async def test_health():
+        """Health check for E2E tests"""
+        return {
+            "status": "ok",
+            "test_mode": True,
+            "message": "Test endpoints are active"
+        }
+
+    @app.get("/test/games/{game_id}")
+    async def test_get_game_state(game_id: str):
+        """Get full game state (for debugging E2E tests)"""
+        if game_id not in games:
+            raise HTTPException(status_code=404, detail="Game not found")
+
+        game, _ = games[game_id]
+        games[game_id] = (game, time.time())
+
+        state = serialize_game_state(game, show_ai_thinking=True)
+
+        return {
+            "game_id": game_id,
+            "game_state": state
+        }
 
 
 # Health check endpoint
