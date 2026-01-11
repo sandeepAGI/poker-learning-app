@@ -110,8 +110,14 @@ class TestMultiHandScenarios:
                     # Don't send next_hand - game is over
                     break
 
-                # Check if game_over event was received
+                # Check if game_over event was received in the drained events
                 game_over_event = next((e for e in events if e.get("type") == "game_over"), None)
+
+                # FIX: Also check messages that arrived AFTER drain_events completed
+                # This handles race condition where game_over arrives between drain_events and this check
+                if not game_over_event:
+                    game_over_event = next((m for m in ws.received_messages if m.get("type") == "game_over"), None)
+
                 if game_over_event:
                     print(f"Game over event received after hand {hand_num + 1}")
                     player_eliminated = True
@@ -122,6 +128,18 @@ class TestMultiHandScenarios:
                     if final_state["state"] == "showdown":
                         await ws.send_next_hand()
                         await asyncio.sleep(0.5)  # Brief pause
+
+                        # FIX: After sending next_hand, check if game_over event arrives
+                        # Backend sends game_over in response to next_hand when game is over
+                        try:
+                            event = await ws.receive_event(timeout=1.0)
+                            if event.get("type") == "game_over":
+                                print(f"Game over event received after sending next_hand (hand {hand_num + 1})")
+                                player_eliminated = True
+                                break
+                        except TimeoutError:
+                            # No game_over - continue to next hand normally
+                            pass
 
             print(f"\nCompleted {hands_played} hands")
             assert hands_played >= 1, "Should play at least 1 hand"

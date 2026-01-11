@@ -404,6 +404,41 @@
 
 ---
 
+## Post-Phase 4: Nightly Test Fixes
+
+### Nightly Test Failure: test_go_all_in_every_hand_for_10_hands
+**Status:** ✅ FIXED
+**Started:** January 11, 2026
+**Completed:** January 11, 2026
+
+**Root Cause Analysis:**
+- Test timeout after 20 minutes of successful execution
+- Race condition between test event checking and backend game_over event timing
+- Backend sends `game_over` ONLY in response to `next_hand` request, not automatically
+- Test's `drain_events()` call completed before `next_hand` was sent
+- `game_over` event arrived AFTER test checked the events list
+- Next iteration waited for `state_update` that never came (game was over)
+
+**Fix Applied:**
+- Option 1 implemented: Modified test to handle delayed `game_over` events
+- Added check for `game_over` in ALL received messages, not just drained events
+- Added explicit check for `game_over` after sending `next_hand` request
+- Test now properly detects game termination regardless of event timing
+
+**Test Results:**
+- ✅ Local run: PASSED (10 hands in 2m40s)
+- Lines modified: test_user_scenarios.py:113-142
+
+**Files Modified:**
+- backend/tests/test_user_scenarios.py (+13 lines, race condition fixes)
+- docs/TDD-EXECUTION-LOG.md
+
+**Evidence:**
+- Log analysis showed `game_over` WAS received, but timing caused test to miss it
+- Duplicate winner entries (human winning 3960 + 40) confirmed as CORRECT behavior for side pots with odd chip distribution
+
+---
+
 **Execution Mode:** Autonomous TDD (all 4 phases)
 **Test Discipline:** 100% tests passing at each phase boundary ✅
 **Documentation:** Updated at each phase ✅
