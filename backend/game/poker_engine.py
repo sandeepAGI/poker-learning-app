@@ -128,7 +128,7 @@ class Player:
         self.all_in = False
         self.hole_cards = []
         self.has_acted = False
-        self.is_active = self.stack >= 5  # Reactivate if they have chips
+        self.is_active = self.stack > 0  # Reactivate if they have any chips
 
     def reset_for_new_round(self):
         """Reset for new betting round."""
