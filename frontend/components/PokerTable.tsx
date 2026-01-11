@@ -274,13 +274,13 @@ export function PokerTable() {
   return (
     <div className="flex flex-col h-screen bg-[#0D5F2F] p-2 sm:p-4">
       {/* Header */}
-      <div className="flex justify-between items-center mb-2 sm:mb-4 text-white">
+      <div className="flex justify-between items-center mb-2 sm:mb-4 text-white" data-testid="poker-table-header">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold">Poker Learning App</h1>
           <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm opacity-80">
             <span className="hidden sm:inline">Game State: {gameState.state.toUpperCase()}</span>
             {/* WebSocket connection status */}
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1" data-testid="connection-status">
               {connectionState === 'connected' && <span className="text-green-400">● Connected</span>}
               {connectionState === 'connecting' && <span className="text-yellow-400">⟳ Connecting...</span>}
               {connectionState === 'reconnecting' && <span className="text-orange-400">⟳ Reconnecting...</span>}
@@ -290,7 +290,7 @@ export function PokerTable() {
           </div>
           {/* Issue #1 fix: Display blind levels and hand count */}
           <div className="text-sm opacity-80 mt-1">
-            Hand #{gameState.hand_count || 1} | Blinds: ${gameState.small_blind || 5}/${gameState.big_blind || 10}
+            <span data-testid="hand-count">Hand #{gameState.hand_count || 1}</span> | <span data-testid="blind-levels">Blinds: ${gameState.small_blind || 5}/${gameState.big_blind || 10}</span>
             {/* Debug: Show step mode state */}
             {stepMode && <span className="ml-2 text-yellow-300">| Step Mode: ON</span>}
             {awaitingContinue && <span className="ml-2 text-green-300 font-bold">| WAITING FOR CONTINUE</span>}
@@ -302,6 +302,7 @@ export function PokerTable() {
           {/* Phase 4: Continue button (shown only in Step Mode when waiting) */}
           {awaitingContinue && (
             <motion.button
+              data-testid="continue-button"
               onClick={() => {
                 console.log('[PokerTable] Continue button clicked!');
                 sendContinue();
@@ -318,6 +319,7 @@ export function PokerTable() {
 
           {/* Settings Menu Button */}
           <button
+            data-testid="settings-button"
             onClick={() => setShowSettingsMenu(!showSettingsMenu)}
             className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
             title="Game settings and options"
@@ -328,12 +330,14 @@ export function PokerTable() {
           {/* Settings Dropdown Menu */}
           {showSettingsMenu && (
             <motion.div
+              data-testid="settings-menu"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               className="absolute top-12 right-20 bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg shadow-2xl p-2 min-w-[250px] z-50"
             >
               {/* Analyze Last Hand */}
               <button
+                data-testid="analyze-hand-button"
                 onClick={() => {
                   handleAnalysisClick();
                   setShowSettingsMenu(false);
@@ -346,6 +350,7 @@ export function PokerTable() {
 
               {/* Phase 4.5: Session Analysis */}
               <button
+                data-testid="session-analysis-button"
                 onClick={() => {
                   handleSessionAnalysisClick('quick');
                   setShowSettingsMenu(false);
@@ -358,6 +363,7 @@ export function PokerTable() {
 
               {/* Toggle AI Thinking */}
               <button
+                data-testid="ai-thinking-toggle"
                 onClick={() => {
                   toggleShowAiThinking();
                   setShowSettingsMenu(false);
@@ -372,6 +378,7 @@ export function PokerTable() {
 
               {/* Toggle Step Mode */}
               <button
+                data-testid="step-mode-toggle"
                 onClick={() => {
                   toggleStepMode();
                   setShowSettingsMenu(false);
@@ -388,6 +395,7 @@ export function PokerTable() {
 
           {/* Phase 2: Help button */}
           <button
+            data-testid="help-button"
             onClick={() => window.open('/guide', '_blank')}
             className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-4 py-2 rounded-lg font-semibold mr-2"
             title="Open game guide in new tab"
@@ -397,6 +405,7 @@ export function PokerTable() {
 
           {/* Quit Game button */}
           <button
+            data-testid="quit-button"
             onClick={handleQuitClick}
             className="bg-[#DC2626] hover:bg-[#B91C1C] text-white px-4 py-2 rounded-lg font-semibold"
             title="Quit game and return to lobby"
@@ -409,6 +418,7 @@ export function PokerTable() {
       {/* Phase 4: Step Mode - Awaiting Continue Banner */}
       {awaitingContinue && (
         <motion.div
+          data-testid="waiting-for-continue"
           className="bg-yellow-100 border-2 border-yellow-600 text-yellow-900 px-4 py-3 rounded mb-4 text-center font-bold"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -420,6 +430,7 @@ export function PokerTable() {
       {/* Error display */}
       {error && (
         <motion.div
+          data-testid="error-message"
           className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -429,7 +440,7 @@ export function PokerTable() {
       )}
 
       {/* Main table - Circular Layout */}
-      <div className="flex-1 relative">
+      <div className="flex-1 relative" data-testid="poker-table-main">
         {/* Extract opponents into array for easier positioning */}
         {(() => {
           const opponents = gameState.players.filter((p) => !p.is_human);
@@ -444,6 +455,7 @@ export function PokerTable() {
               {/* Opponent 1 - Left Side (clickable) */}
               {opponents[0] && (
                 <div
+                  data-testid="opponent-seat-0"
                   className={`absolute top-1/3 left-8 cursor-pointer transition-all ${focusedElement === 'opponent-0' ? 'z-50 scale-110' : 'z-10'}`}
                   onClick={() => setFocusedElement(focusedElement === 'opponent-0' ? null : 'opponent-0')}
                   title="Click to bring to front"
@@ -465,6 +477,7 @@ export function PokerTable() {
               {/* Opponent 2 - Position depends on player count (clickable) */}
               {opponents[1] && (
                 <div
+                  data-testid="opponent-seat-1"
                   className={`${opponents.length === 3 ? "absolute top-8 left-1/2 -translate-x-1/2" : "absolute top-8 left-[25%] -translate-x-1/2"} cursor-pointer transition-all ${focusedElement === 'opponent-1' ? 'z-50 scale-110' : 'z-10'}`}
                   onClick={() => setFocusedElement(focusedElement === 'opponent-1' ? null : 'opponent-1')}
                   title="Click to bring to front"
@@ -486,6 +499,7 @@ export function PokerTable() {
               {/* Opponent 3 - Position depends on player count (clickable) */}
               {opponents[2] && (
                 <div
+                  data-testid="opponent-seat-2"
                   className={`${opponents.length === 3 ? "absolute top-1/3 right-8" : "absolute top-8 left-1/2 -translate-x-1/2"} cursor-pointer transition-all ${focusedElement === 'opponent-2' ? 'z-50 scale-110' : 'z-10'}`}
                   onClick={() => setFocusedElement(focusedElement === 'opponent-2' ? null : 'opponent-2')}
                   title="Click to bring to front"
@@ -507,6 +521,7 @@ export function PokerTable() {
               {/* Opponent 4 - Top Right (for 6-player tables, clickable) */}
               {opponents[3] && (
                 <div
+                  data-testid="opponent-seat-3"
                   className={`absolute top-8 left-[75%] -translate-x-1/2 cursor-pointer transition-all ${focusedElement === 'opponent-3' ? 'z-50 scale-110' : 'z-10'}`}
                   onClick={() => setFocusedElement(focusedElement === 'opponent-3' ? null : 'opponent-3')}
                   title="Click to bring to front"
@@ -528,6 +543,7 @@ export function PokerTable() {
               {/* Opponent 5 - Right Side (for 6-player tables, clickable) */}
               {opponents[4] && (
                 <div
+                  data-testid="opponent-seat-4"
                   className={`absolute top-1/3 right-8 cursor-pointer transition-all ${focusedElement === 'opponent-4' ? 'z-50 scale-110' : 'z-10'}`}
                   onClick={() => setFocusedElement(focusedElement === 'opponent-4' ? null : 'opponent-4')}
                   title="Click to bring to front"
@@ -551,12 +567,14 @@ export function PokerTable() {
 
         {/* Center Area - Community Cards and Pot - Click to bring to foreground */}
         <div
+          data-testid="community-cards-area"
           className={`absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-4 cursor-pointer transition-all ${focusedElement === 'community' ? 'z-50 scale-105' : 'z-20'}`}
           onClick={() => setFocusedElement(focusedElement === 'community' ? null : 'community')}
           title="Click to bring community cards to front"
         >
           {/* Pot */}
           <motion.div
+            data-testid="pot-display"
             className="bg-[#D97706] text-white px-6 py-3 rounded-full text-3xl font-bold shadow-2xl"
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
@@ -575,6 +593,7 @@ export function PokerTable() {
 
         {/* Human Player - Bottom (clickable) */}
         <div
+          data-testid="human-player-seat"
           className={`absolute human-player-position left-1/2 -translate-x-1/2 cursor-pointer transition-all ${focusedElement === 'human' ? 'z-50 scale-110' : 'z-10'}`}
           onClick={() => setFocusedElement(focusedElement === 'human' ? null : 'human')}
           title="Click to bring to front"
@@ -592,6 +611,7 @@ export function PokerTable() {
 
         {/* Action buttons - Click to bring to foreground */}
         <div
+          data-testid="action-buttons-container"
           className={`absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 cursor-pointer transition-all ${focusedElement === 'actions' ? 'z-50' : 'z-30'}`}
           onClick={() => setFocusedElement(focusedElement === 'actions' ? null : 'actions')}
           title="Click to bring action buttons to front"
@@ -607,7 +627,7 @@ export function PokerTable() {
             </div>
           ) : isWaitingAllIn ? (
             /* Bug Fix #10: Show waiting message when all-in */
-            <div className="text-center py-4">
+            <div className="text-center py-4" data-testid="all-in-message">
               <div className="text-yellow-400 font-bold text-xl mb-2">🎲 All-In!</div>
               <div className="text-white text-sm">
                 Waiting for hand to complete...
@@ -615,6 +635,7 @@ export function PokerTable() {
             </div>
           ) : isShowdown ? (
             <button
+              data-testid="next-hand-button"
               onClick={() => nextHand()}
               disabled={loading}
               className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-bold py-3 px-4 rounded-lg text-lg disabled:opacity-50"
@@ -635,6 +656,7 @@ export function PokerTable() {
               <div className="flex gap-4">
                 {/* Fold */}
                 <button
+                  data-testid="fold-button"
                   onClick={() => submitAction('fold')}
                   disabled={loading}
                   className="flex-1 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]"
@@ -644,6 +666,7 @@ export function PokerTable() {
 
                 {/* Call */}
                 <button
+                  data-testid="call-button"
                   onClick={() => submitAction('call')}
                   disabled={loading || !canCall}
                   className="flex-1 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]"
@@ -657,6 +680,7 @@ export function PokerTable() {
                 {/* Raise - Opens expandable panel */}
                 {canRaise ? (
                   <button
+                    data-testid="raise-button"
                     onClick={() => setShowRaisePanel(!showRaisePanel)}
                     disabled={loading}
                     className={`flex-1 ${showRaisePanel ? 'bg-[#059669]' : 'bg-[#10B981]'} hover:bg-[#059669] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]`}
@@ -665,6 +689,7 @@ export function PokerTable() {
                   </button>
                 ) : (
                   <button
+                    data-testid="raise-button"
                     disabled
                     className="flex-1 bg-[#1F7A47]/50 text-gray-400 font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl opacity-50 cursor-not-allowed min-h-[44px]"
                     title={gameState.human_player.stack <= callAmount ? 'Not enough chips to raise' : 'Raise not available'}
@@ -684,34 +709,39 @@ export function PokerTable() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg p-3 space-y-3">
+                    <div className="bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg p-3 space-y-3" data-testid="raise-panel">
                       {/* Quick bet buttons */}
                       <div className="flex gap-2 justify-center flex-wrap">
                         <button
+                          data-testid="min-raise-button"
                           onClick={() => handleRaiseAmountChange(minRaise)}
                           className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white font-semibold py-2 px-4 rounded"
                         >
                           Min ${minRaise}
                         </button>
                         <button
+                          data-testid="half-pot-button"
                           onClick={() => handleRaiseAmountChange(Math.floor(gameState.pot * 0.5))}
                           className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white font-semibold py-2 px-4 rounded"
                         >
                           ½ Pot ${Math.floor(gameState.pot * 0.5)}
                         </button>
                         <button
+                          data-testid="pot-button"
                           onClick={() => handleRaiseAmountChange(gameState.pot)}
                           className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white font-semibold py-2 px-4 rounded"
                         >
                           Pot ${gameState.pot}
                         </button>
                         <button
+                          data-testid="2x-pot-button"
                           onClick={() => handleRaiseAmountChange(gameState.pot * 2)}
                           className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white font-semibold py-2 px-4 rounded"
                         >
                           2x Pot ${gameState.pot * 2}
                         </button>
                         <button
+                          data-testid="all-in-button"
                           onClick={handleAllIn}
                           className="bg-[#F59E0B] hover:bg-[#D97706] text-black font-bold py-2 px-4 rounded"
                         >
@@ -725,6 +755,7 @@ export function PokerTable() {
                           Raise Amount: ${raiseAmount}
                         </label>
                         <input
+                          data-testid="raise-amount-slider"
                           type="range"
                           value={raiseAmount}
                           onChange={(e) => handleRaiseAmountChange(parseInt(e.target.value))}
@@ -742,6 +773,7 @@ export function PokerTable() {
 
                       {/* Confirm Raise Button - FIX-07: Auto-resets after 3 seconds */}
                       <button
+                        data-testid="confirm-raise-button"
                         onClick={handleRaiseSubmit}
                         disabled={loading || raiseAmount < minRaise || raiseAmount > maxRaise}
                         className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-bold py-3 px-4 rounded-lg text-lg disabled:opacity-50"
