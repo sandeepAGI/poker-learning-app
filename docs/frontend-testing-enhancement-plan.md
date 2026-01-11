@@ -1,8 +1,17 @@
 # Frontend Testing Enhancement Plan - TDD Execution
 
 **Date Created:** January 11, 2026
-**Status:** Ready for Implementation
+**Date Updated:** January 11, 2026
+**Status:** In Implementation
 **Related:** `frontend-testing-roadmap.md` (specifications), `archive/codex-testing-fixes.md` (Phase 1 backend)
+
+---
+
+## ⚠️ Important Notes
+
+**Line Number References:** This document contains approximate line numbers for reference. Always verify actual file structure before making changes, as line numbers may have shifted due to code updates.
+
+**Existing Tests:** The codebase already contains `frontend/__tests__/short-stack-logic.test.ts`. Phase 2 will add Jest configuration to run this existing test along with new tests.
 
 ---
 
@@ -17,7 +26,8 @@ This document provides a step-by-step TDD execution plan for implementing fronte
 2. **Phase 2:** Component tests with Jest + RTL (3-5 hours)
 3. **Phase 3a:** Backend test endpoint (1-2 hours)
 4. **Phase 3b:** E2E tests with Playwright (3-4 hours)
-5. **Phase 4:** Visual regression tests (2-3 hours)
+5. **Phase 4:** Visual regression tests (2-3 hours) - **Nightly CI only**
+6. **CI Integration:** Add GitHub Actions workflows (30 min)
 
 ---
 
@@ -162,28 +172,33 @@ await expect(page.locator('[data-testid="human-stack"]')).toContainText('$30')
 
 **Question:** How do we ensure consistent screenshots across environments?
 
-**Decision:** Generate baselines in CI only (ubuntu-latest)
+**Decision:** Generate baselines in CI only (ubuntu-latest), run in nightly workflow
 
 **Strategy:**
 ```yaml
-# In CI workflow
-- name: Generate baselines (if missing)
-  run: |
-    if [ ! -d "tests/e2e/screenshots/baseline" ]; then
-      npx playwright test --update-snapshots
-      git add tests/e2e/screenshots/baseline
-      git commit -m "Generate Playwright baseline screenshots"
-      git push
-    fi
+# In nightly CI workflow only
+- name: Run visual regression tests
+  run: npx playwright test test_responsive_design.spec.ts test_card_sizing.spec.ts
 
-- name: Run visual tests
-  run: npx playwright test
+- name: Upload visual diffs on failure
+  uses: actions/upload-artifact@v4
+  if: failure()
+  with:
+    name: visual-diffs
+    path: tests/e2e/*-snapshots/
 ```
+
+**Baseline Management:**
+- Baselines stored in `tests/e2e/*-snapshots/` and committed to git
+- Generated in CI using ubuntu-latest for consistency
+- Updated manually when UI intentionally changes: `npx playwright test --update-snapshots`
+- Developers can test locally but baselines may differ slightly (OS/font rendering)
 
 **Rationale:**
 - Different OS/browsers render differently (fonts, anti-aliasing)
-- CI environment is consistent and reproducible
-- Developers update baselines via CI, not locally
+- CI environment (ubuntu-latest) is consistent and reproducible
+- Visual tests are slower, better suited for nightly runs
+- Prevents false positives from local OS differences
 
 ---
 
@@ -606,22 +621,30 @@ git log --oneline -5
 
 ### Step 2.1: Install Dependencies
 
-**Command:**
+**Check Latest Versions:**
 ```bash
 cd frontend
+# Check latest React Testing Library version (must support React 19)
+npm view @testing-library/react versions --json | tail -1
+```
+
+**Install (use latest compatible versions):**
+```bash
 npm install --save-dev \
-  @testing-library/react@^14.0.0 \
-  @testing-library/jest-dom@^6.1.5 \
-  @testing-library/user-event@^14.5.1 \
+  @testing-library/react@latest \
+  @testing-library/jest-dom@latest \
+  @testing-library/user-event@latest \
   jest@^29.7.0 \
   jest-environment-jsdom@^29.7.0 \
   @types/jest@^29.5.11
 ```
 
+**Note:** React 19 requires @testing-library/react@^15.0.0 or higher. If installation fails with peer dependency errors, check compatibility.
+
 **Verify:**
 ```bash
 npm list @testing-library/react
-# Should show version 14.x
+# Should show version compatible with React 19
 ```
 
 ---
@@ -653,6 +676,14 @@ const customJestConfig = {
     '!**/*.d.ts',
     '!**/node_modules/**',
   ],
+  coverageThresholds: {
+    global: {
+      statements: 70,
+      branches: 60,
+      functions: 70,
+      lines: 70,
+    },
+  },
 }
 
 module.exports = createJestConfig(customJestConfig)
@@ -701,24 +732,35 @@ const localStorageMock = {
 }
 global.localStorage = localStorageMock
 
-// Mock WebSocket (used by useGameStore)
+// Mock WebSocket (used by PokerWebSocket class)
+// This prevents real WebSocket connections during tests
 global.WebSocket = class WebSocket {
   constructor(url) {
     this.url = url
     this.readyState = WebSocket.CONNECTING
+    this.onopen = null
+    this.onclose = null
+    this.onerror = null
+    this.onmessage = null
+
+    // Simulate async open
     setTimeout(() => {
       this.readyState = WebSocket.OPEN
-      this.onopen?.()
+      if (this.onopen) {
+        this.onopen(new Event('open'))
+      }
     }, 0)
   }
 
   send(data) {
-    // Mock send
+    // Mock send - do nothing
   }
 
   close() {
     this.readyState = WebSocket.CLOSED
-    this.onclose?.()
+    if (this.onclose) {
+      this.onclose(new Event('close'))
+    }
   }
 
   static CONNECTING = 0
@@ -726,6 +768,12 @@ global.WebSocket = class WebSocket {
   static CLOSING = 2
   static CLOSED = 3
 }
+
+// Global test cleanup
+afterEach(() => {
+  jest.clearAllMocks()
+  jest.clearAllTimers()
+})
 ```
 
 **Commit:**
@@ -1575,9 +1623,13 @@ if TEST_MODE:
 
         game, _ = games[game_id]
 
-        # Apply state modifications
+        # Apply state modifications with validation
         if "player_stacks" in request:
             for player_name, stack in request["player_stacks"].items():
+                # Validate stack is non-negative
+                if stack < 0:
+                    raise HTTPException(status_code=400, detail=f"Invalid stack: {stack}")
+
                 # Find player by name (case-insensitive)
                 player = next(
                     (p for p in game.players if p.name.lower() == player_name.lower()),
@@ -1586,6 +1638,8 @@ if TEST_MODE:
                 if player:
                     player.stack = stack
                     logger.info(f"[TEST] Set {player.name} stack to ${stack}")
+                else:
+                    logger.warning(f"[TEST] Player not found: {player_name}")
 
         if "dealer_position" in request:
             game.dealer_index = request["dealer_position"]
@@ -1605,7 +1659,18 @@ if TEST_MODE:
             logger.info(f"[TEST] Set game state to {game.current_state}")
 
         if "community_cards" in request:
-            game.community_cards = request["community_cards"]
+            import re
+            cards = request["community_cards"]
+
+            # Validate card format (e.g., "Ah", "Kd", "2c")
+            for card in cards:
+                if not re.match(r'^[2-9TJQKA][hdsc]$', card):
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"Invalid card format: {card}. Expected format: rank[2-9TJQKA] + suit[hdsc]"
+                    )
+
+            game.community_cards = cards
             logger.info(f"[TEST] Set community cards to {game.community_cards}")
 
         if "current_player_index" in request:
@@ -1870,16 +1935,24 @@ test.describe('Short-Stack UI', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate and create game
     await page.goto('http://localhost:3000')
-    await page.click('text=New Game')
 
-    // Wait for game to be created
-    await page.waitForURL(/\/game\/.*/)
+    // Verify New Game button exists and click
+    const newGameButton = page.locator('text=New Game')
+    await expect(newGameButton).toBeVisible({ timeout: 10000 })
+    await newGameButton.click()
 
-    // Extract game ID from URL
+    // Wait for game to be created and URL to change
+    await page.waitForURL(/\/game\/[a-f0-9-]{36}/, { timeout: 10000 })
+
+    // Extract and validate game ID from URL
     const url = page.url()
     gameId = url.split('/').pop() || ''
 
-    expect(gameId).toBeTruthy()
+    // Validate UUID format
+    expect(gameId).toMatch(/^[a-f0-9-]{36}$/)
+
+    // Wait for poker table to be ready
+    await expect(page.getByTestId('poker-table-main')).toBeVisible({ timeout: 10000 })
   })
 
   test('allows call all-in when stack < call amount', async ({ page, request }) => {
@@ -1902,25 +1975,19 @@ test.describe('Short-Stack UI', () => {
 
     expect(response.ok()).toBeTruthy()
 
-    // Wait for WebSocket to update UI
-    await page.waitForTimeout(500)
-
-    // Verify Call button enabled
+    // Wait for WebSocket to update UI (check for stack change)
     const callButton = page.getByTestId('call-button')
-    await expect(callButton).toBeEnabled()
+    await expect(callButton).toBeEnabled({ timeout: 5000 })
 
-    // Verify shows "All-In"
-    await expect(callButton).toContainText('All-In')
+    // Verify shows "All-In" with correct amount
+    await expect(callButton).toContainText('All-In', { timeout: 2000 })
     await expect(callButton).toContainText('$30')
 
     // Click and verify action succeeds
     await callButton.click()
 
-    // Wait for action to process
-    await page.waitForTimeout(1000)
-
     // Verify player is all-in (check for all-in badge or message)
-    await expect(page.getByTestId('all-in-message')).toBeVisible()
+    await expect(page.getByTestId('all-in-message')).toBeVisible({ timeout: 5000 })
   })
 
   test('allows raise all-in when stack < min raise', async ({ page, request }) => {
@@ -1941,22 +2008,20 @@ test.describe('Short-Stack UI', () => {
       },
     })
 
-    await page.waitForTimeout(500)
+    // Wait for UI to update, then click Raise to open panel
+    const raiseButton = page.getByTestId('raise-button')
+    await expect(raiseButton).toBeEnabled({ timeout: 5000 })
+    await raiseButton.click()
 
-    // Click Raise to open panel
-    await page.getByTestId('raise-button').click()
-
-    // Verify All-In button available
+    // Verify All-In button available in raise panel
     const allInButton = page.getByTestId('all-in-button')
-    await expect(allInButton).toBeEnabled()
+    await expect(allInButton).toBeEnabled({ timeout: 2000 })
 
     // Click All-In
     await allInButton.click()
 
-    await page.waitForTimeout(1000)
-
     // Verify all-in succeeded
-    await expect(page.getByTestId('all-in-message')).toBeVisible()
+    await expect(page.getByTestId('all-in-message')).toBeVisible({ timeout: 5000 })
   })
 
   test('shows correct call button label for short stack', async ({ page, request }) => {
@@ -1976,10 +2041,9 @@ test.describe('Short-Stack UI', () => {
       },
     })
 
-    await page.waitForTimeout(500)
-
-    // Verify label shows "Call All-In $15" (not "Call $50")
+    // Wait for UI to update and verify label shows "Call All-In $15" (not "Call $50")
     const callButton = page.getByTestId('call-button')
+    await expect(callButton).toBeEnabled({ timeout: 5000 })
     await expect(callButton).toContainText('All-In')
     await expect(callButton).toContainText('$15')
     await expect(callButton).not.toContainText('$50')
@@ -2046,13 +2110,11 @@ test.describe('Winner Modal - Split Pot', () => {
       },
     })
 
-    await page.waitForTimeout(500)
+    // Wait for UI to update
+    await expect(page.getByTestId('fold-button')).toBeEnabled({ timeout: 5000 })
 
     // Fold to trigger showdown
     await page.getByTestId('fold-button').click()
-
-    // Wait for showdown to process
-    await page.waitForTimeout(2000)
 
     // Wait for winner modal
     await expect(page.getByTestId('winner-modal')).toBeVisible({ timeout: 10000 })
@@ -2180,10 +2242,7 @@ test.describe('Step Mode', () => {
     // Make an action (fold)
     await page.getByTestId('fold-button').click()
 
-    // Wait for AI turn
-    await page.waitForTimeout(1000)
-
-    // Verify "Continue" button appears
+    // Verify "Continue" button appears (AI paused)
     await expect(page.getByTestId('continue-button')).toBeVisible({ timeout: 5000 })
 
     // Verify awaiting continue message
@@ -2204,10 +2263,11 @@ test.describe('Step Mode', () => {
     // Click Continue
     await page.getByTestId('continue-button').click()
 
-    // Verify one AI action occurred (Continue button should reappear for next AI)
-    await page.waitForTimeout(500)
-
     // Continue button should reappear (next AI turn) or hand is complete
+    // Use a small delay for state transition
+    await page.waitForLoadState('networkidle')
+
+    // Check if continue button reappeared or hand completed
     const continueVisible = await page.getByTestId('continue-button').isVisible({ timeout: 2000 })
     const nextHandVisible = await page.getByTestId('next-hand-button').isVisible({ timeout: 2000 })
 
@@ -2233,7 +2293,8 @@ test.describe('Step Mode', () => {
       if (await continueButton.isVisible({ timeout: 2000 })) {
         await continueButton.click()
         continueCount++
-        await page.waitForTimeout(500)
+        // Wait for state transition
+        await page.waitForLoadState('networkidle')
       } else {
         // Hand completed
         break
