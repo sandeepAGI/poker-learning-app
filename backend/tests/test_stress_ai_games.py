@@ -329,7 +329,12 @@ class TestStressAIGames:
     def test_run_500_ai_games_varied_players(self):
         """
         TIER 2: Regression test with 500 games and varied player counts.
-        Runtime: ~10 minutes.
+        Runtime: ~10 minutes (local), 90+ minutes (CI - GitHub Actions ubuntu-latest).
+
+        Note: CI environment runs 8-9x slower than local. This is expected due to:
+        - Shared CI runner resources
+        - 4-player games creating more complex scenarios
+        - Varied player counts increasing average game complexity
         """
         # Temporarily enable player count variation
         global VARY_PLAYER_COUNT

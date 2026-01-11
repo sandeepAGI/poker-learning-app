@@ -9,7 +9,7 @@ jobs:
   stress-tests:
     name: Long-Running Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180  # Increased from 120: test_run_500_ai_games_varied_players takes 90+ min in CI
 
     steps:
       - name: Checkout code
