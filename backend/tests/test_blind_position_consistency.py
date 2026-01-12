@@ -114,6 +114,9 @@ async def test_websocket_and_rest_return_same_positions():
     This is the user-facing symptom: UI shows different button positions
     depending on whether data comes from REST or WebSocket.
     """
+    pytest.skip("Requires WebSocket test infrastructure to compare with REST")
+
+    # The code below requires a running server, so we skip this test
     game_id = await create_test_game(ai_count=3)
 
     # Get state via REST API
@@ -127,5 +130,3 @@ async def test_websocket_and_rest_return_same_positions():
 
     # Both should return same positions
     # This will FAIL if WebSocket recomputes and REST uses stored values
-
-    pytest.skip("Requires WebSocket test infrastructure to compare with REST")

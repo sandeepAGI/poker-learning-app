@@ -14,6 +14,22 @@ from unittest.mock import patch, Mock, MagicMock
 BASE_URL = "http://localhost:8000"
 
 
+def server_is_running():
+    """Check if the server is running."""
+    try:
+        requests.get(f"{BASE_URL}/", timeout=1)
+        return True
+    except requests.exceptions.ConnectionError:
+        return False
+
+
+# Skip all tests if server isn't running
+pytestmark = pytest.mark.skipif(
+    not server_is_running(),
+    reason="Server not running at localhost:8000. Start with: python main.py"
+)
+
+
 def api_request(method, endpoint, **kwargs):
     """Helper to make API requests."""
     url = f"{BASE_URL}{endpoint}"
@@ -66,22 +82,22 @@ class TestLLMAnalysisEndpoint:
 
     def test_analysis_endpoint_requires_game_id(self, mock_llm_analyzer):
         """Test that endpoint requires valid game ID."""
-        response = client.get("/games/nonexistent-game-id/analysis-llm")
+        response = requests.get(f"{BASE_URL}/games/nonexistent-game-id/analysis-llm")
         assert response.status_code == 404
 
     def test_analysis_endpoint_quick_depth(self, mock_llm_analyzer):
         """Test quick analysis (Haiku model)."""
         # Create a game
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         assert response.status_code == 200
         game_id = response.json()["game_id"]
 
         # Play one hand (fold)
-        response = client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        response = requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
         assert response.status_code == 200
 
         # Request quick analysis
-        response = client.get(f"/games/{game_id}/analysis-llm?depth=quick&use_cache=false")
+        response = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=quick&use_cache=false")
         assert response.status_code == 200
 
         data = response.json()
@@ -100,14 +116,14 @@ class TestLLMAnalysisEndpoint:
     def test_analysis_endpoint_deep_depth(self, mock_llm_analyzer):
         """Test deep dive analysis (Sonnet model)."""
         # Create a game
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         game_id = response.json()["game_id"]
 
         # Play one hand
-        response = client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        response = requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
 
         # Request deep analysis
-        response = client.get(f"/games/{game_id}/analysis-llm?depth=deep&use_cache=false")
+        response = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=deep&use_cache=false")
         assert response.status_code == 200
 
         data = response.json()
@@ -122,11 +138,11 @@ class TestLLMAnalysisEndpoint:
     def test_analysis_endpoint_invalid_depth(self):
         """Test that invalid depth parameter is rejected."""
         # Create a game
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         game_id = response.json()["game_id"]
 
         # Request with invalid depth
-        response = client.get(f"/games/{game_id}/analysis-llm?depth=invalid")
+        response = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=invalid")
         assert response.status_code == 422  # Validation error
 
 
@@ -136,12 +152,12 @@ class TestCaching:
     def test_cached_analysis_returns_immediately(self, mock_llm_analyzer):
         """Test that cached analysis doesn't call LLM again."""
         # Create game and play hand
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         game_id = response.json()["game_id"]
-        client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
 
         # First request (not cached)
-        response1 = client.get(f"/games/{game_id}/analysis-llm?depth=quick")
+        response1 = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=quick")
         assert response1.status_code == 200
         assert response1.json().get("cached", False) is False
 
@@ -149,7 +165,7 @@ class TestCaching:
         assert mock_llm_analyzer.analyze_hand.call_count == 1
 
         # Second request (should be cached)
-        response2 = client.get(f"/games/{game_id}/analysis-llm?depth=quick")
+        response2 = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=quick")
         assert response2.status_code == 200
         assert response2.json()["cached"] is True
 
@@ -162,16 +178,16 @@ class TestCaching:
     def test_different_depths_not_cached_together(self, mock_llm_analyzer):
         """Test that quick and deep analyses are cached separately."""
         # Create game and play hand
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         game_id = response.json()["game_id"]
-        client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
 
         # Request quick analysis
-        response1 = client.get(f"/games/{game_id}/analysis-llm?depth=quick")
+        response1 = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=quick")
         assert response1.json()["cached"] is False
 
         # Request deep analysis (different depth, not cached)
-        response2 = client.get(f"/games/{game_id}/analysis-llm?depth=deep")
+        response2 = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=deep")
         assert response2.json()["cached"] is False
 
         # Verify LLM was called twice (once for each depth)
@@ -180,16 +196,16 @@ class TestCaching:
     def test_use_cache_false_bypasses_cache(self, mock_llm_analyzer):
         """Test that use_cache=false forces fresh analysis."""
         # Create game and play hand
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         game_id = response.json()["game_id"]
-        client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
 
         # First request
-        response1 = client.get(f"/games/{game_id}/analysis-llm?depth=quick")
+        response1 = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=quick")
         assert response1.status_code == 200
 
         # Second request with use_cache=false
-        response2 = client.get(f"/games/{game_id}/analysis-llm?depth=quick&use_cache=false")
+        response2 = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=quick&use_cache=false")
         assert response2.status_code == 200
         assert response2.json()["cached"] is False
 
@@ -203,39 +219,39 @@ class TestRateLimiting:
     def test_rate_limiting_enforced(self, mock_llm_analyzer):
         """Test that rapid requests are rate limited."""
         # Create game and play hand
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         game_id = response.json()["game_id"]
-        client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
 
         # Play another hand
-        client.post(f"/games/{game_id}/next", json={})
-        client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        requests.post(f"{BASE_URL}/games/{game_id}/next", json={})
+        requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
 
         # First analysis succeeds
-        response1 = client.get(f"/games/{game_id}/analysis-llm?hand_number=2&use_cache=false")
+        response1 = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?hand_number=2&use_cache=false")
         assert response1.status_code == 200
 
         # Immediate second analysis is rate limited (same game, different hand)
-        client.post(f"/games/{game_id}/next", json={})
-        client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        requests.post(f"{BASE_URL}/games/{game_id}/next", json={})
+        requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
 
-        response2 = client.get(f"/games/{game_id}/analysis-llm?hand_number=3&use_cache=false")
+        response2 = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?hand_number=3&use_cache=false")
         assert response2.status_code == 429  # Too Many Requests
         assert "Rate limit" in response2.json()["detail"]
 
     def test_rate_limit_bypass_with_cache(self, mock_llm_analyzer):
         """Test that cached requests bypass rate limiting."""
         # Create game and play hand
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         game_id = response.json()["game_id"]
-        client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
 
         # First request
-        response1 = client.get(f"/games/{game_id}/analysis-llm?depth=quick")
+        response1 = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=quick")
         assert response1.status_code == 200
 
         # Immediate cached request succeeds (no rate limit)
-        response2 = client.get(f"/games/{game_id}/analysis-llm?depth=quick")
+        response2 = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=quick")
         assert response2.status_code == 200
         assert response2.json()["cached"] is True
 
@@ -245,12 +261,12 @@ class TestAdminMetrics:
 
     def test_metrics_endpoint_exists(self):
         """Test that metrics endpoint is accessible."""
-        response = client.get("/admin/analysis-metrics")
+        response = requests.get(f"{BASE_URL}/admin/analysis-metrics")
         assert response.status_code == 200
 
     def test_metrics_structure(self):
         """Test that metrics have correct structure."""
-        response = client.get("/admin/analysis-metrics")
+        response = requests.get(f"{BASE_URL}/admin/analysis-metrics")
         data = response.json()
 
         # Check required fields
@@ -272,18 +288,18 @@ class TestAdminMetrics:
     def test_metrics_tracking(self, mock_llm_analyzer):
         """Test that metrics are updated after analysis."""
         # Get initial metrics
-        response1 = client.get("/admin/analysis-metrics")
+        response1 = requests.get(f"{BASE_URL}/admin/analysis-metrics")
         initial_total = response1.json()["total_analyses"]
         initial_haiku = response1.json()["haiku_analyses"]
 
         # Perform quick analysis
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         game_id = response.json()["game_id"]
-        client.post(f"/games/{game_id}/actions", json={"action": "fold"})
-        client.get(f"/games/{game_id}/analysis-llm?depth=quick&use_cache=false")
+        requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
+        requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=quick&use_cache=false")
 
         # Check metrics increased
-        response2 = client.get("/admin/analysis-metrics")
+        response2 = requests.get(f"{BASE_URL}/admin/analysis-metrics")
         final_total = response2.json()["total_analyses"]
         final_haiku = response2.json()["haiku_analyses"]
 
@@ -301,12 +317,12 @@ class TestErrorHandling:
             mock.analyze_hand.side_effect = Exception("API Error")
 
             # Create game and play hand
-            response = client.post("/games", json={"num_ai_players": 3})
+            response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
             game_id = response.json()["game_id"]
-            client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+            requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
 
             # Request analysis
-            response = client.get(f"/games/{game_id}/analysis-llm?depth=quick&use_cache=false")
+            response = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?depth=quick&use_cache=false")
             assert response.status_code == 200
 
             data = response.json()
@@ -319,23 +335,23 @@ class TestErrorHandling:
     def test_no_completed_hands_returns_error(self):
         """Test that analysis fails gracefully when no hands completed."""
         # Create game but don't play any hands
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         game_id = response.json()["game_id"]
 
         # Try to analyze (should fail)
-        response = client.get(f"/games/{game_id}/analysis-llm")
+        response = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm")
         assert response.status_code == 404
         assert "No completed hands" in response.json()["detail"]
 
     def test_specific_hand_number_not_found(self):
         """Test requesting analysis for non-existent hand number."""
         # Create game and play 1 hand
-        response = client.post("/games", json={"num_ai_players": 3})
+        response = requests.post(f"{BASE_URL}/games", json={"num_ai_players": 3})
         game_id = response.json()["game_id"]
-        client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        requests.post(f"{BASE_URL}/games/{game_id}/actions", json={"action": "fold"})
 
         # Request analysis for hand #5 (doesn't exist)
-        response = client.get(f"/games/{game_id}/analysis-llm?hand_number=5")
+        response = requests.get(f"{BASE_URL}/games/{game_id}/analysis-llm?hand_number=5")
         assert response.status_code == 404
         assert "Hand #5 not found" in response.json()["detail"]
 

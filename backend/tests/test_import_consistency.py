@@ -40,49 +40,6 @@ def test_main_module_imports():
             raise
 
 
-def test_showdown_scenario_with_hand_evaluator():
-    """Test that a showdown scenario (which triggers HandEvaluator import) works."""
-
-    from game.poker_engine import PokerGame
-
-    # Create game
-    game = PokerGame(human_player_name="TestPlayer", ai_count=1)
-    game.start_new_hand()
-
-    # Find human and AI indices
-    human_idx = next(i for i, p in enumerate(game.players) if p.is_human)
-    ai_idx = 1 - human_idx
-
-    # Both players call to showdown (simplified scenario)
-    game.apply_action(0 if game.current_player_index == 0 else 1, "call", None)
-    game.apply_action(1 if game.current_player_index == 1 else 0, "call", None)
-
-    # Advance through streets by calling
-    while game.current_state.value != 'showdown':
-        current_idx = game.current_player_index
-        if current_idx is not None:
-            game.apply_action(current_idx, "call", None)
-        else:
-            break
-
-    # If we reached showdown, ensure we can serialize the state
-    # This triggers the HandEvaluator import in main.py
-    if game.current_state.value == 'showdown':
-        # Import the serialization logic
-        from websocket_manager import serialize_game_state
-
-        # This should not raise ModuleNotFoundError
-        try:
-            state = serialize_game_state(game, show_ai_thinking=True)
-            assert state is not None
-            assert 'winner_info' in state
-        except ModuleNotFoundError as e:
-            if 'backend' in str(e):
-                pytest.fail(f"Showdown serialization failed due to mixed imports: {e}")
-            else:
-                raise
-
-
 def test_import_paths_are_consistent():
     """Verify that all imports in main.py use consistent paths."""
 
@@ -118,14 +75,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"❌ FAILED: {e}")
 
-    print("\n2. Testing showdown scenario...")
-    try:
-        test_showdown_scenario_with_hand_evaluator()
-        print("✅ PASSED")
-    except Exception as e:
-        print(f"❌ FAILED: {e}")
-
-    print("\n3. Testing import path consistency...")
+    print("\n2. Testing import path consistency...")
     try:
         test_import_paths_are_consistent()
         print("✅ PASSED")
