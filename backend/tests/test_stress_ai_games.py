@@ -278,6 +278,7 @@ def play_full_game(game_num: int, stats: StressTestStats, player_count=None) -> 
 class TestStressAIGames:
     """Stress test with many AI-only games."""
 
+    @pytest.mark.monthly  # Marathon: 100 games, 10-15 minutes
     def test_run_100_ai_games(self):
         """Run 100 complete AI-only games and verify no crashes."""
         stats = StressTestStats()
@@ -331,6 +332,7 @@ class TestStressAIGames:
 
         assert stats.chip_violations == 0
 
+    @pytest.mark.monthly  # Marathon: 200 games, 15-30 minutes
     def test_run_200_ai_games_varied_players(self):
         """
         TIER 2: Regression test with 200 games and varied player counts.
@@ -377,6 +379,7 @@ class TestStressAIGames:
         finally:
             VARY_PLAYER_COUNT = original_vary
 
+    @pytest.mark.monthly  # Marathon: 100 heads-up games, 10-15 minutes
     def test_run_heads_up_intensive(self):
         """
         Test heads-up (2 player) games intensively.
@@ -405,6 +408,7 @@ class TestStressAIGames:
         # Verify all games were 2-player
         assert stats.player_count_distribution.get(2, 0) == num_games, "All games should be 2-player"
 
+    @pytest.mark.monthly  # Marathon: 100 multi-player games, 10-15 minutes
     def test_run_multi_player_intensive(self):
         """
         Test 4 player games intensively.

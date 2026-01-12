@@ -39,9 +39,10 @@ jobs:
           echo "Core dump limit: $(ulimit -c)"
 
           # Run tests with Python fault handler enabled
+          # Exclude monthly tests (fuzzing + stress) - those run monthly
           PYTHONPATH=backend python -X faulthandler -m pytest backend/tests/ \
             -v --tb=long \
-            -m "slow" \
+            -m "slow and not monthly" \
             --timeout=600 \
             --ignore=backend/tests/test_bugs_real.py \
             --ignore=backend/tests/test_multiple_winners.py
@@ -64,16 +65,17 @@ jobs:
           echo "## Nightly Test Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Slow tests executed:**" >> $GITHUB_STEP_SUMMARY
-          echo "- User scenarios: Multi-hand gameplay (19 min)" >> $GITHUB_STEP_SUMMARY
           echo "- Edge cases: 350+ scenarios" >> $GITHUB_STEP_SUMMARY
-          echo "- Stress tests: 200-game AI marathon" >> $GITHUB_STEP_SUMMARY
           echo "- RNG fairness: Statistical validation" >> $GITHUB_STEP_SUMMARY
           echo "- Performance: Benchmarks" >> $GITHUB_STEP_SUMMARY
-          echo "- Action fuzzing: Random action testing" >> $GITHUB_STEP_SUMMARY
           echo "- Concurrency: Multi-connection stress" >> $GITHUB_STEP_SUMMARY
-          echo "- WebSocket simulation: Long-running scenarios" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Note:** E2E tests run in comprehensive workflow on every push" >> $GITHUB_STEP_SUMMARY
+          echo "**Not included in nightly:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Monthly marathon tests (fuzzing + stress)" >> $GITHUB_STEP_SUMMARY
+          echo "  - Run 1st of each month with 3-hour timeout" >> $GITHUB_STEP_SUMMARY
+          echo "  - Includes: 200-game AI marathon, action fuzzing" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Note:** E2E tests (21 tests) run in comprehensive workflow on every push" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload results on failure
         if: failure()

@@ -109,6 +109,7 @@ async def create_test_game(ai_count: int = 3) -> str:
 
 
 @pytest.mark.slow
+@pytest.mark.monthly  # Marathon tests: Require live backend server, run 5-10 min
 class TestActionFuzzing:
     """Phase 3.1: Fuzz testing with random actions"""
 
