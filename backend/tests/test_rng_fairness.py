@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from game.poker_engine import PokerGame, DeckManager, HandEvaluator
 
 
+@pytest.mark.slow
 class TestCardDistribution:
     """Test 1: Chi-squared test for uniform card distribution."""
 
@@ -133,6 +134,7 @@ class TestCardDistribution:
         print("\n✅ PASS: Suit distribution is uniform")
 
 
+@pytest.mark.slow
 class TestHandStrengthProbabilities:
     """Test 2: Hand strength probabilities match poker theory."""
 
@@ -217,6 +219,7 @@ class TestHandStrengthProbabilities:
         print("\n✅ PASS: Hand strength probabilities match theoretical values")
 
 
+@pytest.mark.slow
 class TestPatternDetection:
     """Test 3: Detect patterns in consecutive deals."""
 
@@ -288,6 +291,7 @@ class TestPatternDetection:
         print("\n✅ PASS: Shuffle produces high entropy")
 
 
+@pytest.mark.slow
 class TestDeckIntegrity:
     """Test 4: Verify deck integrity (no duplicates, all cards present)."""
 

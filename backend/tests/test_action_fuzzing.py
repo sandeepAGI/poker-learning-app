@@ -108,6 +108,7 @@ async def create_test_game(ai_count: int = 3) -> str:
         return response.json()["game_id"]
 
 
+@pytest.mark.slow
 class TestActionFuzzing:
     """Phase 3.1: Fuzz testing with random actions"""
 

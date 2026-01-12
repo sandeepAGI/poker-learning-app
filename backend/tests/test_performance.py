@@ -22,6 +22,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from game.poker_engine import PokerGame
 
 
+@pytest.mark.slow
 class TestConcurrentGames:
     """Test 1: Concurrent game execution."""
 
@@ -114,6 +115,7 @@ class TestConcurrentGames:
         print("\n✅ PASS: Performance scaling is acceptable")
 
 
+@pytest.mark.slow
 class TestGameEnginePerformance:
     """Test 2: Individual game engine performance."""
 
@@ -249,6 +251,7 @@ class TestGameEnginePerformance:
         print("\n✅ PASS: Complete hand performance acceptable")
 
 
+@pytest.mark.slow
 class TestMemoryUsage:
     """Test 3: Memory usage characteristics."""
 
@@ -302,6 +305,7 @@ class TestMemoryUsage:
         print("\n✅ PASS: Memory usage is stable")
 
 
+@pytest.mark.slow
 class TestThroughputBenchmarks:
     """Test 4: System throughput benchmarks."""
 
@@ -386,6 +390,7 @@ class TestThroughputBenchmarks:
         print("\n✅ PASS: Action throughput acceptable")
 
 
+@pytest.mark.slow
 class TestStressScenarios:
     """Test 5: Stress test scenarios."""
 

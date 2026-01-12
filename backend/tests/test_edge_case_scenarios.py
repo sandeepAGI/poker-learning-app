@@ -29,6 +29,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from game.poker_engine import PokerGame, GameState
 
 
+@pytest.mark.slow
 class TestMultipleAllInsSidePots:
     """Test multiple all-ins creating complex side pots."""
 
@@ -123,6 +124,7 @@ class TestMultipleAllInsSidePots:
         assert scenarios_passed >= 45, f"Too many failures: {scenarios_passed}/50"
 
 
+@pytest.mark.slow
 class TestSequentialRaisesAllInInterruption:
     """Test raises interrupted by all-in for less."""
 
@@ -197,6 +199,7 @@ class TestSequentialRaisesAllInInterruption:
         assert passed >= 25, f"Too many failures: {passed}/30"
 
 
+@pytest.mark.slow
 class TestBBOptionMultiPlayer:
     """Test BB option with 3+ players."""
 
@@ -323,6 +326,7 @@ class TestBBOptionMultiPlayer:
         assert passed >= 45, f"Too many failures: {passed}/50"
 
 
+@pytest.mark.slow
 class TestComplexShowdownTies:
     """Test showdown scenarios with multiple tied winners."""
 
@@ -381,6 +385,7 @@ class TestComplexShowdownTies:
         assert final_total == initial_total
 
 
+@pytest.mark.slow
 class TestFoldCascadeScenarios:
     """Test scenarios where multiple players fold in sequence."""
 
@@ -452,6 +457,7 @@ class TestFoldCascadeScenarios:
         assert final_total == initial_total
 
 
+@pytest.mark.slow
 class TestChipConservationEdgeCases:
     """Verify chip conservation in edge cases."""
 
@@ -521,6 +527,7 @@ class TestChipConservationEdgeCases:
 
 
 # Summary test to run all edge cases
+@pytest.mark.slow
 class TestEdgeCasesSummary:
     """Summary test that runs a subset of all edge cases."""
 

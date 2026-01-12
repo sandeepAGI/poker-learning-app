@@ -38,6 +38,7 @@ from test_websocket_integration import (
 # 4.1: Multi-Hand Scenarios (3 hours)
 # =============================================================================
 
+@pytest.mark.slow
 class TestMultiHandScenarios:
     """Test user strategies played over multiple hands"""
 
@@ -268,6 +269,7 @@ class TestMultiHandScenarios:
 # 4.2: Complex Betting Sequences (3 hours)
 # =============================================================================
 
+@pytest.mark.slow
 class TestComplexBettingSequences:
     """Test multi-action sequences within single hands"""
 
@@ -454,6 +456,7 @@ class TestComplexBettingSequences:
 # 4.3: Edge Case Scenarios (2 hours)
 # =============================================================================
 
+@pytest.mark.slow
 class TestEdgeCaseScenarios:
     """Test boundary conditions and special situations"""
 

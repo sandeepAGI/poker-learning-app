@@ -380,6 +380,7 @@ def run_multiple_scenarios():
 
 
 # Pytest tests
+@pytest.mark.slow
 class TestWebSocketSimulation:
     """Pytest tests using the simulator."""
 

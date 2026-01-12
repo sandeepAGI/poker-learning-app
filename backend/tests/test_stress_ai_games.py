@@ -270,6 +270,7 @@ def play_full_game(game_num: int, stats: StressTestStats, player_count=None) -> 
         return False
 
 
+@pytest.mark.slow
 class TestStressAIGames:
     """Stress test with many AI-only games."""
 

@@ -199,6 +199,7 @@ async def create_test_game(ai_count: int = 3, port: int = 8003) -> str:
 # ====================
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_two_connections_same_game_simultaneous_fold():
     """
     CRITICAL: Two WebSocket connections send fold actions at exactly the same time.
@@ -277,6 +278,7 @@ async def test_two_connections_same_game_simultaneous_fold():
 
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_rapid_action_spam_100_folds():
     """
     CRITICAL: Player clicks fold button 100 times in rapid succession (spam clicking).
@@ -334,6 +336,7 @@ async def test_rapid_action_spam_100_folds():
 
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_simultaneous_different_actions():
     """
     Two connections send DIFFERENT actions simultaneously (fold vs call).
@@ -393,6 +396,7 @@ async def test_simultaneous_different_actions():
 
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_rapid_raise_amount_changes():
     """
     User drags raise slider rapidly, sending many raise actions with different amounts.
@@ -445,6 +449,7 @@ async def test_rapid_raise_amount_changes():
 # ====================
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_concurrent_game_creation():
     """
     CRITICAL: 10 users create games simultaneously.
@@ -485,6 +490,7 @@ async def test_concurrent_game_creation():
 
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_action_during_state_transition():
     """
     Player sends action while game is transitioning between states (e.g., pre_flop → flop).
@@ -526,6 +532,7 @@ async def test_action_during_state_transition():
 
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_multiple_simultaneous_raise_validations():
     """
     Multiple users send raises simultaneously with edge case amounts.
@@ -589,6 +596,7 @@ async def test_multiple_simultaneous_raise_validations():
 # ====================
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_concurrency_stress_test():
     """
     Comprehensive stress test: Multiple connections, rapid actions, simultaneous requests.

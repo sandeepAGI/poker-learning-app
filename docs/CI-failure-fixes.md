@@ -266,9 +266,481 @@ $ find backend/tests -name "test_performance.py" -o -name "test_rng_fairness.py"
 - [x] Document all findings from 4-agent investigation
 - [x] Categorize failures by severity and status
 - [x] Create phased implementation plan
-- [ ] Review with stakeholder (user approval needed)
+- [x] Review with stakeholder (user approval received)
 
 **Deliverable**: This document
+
+---
+
+### Phase 0.5: Test Suite Consolidation & Coverage (NEW - IMMEDIATE)
+**Goal**: Simplify to 2 workflows and fix critical coverage gaps
+
+**Timeline**: Today (1-2 hours)
+
+**Rationale**:
+- Current state: 5 workflows with redundancy and gaps
+- Only 31% of backend tests run in CI
+- User directive: "Comprehensive should be comprehensive, Nightly for slow tests only"
+
+#### Proposed New Structure
+
+**Workflow 1: Comprehensive Test Suite** (Per-commit, <10 minutes)
+- ALL backend tests that run fast (<10 min total)
+- ALL frontend tests (build + Jest)
+- ALL fast E2E tests (critical flows, browser refresh)
+- Visual regression (if <2 min)
+- Target runtime: 8-10 minutes
+- Runs on: Every push to main/develop, every PR
+
+**Workflow 2: Nightly Test Suite** (Nightly, unlimited time)
+- ONLY slow tests: stress tests (200-game AI marathon)
+- ONLY slow tests: property-based fuzzing (1000 scenarios)
+- ONLY slow tests: performance benchmarks
+- Long-running E2E scenarios
+- Concurrency and load tests
+- Target runtime: 60-180 minutes
+- Runs on: 2 AM UTC daily, manual dispatch
+
+**Workflows to DELETE**:
+- `quick-tests.yml` (redundant with comprehensive)
+- `frontend-tests.yml` (merge into comprehensive)
+- `nightly-e2e.yml` (merge fast E2E into comprehensive, slow into nightly)
+- Keep: `generate-visual-baselines.yml` (manual utility)
+
+---
+
+#### Task 0.5.1: Audit Test Runtime
+**Goal**: Categorize all 58 backend tests by runtime
+
+**Process**:
+1. Run each test file individually with timing
+2. Categorize as:
+   - **Fast** (<10 seconds) → Comprehensive
+   - **Medium** (10-60 seconds) → Comprehensive
+   - **Slow** (>60 seconds) → Nightly
+3. Document findings
+
+**Script**:
+```bash
+# Test all backend tests with timing
+for test_file in backend/tests/test_*.py; do
+    echo "Testing: $test_file"
+    time PYTHONPATH=backend pytest "$test_file" -v --tb=short
+done
+```
+
+**Deliverable**: List of all tests with runtimes
+
+**Acceptance Criteria**:
+- [ ] All 58 backend tests categorized by runtime
+- [ ] Clear list of Fast vs Slow tests
+- [ ] Total estimated runtime for Comprehensive (<10 min)
+
+---
+
+#### Task 0.5.2: Create New Comprehensive Workflow
+**Goal**: Single comprehensive workflow with ALL fast tests
+
+**File**: `.github/workflows/test.yml` (update existing)
+
+**New Structure**:
+```yaml
+name: Comprehensive Test Suite
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio pytest-timeout
+
+      # Run ALL fast backend tests (auto-discovery)
+      - name: Run all backend tests
+        run: |
+          PYTHONPATH=backend python -m pytest backend/tests/ \
+            -v --tb=short \
+            -m "not slow" \
+            --timeout=60
+
+  frontend-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: cd frontend && npm ci
+
+      - name: Run Jest tests
+        run: cd frontend && npm test
+
+      - name: Build frontend
+        run: cd frontend && npm run build
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+      - uses: actions/setup-node@v3
+
+      - name: Install dependencies
+        run: |
+          cd backend && pip install -r requirements.txt
+          cd ../frontend && npm ci
+          npx playwright install chromium
+
+      - name: Start backend
+        run: |
+          cd backend
+          python main.py &
+          sleep 5
+
+      - name: Start frontend
+        run: |
+          cd frontend
+          npm run dev &
+          sleep 10
+
+      - name: Run E2E tests
+        run: |
+          PYTHONPATH=backend pytest tests/e2e/test_critical_flows.py -v
+          PYTHONPATH=backend pytest tests/e2e/test_browser_refresh.py -v
+          npx playwright test tests/e2e/test_visual_regression.spec.ts
+```
+
+**Key Changes**:
+1. **Auto-discovery**: Use `pytest backend/tests/ -m "not slow"` instead of explicit file lists
+2. **All jobs in one workflow**: Backend, frontend, E2E together
+3. **Pytest markers**: Use `-m "not slow"` to exclude slow tests
+4. **Timeout protection**: 15 min timeout to prevent runaway tests
+
+**Deliverable**: Updated test.yml with comprehensive coverage
+
+**Acceptance Criteria**:
+- [ ] Workflow includes ALL fast tests (auto-discovery)
+- [ ] Runtime <10 minutes
+- [ ] No explicit file lists (uses pytest markers)
+- [ ] Includes backend, frontend, E2E
+
+---
+
+#### Task 0.5.3: Create New Nightly Workflow
+**Goal**: Single nightly workflow with ONLY slow tests
+
+**File**: `.github/workflows/nightly-tests.yml` (update existing)
+
+**New Structure**:
+```yaml
+name: Nightly Test Suite
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 2 AM UTC daily
+  workflow_dispatch:
+
+jobs:
+  slow-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio pytest-timeout
+
+      # Run ONLY slow tests (marked with @pytest.mark.slow)
+      - name: Run slow backend tests
+        run: |
+          PYTHONPATH=backend python -m pytest backend/tests/ \
+            -v --tb=long \
+            -m "slow" \
+            --timeout=600
+
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Nightly Tests Failed (${new Date().toISOString().split('T')[0]})`,
+              body: `## Nightly Test Failure\n\n**Run**: ${runUrl}\n\n### Action Required\n\n1. Review logs\n2. Investigate failure\n3. Fix or document issue\n\n### Quick Links\n- [View Logs](${runUrl})`,
+              labels: ['ci-failure', 'nightly', 'needs-investigation']
+            });
+```
+
+**Key Changes**:
+1. **Marker-based**: Only run tests marked with `@pytest.mark.slow`
+2. **Long timeout**: 600 seconds per test (10 min)
+3. **Auto-issue creation**: Creates GitHub issue on failure
+4. **No redundancy**: Only slow tests, nothing from comprehensive
+
+**Deliverable**: Updated nightly-tests.yml with slow tests only
+
+**Acceptance Criteria**:
+- [ ] Only runs tests marked with `@pytest.mark.slow`
+- [ ] No overlap with comprehensive workflow
+- [ ] Creates issue on failure
+- [ ] Reasonable timeout (180 min total)
+
+---
+
+#### Task 0.5.4: Add Pytest Markers to Tests
+**Goal**: Mark all tests as either default (fast) or slow
+
+**Process**:
+1. Add markers to conftest.py
+2. Mark slow tests with `@pytest.mark.slow`
+3. Leave fast tests unmarked (default)
+
+**File 1**: `backend/conftest.py`
+```python
+import pytest
+
+def pytest_configure(config):
+    """Register custom markers"""
+    config.addinivalue_line(
+        "markers",
+        "slow: marks tests as slow (deselected by default, run in nightly)"
+    )
+```
+
+**File 2**: Mark slow tests (example)
+```python
+# backend/tests/test_stress_ai_games.py
+import pytest
+
+@pytest.mark.slow
+def test_200_game_ai_marathon():
+    """Slow test: 200 AI games"""
+    # ... test code ...
+
+@pytest.mark.slow
+def test_stress_concurrent_games():
+    """Slow test: concurrent game stress"""
+    # ... test code ...
+```
+
+**Tests to Mark as Slow**:
+- `test_stress_ai_games.py` (all tests)
+- `test_property_based_enhanced.py` (1000 scenario test only)
+- `test_action_fuzzing.py` (all tests)
+- `test_concurrency.py` (all tests)
+- `test_performance.py` (benchmark tests only)
+- `test_rng_fairness.py` (statistical tests)
+- Any test taking >60 seconds
+
+**Deliverable**: Pytest markers configured and applied
+
+**Acceptance Criteria**:
+- [ ] conftest.py has `slow` marker defined
+- [ ] All slow tests marked with `@pytest.mark.slow`
+- [ ] Fast tests left unmarked (default)
+- [ ] Documentation updated
+
+---
+
+#### Task 0.5.5: Delete Redundant Workflows
+**Goal**: Remove 3 redundant workflow files
+
+**Files to Delete**:
+1. `.github/workflows/quick-tests.yml` (redundant with comprehensive)
+2. `.github/workflows/frontend-tests.yml` (merged into comprehensive)
+3. `.github/workflows/nightly-e2e.yml` (merged into comprehensive + nightly)
+
+**Process**:
+```bash
+# Delete redundant workflows
+rm .github/workflows/quick-tests.yml
+rm .github/workflows/frontend-tests.yml
+rm .github/workflows/nightly-e2e.yml
+
+# Verify only 3 workflows remain
+ls -la .github/workflows/
+# Should show:
+# - test.yml (comprehensive)
+# - nightly-tests.yml (slow tests only)
+# - generate-visual-baselines.yml (manual utility)
+```
+
+**Deliverable**: 3 workflows deleted, 3 remaining
+
+**Acceptance Criteria**:
+- [ ] quick-tests.yml deleted
+- [ ] frontend-tests.yml deleted
+- [ ] nightly-e2e.yml deleted
+- [ ] Only 3 workflows remain (comprehensive, nightly, visual-baselines)
+
+---
+
+#### Task 0.5.6: Update Documentation
+**Goal**: Document new test suite structure
+
+**File**: `docs/TEST-SUITE-REFERENCE.md`
+
+**Add Section**:
+```markdown
+## Test Suite Organization (Updated 2026-01-12)
+
+### Philosophy
+We maintain exactly **2 test workflows**:
+
+1. **Comprehensive Test Suite** (Per-commit, <10 min)
+   - ALL fast tests (unmarked or not marked `slow`)
+   - Runs on every commit and PR
+   - Must pass before merge
+   - Target: <10 minutes total runtime
+
+2. **Nightly Test Suite** (Daily, unlimited)
+   - ONLY slow tests (marked with `@pytest.mark.slow`)
+   - Runs at 2 AM UTC daily
+   - Can take hours if needed
+   - Failure creates GitHub issue
+
+### Running Tests Locally
+
+**Run all fast tests (what CI runs per-commit):**
+```bash
+PYTHONPATH=backend pytest backend/tests/ -m "not slow" -v
+```
+
+**Run only slow tests (what CI runs nightly):**
+```bash
+PYTHONPATH=backend pytest backend/tests/ -m "slow" -v
+```
+
+**Run ALL tests (comprehensive + slow):**
+```bash
+PYTHONPATH=backend pytest backend/tests/ -v
+```
+
+### Marking Tests
+
+**Default (fast tests):**
+```python
+def test_hand_evaluation():
+    # No marker needed - runs in comprehensive suite
+    pass
+```
+
+**Slow tests:**
+```python
+import pytest
+
+@pytest.mark.slow
+def test_200_game_marathon():
+    # Only runs in nightly suite
+    pass
+```
+
+### Adding New Tests
+
+**Decision tree:**
+1. Does your test take >60 seconds? → Mark with `@pytest.mark.slow`
+2. Otherwise → No marker needed (runs in comprehensive)
+
+**Guidelines:**
+- Comprehensive suite must stay <10 minutes total
+- If comprehensive exceeds 10 min, promote slowest tests to nightly
+- Nightly suite can be unlimited (within 180 min timeout)
+```
+
+**Deliverable**: Updated documentation
+
+**Acceptance Criteria**:
+- [ ] TEST-SUITE-REFERENCE.md updated with new structure
+- [ ] CLAUDE.md updated with workflow commands
+- [ ] Clear guidelines for marking tests
+
+---
+
+#### Task 0.5.7: Verify New Structure
+**Goal**: Test new workflows locally and in CI
+
+**Process**:
+1. **Test marker discovery locally**:
+   ```bash
+   # Should show all fast tests
+   pytest backend/tests/ -m "not slow" --collect-only
+
+   # Should show only slow tests
+   pytest backend/tests/ -m "slow" --collect-only
+   ```
+
+2. **Run comprehensive suite locally**:
+   ```bash
+   # Should complete in <10 minutes
+   time PYTHONPATH=backend pytest backend/tests/ -m "not slow" -v
+   ```
+
+3. **Commit and push**:
+   ```bash
+   git add .github/workflows/ backend/conftest.py backend/tests/ docs/
+   git commit -m "Phase 0.5: Consolidate to 2 test workflows (comprehensive + nightly)"
+   git push
+   ```
+
+4. **Monitor first CI run**:
+   - Check comprehensive workflow runs
+   - Verify all expected tests run
+   - Confirm runtime <10 minutes
+   - Check test count matches expectations
+
+**Deliverable**: Working 2-workflow structure
+
+**Acceptance Criteria**:
+- [ ] Comprehensive workflow runs successfully
+- [ ] Runtime <10 minutes
+- [ ] All fast tests execute
+- [ ] No redundant workflows running
+- [ ] Test count documented
+
+---
+
+### Phase 0.5 Success Metrics
+
+**Before Phase 0.5**:
+- 5 workflows (3 redundant)
+- 31% backend test coverage in CI (18/58 files)
+- Explicit file lists (brittle, easy to forget new tests)
+- Nightly tests 100% failure rate
+
+**After Phase 0.5**:
+- 2 workflows (clean, purposeful)
+- ~90% backend test coverage in CI (50+/58 files)
+- Auto-discovery via pytest markers (new tests automatically included)
+- Nightly tests stable or disabled temporarily
+
+**Expected Runtime**:
+- Comprehensive: 8-10 minutes (currently 7-8 min, adding ~50% more tests)
+- Nightly: 60-120 minutes (down from 167 min, only true slow tests)
 
 ---
 
