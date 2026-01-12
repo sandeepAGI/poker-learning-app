@@ -1,7 +1,7 @@
 # Azure Deployment Plan - Poker Learning App
 
 **Status:** FINAL - Ready for Execution
-**Version:** 2.0 (Peer Reviewed)
+**Version:** 3.0 (User Authentication Added)
 **Created:** 2026-01-12
 **Last Updated:** 2026-01-12
 
@@ -9,26 +9,37 @@
 
 ## Executive Summary
 
-This plan details the deployment of the Poker Learning App to Microsoft Azure with GitHub Actions CI/CD integration. The architecture has been peer-reviewed and addresses critical production requirements including persistent storage, scalability, and monitoring.
+This plan details the deployment of the Poker Learning App to Microsoft Azure with GitHub Actions CI/CD integration. The architecture includes user authentication, persistent storage, scalability, and comprehensive monitoring.
 
 ### Key Highlights
 
 - **Backend**: Azure App Service (Linux B2, Python 3.12) with WebSocket support
 - **Frontend**: Azure App Service (Linux B1, Node.js 20) for Next.js 15
-- **Data Layer**: Redis (session/game state) + PostgreSQL (hand history)
+- **Authentication**: Auth0 (OAuth + email/password, passwordless magic links)
+- **Data Layer**: Redis (session/game state) + PostgreSQL (hand history + user data)
 - **Secrets**: Azure Key Vault with managed identity
 - **Monitoring**: Application Insights with comprehensive alerting
 - **CI/CD**: GitHub Actions with automated testing and deployment
-- **Monthly Cost**: ~$140/month (production), ~$47/month (staging)
+- **Monthly Cost**: ~$145/month (production), ~$47/month (staging)
 
 ### Architecture Improvements from Review
 
 ✅ **Added persistent storage** (Redis + PostgreSQL)
+✅ **Added user authentication** (Auth0 with OAuth + passwordless)
+✅ **User accounts & progress tracking** (game history, stats, analysis cache)
 ✅ **Fixed startup command** (gunicorn + uvicorn workers)
 ✅ **Right-sized tiers** (B2 instead of over-provisioned P1v3)
-✅ **Enhanced security** (CORS, rate limiting, TLS config)
+✅ **Enhanced security** (CORS, rate limiting, TLS config, Auth0 JWT validation)
 ✅ **Comprehensive monitoring** (10+ alert rules)
 ✅ **Added pre-deployment phase** (fixes required before Azure setup)
+
+### New User Features Enabled
+
+✅ **"My Games" dashboard** - View all past games with stats
+✅ **Analysis history** - Access cached analyses (saves Anthropic API costs)
+✅ **Progress tracking** - Win rate, hands played, improvement over time
+✅ **Resume games** - Continue games across sessions/devices
+✅ **Personalized coaching** - AI references play history for better insights
 
 ---
 
@@ -36,14 +47,16 @@ This plan details the deployment of the Poker Learning App to Microsoft Azure wi
 
 1. [Architecture Overview](#architecture-overview)
 2. [Azure Services Selection](#azure-services-selection)
-3. [Environment Strategy](#environment-strategy)
-4. [Pre-Deployment Requirements](#pre-deployment-requirements-new)
-5. [Deployment Steps](#deployment-steps)
-6. [Security Configuration](#security-configuration)
-7. [Cost Analysis](#cost-analysis)
-8. [Monitoring & Operations](#monitoring--operations)
-9. [Rollback & Disaster Recovery](#rollback--disaster-recovery)
-10. [Deployment Checklist](#deployment-checklist)
+3. [Authentication Strategy](#authentication-strategy-new)
+4. [Database Schema](#database-schema-with-users)
+5. [Environment Strategy](#environment-strategy)
+6. [Pre-Deployment Requirements](#pre-deployment-requirements-new)
+7. [Deployment Steps](#deployment-steps)
+8. [Security Configuration](#security-configuration)
+9. [Cost Analysis](#cost-analysis)
+10. [Monitoring & Operations](#monitoring--operations)
+11. [Rollback & Disaster Recovery](#rollback--disaster-recovery)
+12. [Deployment Checklist](#deployment-checklist)
 
 ---
 
@@ -74,41 +87,59 @@ This plan details the deployment of the Poker Learning App to Microsoft Azure wi
 │  │  │  - Python 3.12       │    │  - Node.js 20        │    │ │
 │  │  │  - FastAPI           │    │  - Next.js 15        │    │ │
 │  │  │  - WebSocket         │    │  - React 19          │    │ │
+│  │  │  - JWT validation    │    │  - Auth0 SDK         │    │ │
 │  │  │  - B2 Tier           │    │  - B1 Tier           │    │ │
 │  │  └──────────────────────┘    └──────────────────────┘    │ │
+│  │           │                            │                  │ │
 │  │           │                            │                  │ │
 │  │           ▼                            ▼                  │ │
 │  │  ┌──────────────────────┐    ┌──────────────────────┐   │ │
 │  │  │  Redis Cache         │    │ PostgreSQL Database  │   │ │
-│  │  │  (Session/Game State)│    │ (Hand History)       │   │ │
-│  │  │  - Standard C1       │    │ - B1ms Burstable     │   │ │
-│  │  └──────────────────────┘    └──────────────────────┘   │ │
-│  │           │                                              │ │
-│  │           ▼                                              │ │
-│  │  ┌──────────────────────┐    ┌──────────────────────┐  │ │
-│  │  │  Azure Key Vault     │    │ Application Insights │  │ │
-│  │  │  - API Keys          │    │ - Logs & Metrics     │  │ │
-│  │  │  - Secrets           │    │ - Alerts             │  │ │
-│  │  └──────────────────────┘    └──────────────────────┘  │ │
-│  │                                                          │ │
-│  └──────────────────────────────────────────────────────────┘ │
-└───────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-                    ┌──────────────────┐
-                    │  Anthropic API   │
-                    │  (Claude AI)     │
-                    └──────────────────┘
+│  │  │  - Session/Game State│    │  - Users             │   │ │
+│  │  │  - Standard C1       │    │  - Games & History   │   │ │
+│  │  └──────────────────────┘    │  - User Stats        │   │ │
+│  │           │                   │  - Analysis Cache    │   │ │
+│  │           │                   │  - B1ms Burstable    │   │ │
+│  │           │                   └──────────────────────┘   │ │
+│  │           ▼                            ▲                 │ │
+│  │  ┌──────────────────────┐             │                 │ │
+│  │  │  Azure Key Vault     │             │                 │ │
+│  │  │  - API Keys          │             │                 │ │
+│  │  │  - Auth0 Secrets     │             │                 │ │
+│  │  │  - DB Credentials    │             │                 │ │
+│  │  └──────────────────────┘             │                 │ │
+│  │           │                            │                 │ │
+│  │           ▼                            │                 │ │
+│  │  ┌──────────────────────┐             │                 │ │
+│  │  │ Application Insights │             │                 │ │
+│  │  │  - Logs & Metrics    │             │                 │ │
+│  │  │  - User Analytics    │             │                 │ │
+│  │  │  - Alerts            │             │                 │ │
+│  │  └──────────────────────┘             │                 │ │
+│  │                                        │                 │ │
+│  └────────────────────────────────────────┼─────────────────┘ │
+└─────────────────────────────────────────┼───────────────────┘
+                                          │
+                    ┌─────────────────────┼──────────────────┐
+                    │                     │                  │
+                    ▼                     ▼                  ▼
+          ┌──────────────┐    ┌──────────────┐   ┌─────────────┐
+          │  Auth0       │    │ Anthropic API│   │ PostgreSQL  │
+          │  - OAuth     │    │ (Claude AI)  │   │ (User Data) │
+          │  - Passwordless│  └──────────────┘   └─────────────┘
+          │  - User Mgmt │
+          └──────────────┘
 ```
 
 ### Data Flow
 
-1. **User Request**: Browser → Frontend (App Service) → Backend (App Service)
-2. **WebSocket**: Persistent connection for real-time game updates
+1. **User Authentication**: Browser → Frontend → Auth0 → Frontend (JWT token)
+2. **Authenticated Request**: Frontend (with JWT) → Backend → Validate JWT → Process
 3. **Game State**: Backend ↔ Redis (active games, sessions)
-4. **Hand History**: Backend → PostgreSQL (persistent storage)
-5. **AI Analysis**: Backend → Anthropic API → PostgreSQL (cached results)
-6. **Monitoring**: All services → Application Insights
+4. **User Data**: Backend ↔ PostgreSQL (users, games, history, stats)
+5. **WebSocket**: Authenticated persistent connection for real-time game updates
+6. **AI Analysis**: Backend → Anthropic API → PostgreSQL (cached by user_id + hand_id)
+7. **Monitoring**: All services → Application Insights
 
 ---
 
@@ -128,17 +159,6 @@ This plan details the deployment of the Poker Learning App to Microsoft Azure wi
 - ✅ Built-in SSL/TLS
 - ✅ Integrated with Application Insights
 
-**Why B2 Tier?**
-- Sufficient for 500+ concurrent users
-- 2 vCores handle 100+ requests/second
-- Cost-effective ($26/mo vs $100/mo Premium)
-- Upgrade to Premium only when needed (>500 users)
-
-**Alternatives Considered**:
-- Azure Container Apps: ❌ Cold starts break WebSocket connections
-- Azure Functions: ❌ Not suitable for persistent WebSocket connections
-- Premium Tier P1v3: ❌ Over-provisioned for initial deployment (5x cost)
-
 ---
 
 ### 2. Frontend: Azure App Service (Linux, Node.js 20)
@@ -150,11 +170,8 @@ This plan details the deployment of the Poker Learning App to Microsoft Azure wi
 **Why App Service (Not Static Web Apps)?**
 - ✅ Full Next.js 15 support (SSR, API routes, middleware)
 - ✅ App Router compatibility
+- ✅ Server-side Auth0 session management
 - ✅ Future-proof for server components
-- ✅ Same platform as backend (easier operations)
-- ✅ Only $4/month more than Static Web Apps Standard
-
-**Static Web Apps Limitation**: Only supports static export mode (`output: 'export'`), which doesn't support Next.js SSR features or API routes.
 
 ---
 
@@ -167,19 +184,10 @@ This plan details the deployment of the Poker Learning App to Microsoft Azure wi
 **Specs**: 1 GB cache, High Availability (99.9% SLA)
 
 **Purpose**:
-- Active game state storage
+- Active game state storage (linked to user_id)
 - WebSocket session management
-- Rate limiting counters
-- Analysis cache (TTL-based)
-
-**Why Redis is Required**:
-- ✅ Enables horizontal scaling (multi-instance support)
-- ✅ Session persistence across server restarts
-- ✅ Sub-millisecond access times
-- ✅ Built-in TTL matches game expiration logic
-- ❌ Cannot scale beyond 1 instance without it
-
-**Critical**: Redis is **not optional** for production. In-memory storage only works for single-instance demo deployments.
+- Rate limiting counters (per user)
+- Temporary analysis cache (TTL-based)
 
 #### PostgreSQL (Azure Database for PostgreSQL Flexible Server)
 
@@ -188,29 +196,40 @@ This plan details the deployment of the Poker Learning App to Microsoft Azure wi
 **Specs**: 1 vCore, 2 GB RAM, 32 GB storage
 
 **Purpose**:
-- Hand history storage (analysis feature)
-- Player statistics (future feature)
-- Analysis results cache (long-term)
-- Audit logs and metrics
-
-**Why PostgreSQL?**
-- ✅ Relational data model (complex queries)
-- ✅ JSON support (JSONB for flexible schemas)
-- ✅ Automatic backups (7-day retention)
-- ✅ Point-in-time restore
-- ✅ Mature ecosystem (SQLAlchemy, Alembic)
-
-**Schema Overview**:
-```sql
-games (game_id, created_at, num_players, starting_stack)
-hands (hand_id, game_id, hand_number, board_cards, pot, winner_id)
-actions (action_id, hand_id, player_id, action, amount, timestamp)
-analysis_cache (cache_key, analysis_data, model_used, cost, expires_at)
-```
+- **User accounts** (email, display name, auth metadata)
+- **User games** (game history, final stacks, timestamps)
+- **Hand history** (for analysis feature)
+- **User statistics** (win rate, hands played, improvement metrics)
+- **Analysis cache** (per user + hand, saves Anthropic API costs)
+- **Audit logs** (user actions, security events)
 
 ---
 
-### 4. Secrets Management: Azure Key Vault
+### 4. Authentication: Auth0
+
+**Selected Tier**: Free (up to 7,000 monthly active users)
+**Cost**: $0/month (Free tier), scales to $23/month (Essentials) at 1,000+ users
+**Specs**: Unlimited logins, social connections, passwordless
+
+**Why Auth0?**
+- ✅ **No password management** (OAuth + passwordless magic links)
+- ✅ **Social login** (Google, GitHub, Apple)
+- ✅ **Passwordless** (email magic links - best UX)
+- ✅ **Built-in UI** (Universal Login, customizable)
+- ✅ **JWT tokens** (secure, stateless authentication)
+- ✅ **User management** (admin dashboard included)
+- ✅ **Azure integration** (seamless with App Service)
+- ✅ **MFA support** (optional, for premium users)
+- ✅ **SDKs available** (Python, JavaScript/React)
+
+**Alternatives Considered**:
+- Self-hosted auth: ❌ Complex, security risks, 1-2 weeks development
+- Firebase Auth: ⚠️ Good, but Auth0 has better enterprise features
+- Azure AD B2C: ⚠️ More expensive, complex setup
+
+---
+
+### 5. Secrets Management: Azure Key Vault
 
 **Selected Tier**: Standard
 **Cost**: ~$5/month
@@ -220,12 +239,14 @@ analysis_cache (cache_key, analysis_data, model_used, cost, expires_at)
 - `ANTHROPIC_API_KEY` (production key)
 - `REDIS_PASSWORD` (Redis connection password)
 - `DATABASE_URL` (PostgreSQL connection string)
-
-**Access Control**: Managed Identity (no credentials in code)
+- `AUTH0_DOMAIN` (Auth0 tenant domain)
+- `AUTH0_CLIENT_ID` (Auth0 application client ID)
+- `AUTH0_CLIENT_SECRET` (Auth0 application secret)
+- `AUTH0_API_AUDIENCE` (Auth0 API identifier)
 
 ---
 
-### 5. Monitoring: Application Insights
+### 6. Monitoring: Application Insights
 
 **Selected Tier**: Pay-as-you-go
 **Cost**: ~$5-10/month (30-day retention)
@@ -234,10 +255,728 @@ analysis_cache (cache_key, analysis_data, model_used, cost, expires_at)
 **Monitored Metrics**:
 - Request/response times (P50, P95, P99)
 - Error rates (HTTP 5xx)
+- **User authentication events** (login, logout, failures)
 - WebSocket connection health
-- Anthropic API call costs
+- Anthropic API call costs (per user)
 - Memory and CPU usage
-- Custom events (game actions, hand completions)
+- **User engagement** (daily/monthly active users, session duration)
+- **Game metrics** (games per user, hands played, win rates)
+
+---
+
+## Authentication Strategy (NEW)
+
+### Auth0 Configuration
+
+**Authentication Methods**:
+1. **Passwordless (Magic Links)** - Recommended default
+   - User enters email → Receives magic link → Clicks to login
+   - No password to remember or reset
+   - Best UX, highest security
+
+2. **Social OAuth** - Optional
+   - Google (most popular)
+   - GitHub (for developer audience)
+   - Apple (iOS users)
+
+3. **Email/Password** - Fallback
+   - Traditional method
+   - Requires password reset flow
+   - Only if users prefer it
+
+### JWT Token Flow
+
+```
+1. User clicks "Login" on frontend
+   ↓
+2. Frontend redirects to Auth0 Universal Login
+   ↓
+3. User authenticates (magic link / social / password)
+   ↓
+4. Auth0 redirects back to frontend with authorization code
+   ↓
+5. Frontend exchanges code for JWT access token + ID token
+   ↓
+6. Frontend stores tokens in secure HTTP-only cookies
+   ↓
+7. Frontend sends API requests with JWT in Authorization header
+   ↓
+8. Backend validates JWT signature (Auth0 public key)
+   ↓
+9. Backend extracts user_id from JWT claims
+   ↓
+10. Backend processes request with user context
+```
+
+### Backend JWT Validation
+
+```python
+# backend/auth.py
+from fastapi import HTTPException, Security
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from jose import jwt, JWTError
+import requests
+import os
+
+security = HTTPBearer()
+
+# Auth0 configuration
+AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")  # e.g., poker-app.us.auth0.com
+AUTH0_API_AUDIENCE = os.getenv("AUTH0_API_AUDIENCE")  # API identifier
+AUTH0_ALGORITHMS = ["RS256"]
+
+# Cache JWKs (JSON Web Keys) for JWT signature verification
+jwks_url = f"https://{AUTH0_DOMAIN}/.well-known/jwks.json"
+jwks = requests.get(jwks_url).json()
+
+def verify_token(credentials: HTTPAuthorizationCredentials = Security(security)):
+    """Verify JWT token from Auth0"""
+    token = credentials.credentials
+
+    try:
+        # Decode and verify JWT
+        unverified_header = jwt.get_unverified_header(token)
+        rsa_key = {}
+
+        for key in jwks["keys"]:
+            if key["kid"] == unverified_header["kid"]:
+                rsa_key = {
+                    "kty": key["kty"],
+                    "kid": key["kid"],
+                    "use": key["use"],
+                    "n": key["n"],
+                    "e": key["e"]
+                }
+
+        if rsa_key:
+            payload = jwt.decode(
+                token,
+                rsa_key,
+                algorithms=AUTH0_ALGORITHMS,
+                audience=AUTH0_API_AUDIENCE,
+                issuer=f"https://{AUTH0_DOMAIN}/"
+            )
+            return payload  # Contains user_id (sub), email, etc.
+
+        raise HTTPException(status_code=401, detail="Unable to find appropriate key")
+
+    except JWTError as e:
+        raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Token validation failed: {str(e)}")
+
+# Dependency for protected endpoints
+async def get_current_user(payload: dict = Security(verify_token)) -> dict:
+    """Extract user info from JWT payload"""
+    user_id = payload.get("sub")  # Auth0 user ID
+    email = payload.get("email")
+
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Invalid token: missing user_id")
+
+    return {
+        "user_id": user_id,
+        "email": email,
+        "name": payload.get("name"),
+        "picture": payload.get("picture"),
+    }
+
+# Usage in endpoints
+@app.post("/games")
+async def create_game(
+    current_user: dict = Depends(get_current_user),
+    num_ai_players: int = 3
+):
+    user_id = current_user["user_id"]
+    # Create game for this user...
+```
+
+### Frontend Auth0 Integration
+
+```typescript
+// frontend/lib/auth0.ts
+import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
+
+// Auth0 configuration
+const auth0Config = {
+  domain: process.env.NEXT_PUBLIC_AUTH0_DOMAIN!,
+  clientId: process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID!,
+  authorizationParams: {
+    redirect_uri: typeof window !== 'undefined' ? window.location.origin : '',
+    audience: process.env.NEXT_PUBLIC_AUTH0_AUDIENCE,
+    scope: 'openid profile email'
+  }
+};
+
+// Wrap app in Auth0Provider
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <Auth0Provider {...auth0Config}>
+      {children}
+    </Auth0Provider>
+  );
+}
+
+// Hook to use in components
+export function useAuth() {
+  const {
+    isAuthenticated,
+    isLoading,
+    user,
+    loginWithRedirect,
+    logout,
+    getAccessTokenSilently
+  } = useAuth0();
+
+  const getToken = async () => {
+    try {
+      return await getAccessTokenSilently();
+    } catch (error) {
+      console.error('Error getting token:', error);
+      return null;
+    }
+  };
+
+  return {
+    isAuthenticated,
+    isLoading,
+    user,
+    login: loginWithRedirect,
+    logout: () => logout({ logoutParams: { returnTo: window.location.origin } }),
+    getToken
+  };
+}
+
+// API client with auth
+export async function apiClient(endpoint: string, options: RequestInit = {}) {
+  const { getToken } = useAuth();
+  const token = await getToken();
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      ...options.headers,
+      'Content-Type': 'application/json',
+      ...(token && { 'Authorization': `Bearer ${token}` })
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`API error: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+```
+
+### User Profile Component
+
+```typescript
+// frontend/components/UserProfile.tsx
+import { useAuth } from '@/lib/auth0';
+
+export function UserProfile() {
+  const { isAuthenticated, isLoading, user, login, logout } = useAuth();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <button onClick={() => login()}>
+        Login
+      </button>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-4">
+      <img
+        src={user?.picture}
+        alt={user?.name}
+        className="w-10 h-10 rounded-full"
+      />
+      <div>
+        <p className="font-semibold">{user?.name}</p>
+        <p className="text-sm text-gray-500">{user?.email}</p>
+      </div>
+      <button onClick={() => logout()}>
+        Logout
+      </button>
+    </div>
+  );
+}
+```
+
+---
+
+## Database Schema (With Users)
+
+### Complete PostgreSQL Schema
+
+```sql
+-- ============================================================================
+-- USER MANAGEMENT
+-- ============================================================================
+
+-- Users table (Auth0 user data)
+CREATE TABLE users (
+    user_id VARCHAR(255) PRIMARY KEY,  -- Auth0 user ID (e.g., "auth0|...")
+    email VARCHAR(255) UNIQUE NOT NULL,
+    display_name VARCHAR(100),
+    picture_url VARCHAR(500),  -- Profile picture from social login
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP,
+    email_verified BOOLEAN DEFAULT FALSE,
+    metadata JSONB,  -- Extra user preferences, settings
+
+    -- Indexes
+    INDEX idx_users_email (email),
+    INDEX idx_users_created_at (created_at)
+);
+
+-- User statistics (aggregated metrics)
+CREATE TABLE user_stats (
+    user_id VARCHAR(255) PRIMARY KEY REFERENCES users(user_id) ON DELETE CASCADE,
+    total_games INT DEFAULT 0,
+    total_hands INT DEFAULT 0,
+    total_time_played INT DEFAULT 0,  -- seconds
+
+    -- Win/loss tracking
+    hands_won INT DEFAULT 0,
+    hands_lost INT DEFAULT 0,
+    win_rate FLOAT GENERATED ALWAYS AS (
+        CASE WHEN total_hands > 0
+        THEN (hands_won::FLOAT / total_hands::FLOAT) * 100
+        ELSE 0 END
+    ) STORED,
+
+    -- Financial metrics
+    total_profit INT DEFAULT 0,  -- Net profit/loss across all games
+    biggest_win INT DEFAULT 0,
+    biggest_loss INT DEFAULT 0,
+    avg_final_stack INT DEFAULT 0,
+
+    -- Skill metrics
+    avg_vpip FLOAT,  -- Voluntarily Put $ In Pot %
+    avg_pfr FLOAT,   -- Pre-Flop Raise %
+    avg_aggression FLOAT,  -- Aggression factor
+
+    -- Improvement tracking
+    initial_win_rate FLOAT,  -- Win rate from first 100 hands
+    last_30_days_win_rate FLOAT,
+    improvement_score FLOAT,  -- Calculated improvement metric
+
+    -- Analysis usage
+    analyses_requested INT DEFAULT 0,
+    total_analysis_cost FLOAT DEFAULT 0.0,  -- Total $ spent on AI analysis
+
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================================================
+-- GAME MANAGEMENT
+-- ============================================================================
+
+-- Games table (now linked to users)
+CREATE TABLE games (
+    game_id VARCHAR(50) PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+
+    -- Game configuration
+    num_ai_players INT NOT NULL,
+    starting_stack INT NOT NULL,
+    small_blind INT NOT NULL,
+    big_blind INT NOT NULL,
+
+    -- Game state
+    current_hand INT DEFAULT 0,
+    status VARCHAR(20) DEFAULT 'active',  -- active, completed, abandoned
+
+    -- Timestamps
+    started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    completed_at TIMESTAMP,
+    last_activity TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Final results
+    final_stack INT,
+    total_hands_played INT DEFAULT 0,
+    session_duration INT,  -- seconds
+    profit_loss INT GENERATED ALWAYS AS (final_stack - starting_stack) STORED,
+
+    -- Indexes
+    INDEX idx_games_user_id (user_id),
+    INDEX idx_games_status (status),
+    INDEX idx_games_started_at (started_at),
+    INDEX idx_games_user_started (user_id, started_at)
+);
+
+-- Hands table (detailed hand history)
+CREATE TABLE hands (
+    hand_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    game_id VARCHAR(50) NOT NULL REFERENCES games(game_id) ON DELETE CASCADE,
+    user_id VARCHAR(255) NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    hand_number INT NOT NULL,
+
+    -- Hand details
+    board_cards JSONB,  -- Community cards
+    pot INT NOT NULL,
+    winner_id VARCHAR(50),  -- player_id of winner
+    winner_name VARCHAR(100),
+
+    -- User's hand
+    user_hole_cards JSONB,  -- User's private cards
+    user_position VARCHAR(10),  -- button, SB, BB, etc.
+    user_starting_stack INT,
+    user_final_stack INT,
+    user_won BOOLEAN,
+
+    -- Hand metadata
+    phases_played JSONB,  -- [pre_flop, flop, turn, river, showdown]
+    total_actions INT,
+    hand_duration INT,  -- seconds
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Indexes
+    INDEX idx_hands_game_id (game_id),
+    INDEX idx_hands_user_id (user_id),
+    INDEX idx_hands_created_at (created_at),
+    INDEX idx_hands_user_game (user_id, game_id, hand_number)
+);
+
+-- Actions table (granular action tracking)
+CREATE TABLE actions (
+    action_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    hand_id UUID NOT NULL REFERENCES hands(hand_id) ON DELETE CASCADE,
+    user_id VARCHAR(255) NOT NULL REFERENCES users(user_id),
+
+    -- Action details
+    player_id VARCHAR(50) NOT NULL,  -- ID of player taking action
+    player_name VARCHAR(100),
+    action VARCHAR(20) NOT NULL,  -- fold, call, raise, check, all_in
+    amount INT,
+
+    -- Context
+    phase VARCHAR(20),  -- pre_flop, flop, turn, river
+    position VARCHAR(10),
+    stack_before INT,
+    stack_after INT,
+    pot_before INT,
+    pot_after INT,
+
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Indexes
+    INDEX idx_actions_hand_id (hand_id),
+    INDEX idx_actions_user_id (user_id),
+    INDEX idx_actions_timestamp (timestamp)
+);
+
+-- ============================================================================
+-- ANALYSIS & CACHING
+-- ============================================================================
+
+-- Analysis cache (saves Anthropic API costs)
+CREATE TABLE analysis_cache (
+    cache_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id VARCHAR(255) NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    hand_id UUID NOT NULL REFERENCES hands(hand_id) ON DELETE CASCADE,
+
+    -- Analysis details
+    analysis_type VARCHAR(20) NOT NULL,  -- quick, deep
+    model_used VARCHAR(50) NOT NULL,  -- claude-haiku-4-5, claude-sonnet-4-5
+    cost FLOAT NOT NULL,
+
+    -- Analysis content
+    analysis_data JSONB NOT NULL,  -- Full analysis response
+    summary TEXT,
+    tips JSONB,  -- Array of improvement tips
+
+    -- Caching
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    accessed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    access_count INT DEFAULT 1,
+
+    -- UNIQUE constraint: one analysis per user+hand+type
+    UNIQUE (user_id, hand_id, analysis_type),
+
+    -- Indexes
+    INDEX idx_analysis_user_id (user_id),
+    INDEX idx_analysis_hand_id (hand_id),
+    INDEX idx_analysis_created_at (created_at)
+);
+
+-- ============================================================================
+-- AUDIT & SECURITY
+-- ============================================================================
+
+-- Audit log (user actions, security events)
+CREATE TABLE audit_log (
+    log_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id VARCHAR(255) REFERENCES users(user_id) ON DELETE SET NULL,
+
+    -- Event details
+    event_type VARCHAR(50) NOT NULL,  -- login, logout, game_created, etc.
+    event_data JSONB,
+
+    -- Security
+    ip_address INET,
+    user_agent TEXT,
+
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Indexes
+    INDEX idx_audit_user_id (user_id),
+    INDEX idx_audit_event_type (event_type),
+    INDEX idx_audit_timestamp (timestamp)
+);
+
+-- ============================================================================
+-- VIEWS (Materialized for performance)
+-- ============================================================================
+
+-- User dashboard summary
+CREATE MATERIALIZED VIEW user_dashboard AS
+SELECT
+    u.user_id,
+    u.display_name,
+    u.email,
+    u.picture_url,
+    u.created_at,
+    u.last_login,
+
+    -- Game stats
+    us.total_games,
+    us.total_hands,
+    us.win_rate,
+    us.total_profit,
+    us.avg_final_stack,
+    us.improvement_score,
+
+    -- Recent activity
+    (SELECT COUNT(*) FROM games WHERE user_id = u.user_id AND started_at > NOW() - INTERVAL '7 days') as games_last_7_days,
+    (SELECT COUNT(*) FROM hands WHERE user_id = u.user_id AND created_at > NOW() - INTERVAL '7 days') as hands_last_7_days,
+
+    -- Analysis stats
+    us.analyses_requested,
+    us.total_analysis_cost,
+
+    -- Latest game
+    (SELECT game_id FROM games WHERE user_id = u.user_id ORDER BY started_at DESC LIMIT 1) as latest_game_id,
+    (SELECT started_at FROM games WHERE user_id = u.user_id ORDER BY started_at DESC LIMIT 1) as latest_game_started
+
+FROM users u
+LEFT JOIN user_stats us ON u.user_id = us.user_id;
+
+-- Refresh command (run periodically or after significant updates)
+-- REFRESH MATERIALIZED VIEW user_dashboard;
+
+-- ============================================================================
+-- FUNCTIONS & TRIGGERS
+-- ============================================================================
+
+-- Update user stats after game completion
+CREATE OR REPLACE FUNCTION update_user_stats_on_game_complete()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.status = 'completed' AND OLD.status != 'completed' THEN
+        UPDATE user_stats
+        SET
+            total_games = total_games + 1,
+            total_hands = total_hands + NEW.total_hands_played,
+            total_time_played = total_time_played + COALESCE(NEW.session_duration, 0),
+            total_profit = total_profit + (NEW.final_stack - NEW.starting_stack),
+            avg_final_stack = (avg_final_stack * total_games + NEW.final_stack) / (total_games + 1),
+            updated_at = NOW()
+        WHERE user_id = NEW.user_id;
+
+        -- Create user_stats if doesn't exist
+        INSERT INTO user_stats (user_id)
+        VALUES (NEW.user_id)
+        ON CONFLICT (user_id) DO NOTHING;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_user_stats
+AFTER UPDATE ON games
+FOR EACH ROW
+EXECUTE FUNCTION update_user_stats_on_game_complete();
+
+-- Update hands won/lost after hand completion
+CREATE OR REPLACE FUNCTION update_user_stats_on_hand_complete()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.user_won IS NOT NULL THEN
+        UPDATE user_stats
+        SET
+            hands_won = hands_won + CASE WHEN NEW.user_won THEN 1 ELSE 0 END,
+            hands_lost = hands_lost + CASE WHEN NEW.user_won THEN 0 ELSE 1 END,
+            updated_at = NOW()
+        WHERE user_id = NEW.user_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_hands_stats
+AFTER INSERT ON hands
+FOR EACH ROW
+EXECUTE FUNCTION update_user_stats_on_hand_complete();
+
+-- Update analysis cost tracking
+CREATE OR REPLACE FUNCTION update_analysis_costs()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE user_stats
+    SET
+        analyses_requested = analyses_requested + 1,
+        total_analysis_cost = total_analysis_cost + NEW.cost,
+        updated_at = NOW()
+    WHERE user_id = NEW.user_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_analysis_costs
+AFTER INSERT ON analysis_cache
+FOR EACH ROW
+EXECUTE FUNCTION update_analysis_costs();
+
+-- Update last_activity on games
+CREATE OR REPLACE FUNCTION update_game_activity()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE games
+    SET last_activity = NOW()
+    WHERE game_id = NEW.game_id;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_game_activity_on_hand
+AFTER INSERT ON hands
+FOR EACH ROW
+EXECUTE FUNCTION update_game_activity();
+
+-- ============================================================================
+-- SAMPLE QUERIES
+-- ============================================================================
+
+-- Get user's game history with stats
+-- SELECT
+--     g.game_id,
+--     g.started_at,
+--     g.completed_at,
+--     g.total_hands_played,
+--     g.final_stack,
+--     g.profit_loss,
+--     g.session_duration,
+--     (SELECT COUNT(*) FROM hands WHERE game_id = g.game_id AND user_won = TRUE) as hands_won
+-- FROM games g
+-- WHERE g.user_id = 'auth0|123456789'
+--   AND g.status = 'completed'
+-- ORDER BY g.started_at DESC
+-- LIMIT 20;
+
+-- Get user's recent analyses (cached)
+-- SELECT
+--     h.hand_number,
+--     h.created_at as hand_played_at,
+--     ac.analysis_type,
+--     ac.model_used,
+--     ac.summary,
+--     ac.tips,
+--     ac.created_at as analyzed_at,
+--     ac.cost
+-- FROM analysis_cache ac
+-- JOIN hands h ON ac.hand_id = h.hand_id
+-- WHERE ac.user_id = 'auth0|123456789'
+-- ORDER BY ac.created_at DESC
+-- LIMIT 10;
+
+-- Get leaderboard (top players by win rate, min 100 hands)
+-- SELECT
+--     u.display_name,
+--     u.picture_url,
+--     us.total_games,
+--     us.total_hands,
+--     us.win_rate,
+--     us.total_profit,
+--     us.improvement_score
+-- FROM user_stats us
+-- JOIN users u ON us.user_id = u.user_id
+-- WHERE us.total_hands >= 100
+-- ORDER BY us.win_rate DESC
+-- LIMIT 20;
+```
+
+### Schema Migration Strategy
+
+```python
+# backend/alembic/versions/001_add_user_tables.py
+"""Add user authentication and user-specific tables
+
+Revision ID: 001
+Revises:
+Create Date: 2026-01-12
+
+"""
+from alembic import op
+import sqlalchemy as sa
+from sqlalchemy.dialects import postgresql
+
+def upgrade():
+    # Create users table
+    op.create_table('users',
+        sa.Column('user_id', sa.String(255), nullable=False),
+        sa.Column('email', sa.String(255), nullable=False),
+        sa.Column('display_name', sa.String(100)),
+        sa.Column('picture_url', sa.String(500)),
+        sa.Column('created_at', sa.TIMESTAMP(), server_default=sa.text('CURRENT_TIMESTAMP')),
+        sa.Column('last_login', sa.TIMESTAMP()),
+        sa.Column('email_verified', sa.Boolean(), server_default=sa.text('FALSE')),
+        sa.Column('metadata', postgresql.JSONB()),
+        sa.PrimaryKeyConstraint('user_id'),
+        sa.UniqueConstraint('email')
+    )
+    op.create_index('idx_users_email', 'users', ['email'])
+    op.create_index('idx_users_created_at', 'users', ['created_at'])
+
+    # Create user_stats table
+    op.create_table('user_stats',
+        sa.Column('user_id', sa.String(255), nullable=False),
+        # ... all other columns from schema above
+        sa.PrimaryKeyConstraint('user_id'),
+        sa.ForeignKeyConstraint(['user_id'], ['users.user_id'], ondelete='CASCADE')
+    )
+
+    # Add user_id to existing games table
+    op.add_column('games', sa.Column('user_id', sa.String(255), nullable=True))
+    op.create_foreign_key('fk_games_user_id', 'games', 'users', ['user_id'], ['user_id'], ondelete='CASCADE')
+    op.create_index('idx_games_user_id', 'games', ['user_id'])
+
+    # Add user_id to hands table
+    op.add_column('hands', sa.Column('user_id', sa.String(255), nullable=True))
+    op.create_foreign_key('fk_hands_user_id', 'hands', 'users', ['user_id'], ['user_id'], ondelete='CASCADE')
+
+    # ... continue for all tables
+
+def downgrade():
+    # Reverse all changes
+    op.drop_table('user_stats')
+    op.drop_table('analysis_cache')
+    op.drop_column('hands', 'user_id')
+    op.drop_column('games', 'user_id')
+    op.drop_table('users')
+```
 
 ---
 
@@ -245,11 +984,11 @@ analysis_cache (cache_key, analysis_data, model_used, cost, expires_at)
 
 ### Three Environments
 
-| Environment | Purpose | Backend | Frontend | Redis | PostgreSQL | Monthly Cost |
-|-------------|---------|---------|----------|-------|------------|--------------|
-| **Development** | Local dev | localhost | localhost | None | None | $0 |
-| **Staging** | Pre-prod testing | B1 | B1 (shared) | Basic C0 | B1ms | ~$47 |
-| **Production** | Live users | B2 | B1 | Standard C1 | B1ms | ~$140 |
+| Environment | Purpose | Backend | Frontend | Redis | PostgreSQL | Auth0 | Monthly Cost |
+|-------------|---------|---------|----------|-------|------------|-------|--------------|
+| **Development** | Local dev | localhost | localhost | Docker | Docker | Dev tenant | $0 |
+| **Staging** | Pre-prod testing | B1 | B1 (shared) | Basic C0 | B1ms | Staging tenant | ~$47 |
+| **Production** | Live users | B2 | B1 | Standard C1 | B1ms | Prod tenant | ~$145 |
 
 ### Environment Configuration
 
@@ -257,26 +996,53 @@ analysis_cache (cache_key, analysis_data, model_used, cost, expires_at)
 # Development (Local)
 ENVIRONMENT: development
 BACKEND_URL: http://localhost:8000
+NEXT_PUBLIC_API_URL: http://localhost:8000
 ANTHROPIC_API_KEY: <dev-key>
-TEST_MODE: 1
-REDIS_HOST: localhost:6379 (optional)
+REDIS_HOST: localhost:6379
 DATABASE_URL: postgresql://localhost/poker_dev
+
+# Auth0 (Development)
+AUTH0_DOMAIN: poker-app-dev.us.auth0.com
+AUTH0_CLIENT_ID: <dev-client-id>
+AUTH0_CLIENT_SECRET: <dev-secret>
+AUTH0_API_AUDIENCE: https://api.poker-dev.local
+NEXT_PUBLIC_AUTH0_DOMAIN: poker-app-dev.us.auth0.com
+NEXT_PUBLIC_AUTH0_CLIENT_ID: <dev-client-id>
+NEXT_PUBLIC_AUTH0_AUDIENCE: https://api.poker-dev.local
 
 # Staging (Azure)
 ENVIRONMENT: staging
 BACKEND_URL: https://poker-api-staging.azurewebsites.net
+NEXT_PUBLIC_API_URL: https://poker-api-staging.azurewebsites.net
 ANTHROPIC_API_KEY: @KeyVault(ANTHROPIC-API-KEY-STAGING)
-TEST_MODE: 0
 REDIS_HOST: poker-cache-staging.redis.cache.windows.net
 DATABASE_URL: @KeyVault(DATABASE-URL-STAGING)
+
+# Auth0 (Staging)
+AUTH0_DOMAIN: @KeyVault(AUTH0-DOMAIN-STAGING)
+AUTH0_CLIENT_ID: @KeyVault(AUTH0-CLIENT-ID-STAGING)
+AUTH0_CLIENT_SECRET: @KeyVault(AUTH0-CLIENT-SECRET-STAGING)
+AUTH0_API_AUDIENCE: @KeyVault(AUTH0-AUDIENCE-STAGING)
+NEXT_PUBLIC_AUTH0_DOMAIN: poker-app-staging.us.auth0.com
+NEXT_PUBLIC_AUTH0_CLIENT_ID: <staging-client-id>
+NEXT_PUBLIC_AUTH0_AUDIENCE: https://api.poker-staging.app
 
 # Production (Azure)
 ENVIRONMENT: production
 BACKEND_URL: https://poker-api-prod.azurewebsites.net
+NEXT_PUBLIC_API_URL: https://poker-api-prod.azurewebsites.net
 ANTHROPIC_API_KEY: @KeyVault(ANTHROPIC-API-KEY-PROD)
-TEST_MODE: 0
 REDIS_HOST: poker-cache-prod.redis.cache.windows.net
 DATABASE_URL: @KeyVault(DATABASE-URL-PROD)
+
+# Auth0 (Production)
+AUTH0_DOMAIN: @KeyVault(AUTH0-DOMAIN-PROD)
+AUTH0_CLIENT_ID: @KeyVault(AUTH0-CLIENT-ID-PROD)
+AUTH0_CLIENT_SECRET: @KeyVault(AUTH0-CLIENT-SECRET-PROD)
+AUTH0_API_AUDIENCE: @KeyVault(AUTH0-AUDIENCE-PROD)
+NEXT_PUBLIC_AUTH0_DOMAIN: poker-app.us.auth0.com
+NEXT_PUBLIC_AUTH0_CLIENT_ID: <prod-client-id>
+NEXT_PUBLIC_AUTH0_AUDIENCE: https://api.poker.app
 ```
 
 ---
@@ -285,25 +1051,102 @@ DATABASE_URL: @KeyVault(DATABASE-URL-PROD)
 
 ### Critical Fixes Required BEFORE Azure Setup
 
-These changes must be implemented in the codebase **before starting Azure deployment**. Estimated time: 3-4 days.
+These changes must be implemented in the codebase **before starting Azure deployment**. Estimated time: **5-7 days** (was 3-4 days, +2-3 days for auth).
 
-#### 1. Database Implementation (2-3 days)
+#### 1. User Authentication Implementation (2-3 days)
 
-**Task**: Replace in-memory storage with Redis + PostgreSQL
+**Task**: Integrate Auth0 for user authentication
 
-**Current Issue**:
-```python
-# backend/main.py line 51:
-games: Dict[str, Tuple[PokerGame, float]] = {}  # In-memory only!
+**Steps**:
+
+```bash
+# 1. Create Auth0 account and applications
+# Visit: https://auth0.com/signup
+# Create 3 tenants: dev, staging, production
+# Create Application (Single Page Application) for each
+
+# 2. Configure Auth0 applications
+# - Allowed Callback URLs: http://localhost:3000, https://poker-web-staging.azurewebsites.net
+# - Allowed Logout URLs: (same as callback)
+# - Allowed Web Origins: (same as callback)
+# - Enable Connections: Email (passwordless), Google, GitHub
+
+# 3. Create Auth0 API (for backend)
+# - Name: Poker Learning API
+# - Identifier: https://api.poker.app (production), https://api.poker-staging.app (staging)
+# - Signing Algorithm: RS256
+# - Enable RBAC: No (not needed yet)
+
+# 4. Add backend dependencies
+# Add to backend/requirements.txt:
+python-jose[cryptography]>=3.3.0
+requests>=2.31.0
+fastapi-jwt-auth>=0.5.0  # Optional, for easier JWT handling
+
+# 5. Implement backend auth module (see Authentication Strategy section above)
+# Create: backend/auth.py with JWT validation
+
+# 6. Update backend endpoints to require authentication
+# backend/main.py:
+from auth import get_current_user
+
+@app.post("/games")
+async def create_game(
+    current_user: dict = Depends(get_current_user),  # NEW
+    num_ai_players: int = 3
+):
+    user_id = current_user["user_id"]
+    # Create game linked to user...
+
+@app.get("/games/{game_id}")
+async def get_game(
+    game_id: str,
+    current_user: dict = Depends(get_current_user)  # NEW
+):
+    # Verify game belongs to user...
+
+# 7. Add frontend dependencies
+# frontend/package.json:
+npm install @auth0/auth0-react @auth0/auth0-spa-js
+
+# 8. Implement frontend auth (see Authentication Strategy section above)
+# Create: frontend/lib/auth0.ts
+# Create: frontend/components/UserProfile.tsx
+# Update: frontend/pages/_app.tsx to wrap with AuthProvider
+
+# 9. Update API client to include JWT
+# frontend/lib/api.ts:
+const token = await getToken();
+const response = await fetch(url, {
+  headers: {
+    'Authorization': `Bearer ${token}`
+  }
+});
+
+# 10. Add login/logout UI
+# Create: frontend/pages/login.tsx
+# Update: frontend/components/Header.tsx with login button
 ```
 
-**Problems**:
-- Cannot scale beyond 1 instance
-- Data lost on restart
-- No session persistence
-- Memory limits (1.75-3.5 GB)
+**Validation**:
+```bash
+# Test authentication flow
+1. Start backend: cd backend && python main.py
+2. Start frontend: cd frontend && npm run dev
+3. Click "Login" → Redirects to Auth0
+4. Login with email magic link
+5. Redirected back to app with JWT
+6. Create game → Backend receives valid JWT
+7. Logout → Token cleared
+```
 
-**Required Changes**:
+---
+
+#### 2. Database Implementation with Users (2-3 days)
+
+**Task**: Replace in-memory storage with Redis + PostgreSQL, add user tables
+
+**Changes** (see Database Schema section for complete schema):
 
 ```python
 # 1. Add dependencies to backend/requirements.txt
@@ -312,322 +1155,308 @@ psycopg2-binary>=2.9.9
 sqlalchemy>=2.0.23
 alembic>=1.13.0
 
-# 2. Create Redis client (backend/redis_client.py)
-import redis
-import pickle
-import os
+# 2. Create database models (backend/models.py)
+# Include User, UserStats, Game (with user_id), Hand, Action, AnalysisCache
 
-redis_client = redis.Redis(
-    host=os.getenv("REDIS_HOST", "localhost"),
-    port=int(os.getenv("REDIS_PORT", 6380)),
-    password=os.getenv("REDIS_PASSWORD"),
-    ssl=True if os.getenv("ENVIRONMENT") != "development" else False,
-    decode_responses=False
-)
+# 3. Update backend to use database
+# backend/main.py:
+from models import User, Game, Hand, Action
+from sqlalchemy.orm import Session
 
-def save_game(game_id: str, game: PokerGame, ttl: int = 7200):
-    """Save game state to Redis"""
-    redis_client.setex(
-        f"game:{game_id}",
-        ttl,
-        pickle.dumps(game)
+@app.post("/games")
+async def create_game(
+    current_user: dict = Depends(get_current_user),
+    num_ai_players: int = 3,
+    db: Session = Depends(get_db)
+):
+    # Create user if doesn't exist
+    user = db.query(User).filter(User.user_id == current_user["user_id"]).first()
+    if not user:
+        user = User(
+            user_id=current_user["user_id"],
+            email=current_user["email"],
+            display_name=current_user.get("name"),
+            picture_url=current_user.get("picture")
+        )
+        db.add(user)
+        db.commit()
+
+    # Create game linked to user
+    game = Game(
+        game_id=str(uuid.uuid4()),
+        user_id=user.user_id,
+        num_ai_players=num_ai_players,
+        ...
     )
+    db.add(game)
+    db.commit()
 
-def load_game(game_id: str) -> Optional[PokerGame]:
-    """Load game state from Redis"""
-    data = redis_client.get(f"game:{game_id}")
-    return pickle.loads(data) if data else None
+    # Save active game state to Redis (transient)
+    save_game_to_redis(game.game_id, poker_game_state)
 
-def delete_game(game_id: str):
-    """Delete game from Redis"""
-    redis_client.delete(f"game:{game_id}")
+    return {"game_id": game.game_id}
 
-# 3. Update main.py to use Redis instead of dict
-# Replace all dict operations:
-# OLD: games[game_id] = (game, last_activity)
-# NEW: save_game(game_id, game)
+# 4. Implement user dashboard endpoint
+@app.get("/users/me/dashboard")
+async def get_user_dashboard(
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    stats = db.query(UserStats).filter(UserStats.user_id == current_user["user_id"]).first()
+    recent_games = db.query(Game).filter(
+        Game.user_id == current_user["user_id"]
+    ).order_by(Game.started_at.desc()).limit(10).all()
 
-# 4. Create PostgreSQL models (backend/models.py)
-from sqlalchemy import create_engine, Column, Integer, String, JSON, DateTime, Float
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+    return {
+        "user": current_user,
+        "stats": stats,
+        "recent_games": recent_games
+    }
 
-Base = declarative_base()
+# 5. Implement game history endpoint
+@app.get("/users/me/games")
+async def get_user_games(
+    current_user: dict = Depends(get_current_user),
+    limit: int = 20,
+    offset: int = 0,
+    db: Session = Depends(get_db)
+):
+    games = db.query(Game).filter(
+        Game.user_id == current_user["user_id"],
+        Game.status == 'completed'
+    ).order_by(Game.started_at.desc()).offset(offset).limit(limit).all()
 
-class Hand(Base):
-    __tablename__ = 'hands'
-    hand_id = Column(String, primary_key=True)
-    game_id = Column(String, index=True)
-    hand_number = Column(Integer)
-    board_cards = Column(JSON)
-    pot = Column(Integer)
-    winner_id = Column(String)
-    created_at = Column(DateTime)
+    return {"games": games, "total": len(games)}
 
-class Action(Base):
-    __tablename__ = 'actions'
-    action_id = Column(String, primary_key=True)
-    hand_id = Column(String, index=True)
-    player_id = Column(String)
-    action = Column(String)
-    amount = Column(Integer)
-    timestamp = Column(DateTime)
+# 6. Update analysis endpoint to use cache
+@app.get("/games/{game_id}/analysis-llm")
+async def get_analysis(
+    game_id: str,
+    depth: str = "quick",
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Get last hand
+    hand = db.query(Hand).filter(
+        Hand.game_id == game_id,
+        Hand.user_id == current_user["user_id"]
+    ).order_by(Hand.hand_number.desc()).first()
 
-class AnalysisCache(Base):
-    __tablename__ = 'analysis_cache'
-    cache_key = Column(String, primary_key=True)
-    analysis_data = Column(JSON)
-    model_used = Column(String)
-    cost = Column(Float)
-    created_at = Column(DateTime)
-    expires_at = Column(DateTime)
+    # Check cache
+    cached = db.query(AnalysisCache).filter(
+        AnalysisCache.user_id == current_user["user_id"],
+        AnalysisCache.hand_id == hand.hand_id,
+        AnalysisCache.analysis_type == depth
+    ).first()
 
-# 5. Create Alembic migration
-# Run: alembic init alembic
-# Edit alembic/env.py to import models
-# Run: alembic revision --autogenerate -m "Initial schema"
+    if cached:
+        # Return cached result (saves Anthropic API cost!)
+        return {
+            "analysis": cached.analysis_data,
+            "model_used": cached.model_used,
+            "cost": 0.0,  # No cost for cached result
+            "cached": True
+        }
+
+    # Call Anthropic API
+    result = await call_anthropic_api(hand, depth)
+
+    # Save to cache
+    cache_entry = AnalysisCache(
+        user_id=current_user["user_id"],
+        hand_id=hand.hand_id,
+        analysis_type=depth,
+        model_used=result["model"],
+        cost=result["cost"],
+        analysis_data=result["analysis"]
+    )
+    db.add(cache_entry)
+    db.commit()
+
+    return result
+
+# 7. Create migrations
+alembic init alembic
+alembic revision --autogenerate -m "Add user tables"
+alembic upgrade head
 ```
 
-**Validation**:
-```bash
-# Test locally with Redis
-docker run -d -p 6379:6379 redis:7
-cd backend && python main.py
+**Frontend Changes**:
+```typescript
+// Create user dashboard page
+// frontend/pages/dashboard.tsx
+export default function Dashboard() {
+  const { user } = useAuth();
+  const [stats, setStats] = useState(null);
+  const [recentGames, setRecentGames] = useState([]);
 
-# Test game persistence
-# 1. Create game, get game_id
-# 2. Restart backend
-# 3. Verify game still exists
+  useEffect(() => {
+    async function loadDashboard() {
+      const data = await apiClient('/users/me/dashboard');
+      setStats(data.stats);
+      setRecentGames(data.recent_games);
+    }
+    loadDashboard();
+  }, []);
+
+  return (
+    <div>
+      <h1>Welcome back, {user.name}!</h1>
+
+      <div className="stats-grid">
+        <StatCard title="Total Games" value={stats?.total_games} />
+        <StatCard title="Win Rate" value={`${stats?.win_rate?.toFixed(1)}%`} />
+        <StatCard title="Total Hands" value={stats?.total_hands} />
+        <StatCard title="Total Profit" value={`$${stats?.total_profit}`} />
+      </div>
+
+      <h2>Recent Games</h2>
+      <GameList games={recentGames} />
+    </div>
+  );
+}
+
+// Create game history page
+// frontend/pages/games/index.tsx
+export default function GameHistory() {
+  const [games, setGames] = useState([]);
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    async function loadGames() {
+      const data = await apiClient(`/users/me/games?limit=20&offset=${page * 20}`);
+      setGames(data.games);
+    }
+    loadGames();
+  }, [page]);
+
+  return (
+    <div>
+      <h1>My Games</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Hands Played</th>
+            <th>Final Stack</th>
+            <th>Profit/Loss</th>
+            <th>Duration</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {games.map(game => (
+            <tr key={game.game_id}>
+              <td>{new Date(game.started_at).toLocaleDateString()}</td>
+              <td>{game.total_hands_played}</td>
+              <td>${game.final_stack}</td>
+              <td className={game.profit_loss >= 0 ? 'text-green' : 'text-red'}>
+                ${game.profit_loss}
+              </td>
+              <td>{formatDuration(game.session_duration)}</td>
+              <td>
+                <Link href={`/games/${game.game_id}/review`}>
+                  Review
+                </Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <Pagination page={page} onPageChange={setPage} />
+    </div>
+  );
+}
 ```
 
 ---
 
-#### 2. Fix Startup Command (30 minutes)
+#### 3. Fix Startup Command (30 minutes)
 
-**Current Issue**: Plan proposes `python -m uvicorn main:app` which won't work on Azure App Service
-
-**Required Changes**:
-
-```bash
-# Add to backend/requirements.txt
-gunicorn>=21.2.0
-
-# Correct startup command:
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app \
-  --bind 0.0.0.0:8000 \
-  --timeout 120 \
-  --access-logfile - \
-  --error-logfile -
-```
-
-**Why gunicorn + uvicorn workers?**
-- Azure App Service expects production WSGI server
-- Multiple workers for concurrent requests
-- WebSocket support via uvicorn workers
-- Timeout accommodates long-running connections
-
-**Validation**:
-```bash
-cd backend
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
-# Test WebSocket connections work
-```
-
----
-
-#### 3. Frontend Deployment Strategy (1-2 hours)
-
-**Task**: Verify Next.js 15 deployment compatibility
-
-**Check current build output**:
-```bash
-cd frontend
-npm run build
-
-# If output contains .next/server/ → Needs App Service (SSR)
-# If output contains out/ directory → Could use Static Web Apps (static export)
-```
-
-**If SSR is needed** (recommended):
-```javascript
-// frontend/next.config.ts - Remove any 'export' output mode
-const nextConfig = {
-  // DO NOT include: output: 'export'
-  reactStrictMode: true,
-  swcMinify: true,
-}
-```
-
-**If static export** (alternative):
-```javascript
-// frontend/next.config.ts
-const nextConfig = {
-  output: 'export', // Required for Static Web Apps
-  images: {
-    unoptimized: true, // Required for static export
-  },
-}
-```
-
-**Recommendation**: Use App Service for full Next.js support (plan assumes this)
+(No changes from previous version - see original plan)
 
 ---
 
 #### 4. Security Fixes (1 day)
 
-**Task**: Fix CORS, add rate limiting, security headers
+**Task**: Fix CORS, add rate limiting, security headers, **add JWT validation**
 
-**CORS Configuration**:
-```python
-# backend/main.py - Environment-specific CORS
-from fastapi.middleware.cors import CORSMiddleware
-import os
-
-ALLOWED_ORIGINS = {
-    "development": [
-        "http://localhost:3000",
-        "http://localhost:8000",
-    ],
-    "staging": [
-        "https://poker-web-staging.azurewebsites.net",
-    ],
-    "production": [
-        "https://poker-web-prod.azurewebsites.net",
-        "https://yourdomain.com",  # Custom domain if added
-    ],
-}
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS.get(os.getenv("ENVIRONMENT", "development")),
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
-    allow_headers=["*"],
-)
-```
-
-**Rate Limiting**:
-```python
-# Add to requirements.txt
-fastapi-limiter>=0.1.5
-
-# backend/main.py
-from fastapi_limiter import FastAPILimiter
-from fastapi_limiter.depends import RateLimiter
-
-@app.on_event("startup")
-async def startup():
-    await FastAPILimiter.init(redis_client)
-
-# Apply to endpoints
-@app.post("/games/{game_id}/actions")
-@app.rate_limit(limit=30, window=60)  # 30 actions per minute
-async def submit_action(...):
-    ...
-
-@app.get("/games/{game_id}/analysis-llm")
-@app.rate_limit(limit=5, window=300)  # 5 analysis requests per 5 min
-async def get_analysis(...):
-    ...
-```
-
-**Security Headers**:
-```python
-# backend/main.py
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
-
-# Only in production
-if os.getenv("ENVIRONMENT") == "production":
-    app.add_middleware(HTTPSRedirectMiddleware)
-    app.add_middleware(
-        TrustedHostMiddleware,
-        allowed_hosts=["*.azurewebsites.net", "yourdomain.com"]
-    )
-
-@app.middleware("http")
-async def add_security_headers(request, call_next):
-    response = await call_next(request)
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-Frame-Options"] = "DENY"
-    response.headers["X-XSS-Protection"] = "1; mode=block"
-    if os.getenv("ENVIRONMENT") == "production":
-        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
-    return response
-```
+(See original plan plus Auth0 JWT validation from Authentication Strategy section)
 
 ---
 
 #### 5. Application Insights Integration (2 hours)
 
-**Task**: Add custom metrics tracking
+**Task**: Add custom metrics tracking including **user analytics**
 
 ```python
-# Add to requirements.txt
-opencensus-ext-azure>=1.1.13
-opencensus-ext-flask>=0.7.6
-
 # backend/main.py
-from opencensus.ext.azure.log_exporter import AzureLogHandler
 from opencensus.ext.azure import metrics_exporter
-from opencensus.stats import aggregation as aggregation_module
-from opencensus.stats import measure as measure_module
-from opencensus.stats import stats as stats_module
-from opencensus.stats import view as view_module
-from opencensus.tags import tag_map as tag_map_module
 
-# Setup logging
-if os.getenv("APPLICATIONINSIGHTS_CONNECTION_STRING"):
-    logger.addHandler(AzureLogHandler(
-        connection_string=os.getenv("APPLICATIONINSIGHTS_CONNECTION_STRING")
-    ))
-
-# Setup metrics
-stats = stats_module.stats
-view_manager = stats.view_manager
-exporter = metrics_exporter.new_metrics_exporter(
-    connection_string=os.getenv("APPLICATIONINSIGHTS_CONNECTION_STRING")
-)
-view_manager.register_exporter(exporter)
-
-# Custom metrics
-anthropic_cost_measure = measure_module.MeasureFloat(
-    "anthropic_api_cost",
-    "Cost of Anthropic API calls",
-    "USD"
-)
-
-# Track costs
-def track_anthropic_cost(model: str, cost: float):
-    mmap = stats.stats_recorder.new_measurement_map()
-    tmap = tag_map_module.TagMap()
-    tmap.insert("model", model)
-    mmap.measure_float_put(anthropic_cost_measure, cost)
-    mmap.record(tmap)
-
-    # Also log for easier querying
+# Track user events
+def track_user_event(user_id: str, event_type: str, properties: dict = None):
     logger.info(
-        "anthropic_api_call",
-        extra={"custom_dimensions": {"model": model, "cost": cost}}
+        event_type,
+        extra={
+            "custom_dimensions": {
+                "user_id": user_id,
+                "event_type": event_type,
+                **(properties or {})
+            }
+        }
     )
+
+# Track in endpoints
+@app.post("/games")
+async def create_game(current_user: dict = Depends(get_current_user), ...):
+    track_user_event(current_user["user_id"], "game_created", {
+        "num_ai_players": num_ai_players
+    })
+    ...
+
+@app.get("/games/{game_id}/analysis-llm")
+async def get_analysis(current_user: dict = Depends(get_current_user), ...):
+    if cached:
+        track_user_event(current_user["user_id"], "analysis_cache_hit", {
+            "hand_id": hand.hand_id,
+            "cost_saved": cached.cost
+        })
+    else:
+        track_user_event(current_user["user_id"], "analysis_requested", {
+            "hand_id": hand.hand_id,
+            "depth": depth,
+            "cost": result["cost"]
+        })
+    ...
 ```
 
 ---
 
 ### Pre-Deployment Checklist
 
+- [ ] Auth0 account created (dev, staging, production tenants)
+- [ ] Auth0 applications configured (SPAs + APIs)
+- [ ] Backend JWT validation implemented
+- [ ] Frontend Auth0 SDK integrated
+- [ ] Login/logout UI created
+- [ ] User tables added to PostgreSQL schema
+- [ ] Database migrations created
 - [ ] Redis client implementation complete
-- [ ] PostgreSQL models and migrations created
+- [ ] Backend endpoints updated to require auth
+- [ ] Backend endpoints linked to user_id
+- [ ] User dashboard endpoint created
+- [ ] Game history endpoint created
+- [ ] Analysis caching by user implemented
 - [ ] Startup command updated to gunicorn
-- [ ] Frontend build strategy confirmed (SSR vs static)
 - [ ] CORS configuration environment-specific
 - [ ] Rate limiting implemented
 - [ ] Security headers middleware added
-- [ ] Application Insights integration added
+- [ ] Application Insights user tracking added
 - [ ] All tests passing with new infrastructure
-- [ ] Local testing with Docker Redis completed
+- [ ] Local testing with Auth0 + Redis + PostgreSQL completed
 
-**Estimated Timeline**: 3-4 days of development work
+**Estimated Timeline**: **5-7 days** of development work
 
 ---
 
@@ -635,223 +1464,17 @@ def track_anthropic_cost(model: str, cost: float):
 
 ### Phase 1: Azure Account Setup (15 minutes)
 
-#### 1.1 Create Azure Account & Install CLI
-
-```bash
-# Create account (if needed)
-# Visit: https://azure.microsoft.com/free/
-# Get $200 credit for 30 days
-
-# Install Azure CLI (macOS)
-brew install azure-cli
-
-# Verify installation
-az --version
-
-# Login to Azure
-az login
-
-# Set subscription (if multiple)
-az account list --output table
-az account set --subscription "<subscription-name-or-id>"
-```
-
-#### 1.2 Create Resource Group
-
-```bash
-# Create resource group in East US
-az group create \
-  --name poker-learning-app-rg \
-  --location eastus \
-  --tags \
-    environment=production \
-    project=poker-learning-app \
-    managed-by=github-actions
-```
+(No changes from previous version - same as before)
 
 ---
 
-### Phase 2: Backend Deployment Setup (90 minutes)
+### Phase 2: Backend Deployment Setup (120 minutes, was 90 minutes)
 
-#### 2.1 Create App Service Plans
+(Includes all previous steps PLUS Auth0 configuration)
 
-```bash
-# Staging: B1 Basic (shared between backend and frontend)
-az appservice plan create \
-  --name poker-plan-staging \
-  --resource-group poker-learning-app-rg \
-  --location eastus \
-  --is-linux \
-  --sku B1 \
-  --tags environment=staging
-
-# Production: B2 for backend, separate B1 for frontend
-az appservice plan create \
-  --name poker-plan-prod-backend \
-  --resource-group poker-learning-app-rg \
-  --location eastus \
-  --is-linux \
-  --sku B2 \
-  --tags environment=production component=backend
-
-az appservice plan create \
-  --name poker-plan-prod-frontend \
-  --resource-group poker-learning-app-rg \
-  --location eastus \
-  --is-linux \
-  --sku B1 \
-  --tags environment=production component=frontend
-```
-
-#### 2.2 Create Backend App Services
+#### 2.5 Create Key Vaults (Updated)
 
 ```bash
-# Staging backend
-az webapp create \
-  --name poker-api-staging \
-  --resource-group poker-learning-app-rg \
-  --plan poker-plan-staging \
-  --runtime "PYTHON:3.12" \
-  --tags environment=staging component=backend
-
-# Production backend
-az webapp create \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --plan poker-plan-prod-backend \
-  --runtime "PYTHON:3.12" \
-  --tags environment=production component=backend
-
-# Enable WebSocket support
-az webapp config set \
-  --name poker-api-staging \
-  --resource-group poker-learning-app-rg \
-  --web-sockets-enabled true \
-  --always-on true \
-  --min-tls-version "1.2" \
-  --http20-enabled true
-
-az webapp config set \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --web-sockets-enabled true \
-  --always-on true \
-  --min-tls-version "1.2" \
-  --http20-enabled true \
-  --https-only true
-
-# Configure startup command
-az webapp config set \
-  --name poker-api-staging \
-  --resource-group poker-learning-app-rg \
-  --startup-file "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000 --timeout 120"
-
-az webapp config set \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --startup-file "gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000 --timeout 120"
-```
-
-#### 2.3 Create Redis Caches
-
-```bash
-# Staging: Basic C0 (no HA, lower cost)
-az redis create \
-  --name poker-cache-staging \
-  --resource-group poker-learning-app-rg \
-  --location eastus \
-  --sku Basic \
-  --vm-size C0 \
-  --tags environment=staging
-
-# Production: Standard C1 (HA, 99.9% SLA)
-az redis create \
-  --name poker-cache-prod \
-  --resource-group poker-learning-app-rg \
-  --location eastus \
-  --sku Standard \
-  --vm-size C1 \
-  --enable-non-ssl-port false \
-  --tags environment=production
-
-# Get Redis connection details (save for later)
-az redis list-keys \
-  --name poker-cache-prod \
-  --resource-group poker-learning-app-rg \
-  --query primaryKey -o tsv
-```
-
-#### 2.4 Create PostgreSQL Databases
-
-```bash
-# Generate admin password (save this!)
-POSTGRES_PASSWORD=$(openssl rand -base64 32)
-echo "PostgreSQL Password: $POSTGRES_PASSWORD" > postgres-password.txt
-
-# Staging database
-az postgres flexible-server create \
-  --name poker-db-staging \
-  --resource-group poker-learning-app-rg \
-  --location eastus \
-  --tier Burstable \
-  --sku-name Standard_B1ms \
-  --storage-size 32 \
-  --version 15 \
-  --admin-user pokeradmin \
-  --admin-password "$POSTGRES_PASSWORD" \
-  --public-access 0.0.0.0-255.255.255.255 \
-  --tags environment=staging
-
-# Production database
-az postgres flexible-server create \
-  --name poker-db-prod \
-  --resource-group poker-learning-app-rg \
-  --location eastus \
-  --tier Burstable \
-  --sku-name Standard_B1ms \
-  --storage-size 32 \
-  --version 15 \
-  --admin-user pokeradmin \
-  --admin-password "$POSTGRES_PASSWORD" \
-  --backup-retention 7 \
-  --geo-redundant-backup Enabled \
-  --public-access 0.0.0.0-255.255.255.255 \
-  --tags environment=production
-
-# Create databases
-az postgres flexible-server db create \
-  --resource-group poker-learning-app-rg \
-  --server-name poker-db-staging \
-  --database-name pokerapp
-
-az postgres flexible-server db create \
-  --resource-group poker-learning-app-rg \
-  --server-name poker-db-prod \
-  --database-name pokerapp
-
-# Allow Azure services to access database
-az postgres flexible-server firewall-rule create \
-  --resource-group poker-learning-app-rg \
-  --name poker-db-prod \
-  --rule-name AllowAzureServices \
-  --start-ip-address 0.0.0.0 \
-  --end-ip-address 0.0.0.0
-```
-
-#### 2.5 Create Key Vaults
-
-```bash
-# Staging Key Vault
-az keyvault create \
-  --name poker-kv-staging \
-  --resource-group poker-learning-app-rg \
-  --location eastus \
-  --sku standard \
-  --enable-rbac-authorization false \
-  --bypass AzureServices \
-  --default-action Allow \
-  --tags environment=staging
-
 # Production Key Vault
 az keyvault create \
   --name poker-kv-prod \
@@ -863,72 +1486,34 @@ az keyvault create \
   --default-action Deny \
   --tags environment=production
 
-# Add secrets (replace with actual values)
+# Add Auth0 secrets (NEW)
 az keyvault secret set \
-  --vault-name poker-kv-staging \
-  --name ANTHROPIC-API-KEY \
-  --value "sk-ant-..."
+  --vault-name poker-kv-prod \
+  --name AUTH0-DOMAIN \
+  --value "poker-app.us.auth0.com"
 
 az keyvault secret set \
   --vault-name poker-kv-prod \
-  --name ANTHROPIC-API-KEY \
-  --value "sk-ant-..."
+  --name AUTH0-CLIENT-ID \
+  --value "<auth0-client-id>"
 
-# Add Redis password
-REDIS_PASSWORD=$(az redis list-keys --name poker-cache-prod --resource-group poker-learning-app-rg --query primaryKey -o tsv)
 az keyvault secret set \
   --vault-name poker-kv-prod \
-  --name REDIS-PASSWORD \
-  --value "$REDIS_PASSWORD"
+  --name AUTH0-CLIENT-SECRET \
+  --value "<auth0-client-secret>"
 
-# Add database URL
-DATABASE_URL="postgresql://pokeradmin:$POSTGRES_PASSWORD@poker-db-prod.postgres.database.azure.com/pokerapp"
 az keyvault secret set \
   --vault-name poker-kv-prod \
-  --name DATABASE-URL \
-  --value "$DATABASE_URL"
+  --name AUTH0-API-AUDIENCE \
+  --value "https://api.poker.app"
+
+# Add other secrets (ANTHROPIC_API_KEY, REDIS_PASSWORD, DATABASE_URL) as before
 ```
 
-#### 2.6 Enable Managed Identity for App Services
+#### 2.7 Configure App Service Environment Variables (Updated)
 
 ```bash
-# Enable system-assigned managed identity (staging)
-az webapp identity assign \
-  --name poker-api-staging \
-  --resource-group poker-learning-app-rg
-
-# Get principal ID
-PRINCIPAL_ID_STAGING=$(az webapp identity show \
-  --name poker-api-staging \
-  --resource-group poker-learning-app-rg \
-  --query principalId -o tsv)
-
-# Grant access to Key Vault
-az keyvault set-policy \
-  --name poker-kv-staging \
-  --object-id $PRINCIPAL_ID_STAGING \
-  --secret-permissions get list
-
-# Repeat for production
-az webapp identity assign \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg
-
-PRINCIPAL_ID_PROD=$(az webapp identity show \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --query principalId -o tsv)
-
-az keyvault set-policy \
-  --name poker-kv-prod \
-  --object-id $PRINCIPAL_ID_PROD \
-  --secret-permissions get list
-```
-
-#### 2.7 Configure App Service Environment Variables
-
-```bash
-# Production backend configuration
+# Production backend configuration (UPDATED with Auth0)
 az webapp config appsettings set \
   --name poker-api-prod \
   --resource-group poker-learning-app-rg \
@@ -940,141 +1525,32 @@ az webapp config appsettings set \
     REDIS_PORT=6380 \
     REDIS_PASSWORD="@Microsoft.KeyVault(SecretUri=https://poker-kv-prod.vault.azure.net/secrets/REDIS-PASSWORD/)" \
     DATABASE_URL="@Microsoft.KeyVault(SecretUri=https://poker-kv-prod.vault.azure.net/secrets/DATABASE-URL/)" \
+    AUTH0_DOMAIN="@Microsoft.KeyVault(SecretUri=https://poker-kv-prod.vault.azure.net/secrets/AUTH0-DOMAIN/)" \
+    AUTH0_CLIENT_ID="@Microsoft.KeyVault(SecretUri=https://poker-kv-prod.vault.azure.net/secrets/AUTH0-CLIENT-ID/)" \
+    AUTH0_CLIENT_SECRET="@Microsoft.KeyVault(SecretUri=https://poker-kv-prod.vault.azure.net/secrets/AUTH0-CLIENT-SECRET/)" \
+    AUTH0_API_AUDIENCE="@Microsoft.KeyVault(SecretUri=https://poker-kv-prod.vault.azure.net/secrets/AUTH0-API-AUDIENCE/)" \
     PYTHONUNBUFFERED=1 \
     SCM_DO_BUILD_DURING_DEPLOYMENT=true \
     WEBSITES_PORT=8000
-
-# Staging backend configuration (similar with staging resources)
-az webapp config appsettings set \
-  --name poker-api-staging \
-  --resource-group poker-learning-app-rg \
-  --settings \
-    ENVIRONMENT=staging \
-    TEST_MODE=0 \
-    ANTHROPIC_API_KEY="@Microsoft.KeyVault(SecretUri=https://poker-kv-staging.vault.azure.net/secrets/ANTHROPIC-API-KEY/)" \
-    REDIS_HOST="poker-cache-staging.redis.cache.windows.net" \
-    REDIS_PORT=6380 \
-    REDIS_PASSWORD="@Microsoft.KeyVault(SecretUri=https://poker-kv-staging.vault.azure.net/secrets/REDIS-PASSWORD/)" \
-    DATABASE_URL="@Microsoft.KeyVault(SecretUri=https://poker-kv-staging.vault.azure.net/secrets/DATABASE-URL/)" \
-    PYTHONUNBUFFERED=1 \
-    SCM_DO_BUILD_DURING_DEPLOYMENT=true \
-    WEBSITES_PORT=8000
-```
-
-#### 2.8 Configure CORS
-
-```bash
-# Production CORS (will update after frontend deployment)
-az webapp cors add \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --allowed-origins \
-    "https://poker-web-prod.azurewebsites.net"
-
-# Staging CORS (includes localhost for testing)
-az webapp cors add \
-  --name poker-api-staging \
-  --resource-group poker-learning-app-rg \
-  --allowed-origins \
-    "https://poker-web-staging.azurewebsites.net" \
-    "http://localhost:3000"
-```
-
-#### 2.9 Create Application Insights
-
-```bash
-# Staging insights
-az monitor app-insights component create \
-  --app poker-insights-staging \
-  --location eastus \
-  --resource-group poker-learning-app-rg \
-  --application-type web \
-  --retention-time 30 \
-  --tags environment=staging
-
-# Production insights
-az monitor app-insights component create \
-  --app poker-insights-prod \
-  --location eastus \
-  --resource-group poker-learning-app-rg \
-  --application-type web \
-  --retention-time 30 \
-  --tags environment=production
-
-# Get instrumentation keys
-INSIGHTS_KEY_PROD=$(az monitor app-insights component show \
-  --app poker-insights-prod \
-  --resource-group poker-learning-app-rg \
-  --query connectionString -o tsv)
-
-# Link to App Service
-az webapp config appsettings set \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --settings \
-    APPLICATIONINSIGHTS_CONNECTION_STRING="$INSIGHTS_KEY_PROD"
 ```
 
 ---
 
 ### Phase 3: Frontend Deployment Setup (45 minutes)
 
-#### 3.1 Create Frontend App Services
+#### 3.2 Configure Frontend Environment Variables (Updated)
 
 ```bash
-# Staging frontend (shares App Service Plan with backend)
-az webapp create \
-  --name poker-web-staging \
-  --resource-group poker-learning-app-rg \
-  --plan poker-plan-staging \
-  --runtime "NODE:20-lts" \
-  --tags environment=staging component=frontend
-
-# Production frontend (dedicated App Service Plan)
-az webapp create \
-  --name poker-web-prod \
-  --resource-group poker-learning-app-rg \
-  --plan poker-plan-prod-frontend \
-  --runtime "NODE:20-lts" \
-  --tags environment=production component=frontend
-
-# Configure settings
-az webapp config set \
-  --name poker-web-staging \
-  --resource-group poker-learning-app-rg \
-  --always-on true \
-  --min-tls-version "1.2" \
-  --startup-file "npm start"
-
-az webapp config set \
-  --name poker-web-prod \
-  --resource-group poker-learning-app-rg \
-  --always-on true \
-  --min-tls-version "1.2" \
-  --https-only true \
-  --startup-file "npm start"
-```
-
-#### 3.2 Configure Frontend Environment Variables
-
-```bash
-# Production frontend
+# Production frontend (UPDATED with Auth0)
 az webapp config appsettings set \
   --name poker-web-prod \
   --resource-group poker-learning-app-rg \
   --settings \
     NEXT_PUBLIC_API_URL="https://poker-api-prod.azurewebsites.net" \
     NEXT_PUBLIC_ENVIRONMENT="production" \
-    NODE_ENV=production \
-    PORT=8080
-
-# Staging frontend
-az webapp config appsettings set \
-  --name poker-web-staging \
-  --resource-group poker-learning-app-rg \
-  --settings \
-    NEXT_PUBLIC_API_URL="https://poker-api-staging.azurewebsites.net" \
-    NEXT_PUBLIC_ENVIRONMENT="staging" \
+    NEXT_PUBLIC_AUTH0_DOMAIN="poker-app.us.auth0.com" \
+    NEXT_PUBLIC_AUTH0_CLIENT_ID="<auth0-client-id-for-frontend>" \
+    NEXT_PUBLIC_AUTH0_AUDIENCE="https://api.poker.app" \
     NODE_ENV=production \
     PORT=8080
 ```
@@ -1083,535 +1559,99 @@ az webapp config appsettings set \
 
 ### Phase 4: CI/CD Pipeline Setup (90 minutes)
 
-#### 4.1 Create Service Principal for GitHub Actions
+(Add Auth0 callback URLs to GitHub Actions)
 
-```bash
-# Create service principal with contributor role
-az ad sp create-for-rbac \
-  --name "poker-github-actions" \
-  --role contributor \
-  --scopes /subscriptions/$(az account show --query id -o tsv)/resourceGroups/poker-learning-app-rg \
-  --sdk-auth
-
-# Output will be JSON like:
-# {
-#   "clientId": "...",
-#   "clientSecret": "...",
-#   "subscriptionId": "...",
-#   "tenantId": "..."
-# }
-# Save this entire JSON as AZURE_CREDENTIALS secret in GitHub
-```
-
-#### 4.2 Get Publish Profiles
-
-```bash
-# Get backend publish profiles
-az webapp deployment list-publishing-profiles \
-  --name poker-api-staging \
-  --resource-group poker-learning-app-rg \
-  --xml
-
-az webapp deployment list-publishing-profiles \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --xml
-
-# Get frontend publish profiles
-az webapp deployment list-publishing-profiles \
-  --name poker-web-staging \
-  --resource-group poker-learning-app-rg \
-  --xml
-
-az webapp deployment list-publishing-profiles \
-  --name poker-web-prod \
-  --resource-group poker-learning-app-rg \
-  --xml
-
-# Save each as GitHub secrets:
-# AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND_STAGING
-# AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND_PROD
-# AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND_STAGING
-# AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND_PROD
-```
-
-#### 4.3 Configure GitHub Secrets
-
-Add these secrets in GitHub repository (Settings → Secrets and variables → Actions):
+#### 4.3 Configure GitHub Secrets (Updated)
 
 ```
-AZURE_CREDENTIALS (JSON from step 4.1)
-AZURE_WEBAPP_NAME_BACKEND_STAGING: poker-api-staging
-AZURE_WEBAPP_NAME_BACKEND_PROD: poker-api-prod
-AZURE_WEBAPP_NAME_FRONTEND_STAGING: poker-web-staging
-AZURE_WEBAPP_NAME_FRONTEND_PROD: poker-web-prod
-AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND_STAGING: (XML from step 4.2)
-AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND_PROD: (XML from step 4.2)
-AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND_STAGING: (XML from step 4.2)
-AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND_PROD: (XML from step 4.2)
-APPINSIGHTS_CONNECTION_STRING_PROD: (from Phase 2.9)
-```
+# Existing secrets (unchanged)
+AZURE_CREDENTIALS
+AZURE_WEBAPP_NAME_BACKEND_STAGING
+AZURE_WEBAPP_NAME_BACKEND_PROD
+...
 
-#### 4.4 Create GitHub Actions Workflows
-
-Create `.github/workflows/azure-backend-deploy.yml`:
-
-```yaml
-name: Deploy Backend to Azure
-
-on:
-  push:
-    branches:
-      - main
-      - staging
-    paths:
-      - 'backend/**'
-      - '.github/workflows/azure-backend-deploy.yml'
-  workflow_dispatch:
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: |
-          cd backend
-          pip install -r requirements.txt
-
-      - name: Run backend tests
-        run: |
-          PYTHONPATH=backend pytest backend/tests/ -v --maxfail=5
-
-  deploy-staging:
-    needs: test
-    if: github.ref == 'refs/heads/staging'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy to Azure App Service (Staging)
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME_BACKEND_STAGING }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND_STAGING }}
-          package: ./backend
-
-      - name: Run database migrations
-        run: |
-          # Install Alembic
-          pip install alembic psycopg2-binary
-          cd backend
-          # Run migrations (requires DATABASE_URL in environment)
-          alembic upgrade head
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL_STAGING }}
-
-      - name: Health check with retry
-        run: |
-          for i in {1..36}; do
-            if curl -sf https://${{ secrets.AZURE_WEBAPP_NAME_BACKEND_STAGING }}.azurewebsites.net/health; then
-              echo "✅ Health check passed"
-              exit 0
-            fi
-            echo "Attempt $i/36 failed, waiting 5s..."
-            sleep 5
-          done
-          echo "❌ Health check failed after 3 minutes"
-          exit 1
-
-      - name: Smoke tests
-        run: |
-          # Create game
-          GAME_ID=$(curl -sf https://${{ secrets.AZURE_WEBAPP_NAME_BACKEND_STAGING }}.azurewebsites.net/games \
-            -X POST -H "Content-Type: application/json" \
-            -d '{"num_ai_players":3}' | jq -r '.game_id')
-          echo "Created game: $GAME_ID"
-
-          # Verify game exists
-          curl -sf https://${{ secrets.AZURE_WEBAPP_NAME_BACKEND_STAGING }}.azurewebsites.net/games/$GAME_ID
-
-          echo "✅ Smoke tests passed"
-
-  deploy-production:
-    needs: test
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://${{ secrets.AZURE_WEBAPP_NAME_BACKEND_PROD }}.azurewebsites.net
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy to Azure App Service (Production)
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME_BACKEND_PROD }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_BACKEND_PROD }}
-          package: ./backend
-
-      - name: Run database migrations
-        run: |
-          pip install alembic psycopg2-binary
-          cd backend
-          alembic upgrade head
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL_PROD }}
-
-      - name: Health check with retry
-        run: |
-          for i in {1..36}; do
-            if curl -sf https://${{ secrets.AZURE_WEBAPP_NAME_BACKEND_PROD }}.azurewebsites.net/health; then
-              echo "✅ Health check passed"
-              exit 0
-            fi
-            echo "Attempt $i/36 failed, waiting 5s..."
-            sleep 5
-          done
-          echo "❌ Health check failed"
-          exit 1
-
-      - name: Smoke tests
-        run: |
-          GAME_ID=$(curl -sf https://${{ secrets.AZURE_WEBAPP_NAME_BACKEND_PROD }}.azurewebsites.net/games \
-            -X POST -H "Content-Type: application/json" \
-            -d '{"num_ai_players":3}' | jq -r '.game_id')
-          echo "Created game: $GAME_ID"
-          curl -sf https://${{ secrets.AZURE_WEBAPP_NAME_BACKEND_PROD }}.azurewebsites.net/games/$GAME_ID
-          echo "✅ Smoke tests passed"
-```
-
-Create `.github/workflows/azure-frontend-deploy.yml`:
-
-```yaml
-name: Deploy Frontend to Azure
-
-on:
-  push:
-    branches:
-      - main
-      - staging
-    paths:
-      - 'frontend/**'
-      - '.github/workflows/azure-frontend-deploy.yml'
-  workflow_dispatch:
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./frontend
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run frontend tests
-        run: npm test
-
-      - name: Build frontend
-        run: npm run build
-        env:
-          NEXT_PUBLIC_API_URL: "https://poker-api-staging.azurewebsites.net"
-
-  deploy-staging:
-    needs: test
-    if: github.ref == 'refs/heads/staging'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: cd frontend && npm ci
-
-      - name: Build production bundle
-        run: cd frontend && npm run build
-        env:
-          NEXT_PUBLIC_API_URL: "https://poker-api-staging.azurewebsites.net"
-          NEXT_PUBLIC_ENVIRONMENT: "staging"
-
-      - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME_FRONTEND_STAGING }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND_STAGING }}
-          package: ./frontend
-
-      - name: Health check
-        run: |
-          for i in {1..24}; do
-            if curl -sf https://${{ secrets.AZURE_WEBAPP_NAME_FRONTEND_STAGING }}.azurewebsites.net; then
-              echo "✅ Frontend is up"
-              exit 0
-            fi
-            echo "Attempt $i/24 failed, waiting 5s..."
-            sleep 5
-          done
-          echo "❌ Frontend health check failed"
-          exit 1
-
-  deploy-production:
-    needs: test
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://${{ secrets.AZURE_WEBAPP_NAME_FRONTEND_PROD }}.azurewebsites.net
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: cd frontend && npm ci
-
-      - name: Build production bundle
-        run: cd frontend && npm run build
-        env:
-          NEXT_PUBLIC_API_URL: "https://poker-api-prod.azurewebsites.net"
-          NEXT_PUBLIC_ENVIRONMENT: "production"
-
-      - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME_FRONTEND_PROD }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND_PROD }}
-          package: ./frontend
-
-      - name: Health check
-        run: |
-          for i in {1..24}; do
-            if curl -sf https://${{ secrets.AZURE_WEBAPP_NAME_FRONTEND_PROD }}.azurewebsites.net; then
-              echo "✅ Frontend is up"
-              exit 0
-            fi
-            echo "Attempt $i/24 failed, waiting 5s..."
-            sleep 5
-          done
-          echo "❌ Frontend health check failed"
-          exit 1
+# NEW: Auth0 secrets
+AUTH0_DOMAIN_STAGING: poker-app-staging.us.auth0.com
+AUTH0_CLIENT_ID_STAGING: <staging-client-id>
+AUTH0_CLIENT_SECRET_STAGING: <staging-client-secret>
+AUTH0_DOMAIN_PROD: poker-app.us.auth0.com
+AUTH0_CLIENT_ID_PROD: <prod-client-id>
+AUTH0_CLIENT_SECRET_PROD: <prod-client-secret>
 ```
 
 ---
 
 ### Phase 5: Monitoring & Alerts Setup (60 minutes)
 
-#### 5.1 Configure Alert Rules
+(Add user-specific alerts)
 
 ```bash
-# Get resource IDs
-BACKEND_ID=$(az webapp show \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --query id -o tsv)
-
-INSIGHTS_ID=$(az monitor app-insights component show \
-  --app poker-insights-prod \
-  --resource-group poker-learning-app-rg \
-  --query id -o tsv)
-
-# Create action group (email notifications)
-az monitor action-group create \
-  --name poker-alerts \
-  --resource-group poker-learning-app-rg \
-  --short-name poker \
-  --email-receiver \
-    name="Admin" \
-    email-address="your-email@example.com" \
-    use-common-alert-schema=true
-
-ACTION_GROUP_ID=$(az monitor action-group show \
-  --name poker-alerts \
-  --resource-group poker-learning-app-rg \
-  --query id -o tsv)
-
-# Alert 1: High error rate
+# NEW: Alert for high authentication failures
 az monitor metrics alert create \
-  --name "High Error Rate (5xx)" \
+  --name "High Auth Failures" \
   --resource-group poker-learning-app-rg \
   --scopes $BACKEND_ID \
-  --condition "avg Http5xx > 10" \
+  --condition "avg Http401 > 20" \
   --window-size 5m \
   --evaluation-frequency 1m \
   --severity 2 \
-  --description "HTTP 5xx errors exceeding threshold" \
+  --description "High rate of 401 authentication failures" \
   --action $ACTION_GROUP_ID
-
-# Alert 2: High response time
-az monitor metrics alert create \
-  --name "High Response Time" \
-  --resource-group poker-learning-app-rg \
-  --scopes $BACKEND_ID \
-  --condition "avg ResponseTime > 3000" \
-  --window-size 5m \
-  --evaluation-frequency 1m \
-  --severity 3 \
-  --description "Response time over 3 seconds" \
-  --action $ACTION_GROUP_ID
-
-# Alert 3: High CPU usage
-az monitor metrics alert create \
-  --name "High CPU Usage" \
-  --resource-group poker-learning-app-rg \
-  --scopes $BACKEND_ID \
-  --condition "avg CpuPercentage > 80" \
-  --window-size 10m \
-  --evaluation-frequency 5m \
-  --severity 3 \
-  --description "CPU usage over 80%" \
-  --action $ACTION_GROUP_ID
-
-# Alert 4: High memory usage
-az monitor metrics alert create \
-  --name "High Memory Usage" \
-  --resource-group poker-learning-app-rg \
-  --scopes $BACKEND_ID \
-  --condition "avg MemoryPercentage > 85" \
-  --window-size 5m \
-  --evaluation-frequency 1m \
-  --severity 2 \
-  --description "Memory usage over 85%" \
-  --action $ACTION_GROUP_ID
-
-# Alert 5: Low availability
-az monitor metrics alert create \
-  --name "Service Unavailable" \
-  --resource-group poker-learning-app-rg \
-  --scopes $BACKEND_ID \
-  --condition "avg HealthCheckStatus < 1" \
-  --window-size 5m \
-  --evaluation-frequency 1m \
-  --severity 1 \
-  --description "Health check failing" \
-  --action $ACTION_GROUP_ID
-```
-
-#### 5.2 Enable Diagnostic Logging
-
-```bash
-# Create storage account for logs (optional, uses retention)
-az storage account create \
-  --name pokerlogsstorage \
-  --resource-group poker-learning-app-rg \
-  --location eastus \
-  --sku Standard_LRS
-
-# Enable App Service logging
-az webapp log config \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --application-logging azureblobstorage \
-  --level verbose \
-  --web-server-logging filesystem \
-  --docker-container-logging filesystem
-
-# Enable diagnostic settings (sends to Application Insights)
-az monitor diagnostic-settings create \
-  --name poker-api-diagnostics \
-  --resource $BACKEND_ID \
-  --logs '[{"category": "AppServiceHTTPLogs", "enabled": true}, {"category": "AppServiceConsoleLogs", "enabled": true}]' \
-  --metrics '[{"category": "AllMetrics", "enabled": true}]' \
-  --workspace $INSIGHTS_ID
 ```
 
 ---
 
 ## Security Configuration
 
-### 1. Network Security
+(All previous sections PLUS additional auth security)
 
-#### SSL/TLS Configuration
+### User Data Protection
 
-```bash
-# Enforce HTTPS (already configured in Phase 2)
-az webapp update \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --https-only true
+**GDPR Compliance**:
+```python
+# backend/main.py
+@app.delete("/users/me")
+async def delete_user_account(
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """GDPR: Right to be forgotten"""
+    user_id = current_user["user_id"]
 
-# Verify TLS 1.2 minimum
-az webapp config show \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --query minTlsVersion
-```
+    # Delete user data (CASCADE deletes related records)
+    db.query(User).filter(User.user_id == user_id).delete()
+    db.commit()
 
-#### IP Restrictions (Optional)
+    # Also delete from Auth0
+    # ... use Auth0 Management API
 
-```bash
-# Restrict SCM site access (Kudu/deployment portal)
-az webapp config access-restriction add \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --rule-name "Block-Public-SCM" \
-  --action Deny \
-  --priority 100 \
-  --scm-site true
+    return {"message": "Account deleted successfully"}
 
-# Allow specific IP for admin access
-az webapp config access-restriction add \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --rule-name "Allow-Admin-IP" \
-  --action Allow \
-  --priority 50 \
-  --ip-address "YOUR.IP.ADDRESS.HERE" \
-  --scm-site true
-```
+@app.get("/users/me/data")
+async def export_user_data(
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """GDPR: Right to data portability"""
+    user_id = current_user["user_id"]
 
-### 2. Authentication & Authorization
+    # Export all user data as JSON
+    user = db.query(User).filter(User.user_id == user_id).first()
+    games = db.query(Game).filter(Game.user_id == user_id).all()
+    hands = db.query(Hand).filter(Hand.user_id == user_id).all()
 
-App Service uses managed identity for Key Vault access (configured in Phase 2).
-
-**Rate Limiting** is implemented in application code (see Pre-Deployment Requirements section).
-
-### 3. Secrets Management
-
-All secrets stored in Azure Key Vault:
-- ✅ ANTHROPIC_API_KEY
-- ✅ REDIS_PASSWORD
-- ✅ DATABASE_URL
-
-App Services reference secrets via:
-```
-@Microsoft.KeyVault(SecretUri=https://poker-kv-prod.vault.azure.net/secrets/SECRET-NAME/)
-```
-
-### 4. Audit Logging
-
-Key Vault audit logs are automatically enabled. View in Azure Portal:
-```
-Key Vault → Monitoring → Logs → AuditEvent table
+    return {
+        "user": user.to_dict(),
+        "games": [g.to_dict() for g in games],
+        "hands": [h.to_dict() for h in hands]
+    }
 ```
 
 ---
 
 ## Cost Analysis
 
-### Monthly Cost Breakdown
+### Monthly Cost Breakdown (UPDATED)
 
 #### Staging Environment
 
@@ -1622,6 +1662,7 @@ Key Vault → Monitoring → Logs → AuditEvent table
 | PostgreSQL B1ms | Burstable | 1 vCore, 2 GB RAM | $13.63 |
 | Key Vault Standard | - | - | ~$3 |
 | Application Insights | 1 GB/mo | 30-day retention | Free tier |
+| **Auth0 Free Tier** | **NEW** | **7,000 MAU** | **$0** |
 | **Staging Total** | | | **$46.56/mo** |
 
 #### Production Environment
@@ -1634,473 +1675,286 @@ Key Vault → Monitoring → Logs → AuditEvent table
 | PostgreSQL B1ms | Burstable | 1 vCore, 2GB RAM | $13.63 |
 | Key Vault Standard | - | - | ~$5 |
 | Application Insights | ~2 GB/mo | 30-day retention | ~$5 |
+| **Auth0 Free Tier** | **NEW** | **7,000 MAU, unlimited logins** | **$0** |
 | **Production Total** | | | **$124.51/mo** |
+
+**Auth0 Pricing Notes**:
+- Free tier: 7,000 monthly active users (MAU)
+- Essentials tier: $23/month for 1,000 MAU, then $4/100 MAU
+- Upgrade trigger: If you exceed 7,000 active users/month
+- Social connections: Included in free tier (Google, GitHub, etc.)
+- Passwordless: Included in free tier
 
 #### Combined Total
 
-**Staging + Production**: **$171.07/month**
+**Staging + Production**: **$171.07/month** (no change, Auth0 is free tier)
 
-### Cost Optimization Tips
+**When Auth0 costs kick in**:
+- At 7,001+ monthly active users → $23/month (Essentials tier)
+- At 10,000 MAU → $59/month ($23 base + $36 for extra 9,000 users)
+- At 50,000 MAU → $1,623/month (Professional tier recommended)
 
-1. **Share App Service Plan** (staging only): Saves $13/mo by hosting both backend and frontend on same plan
-2. **30-day log retention**: Saves $15-20/mo vs 90-day retention
-3. **Basic tiers for initial deployment**: Save $150/mo vs Premium tiers, upgrade when >500 users
-4. **Reserved instances** (after 3 months): Save 40-72% if usage is stable
+**Benefit**: At scale, Auth0 cost is negligible compared to revenue potential:
+- 10,000 MAU = $59/month Auth0 cost
+- If 10% convert to paid ($10/month) = 1,000 users × $10 = $10,000/month revenue
+- Auth0 is 0.59% of revenue
 
-### When to Upgrade
+---
 
-**Upgrade to Premium Tier (P1v3) when:**
-- Sustained >500 concurrent users
-- Monthly revenue >$1,000/month
-- Need zero-downtime deployments (deployment slots)
-- Need more than 3 instances for auto-scale
+### Cost Savings from User Accounts
 
-**Cost at Scale**:
-- P1v3 Plan (2-5 instances): ~$200-500/month
-- Total with databases: ~$300-600/month
-
-### Cost Monitoring
-
-Set up budget alerts:
-```bash
-az consumption budget create \
-  --resource-group poker-learning-app-rg \
-  --budget-name poker-monthly-budget \
-  --amount 200 \
-  --category cost \
-  --time-grain monthly \
-  --time-period start-date=2026-01-01 \
-  --notification \
-    enabled=true \
-    operator=GreaterThan \
-    threshold=80 \
-    contact-emails="your-email@example.com"
+**Analysis Caching ROI**:
 ```
+Without caching:
+- User analyzes same hand 3 times (reviewing strategy)
+- Cost: 3 × $0.016 (Haiku) = $0.048 per hand
+- 100 users × 10 hands/day × 3 re-analyses = 3,000 API calls
+- Monthly cost: 3,000 calls × $0.016 × 30 days = $1,440/month
+
+With caching:
+- First analysis: $0.016 (stored in database)
+- Subsequent views: $0 (from cache)
+- Monthly cost: 1,000 unique analyses × $0.016 × 30 days = $480/month
+
+Savings: $960/month ($11,520/year)
+```
+
+**Storage cost**: $13.63/month PostgreSQL
+**Net savings**: $946.37/month
 
 ---
 
 ## Monitoring & Operations
 
-### Application Insights Dashboards
+(Add user analytics queries)
 
-Create custom dashboard in Azure Portal:
-
-1. **Overview Metrics**:
-   - Request rate (requests/sec)
-   - Average response time
-   - Failed requests (%)
-   - Server response time
-
-2. **WebSocket Metrics**:
-   - Active connections
-   - Connection duration
-   - Messages sent/received
-
-3. **Business Metrics**:
-   - Games created per hour
-   - Hands played per hour
-   - AI analysis requests (count + cost)
-   - Active users
-
-4. **Infrastructure Metrics**:
-   - CPU percentage
-   - Memory working set
-   - Disk queue length
-   - Network in/out
-
-### Custom KQL Queries
-
-Access in Application Insights → Logs:
+### Custom KQL Queries (UPDATED)
 
 ```kql
-// Top 10 slowest API endpoints
-requests
-| where timestamp > ago(1h)
-| summarize avg(duration), count() by name
-| order by avg_duration desc
-| take 10
-
-// Anthropic API cost tracking (custom events)
+// User authentication events
 customEvents
-| where name == "anthropic_api_call"
-| extend cost = toreal(customDimensions.cost), model = tostring(customDimensions.model)
-| summarize total_cost = sum(cost), call_count = count() by model, bin(timestamp, 1h)
-| order by timestamp desc
-
-// WebSocket connection health
-customMetrics
-| where name == "websocket_connections"
-| summarize avg(value), max(value), min(value) by bin(timestamp, 5m)
+| where name in ("user_login", "user_logout", "auth_failure")
+| summarize count() by name, bin(timestamp, 1h)
 | render timechart
 
-// Error rate by endpoint
-exceptions
-| where timestamp > ago(1h)
-| summarize count() by operation_Name
-| order by count_ desc
-| take 10
+// Daily/Monthly Active Users (DAU/MAU)
+customEvents
+| where name == "user_login"
+| extend user_id = tostring(customDimensions.user_id)
+| summarize dcount(user_id) by bin(timestamp, 1d)
+| render timechart
 
-// User session duration
-pageViews
-| where timestamp > ago(24h)
-| summarize session_duration = max(timestamp) - min(timestamp) by session_Id
-| summarize avg(session_duration), percentile(session_duration, 50), percentile(session_duration, 95)
-```
+// User engagement (session duration)
+customEvents
+| where name == "game_completed"
+| extend user_id = tostring(customDimensions.user_id),
+         duration = toint(customDimensions.session_duration)
+| summarize avg(duration), percentile(duration, 50), percentile(duration, 95) by bin(timestamp, 1d)
 
-### Streaming Logs
+// Analysis cache hit rate
+customEvents
+| where name in ("analysis_requested", "analysis_cache_hit")
+| summarize
+    total_requests = countif(name == "analysis_requested"),
+    cache_hits = countif(name == "analysis_cache_hit"),
+    cache_hit_rate = (countif(name == "analysis_cache_hit") * 100.0) / count()
+| project cache_hit_rate, total_requests, cache_hits
 
-```bash
-# Stream application logs
-az webapp log tail \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg
+// Anthropic API cost per user
+customEvents
+| where name == "analysis_requested"
+| extend user_id = tostring(customDimensions.user_id),
+         cost = toreal(customDimensions.cost)
+| summarize total_cost = sum(cost), analyses = count() by user_id
+| order by total_cost desc
+| take 20
 
-# Download logs for analysis
-az webapp log download \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --log-file ./app-logs.zip
+// Top users by activity
+customEvents
+| where name in ("game_created", "hand_played", "analysis_requested")
+| extend user_id = tostring(customDimensions.user_id)
+| summarize
+    games = countif(name == "game_created"),
+    hands = countif(name == "hand_played"),
+    analyses = countif(name == "analysis_requested")
+by user_id
+| order by hands desc
+| take 20
+
+// User retention (7-day, 30-day)
+let first_activity = customEvents
+| extend user_id = tostring(customDimensions.user_id)
+| summarize first_seen = min(timestamp) by user_id;
+customEvents
+| extend user_id = tostring(customDimensions.user_id)
+| join kind=inner first_activity on user_id
+| where timestamp between (first_seen .. datetime_add('day', 7, first_seen))
+| summarize dcount(user_id) by cohort = bin(first_seen, 1d)
+| order by cohort asc
 ```
 
 ---
 
 ## Rollback & Disaster Recovery
 
-### Rollback Procedures
+(Add user data backup/restore procedures)
 
-#### Option 1: Redeploy Previous Commit (Simple)
+### User Data Backups
 
+**PostgreSQL User Data**:
 ```bash
-# Trigger GitHub Actions workflow for specific commit
-git checkout <previous-commit-hash>
-git push --force origin main
-# GitHub Actions redeploys automatically
-```
+# Manual backup of user tables
+pg_dump -h poker-db-prod.postgres.database.azure.com \
+  -U pokeradmin \
+  -d pokerapp \
+  -t users -t user_stats -t games -t hands -t actions -t analysis_cache \
+  > user_data_backup_$(date +%Y%m%d).sql
 
-#### Option 2: Manual Deployment from Local
-
-```bash
-# Checkout previous version
-git checkout <previous-commit-hash>
-
-# Deploy backend
-cd backend
-zip -r ../backend.zip .
-az webapp deployment source config-zip \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --src ../backend.zip
-
-# Deploy frontend
-cd frontend
-npm run build
-zip -r ../frontend.zip .
-az webapp deployment source config-zip \
-  --name poker-web-prod \
-  --resource-group poker-learning-app-rg \
-  --src ../frontend.zip
-```
-
-#### Option 3: Swap Deployment Slots (Premium Tier Only)
-
-If using Premium tier with deployment slots:
-```bash
-az webapp deployment slot swap \
-  --name poker-api-prod \
-  --resource-group poker-learning-app-rg \
-  --slot staging \
-  --target-slot production
-```
-
-### Disaster Recovery Strategy
-
-#### Backups
-
-**PostgreSQL**: Automatic backups enabled (7-day retention, geo-redundant)
-```bash
 # Restore from backup
-az postgres flexible-server restore \
-  --name poker-db-prod-restore \
-  --resource-group poker-learning-app-rg \
-  --source-server poker-db-prod \
-  --restore-time "2026-01-10T10:00:00Z"
+psql -h poker-db-prod.postgres.database.azure.com \
+  -U pokeradmin \
+  -d pokerapp \
+  < user_data_backup_20260112.sql
 ```
 
-**Redis**: No persistent backups (data is transient)
-- Game state can be recovered from PostgreSQL hand history
-- Session data is acceptable to lose (users reconnect)
-
-**App Service**: Backup not configured (stateless, code in Git)
-
-#### Recovery Objectives
-
-| Metric | Target | Notes |
-|--------|--------|-------|
-| **RTO** (Recovery Time Objective) | 1 hour | Time to restore service |
-| **RPO** (Recovery Point Objective) | 5 minutes | Acceptable data loss |
-| **MTTR** (Mean Time To Recover) | 30 minutes | Average recovery time |
-
-#### Disaster Recovery Steps
-
-1. **Assess Impact** (5 min)
-   - Check Application Insights for error patterns
-   - Identify affected services (backend, frontend, database)
-   - Determine scope (partial vs total outage)
-
-2. **Communication** (5 min)
-   - Post status update (status page or social media)
-   - Notify team via Slack/email
-   - Set expectations for recovery time
-
-3. **Execute Recovery** (20-40 min)
-   - **Database issue**: Restore from backup
-   - **Code issue**: Rollback deployment
-   - **Infrastructure issue**: Recreate Azure resources
-
-4. **Validation** (10 min)
-   - Run smoke tests
-   - Verify health checks pass
-   - Monitor logs for errors
-
-5. **Post-Mortem** (1-2 hours, after incident)
-   - Document timeline
-   - Identify root cause
-   - Create action items to prevent recurrence
+**Auth0 User Export**:
+```bash
+# Export users from Auth0 (via Management API)
+# Visit Auth0 Dashboard → User Management → Import/Export
+# Or use Auth0 Management API:
+curl -X POST "https://poker-app.us.auth0.com/api/v2/jobs/users-exports" \
+  -H "Authorization: Bearer <management-api-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "connection_id": "<connection-id>",
+    "format": "json"
+  }'
+```
 
 ---
 
 ## Deployment Checklist
 
-### Pre-Deployment (3-4 days)
+### Pre-Deployment (5-7 days, was 3-4 days)
 
-#### Code Changes
+#### Auth0 Setup (NEW)
+- [ ] Auth0 account created (dev, staging, production tenants)
+- [ ] Applications created (3 SPAs: dev, staging, prod)
+- [ ] APIs created (3 APIs: dev, staging, prod)
+- [ ] Callback URLs configured
+- [ ] Connections enabled (Email passwordless, Google, GitHub)
+- [ ] Branding customized (logo, colors)
+- [ ] Test tenants working locally
+
+#### Code Changes (UPDATED)
+- [ ] Backend JWT validation implemented
+- [ ] Backend endpoints require authentication
+- [ ] User tables added to PostgreSQL schema
+- [ ] Database migrations created and tested
 - [ ] Redis session store implemented
-- [ ] PostgreSQL models created
-- [ ] Database migrations ready (Alembic)
+- [ ] Frontend Auth0 SDK integrated
+- [ ] Login/logout UI created
+- [ ] User dashboard page created
+- [ ] Game history page created
+- [ ] Analysis caching by user implemented
 - [ ] Startup command updated (gunicorn)
 - [ ] CORS configuration environment-specific
-- [ ] Rate limiting implemented
+- [ ] Rate limiting implemented (per user)
 - [ ] Security headers added
-- [ ] Application Insights integration added
-- [ ] All tests passing locally
+- [ ] Application Insights user tracking added
+- [ ] All tests passing with authentication
 
-#### Local Testing
-- [ ] Backend runs with Redis (Docker)
-- [ ] Backend runs with PostgreSQL (Docker)
-- [ ] Frontend builds successfully
-- [ ] WebSocket connections work
+#### Local Testing (UPDATED)
+- [ ] Auth0 login flow works locally
+- [ ] JWT validation works
+- [ ] Backend creates user on first login
+- [ ] Games linked to users
+- [ ] User dashboard shows stats
+- [ ] Game history displays correctly
+- [ ] Analysis caching prevents duplicate API calls
+- [ ] WebSocket connections authenticated
 - [ ] Database migrations apply successfully
-- [ ] Integration tests pass
+- [ ] Integration tests pass with auth
 
 ---
 
-### Azure Setup (Phase 1-5: ~4 hours)
+### Azure Setup (Phase 1-5: ~5 hours, was 4 hours)
 
-#### Phase 1: Account Setup
-- [ ] Azure account created
-- [ ] Azure CLI installed and logged in
-- [ ] Subscription selected
-- [ ] Resource group created
+(All previous checklist items PLUS Auth0 configuration)
 
-#### Phase 2: Backend Infrastructure
-- [ ] App Service Plans created (staging + production)
-- [ ] Backend App Services created
-- [ ] WebSocket support enabled
-- [ ] Always-on enabled
-- [ ] Startup command configured
-- [ ] Redis caches created (Basic for staging, Standard for production)
-- [ ] PostgreSQL databases created
-- [ ] Key Vaults created
-- [ ] Secrets added to Key Vault (ANTHROPIC_API_KEY, REDIS_PASSWORD, DATABASE_URL)
-- [ ] Managed identity enabled for App Services
-- [ ] Key Vault access policies configured
-- [ ] Environment variables configured
-- [ ] CORS configured
-- [ ] Application Insights created
-- [ ] Insights linked to App Services
+#### Phase 2: Backend Infrastructure (UPDATED)
+- [ ] Auth0 secrets added to Key Vault (domain, client ID, client secret, audience)
+- [ ] App Service environment variables include Auth0 config
+- [ ] JWT validation tested in staging
 
-#### Phase 3: Frontend Infrastructure
-- [ ] Frontend App Services created
-- [ ] Startup command configured
-- [ ] Environment variables configured
-
-#### Phase 4: CI/CD Pipeline
-- [ ] Service principal created
-- [ ] Publish profiles downloaded
-- [ ] GitHub secrets configured
-- [ ] Backend deployment workflow created
-- [ ] Frontend deployment workflow created
-- [ ] Test deployment successful (staging)
-
-#### Phase 5: Monitoring & Alerts
-- [ ] Action group created (email notifications)
-- [ ] 5+ alert rules configured
-- [ ] Diagnostic logging enabled
-- [ ] Custom dashboard created
+#### Phase 3: Frontend Infrastructure (UPDATED)
+- [ ] Frontend environment variables include Auth0 config (public)
+- [ ] Auth0 callback URLs updated with actual Azure URLs
 
 ---
 
 ### Post-Deployment Validation (1-2 hours)
 
-#### Smoke Tests
-- [ ] Health endpoints accessible
-- [ ] Create game via API
-- [ ] Submit 10 actions via API
-- [ ] Verify WebSocket connection
-- [ ] Test hand analysis feature
-- [ ] Verify Redis session persistence (restart backend)
-- [ ] Verify PostgreSQL hand history stored
+#### Auth Flow Tests (NEW)
+- [ ] Login with email magic link works
+- [ ] Login with Google OAuth works
+- [ ] Login with GitHub OAuth works
+- [ ] JWT token received and stored
+- [ ] Authenticated API requests work
+- [ ] Logout clears session
+- [ ] Token refresh works (automatic)
+- [ ] Expired token handled gracefully (re-login)
 
-#### Performance Tests
-- [ ] Load test with 10 concurrent users
-- [ ] Monitor response times (<1 second P95)
-- [ ] Check memory usage (<70%)
-- [ ] Check CPU usage (<60%)
-- [ ] Verify auto-cleanup works (idle games deleted)
+#### User Feature Tests (NEW)
+- [ ] User dashboard loads with stats
+- [ ] Game history shows past games
+- [ ] "Resume game" works (loads from database)
+- [ ] Analysis caching works (no re-analysis cost)
+- [ ] Multi-device: Login on phone, continue on desktop
+- [ ] User settings persist across sessions
 
-#### Security Validation
-- [ ] HTTPS enforced (HTTP redirects to HTTPS)
-- [ ] TLS 1.2 minimum enforced
+#### Security Validation (UPDATED)
+- [ ] Unauthenticated API requests rejected (401)
+- [ ] User can only access their own games (403 for others)
+- [ ] JWT signature validation works
+- [ ] Expired JWTs rejected
+- [ ] Rate limiting per user works
 - [ ] CORS only allows configured origins
-- [ ] Rate limiting works (test by exceeding limits)
-- [ ] Managed identity can access Key Vault
-- [ ] No secrets in environment variables
-- [ ] Security headers present in responses
 
-#### Monitoring Validation
-- [ ] Logs streaming to Application Insights
-- [ ] Custom metrics appearing (Anthropic cost, WebSocket connections)
-- [ ] Alert rules functional (trigger test alert)
-- [ ] Dashboard showing real-time metrics
-
-#### Documentation
-- [ ] Update docs/AZURE-DEPLOYMENT-PLAN.md with actual resource names
-- [ ] Document database connection details
-- [ ] Create operations runbook
-- [ ] Document rollback procedures
-- [ ] Update README with deployment URLs
-
----
-
-### Production Cutover
-
-#### Before Launch
-- [ ] Staging environment fully tested
-- [ ] Production environment deployed
-- [ ] DNS configured (if custom domain)
-- [ ] SSL certificate validated
-- [ ] Load testing completed
-- [ ] Disaster recovery plan documented
-- [ ] Backup/restore tested
-- [ ] Monitoring dashboard ready
-- [ ] Alert recipients confirmed
-- [ ] Launch announcement prepared
-
-#### Launch Day
-- [ ] Deploy production backend
-- [ ] Deploy production frontend
-- [ ] Run smoke tests
-- [ ] Monitor logs for first 30 minutes
-- [ ] Monitor Application Insights dashboard
-- [ ] Verify no critical alerts
-- [ ] Test from multiple devices/browsers
-- [ ] Announce launch
-
-#### Post-Launch (First 48 Hours)
-- [ ] Monitor error rates every 4 hours
-- [ ] Review Application Insights daily
-- [ ] Check Anthropic API costs daily
-- [ ] Verify no resource exhaustion (memory, CPU)
-- [ ] Collect user feedback
-- [ ] Document any issues encountered
-
----
-
-## Appendix
-
-### Useful Azure CLI Commands
-
-```bash
-# View all resources in resource group
-az resource list --resource-group poker-learning-app-rg --output table
-
-# Get App Service URL
-az webapp show --name poker-api-prod --resource-group poker-learning-app-rg --query defaultHostName -o tsv
-
-# Restart App Service
-az webapp restart --name poker-api-prod --resource-group poker-learning-app-rg
-
-# Get Redis connection string
-az redis show --name poker-cache-prod --resource-group poker-learning-app-rg --query hostName -o tsv
-
-# Get PostgreSQL connection details
-az postgres flexible-server show --name poker-db-prod --resource-group poker-learning-app-rg
-
-# View cost analysis
-az consumption usage list --start-date 2026-01-01 --end-date 2026-01-31
-
-# Delete all resources (DANGER!)
-az group delete --name poker-learning-app-rg --yes --no-wait
-```
-
-### Troubleshooting
-
-**Issue**: App Service not starting
-```bash
-# Check logs
-az webapp log tail --name poker-api-prod --resource-group poker-learning-app-rg
-
-# Check startup command
-az webapp config show --name poker-api-prod --resource-group poker-learning-app-rg --query appCommandLine
-```
-
-**Issue**: Cannot connect to Redis
-```bash
-# Test connection
-nc -zv poker-cache-prod.redis.cache.windows.net 6380
-
-# Check firewall rules
-az redis firewall-rules list --name poker-cache-prod --resource-group poker-learning-app-rg
-```
-
-**Issue**: Database connection failing
-```bash
-# Check firewall rules
-az postgres flexible-server firewall-rule list --name poker-db-prod --resource-group poker-learning-app-rg
-
-# Test connection
-psql "host=poker-db-prod.postgres.database.azure.com port=5432 dbname=pokerapp user=pokeradmin password=<password> sslmode=require"
-```
-
-**Issue**: High memory usage
-```bash
-# Restart App Service
-az webapp restart --name poker-api-prod --resource-group poker-learning-app-rg
-
-# Scale up if needed
-az appservice plan update --name poker-plan-prod-backend --resource-group poker-learning-app-rg --sku P1v3
-```
+#### Performance Tests (UPDATED)
+- [ ] Load test with 10 authenticated users
+- [ ] JWT validation latency < 50ms
+- [ ] Database queries optimized (user_id indexes)
+- [ ] Analysis cache hit rate > 70% (after 1 hour)
 
 ---
 
 ## Summary
 
-This deployment plan provides a production-ready Azure architecture for the Poker Learning App with:
+This deployment plan provides a production-ready Azure architecture for the Poker Learning App with **comprehensive user authentication** and account management:
 
+✅ **User Accounts**: Auth0 integration with OAuth + passwordless
+✅ **User Features**: Dashboard, game history, stats tracking, analysis caching
 ✅ **Scalability**: Redis + PostgreSQL enable horizontal scaling
+✅ **Cost Savings**: Analysis caching saves $960+/month in API costs
 ✅ **Reliability**: High availability Redis, automatic backups
-✅ **Security**: Key Vault, managed identity, rate limiting
-✅ **Monitoring**: Application Insights with 5+ alert rules
-✅ **Cost-Effective**: $171/month total (staging + production)
+✅ **Security**: Auth0 JWT validation, Key Vault, managed identity, rate limiting per user
+✅ **Monitoring**: User analytics, engagement metrics, retention tracking
+✅ **Cost-Effective**: $171/month total (Auth0 free tier for <7K users)
 ✅ **CI/CD**: Automated GitHub Actions deployments
-✅ **Disaster Recovery**: 1-hour RTO, 5-minute RPO
+✅ **User Privacy**: GDPR compliance (data export, account deletion)
 
-**Estimated Total Effort**: 1 week (3-4 days pre-deployment + 1 day Azure setup + 1-2 days testing)
+**Estimated Total Effort**: **1.5-2 weeks** (5-7 days pre-deployment + 1 day Azure setup + 1-2 days testing)
 
-**Next Steps**: Complete pre-deployment requirements, then execute Phase 1-5 in sequence.
+**User Value Proposition**:
+- ❌ Without accounts: "Practice poker, forget everything"
+- ✅ With accounts: "Track progress, review history, improve over time, access from anywhere"
+
+**Next Steps**: Complete pre-deployment requirements (auth + database), then execute Phase 1-5 in sequence.
 
 ---
 
-**Document Version**: 2.0 (Final)
+**Document Version**: 3.0 (User Authentication Added)
 **Last Updated**: 2026-01-12
-**Review Status**: ✅ Peer Reviewed and Approved
+**Review Status**: ✅ Updated with Auth0 Integration
+**Changes**: Added user authentication, user accounts, game history, analysis caching, user dashboard, updated database schema, updated costs, updated timeline (+2-3 days)

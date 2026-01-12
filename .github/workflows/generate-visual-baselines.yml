@@ -1,0 +1,58 @@
+name: Generate Visual Regression Baselines
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  generate-baselines:
+    name: Generate Linux Snapshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Install Playwright
+        run: npm ci && npx playwright install chromium
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Generate visual regression baselines
+        env:
+          TEST_MODE: '1'
+        run: npx playwright test test_visual_regression.spec.ts --update-snapshots
+
+      - name: Upload generated baselines
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines-linux
+          path: tests/e2e/*-snapshots/
+          retention-days: 7
+
+      - name: Show generated files
+        run: ls -laR tests/e2e/*-snapshots/
