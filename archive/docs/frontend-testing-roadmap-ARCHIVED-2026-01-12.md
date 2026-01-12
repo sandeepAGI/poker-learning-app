@@ -1,3 +1,13 @@
+# ⚠️ ARCHIVED - January 12, 2026
+
+**This document has been consolidated into `docs/frontend-testing-enhancement-plan.md`**
+
+All test specifications, infrastructure requirements, and implementation details from this roadmap have been merged into the enhancement plan. Please refer to that document for the complete, up-to-date testing strategy.
+
+**Archive Reason:** Consolidation to avoid duplication and keep testing documentation in a single source of truth.
+
+---
+
 # Frontend Testing Infrastructure Roadmap
 
 **Date Created:** January 11, 2026

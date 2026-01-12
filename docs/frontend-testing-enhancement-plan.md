@@ -1,9 +1,11 @@
 # Frontend Testing Enhancement Plan - TDD Execution
 
 **Date Created:** January 11, 2026
-**Date Updated:** January 11, 2026
-**Status:** In Implementation
-**Related:** `frontend-testing-roadmap.md` (specifications), `archive/codex-testing-fixes.md` (Phase 1 backend)
+**Date Updated:** January 12, 2026
+**Status:** Phase 0 Complete, Ready for Phase 2
+**Related:** `archive/docs/frontend-testing-roadmap-ARCHIVED-2026-01-12.md` (original specs now consolidated here), `archive/codex-testing-fixes.md` (Phase 1 backend)
+
+**IMPORTANT:** This document consolidates the original `frontend-testing-roadmap.md` (now archived). All test specifications from Phases 2-4 of the roadmap are included below.
 
 ---
 
@@ -202,11 +204,19 @@ await expect(page.locator('[data-testid="human-stack"]')).toContainText('$30')
 
 ---
 
-## Phase 0: Add Test IDs to Components
+## Phase 0: Add Test IDs to Components ✅ COMPLETE
 
 **Goal:** Add `data-testid` attributes to all components for reliable test selection
 
 **Estimated Effort:** 1-2 hours
+
+**Status:** COMPLETE (January 12, 2026)
+
+**Implementation Details:**
+- Added 50+ test IDs across all major components
+- Used consistent naming convention: `component-element-id`
+- Per-item IDs use indices or unique player keys
+- Build verified with no TypeScript errors
 
 **Rationale:** Without test IDs, Playwright/RTL tests are fragile (break on text changes, class name refactoring). Test IDs provide stable selectors.
 
@@ -2989,6 +2999,412 @@ cd frontend && npm test -- --bail --findRelatedTests
 
 ---
 
-**Last Updated:** January 11, 2026
-**Status:** Ready for Implementation
-**Total Estimated Effort:** 12-16 hours
+---
+
+## Appendix: Complete Test Specifications from Original Roadmap
+
+This section consolidates all test specifications from the original `frontend-testing-roadmap.md` for reference. Use these specs when implementing the tests in Phases 2-4.
+
+### Phase 2 Test Specifications (Component Tests - Jest + RTL)
+
+#### 2.1: PokerTable Action Button Logic (5 tests)
+**Priority:** 🟡 High (catches short-stack UI regression)
+
+```typescript
+describe('PokerTable - Action Buttons', () => {
+  it('enables Call button when short stack', () => {
+    // Setup: player with $30, facing $80 bet
+    // Verify: Call button enabled, not disabled
+  })
+
+  it('enables Raise button when short stack', () => {
+    // Setup: player with $30, can raise all-in
+    // Verify: Raise button enabled
+  })
+
+  it('disables buttons when eliminated', () => {
+    // Setup: player with $0, not active
+    // Verify: Call/Raise buttons not in document
+  })
+
+  it('disables buttons when all-in waiting', () => {
+    // Setup: player all-in, waiting for showdown
+    // Verify: Call/Raise buttons not in document, All-In message shown
+  })
+
+  it('shows All-In button when active', () => {
+    // Setup: player with $50, current turn
+    // Action: Click Raise to open panel
+    // Verify: All-In button in document
+  })
+})
+```
+
+#### 2.2: Raise Slider Constraints (3 tests)
+**Priority:** 🟡 High (validates min raise logic)
+
+```typescript
+describe('PokerTable - Raise Slider', () => {
+  it('respects minRaise from backend', () => {
+    // Setup: current_bet=20, last_raise_amount=10, big_blind=10
+    // Verify: slider min = 30 (current_bet + last_raise_amount)
+  })
+
+  it('sets slider max to stack + current_bet', () => {
+    // Setup: stack=100, current_bet=10
+    // Verify: slider max = 110
+  })
+
+  it('disables slider when short stack below minRaise', () => {
+    // Setup: current_bet=100, last_raise_amount=50, stack=30
+    // Verify: slider disabled, All-In button enabled
+  })
+})
+```
+
+#### 2.3: WinnerModal Split Pot Display (4 tests)
+**Priority:** 🟢 Medium (validates split pot display)
+
+```typescript
+describe('WinnerModal - Split Pot Display', () => {
+  it('displays "Split Pot!" for two winners', () => {
+    // Setup: 2 winners with equal amounts
+    // Verify: "Split Pot!" text visible
+  })
+
+  it('displays "Split Pot!" for three winners', () => {
+    // Setup: 3 winners
+    // Verify: "Split Pot!" text visible
+  })
+
+  it('shows individual amounts for each winner', () => {
+    // Setup: winners with $51 and $50
+    // Verify: Both amounts displayed correctly
+  })
+
+  it('displays hand ranks at showdown', () => {
+    // Setup: winner with hand_rank='Royal Flush'
+    // Verify: Hand rank displayed
+  })
+})
+```
+
+#### 2.4: WebSocket Store Step Mode (4 tests)
+**Priority:** 🟢 Medium (validates step mode state)
+
+```typescript
+describe('GameStore - Step Mode', () => {
+  it('toggles stepMode flag', () => {
+    // Action: Toggle on, toggle off
+    // Verify: Flag changes correctly
+  })
+
+  it('calls WebSocket when sendContinue invoked', () => {
+    // Setup: Mock WebSocket with sendContinue
+    // Action: Call sendContinue
+    // Verify: WebSocket method called
+  })
+
+  it('sets awaitingContinue when step mode active', () => {
+    // Setup: Enable step mode, set awaiting
+    // Verify: Flag set correctly
+  })
+
+  it('persists stepMode across hands', () => {
+    // Setup: Enable step mode
+    // Action: Simulate new hand (hand_count=2)
+    // Verify: Step mode still enabled
+  })
+})
+```
+
+---
+
+### Phase 3 Test Specifications (E2E Tests - Playwright)
+
+#### 3.1: Short-Stack E2E Tests (3 tests)
+**Priority:** 🟡 High (validates critical short-stack fix)
+
+```typescript
+test.describe('Short-Stack UI', () => {
+  test('allows call all-in when stack < call amount', async ({ page }) => {
+    // Setup: Use /test/set_game_state with stack=$30, current_bet=$80
+    // Action: Click Call button
+    // Verify: Shows "Call All-In $30", action succeeds, all-in badge visible
+  })
+
+  test('allows raise all-in when stack < min raise', async ({ page }) => {
+    // Setup: stack=$30, current_bet=$20
+    // Action: Click Raise, then All-In button
+    // Verify: All-In succeeds, badge visible
+  })
+
+  test('shows correct call button label for short stack', async ({ page }) => {
+    // Setup: stack=$15, current_bet=$50
+    // Verify: Label shows "Call All-In $15", NOT "Call $50"
+  })
+})
+```
+
+#### 3.2: Winner Modal Split Pot E2E (3 tests)
+**Priority:** 🟢 Medium (validates split pot display)
+
+```typescript
+test.describe('Winner Modal - Split Pot', () => {
+  test('displays "Split Pot!" for two-way tie', async ({ page }) => {
+    // Setup: Royal flush on board, 2 active players
+    // Action: Trigger showdown
+    // Verify: "Split Pot!" visible, both winners shown, amounts=$50 each
+  })
+
+  test('displays three-way split correctly', async ({ page }) => {
+    // Setup: Royal flush on board, 3 active players
+    // Verify: "Split Pot!" visible, three winners shown
+  })
+
+  test('shows individual amounts sum to pot', async ({ page }) => {
+    // Setup: $101 pot, 2 winners (odd chip)
+    // Verify: Amounts displayed sum to pot ($51 + $50)
+  })
+})
+```
+
+#### 3.3: Step Mode E2E Tests (3 tests)
+**Priority:** 🟢 Medium (validates step mode flow)
+
+```typescript
+test.describe('Step Mode', () => {
+  test('pauses AI when step mode enabled', async ({ page }) => {
+    // Setup: Enable step mode via settings
+    // Action: Fold
+    // Verify: Continue button appears, "WAITING FOR CONTINUE" message shown
+  })
+
+  test('advances single AI turn when Continue clicked', async ({ page }) => {
+    // Setup: Enable step mode, fold
+    // Action: Click Continue
+    // Verify: One AI action occurs, Continue button reappears or hand completes
+  })
+
+  test('completes full hand in step mode', async ({ page }) => {
+    // Setup: Enable step mode, fold
+    // Action: Click Continue repeatedly (max 10 times)
+    // Verify: Hand completes (Next Hand button or winner modal visible)
+  })
+})
+```
+
+---
+
+### Phase 4 Test Specifications (Visual Regression Tests)
+
+#### 4.1: Responsive Design Assertions
+**Priority:** 🔵 Low (nice-to-have, caught manually)
+
+```typescript
+test.describe('Responsive Design', () => {
+  const viewports = [
+    { name: 'mobile', width: 375, height: 667 },
+    { name: 'tablet', width: 768, height: 1024 },
+    { name: 'desktop', width: 1920, height: 1080 },
+  ]
+
+  for (const viewport of viewports) {
+    test(`no overflow on ${viewport.name}`, async ({ page }) => {
+      // Verify: body.scrollWidth <= window.innerWidth
+      // Verify: community cards container doesn't overflow
+    })
+
+    test(`action buttons fit on ${viewport.name}`, async ({ page }) => {
+      // Verify: Buttons have min height 44px (touch target)
+      // Verify: Buttons don't overlap (with 2px tolerance)
+    })
+  }
+})
+```
+
+#### 4.2: Card Sizing Assertions
+**Priority:** 🔵 Low (nice-to-have)
+
+```typescript
+test.describe('Card Sizing', () => {
+  test('community cards maintain 2.5:3.5 aspect ratio', async ({ page }) => {
+    // Wait for flop
+    // Verify: card width/height ratio within 10% of 2.5/3.5
+  })
+
+  test('cards fit within viewport on mobile', async ({ page }) => {
+    // Setup: 375px viewport
+    // Verify: community cards container width <= 375px
+  })
+
+  test('hole cards readable size', async ({ page }) => {
+    // Verify: Card width >= 50px (readable)
+    // Verify: Card width <= 150px (don't dominate screen)
+  })
+
+  test('visual regression - game table', async ({ page }) => {
+    // Take screenshot, compare to baseline
+    // Mask dynamic elements (connection status, timestamps)
+  })
+})
+```
+
+---
+
+## Infrastructure Requirements (from Original Roadmap)
+
+### Phase 2: Component Tests Dependencies
+
+```bash
+cd frontend
+npm install --save-dev \
+  @testing-library/react@latest \
+  @testing-library/jest-dom@latest \
+  @testing-library/user-event@latest \
+  jest@^29.7.0 \
+  jest-environment-jsdom@^29.7.0 \
+  @types/jest@^29.5.11
+```
+
+**Configuration Files Required:**
+- `frontend/jest.config.js` - Next.js Jest configuration
+- `frontend/jest.setup.js` - Browser API mocks (matchMedia, localStorage, WebSocket)
+- `frontend/__tests__/utils/test-utils.tsx` - Mock builders (createMockGameState, createMockPlayer)
+
+**Package.json Scripts:**
+```json
+{
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --maxWorkers=2"
+  }
+}
+```
+
+---
+
+### Phase 3: E2E Tests Dependencies
+
+```bash
+cd frontend
+npm install --save-dev @playwright/test@^1.40.0
+npx playwright install chromium
+```
+
+**Configuration Files Required:**
+- `frontend/playwright.config.ts` - Auto-start backend (TEST_MODE=1) and frontend
+- `tests/e2e/` directory structure
+
+**Backend Test Endpoint (CRITICAL):**
+- `POST /test/set_game_state` - Manipulate game state for E2E testing
+- `GET /test/health` - Health check for E2E tests
+- `GET /test/games/{id}` - Debug game state
+- **Security:** Only available when `TEST_MODE=1` environment variable set
+
+**Package.json Scripts:**
+```json
+{
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
+  }
+}
+```
+
+---
+
+### Phase 4: Visual Tests Configuration
+
+**Playwright Config Updates:**
+```typescript
+expect: {
+  toHaveScreenshot: {
+    maxDiffPixels: 100,      // Anti-aliasing tolerance
+    threshold: 0.2,          // 20% pixel difference threshold
+    animations: 'disabled',  // Disable animations for consistency
+  },
+}
+```
+
+**Directory Structure:**
+```
+tests/e2e/
+├── screenshots/
+│   ├── baseline/   # Git-tracked baseline images
+│   ├── actual/     # Current run (gitignored)
+│   └── diff/       # Diff images (gitignored)
+└── *-snapshots/    # Playwright snapshot storage (gitignored except baselines)
+```
+
+**Gitignore Additions:**
+```gitignore
+tests/e2e/screenshots/actual/
+tests/e2e/screenshots/diff/
+tests/e2e/*-snapshots/
+```
+
+**Baseline Generation:**
+```bash
+# Generate/update baselines in CI (ubuntu-latest for consistency)
+npx playwright test --update-snapshots
+```
+
+---
+
+## CI Integration Requirements
+
+**GitHub Actions Workflow:** `.github/workflows/test-frontend.yml`
+
+**Jobs:**
+1. **unit-tests** - Jest component tests (<10s)
+2. **e2e-tests** - Playwright E2E tests (<2 min)
+3. **visual-tests** - Visual regression (nightly only, ~3 min)
+
+**Environment Variables:**
+- `TEST_MODE=1` - Enable backend test endpoints for E2E tests
+- `CI=true` - Enable deterministic behavior (retries, workers)
+
+**Artifacts:**
+- Coverage reports (Codecov)
+- Playwright HTML report (on failure)
+- Visual diff images (on failure)
+
+---
+
+## Original Roadmap Summary
+
+**Phase 1:** Backend tests (COMPLETE - 17 tests added, see `archive/codex-testing-fixes.md`)
+
+**Phase 2:** Component tests (16 tests)
+- PokerTable action buttons: 5 tests
+- PokerTable raise slider: 3 tests
+- WinnerModal split pot: 4 tests
+- Store step mode: 4 tests
+
+**Phase 3:** E2E tests (9 tests)
+- Short-stack UI: 3 tests
+- Winner modal split pot: 3 tests
+- Step mode flow: 3 tests
+
+**Phase 4:** Visual tests (10 tests)
+- Responsive design: 6 tests
+- Card sizing: 4 tests
+
+**Total Frontend Tests:** 35 tests + 50+ test IDs
+
+**Total Estimated Effort:** 10-14 hours
+- Phase 2: 3-5 hours
+- Phase 3: 4-6 hours
+- Phase 4: 2-3 hours
+
+---
+
+**Last Updated:** January 12, 2026
+**Status:** Phase 0 Complete, Ready for Phase 2
+**Total Estimated Effort:** 10-14 hours (Phase 0 complete, Phases 2-4 pending)
