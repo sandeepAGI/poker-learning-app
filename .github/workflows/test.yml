@@ -206,9 +206,9 @@ jobs:
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Coverage: ~250+ tests**" >> $GITHUB_STEP_SUMMARY
-          echo "- Backend: ~240 fast tests (auto-discovery)" >> $GITHUB_STEP_SUMMARY
+          echo "**Coverage: ~344+ tests**" >> $GITHUB_STEP_SUMMARY
+          echo "- Backend: 333 fast tests (auto-discovery)" >> $GITHUB_STEP_SUMMARY
           echo "- Frontend: 9 tests (Jest)" >> $GITHUB_STEP_SUMMARY
-          echo "- E2E: 2 critical flows" >> $GITHUB_STEP_SUMMARY
+          echo "- E2E: 2 critical flows (Python)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Note:** Slow tests (stress, performance, fuzzing) run nightly" >> $GITHUB_STEP_SUMMARY
+          echo "**Note:** Slow tests (67 tests: stress, performance, fuzzing) run nightly" >> $GITHUB_STEP_SUMMARY

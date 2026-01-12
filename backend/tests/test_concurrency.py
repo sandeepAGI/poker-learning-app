@@ -233,11 +233,11 @@ async def test_two_connections_same_game_simultaneous_fold():
 
         # Analyze results - but don't trust the immediate response!
         # The test needs to check the actual game state, not just WebSocket responses
-        success1, result1 = results[0] if not isinstance(results[0], Exception) else (False, results[0])
-        success2, result2 = results[1] if not isinstance(results[1], Exception) else (False, results[1])
+        received1, result1 = (True, results[0]) if not isinstance(results[0], Exception) else (False, results[0])
+        received2, result2 = (True, results[1]) if not isinstance(results[1], Exception) else (False, results[1])
 
-        print(f"[TEST] Client1 initial response: {'SUCCESS' if success1 else 'REJECTED/ERROR'}")
-        print(f"[TEST] Client2 initial response: {'SUCCESS' if success2 else 'REJECTED/ERROR'}")
+        print(f"[TEST] Client1 response received: {'YES' if received1 else 'EXCEPTION'}")
+        print(f"[TEST] Client2 response received: {'YES' if received2 else 'EXCEPTION'}")
 
         # Drain all events to get final state
         print("[TEST] Draining events to get final game state...")

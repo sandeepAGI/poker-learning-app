@@ -150,14 +150,18 @@ def play_single_hand(game: PokerGame, stats: StressTestStats) -> bool:
                     break
                 continue
 
-            # Find player index
-            player_idx = None
-            for i, p in enumerate(game.players):
-                if p == current:
-                    player_idx = i
-                    break
-
+            # Use game's current player index directly
+            player_idx = game.current_player_index
             if player_idx is None:
+                stats.errors.append(f"Hand {hand_num}: No valid current player index")
+                break
+
+            # Verify index matches the current player
+            if game.players[player_idx] != current:
+                stats.errors.append(
+                    f"Hand {hand_num}: Index mismatch - current player is "
+                    f"{current.name} but index {player_idx} points to {game.players[player_idx].name}"
+                )
                 break
 
             # Make AI decision (even for "human" player in this test)
