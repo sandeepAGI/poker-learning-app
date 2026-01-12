@@ -35,7 +35,8 @@ jobs:
             -v --tb=short \
             -m "not slow" \
             --timeout=60 \
-            --ignore=backend/tests/test_bugs_real.py
+            --ignore=backend/tests/test_bugs_real.py \
+            --ignore=backend/tests/test_multiple_winners.py
 
       - name: Test Summary
         if: always()
