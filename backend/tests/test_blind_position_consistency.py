@@ -6,19 +6,12 @@ even when a blind poster busts mid-hand.
 
 TDD Red Phase: This test should FAIL before the fix is applied.
 """
-import pytest
-import asyncio
-import httpx
-import json
-from typing import Dict, Any
-
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from game.poker_engine import PokerGame
 from websocket_manager import serialize_game_state
-from test_websocket_integration import create_test_game
 
 
 def test_websocket_serializer_uses_stored_blind_indexes():
@@ -106,27 +99,3 @@ def test_blind_positions_stay_fixed_during_hand():
     assert state["big_blind_position"] == bb_before
 
 
-@pytest.mark.asyncio
-async def test_websocket_and_rest_return_same_positions():
-    """
-    Integration test: Verify WebSocket and REST API return identical blind positions.
-
-    This is the user-facing symptom: UI shows different button positions
-    depending on whether data comes from REST or WebSocket.
-    """
-    pytest.skip("Requires WebSocket test infrastructure to compare with REST")
-
-    # The code below requires a running server, so we skip this test
-    game_id = await create_test_game(ai_count=3)
-
-    # Get state via REST API
-    async with httpx.AsyncClient(base_url="http://127.0.0.1:8001") as client:
-        rest_response = await client.get(f"/games/{game_id}")
-        rest_data = rest_response.json()
-
-    # Get state via direct serialization (simulates WebSocket)
-    # Note: We'd need access to the actual game object for this
-    # For now, this test is more conceptual
-
-    # Both should return same positions
-    # This will FAIL if WebSocket recomputes and REST uses stored values
