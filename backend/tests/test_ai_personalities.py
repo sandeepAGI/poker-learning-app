@@ -126,8 +126,14 @@ def test_tight_aggressive_personality():
         f"TAG should raise premium hands, got: {decision2.action}"
 
 
+@pytest.mark.flaky(reruns=2, reruns_delay=1)
 def test_maniac_personality():
-    """Verify Maniac is hyper-aggressive and bluffs frequently."""
+    """Verify Maniac is hyper-aggressive and bluffs frequently.
+
+    FLAKY: This test checks probabilistic behavior (70% raise rate) with only 10 trials.
+    Statistical probability of false negative: ~4.7% (binomial: P(X<=4 | n=10, p=0.7)).
+    Will retry up to 2 times if it fails due to randomness.
+    """
     # Run 10 decisions with weak hands
     raise_count = 0
 
