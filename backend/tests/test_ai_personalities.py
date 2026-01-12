@@ -126,18 +126,22 @@ def test_tight_aggressive_personality():
         f"TAG should raise premium hands, got: {decision2.action}"
 
 
-@pytest.mark.flaky(reruns=2, reruns_delay=1)
 def test_maniac_personality():
     """Verify Maniac is hyper-aggressive and bluffs frequently.
 
-    FLAKY: This test checks probabilistic behavior (70% raise rate) with only 10 trials.
-    Statistical probability of false negative: ~4.7% (binomial: P(X<=4 | n=10, p=0.7)).
-    Will retry up to 2 times if it fails due to randomness.
+    Statistical design: Uses 50 trials for robust probabilistic testing.
+    - True raise rate: ~70% (Maniac personality bluff rate)
+    - Test threshold: ≥50% (25/50 raises)
+    - False negative rate: 0.09% (~1 in 1,071 runs)
+    - Runtime: ~108ms (negligible)
+
+    Previous approach used 10 trials (4.7% failure rate, ~1 in 21 runs).
+    Increasing sample size provides statistical robustness without retry logic.
     """
-    # Run 10 decisions with weak hands
+    # Run 50 decisions with weak hands for statistical robustness
     raise_count = 0
 
-    for _ in range(10):
+    for _ in range(50):
         decision = AIStrategy.make_decision_with_reasoning(
             personality="Maniac",
             hole_cards=["7h", "2d"],  # Weak hand
@@ -153,8 +157,8 @@ def test_maniac_personality():
             raise_count += 1
 
     # Maniac should raise at least 50% of the time even with weak hands (70% bluff rate)
-    assert raise_count >= 5, \
-        f"Maniac should be hyper-aggressive, only raised {raise_count}/10 times"
+    assert raise_count >= 25, \
+        f"Maniac should be hyper-aggressive, only raised {raise_count}/50 times"
 
 
 def test_ai_name_pool_supports_five_players():
