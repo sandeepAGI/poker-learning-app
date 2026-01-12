@@ -123,9 +123,9 @@ jobs:
           cd frontend
           npm ci
 
-      - name: Install Playwright
+      - name: Install Playwright browsers
         run: |
-          pip install playwright pytest-playwright
+          cd frontend
           npx playwright install chromium
 
       - name: Start backend server
@@ -153,14 +153,16 @@ jobs:
 
       - name: Run visual regression tests
         run: |
-          npx playwright test tests/e2e/test_visual_regression.spec.ts --reporter=html
+          cd frontend
+          npx playwright test ../tests/e2e/test_visual_regression.spec.ts --reporter=html
         env:
           FRONTEND_URL: http://localhost:3000
           BACKEND_URL: http://localhost:8000
 
       - name: Run full scenario tests
         run: |
-          npx playwright test tests/e2e/test_short_stack.spec.ts --reporter=html
+          cd frontend
+          npx playwright test ../tests/e2e/test_short_stack.spec.ts --reporter=html
         env:
           FRONTEND_URL: http://localhost:3000
           BACKEND_URL: http://localhost:8000
