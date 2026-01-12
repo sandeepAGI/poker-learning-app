@@ -7,6 +7,7 @@
 | `CLAUDE.md` | Working agreement, checklists | see git log |
 | `docs/HISTORY.md` | Chronological release / milestone notes | 2024-12-17 |
 | `docs/SETUP.md` | Detailed local setup & operations guide | 2024-11-18 |
+| `docs/AZURE-DEPLOYMENT-PLAN.md` | Production deployment plan for Azure (peer-reviewed) | 2026-01-12 |
 | `docs/TESTING.md` | Testing strategy, suites, and instructions | 2024-12-20 |
 | `docs/TEST-SUITE-REFERENCE.md` | Complete reference for all test suites (backend, frontend, E2E, CI/CD) | 2026-01-12 |
 | `docs/UX_GUIDE.md` | UX/visual guidelines from Phase 4.5 | 2024-12-21 |
