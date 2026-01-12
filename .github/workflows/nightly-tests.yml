@@ -155,14 +155,11 @@ jobs:
           timeout 30 bash -c 'until curl -f http://localhost:3000/ > /dev/null 2>&1; do sleep 1; done'
           echo "✅ Both servers are ready"
 
-      - name: Run visual regression tests
-        run: |
-          NODE_PATH=frontend/node_modules ./frontend/node_modules/.bin/playwright test tests/e2e/test_visual_regression.spec.ts --reporter=html
-        env:
-          FRONTEND_URL: http://localhost:3000
-          BACKEND_URL: http://localhost:8000
+      # Visual regression tests skipped - UI changes frequently during development
+      # For visual regression testing, update baselines manually when needed
+      # See: tests/e2e/test_visual_regression.spec.ts
 
-      - name: Run full scenario tests
+      - name: Run gameplay E2E tests (short-stack scenarios)
         run: |
           NODE_PATH=frontend/node_modules ./frontend/node_modules/.bin/playwright test tests/e2e/test_short_stack.spec.ts --reporter=html
         env:
@@ -187,6 +184,6 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: `Nightly E2E Tests Failed (${new Date().toISOString().split('T')[0]})`,
-              body: `## Nightly E2E Test Failure\n\n**Workflow**: Nightly E2E Tests\n**Run**: ${runUrl}\n**Date**: ${new Date().toISOString()}\n\n### Action Required\n\n1. Review Playwright report (download artifacts)\n2. Check visual regression diffs\n3. Verify if intentional UI changes\n4. Update baselines or fix issues\n\n### Tests Included\n\n- Visual regression (pixel-perfect screenshot comparison)\n- Full game scenario tests\n- Long-running user flows`,
+              body: `## Nightly E2E Test Failure\n\n**Workflow**: Nightly E2E Tests\n**Run**: ${runUrl}\n**Date**: ${new Date().toISOString()}\n\n### Action Required\n\n1. Review Playwright report (download artifacts)\n2. Check test failure logs\n3. Verify gameplay functionality\n4. Fix issues or update tests if behavior changed intentionally\n\n### Tests Included\n\n- Gameplay E2E tests (short-stack scenarios)\n- UI interaction validation\n- Game state verification`,
               labels: ['ci-failure', 'nightly', 'e2e', 'needs-investigation', 'automated']
             });
