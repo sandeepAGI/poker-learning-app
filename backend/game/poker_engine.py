@@ -1970,7 +1970,7 @@ class PokerGame:
                     "current_bet": p.current_bet,
                     "is_active": p.is_active,
                     "all_in": p.all_in,
-                    "hole_cards": p.hole_cards if p.is_human else ["hidden", "hidden"],
+                    "hole_cards": p.hole_cards if p.is_human else (["hidden", "hidden"] if len(p.hole_cards) > 0 else []),
                     "is_current": self.players.index(p) == self.current_player_index
                 } for p in self.players
             ],
