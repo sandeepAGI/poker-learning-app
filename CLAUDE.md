@@ -1,187 +1,37 @@
-# Poker Learning App - Development Guide
+# Poker Learning App
 
-**Current Status**: See [STATUS.md](STATUS.md)
-**Development History**: See [docs/HISTORY.md](docs/HISTORY.md)
+Human vs AI poker training. Players face opponents with distinct styles (rule-based strategies), get coaching on hands/sessions. Coaching analysis powered by Claude API (Haiku/Sonnet 4.5).
 
----
+## Stack
 
-## Quick Start
-
-```bash
-# Backend
-cd backend && pip install -r requirements.txt
-python main.py  # Runs on http://localhost:8000
-
-# Frontend (separate terminal)
-cd frontend && npm install
-npm run dev  # Runs on http://localhost:3000
-```
-
----
-
-## Before Committing Checklist
-
-1. **Run backend tests**:
-   ```bash
-   cd backend && python -m pytest tests/ -v
-   ```
-
-2. **Run property-based test** (thorough validation):
-   ```bash
-   cd /path/to/repo && python tests/legacy/test_property_based.py
-   ```
-
-3. **Check frontend builds**:
-   ```bash
-   cd frontend && npm run build
-   ```
-
-4. **Update STATUS.md** if significant changes were made
-
-5. **Documentation audit**:
-   - Ensure no new `.md` files exist outside `README.md`, `STATUS.md`, `CLAUDE.md`, `docs/`, or `archive/`.
-   - Add/refresh entries in `docs/INDEX.md` for any active doc you touched.
-   - Move stale planning/test logs older than 14 days into `archive/`.
-
-6. **Commit with descriptive message**:
-   ```bash
-   git add .
-   git commit -m "Brief description of changes"
-   git push origin main
-   ```
-
----
-
-## Project Structure
-
-```
-poker-learning-app/
-├── backend/
-│   ├── game/poker_engine.py  # Core game logic (~1600 lines)
-│   ├── main.py               # FastAPI server + WebSocket
-│   ├── websocket_manager.py  # WebSocket handling
-│   └── tests/                # Backend unit tests
-├── frontend/
-│   ├── app/                  # Next.js pages
-│   ├── components/           # React components
-│   └── lib/                  # Store, API, WebSocket client
-├── tests/
-│   └── legacy/               # Integration/exploratory tests
-├── docs/
-│   └── HISTORY.md            # Development history
-├── archive/
-│   └── docs/                 # Archived documentation
-├── README.md                 # User-facing quick start
-├── STATUS.md                 # Current project status
-└── CLAUDE.md                 # This file
-```
-
----
+**Backend:** FastAPI, WebSockets, treys (hand eval), Anthropic SDK
+**Frontend:** Next.js 15 (App Router/Turbopack), React 19, Zustand 5, Tailwind 4, Framer Motion
 
 ## Key Files
 
-| File | Purpose | Lines |
-|------|---------|-------|
-| `backend/game/poker_engine.py` | Core poker logic, AI strategies | ~1600 |
-| `backend/main.py` | REST API + WebSocket endpoints | ~450 |
-| `frontend/components/PokerTable.tsx` | Main game UI | ~400 |
-| `frontend/lib/store.ts` | Zustand state management | ~200 |
-| `frontend/lib/websocket.ts` | WebSocket client | ~360 |
+- `backend/game/poker_engine.py` — core game logic + AI strategy classes
+- `backend/main.py` — REST + WebSocket endpoints
+- `frontend/components/PokerTable.tsx` — main game UI
+- `frontend/lib/store.ts` — Zustand state; `websocket.ts` — real-time client
 
----
+## Commands
 
-## API Endpoints
-
-### REST
-- `POST /games` - Create new game
-- `GET /games/{id}` - Get game state
-- `POST /games/{id}/actions` - Submit player action
-- `POST /games/{id}/next` - Start next hand
-- `GET /games/{id}/analysis` - Get hand analysis
-
-### WebSocket
-- `WS /ws/{game_id}` - Real-time game updates
-
----
-
-## Documentation Policy (2024-12-26)
-
-1. **Allowed locations**
-   - Root may only contain `README.md`, `STATUS.md`, `CLAUDE.md`.
-   - Active docs live under `docs/` and must be listed in `docs/INDEX.md`.
-   - Historical or deprecated content moves under `archive/`.
-
-2. **When updating functionality**
-   - Update `STATUS.md` (high-level progress) and append to `docs/HISTORY.md` as needed.
-   - Extend an existing topical doc (`docs/SETUP.md`, `docs/TESTING.md`, `docs/UX_GUIDE.md`, etc.) rather than creating new files.
-   - If a new doc is unavoidable, name it `docs/<topic>.md`, add it to `docs/INDEX.md` with a short description, and link it from `README.md` or `STATUS.md`.
-
-3. **Lifecycle**
-   - Planning or testing notes older than 14 days must move to `archive/`.
-   - `docs/CURRENT_FIX_LOG.md` is the only “working” log; clear or archive it once the tracked fixes ship.
-
-4. **Before commit**
-   - Run the documentation audit (step 5 in the checklist above).
-   - Preview any modified `.md` to ensure links still point to existing files.
-
----
-
-## Testing Strategy
-
-### Must Pass Before Commit (Quick - 2 min)
 ```bash
-# Phase 1-3 tests (23 tests in ~48s)
-PYTHONPATH=backend python -m pytest backend/tests/test_negative_actions.py \
-  backend/tests/test_hand_evaluator_validation.py \
-  backend/tests/test_property_based_enhanced.py -v
-
-# Frontend build check
-cd frontend && npm run build
+cd backend && python main.py              # API :8000
+cd frontend && npm run dev                # UI :3000
+PYTHONPATH=backend pytest backend/tests/ -v   # tests (run before commits)
+cd frontend && npm run build              # verify build
 ```
 
-### Full Test Suite (Before Major Changes - 25 min)
-```bash
-# All Phase 1-5 tests (49 tests)
-# Backend tests (36 tests - ~20 min)
-PYTHONPATH=backend python -m pytest backend/tests/test_negative_actions.py \
-  backend/tests/test_hand_evaluator_validation.py \
-  backend/tests/test_property_based_enhanced.py \
-  backend/tests/test_user_scenarios.py -v
+## Workflows
 
-# E2E tests (13 tests - ~2.5 min, requires servers running)
-python backend/main.py &
-cd frontend && npm run dev &
-PYTHONPATH=. python -m pytest tests/e2e/test_critical_flows.py -v
-```
+**Before touching `poker_engine.py`:** run `pytest backend/tests/test_property_based_enhanced.py -v` first—guards against infinite loop regression.
 
-### Test Coverage
-- **Phase 1**: Infinite loop regression (1 test)
-- **Phase 2**: Negative testing (12 tests)
-- **Phase 3**: Fuzzing + validation (11 tests)
-- **Phase 4**: Scenario testing (12 tests)
-- **Phase 5**: E2E browser testing (13 tests)
-- **Total**: 49 tests, 100% passing
+**Features:** failing test → implement → quick tests → STATUS.md if significant
+**Bugs:** reproduce with test → fix → regression suite
 
----
+## Gotchas
 
-## Common Tasks
-
-### Add a new feature
-1. Update poker_engine.py if backend change needed
-2. Update frontend components
-3. Add tests in backend/tests/
-4. Run full test suite
-5. Update STATUS.md
-
-### Fix a bug
-1. Write a failing test first
-2. Fix the bug
-3. Verify test passes
-4. Run regression tests
-5. Commit with descriptive message
-
-### Debug an issue
-1. Check backend logs: `python main.py` output
-2. Check browser console for frontend errors
-3. Run property-based test to find edge cases
-4. Add QC assertions if needed (poker_engine.py)
+- Hand eval edge cases: see `test_hand_evaluator_validation.py`
+- AI opponent strategies are rule-based classes in poker_engine.py; only coaching uses Anthropic API
+- Docs go in `docs/` only—see @docs/INDEX.md

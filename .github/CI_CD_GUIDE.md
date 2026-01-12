@@ -56,15 +56,17 @@ git commit -m "Your message" --no-verify
 ### 2.1 Full Test Suite (`test.yml`)
 
 **Triggers**: Push to main/develop, Pull Requests
-**Runtime**: ~27 minutes
+**Runtime**: ~27 minutes (optimized from 46 min)
 **Jobs**:
 
 #### Job 1: Backend Tests (22 min)
 - Phase 1-3 tests (23 tests)
-- Critical poker logic tests (35 tests) - **NEW**
-- Phase 4 scenario tests (12 tests)
+- Critical poker logic tests (35 tests)
+- Phase 7 WebSocket reliability tests
 - Core regression tests (11 tests)
 - Coverage report generation
+
+**Note:** Phase 4 scenario tests moved to nightly workflow (too slow for every commit)
 
 #### Job 2: Frontend Build (2 min)
 - npm install
@@ -88,7 +90,7 @@ git commit -m "Your message" --no-verify
 - test_raise_validation.py (4 tests) - minimum raise enforcement
 - test_heads_up.py (13 tests) - 2-player special rules
 
-**Total**: 81 backend tests + 21 E2E = 102 tests across all phases
+**Total**: 69 backend tests + 21 E2E = 90 tests in PR CI (12 tests moved to nightly)
 
 ### 2.2 Quick Tests (`quick-tests.yml`)
 
@@ -99,6 +101,24 @@ git commit -m "Your message" --no-verify
 - Negative testing (12 tests)
 
 **Purpose**: Fast feedback loop for PR reviews
+
+### 2.3 Nightly Stress Tests (`nightly-tests.yml`)
+
+**Triggers**: Scheduled (2 AM UTC daily), Manual via workflow_dispatch
+**Runtime**: ~60 minutes
+**Tests**:
+- Phase 4 user scenarios (19 min)
+- Edge case scenarios (350+ scenarios)
+- Stress tests (AI game marathon)
+- RNG fairness (statistical validation)
+- Performance benchmarks
+
+**Purpose**: Long-running tests that would slow down PR workflow
+
+**Manual Trigger:**
+```bash
+# Via GitHub UI: Actions → Nightly Stress Tests → Run workflow
+```
 
 ---
 

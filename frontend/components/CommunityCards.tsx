@@ -22,10 +22,11 @@ export function CommunityCards({ cards, gameState }: CommunityCardsProps) {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div data-testid="community-cards-container" className="flex flex-col items-center">
       {/* Stage Label */}
       {stageLabel && (
         <motion.div
+          data-testid="stage-label"
           className="text-[#FCD34D] font-bold text-base mb-2 tracking-wider"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -42,7 +43,7 @@ export function CommunityCards({ cards, gameState }: CommunityCardsProps) {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="flex gap-1 sm:gap-2 md:gap-3">
+        <div data-testid="community-cards-list" className="flex gap-1 sm:gap-2 md:gap-3">
           {cards.map((card, i) => (
             <motion.div
               key={i}
@@ -55,7 +56,7 @@ export function CommunityCards({ cards, gameState }: CommunityCardsProps) {
                 damping: 15
               }}
             >
-              <Card card={card} />
+              <Card card={card} data-testid={`community-card-${i}`} />
             </motion.div>
           ))}
         </div>
