@@ -157,16 +157,14 @@ jobs:
 
       - name: Run visual regression tests
         run: |
-          cd frontend
-          npx playwright test ../tests/e2e/test_visual_regression.spec.ts --reporter=html
+          ./frontend/node_modules/.bin/playwright test tests/e2e/test_visual_regression.spec.ts --reporter=html
         env:
           FRONTEND_URL: http://localhost:3000
           BACKEND_URL: http://localhost:8000
 
       - name: Run full scenario tests
         run: |
-          cd frontend
-          npx playwright test ../tests/e2e/test_short_stack.spec.ts --reporter=html
+          ./frontend/node_modules/.bin/playwright test tests/e2e/test_short_stack.spec.ts --reporter=html
         env:
           FRONTEND_URL: http://localhost:3000
           BACKEND_URL: http://localhost:8000
