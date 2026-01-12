@@ -1,0 +1,51 @@
+#!/bin/bash
+# Pre-commit hook for Poker Learning App
+# Runs fast regression tests before allowing commit
+#
+# Installation:
+#   cp hooks/pre-commit .git/hooks/pre-commit
+#   chmod +x .git/hooks/pre-commit
+
+set -e
+
+echo "🔍 Running pre-commit tests..."
+echo ""
+
+# Change to repository root
+cd "$(git rev-parse --show-toplevel)"
+
+# Check if poker_engine.py is being modified
+if git diff --cached --name-only | grep -q "backend/game/poker_engine.py"; then
+    echo "⚠️  poker_engine.py modified - running infinite loop guard test..."
+    PYTHONPATH=backend python -m pytest \
+      backend/tests/test_property_based_enhanced.py::TestPropertyBasedInvariants::test_property_no_infinite_loops \
+      -v --tb=short -q
+
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "❌ Infinite loop guard test failed! Fix poker_engine.py before committing."
+        echo "   This test prevents infinite loop regressions."
+        exit 1
+    fi
+    echo ""
+fi
+
+# Run fast backend tests (should complete in <1 minute)
+echo "📦 Backend: Quick regression tests..."
+PYTHONPATH=backend python -m pytest \
+  backend/tests/test_action_processing.py \
+  backend/tests/test_state_advancement.py \
+  backend/tests/test_turn_order.py \
+  backend/tests/test_fold_resolution.py \
+  -v --tb=short -q
+
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "❌ Backend tests failed! Fix issues before committing."
+    exit 1
+fi
+
+echo ""
+echo "✅ All pre-commit tests passed!"
+echo "📝 Proceeding with commit..."
+echo ""
