@@ -5,6 +5,10 @@ on:
     - cron: '0 2 * * *'  # 2 AM UTC daily
   workflow_dispatch:      # Allow manual trigger
 
+permissions:
+  issues: write
+  contents: read
+
 jobs:
   slow-backend-tests:
     name: Slow Backend Tests
