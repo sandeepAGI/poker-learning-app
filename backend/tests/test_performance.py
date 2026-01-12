@@ -365,10 +365,11 @@ class TestThroughputBenchmarks:
             game.start_new_hand(process_ai=False)
 
             # Simulate actions for each player
-            for player in game.players:
+            # FIX: Use enumerated player_idx instead of game.current_player_index
+            for player_idx, player in enumerate(game.players):
                 if player.is_active and not player.has_acted:
                     success = game.apply_action(
-                        game.current_player_index,
+                        player_idx,  # Fixed: use actual player index
                         "call",
                         0
                     )
