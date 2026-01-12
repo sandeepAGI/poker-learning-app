@@ -1,4 +1,4 @@
-# Documentation Index (updated 2026-01-11)
+# Documentation Index (updated 2026-01-12)
 
 | File | Purpose | Last Updated |
 | --- | --- | --- |
@@ -8,6 +8,7 @@
 | `docs/HISTORY.md` | Chronological release / milestone notes | 2024-12-17 |
 | `docs/SETUP.md` | Detailed local setup & operations guide | 2024-11-18 |
 | `docs/TESTING.md` | Testing strategy, suites, and instructions | 2024-12-20 |
+| `docs/TEST-SUITE-REFERENCE.md` | Complete reference for all test suites (backend, frontend, E2E, CI/CD) | 2026-01-12 |
 | `docs/UX_GUIDE.md` | UX/visual guidelines from Phase 4.5 | 2024-12-21 |
 | `docs/CURRENT_FIX_LOG.md` | Active issue/fix log (Phase 4.5 work) | 2024-12-25 |
 | `docs/codex-code-review-1226.md` | Latest backend/frontend code review findings | 2024-12-26 |
