@@ -27,7 +27,7 @@ jobs:
           cd backend
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest-asyncio requests
+          pip install pytest-asyncio pytest-timeout requests
 
       - name: Run all fast backend tests (auto-discovery)
         run: |

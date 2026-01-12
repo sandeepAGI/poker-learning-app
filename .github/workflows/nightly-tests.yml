@@ -26,7 +26,7 @@ jobs:
           cd backend
           pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest-asyncio requests
+          pip install pytest-asyncio pytest-timeout requests
 
       - name: Run slow backend tests (marked with 'slow')
         run: |
