@@ -36,7 +36,7 @@ export default defineConfig({
       timeout: 30000,
     },
     {
-      command: 'cd frontend && npm run build && npm start',
+      command: 'cd frontend && npm run dev',
       url: 'http://localhost:3000',
       reuseExistingServer: true,
       timeout: 120000,
