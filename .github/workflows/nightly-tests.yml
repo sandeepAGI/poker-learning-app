@@ -28,14 +28,31 @@ jobs:
           pip install -r requirements.txt
           pip install pytest-asyncio pytest-timeout requests
 
-      - name: Run slow backend tests (marked with 'slow')
+      - name: Run slow backend tests with crash detection
         run: |
-          PYTHONPATH=backend python -m pytest backend/tests/ \
+          # Enable core dumps for segfault detection
+          ulimit -c unlimited
+          echo "Core dump limit: $(ulimit -c)"
+
+          # Run tests with Python fault handler enabled
+          PYTHONPATH=backend python -X faulthandler -m pytest backend/tests/ \
             -v --tb=long \
             -m "slow" \
             --timeout=600 \
             --ignore=backend/tests/test_bugs_real.py \
             --ignore=backend/tests/test_multiple_winners.py
+
+          # Check for core dumps (segfaults)
+          if compgen -G "core*" > /dev/null; then
+            echo "::error::❌ Segmentation fault detected!"
+            echo "Core dumps found:"
+            ls -lh core* || true
+            file core* || true
+            echo "This indicates a crash in C extensions (likely treys library)"
+            exit 1
+          fi
+
+          echo "✅ No segfaults detected"
 
       - name: Test Summary
         if: always()
