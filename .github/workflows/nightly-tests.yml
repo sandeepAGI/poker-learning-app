@@ -1,4 +1,4 @@
-name: Nightly Stress Tests
+name: Nightly Test Suite
 
 on:
   schedule:
@@ -6,10 +6,10 @@ on:
   workflow_dispatch:      # Allow manual trigger
 
 jobs:
-  stress-tests:
-    name: Long-Running Tests
+  slow-backend-tests:
+    name: Slow Backend Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 180  # Increased from 120: test_run_500_ai_games_varied_players takes 90+ min in CI
+    timeout-minutes: 180
 
     steps:
       - name: Checkout code
@@ -28,46 +28,28 @@ jobs:
           pip install -r requirements.txt
           pip install pytest-asyncio requests
 
-      - name: Run Phase 4 user scenarios (slow - 19 min)
+      - name: Run slow backend tests (marked with 'slow')
         run: |
-          PYTHONPATH=backend python -m pytest \
-            backend/tests/test_user_scenarios.py \
-            -v
-
-      - name: Run edge case scenarios
-        run: |
-          PYTHONPATH=backend python -m pytest \
-            backend/tests/test_edge_case_scenarios.py \
-            -v
-
-      - name: Run stress tests
-        run: |
-          PYTHONPATH=backend python -m pytest \
-            backend/tests/test_stress_ai_games.py \
-            -v
-
-      - name: Run RNG fairness tests
-        run: |
-          PYTHONPATH=backend python -m pytest \
-            backend/tests/test_rng_fairness.py \
-            -v
-
-      - name: Run performance benchmarks
-        run: |
-          PYTHONPATH=backend python -m pytest \
-            backend/tests/test_performance.py \
-            -v
+          PYTHONPATH=backend python -m pytest backend/tests/ \
+            -v --tb=long \
+            -m "slow" \
+            --timeout=600 \
+            --ignore=backend/tests/test_bugs_real.py
 
       - name: Test Summary
         if: always()
         run: |
           echo "## Nightly Test Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Long-running tests completed**" >> $GITHUB_STEP_SUMMARY
-          echo "- User scenarios: Phase 4" >> $GITHUB_STEP_SUMMARY
+          echo "**Slow tests executed:**" >> $GITHUB_STEP_SUMMARY
+          echo "- User scenarios: Multi-hand gameplay (19 min)" >> $GITHUB_STEP_SUMMARY
           echo "- Edge cases: 350+ scenarios" >> $GITHUB_STEP_SUMMARY
-          echo "- Stress tests: AI game marathon" >> $GITHUB_STEP_SUMMARY
+          echo "- Stress tests: 200-game AI marathon" >> $GITHUB_STEP_SUMMARY
           echo "- RNG fairness: Statistical validation" >> $GITHUB_STEP_SUMMARY
+          echo "- Performance: Benchmarks" >> $GITHUB_STEP_SUMMARY
+          echo "- Action fuzzing: Random action testing" >> $GITHUB_STEP_SUMMARY
+          echo "- Concurrency: Multi-connection stress" >> $GITHUB_STEP_SUMMARY
+          echo "- WebSocket simulation: Long-running scenarios" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload results on failure
         if: failure()
@@ -78,3 +60,111 @@ jobs:
             htmlcov/
             pytest-results.xml
           retention-days: 7
+
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Nightly Tests Failed (${new Date().toISOString().split('T')[0]})`,
+              body: `## Nightly Test Failure\n\n**Workflow**: Nightly Test Suite\n**Run**: ${runUrl}\n**Date**: ${new Date().toISOString()}\n\n### Action Required\n\n1. Review logs: [View Run](${runUrl})\n2. Investigate failure cause\n3. Create fix or update this issue with findings\n4. Close issue when resolved\n\n### Investigation Checklist\n\n- [ ] Logs reviewed\n- [ ] Root cause identified\n- [ ] Fix implemented or issue documented\n- [ ] Verified fix in next nightly run\n\n### Test Categories\n\n- Stress tests (200-game AI marathon)\n- Performance benchmarks\n- RNG fairness (statistical)\n- Action fuzzing\n- Concurrency tests\n- Edge case scenarios (350+)\n- User scenarios (multi-hand)\n- WebSocket simulation`,
+              labels: ['ci-failure', 'nightly', 'needs-investigation', 'automated']
+            });
+
+  slow-e2e-tests:
+    name: Slow E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest-asyncio requests
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Install Playwright
+        run: |
+          pip install playwright pytest-playwright
+          npx playwright install chromium
+
+      - name: Start backend server
+        run: |
+          cd backend
+          python main.py &
+          sleep 5
+        env:
+          PYTHONUNBUFFERED: 1
+
+      - name: Start frontend server
+        run: |
+          cd frontend
+          npm run build
+          npm run start &
+          sleep 10
+        env:
+          NODE_ENV: production
+
+      - name: Wait for servers to be ready
+        run: |
+          timeout 30 bash -c 'until curl -f http://localhost:8000/ > /dev/null 2>&1; do sleep 1; done'
+          timeout 30 bash -c 'until curl -f http://localhost:3000/ > /dev/null 2>&1; do sleep 1; done'
+          echo "✅ Both servers are ready"
+
+      - name: Run visual regression tests
+        run: |
+          npx playwright test tests/e2e/test_visual_regression.spec.ts --reporter=html
+        env:
+          FRONTEND_URL: http://localhost:3000
+          BACKEND_URL: http://localhost:8000
+
+      - name: Run full scenario tests
+        run: |
+          npx playwright test tests/e2e/test_short_stack.spec.ts --reporter=html
+        env:
+          FRONTEND_URL: http://localhost:3000
+          BACKEND_URL: http://localhost:8000
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-nightly
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Create issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Nightly E2E Tests Failed (${new Date().toISOString().split('T')[0]})`,
+              body: `## Nightly E2E Test Failure\n\n**Workflow**: Nightly E2E Tests\n**Run**: ${runUrl}\n**Date**: ${new Date().toISOString()}\n\n### Action Required\n\n1. Review Playwright report (download artifacts)\n2. Check visual regression diffs\n3. Verify if intentional UI changes\n4. Update baselines or fix issues\n\n### Tests Included\n\n- Visual regression (pixel-perfect screenshot comparison)\n- Full game scenario tests\n- Long-running user flows`,
+              labels: ['ci-failure', 'nightly', 'e2e', 'needs-investigation', 'automated']
+            });

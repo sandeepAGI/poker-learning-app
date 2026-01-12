@@ -1,7 +1,7 @@
 # Test Suite Reference
 
-**Last Updated:** 2026-01-12
-**Status:** ✅ All test suites operational
+**Last Updated:** 2026-01-12 (Phase 0.5 Consolidation)
+**Status:** ✅ All test suites operational - Reorganized into 2 workflows
 
 This document provides a comprehensive reference for all testing infrastructure in the Poker Learning App.
 
@@ -9,26 +9,113 @@ This document provides a comprehensive reference for all testing infrastructure 
 
 ## Table of Contents
 
-1. [Quick Reference](#quick-reference)
-2. [Backend Test Suites](#backend-test-suites)
-3. [Frontend Test Suites](#frontend-test-suites)
-4. [E2E Test Suites](#e2e-test-suites)
-5. [CI/CD Integration](#cicd-integration)
-6. [How to Run Tests](#how-to-run-tests)
-7. [Test Coverage Summary](#test-coverage-summary)
+1. [Test Suite Organization](#test-suite-organization) **← NEW**
+2. [Quick Reference](#quick-reference)
+3. [Backend Test Suites](#backend-test-suites)
+4. [Frontend Test Suites](#frontend-test-suites)
+5. [E2E Test Suites](#e2e-test-suites)
+6. [CI/CD Integration](#cicd-integration)
+7. [How to Run Tests](#how-to-run-tests)
+8. [Test Coverage Summary](#test-coverage-summary)
+
+---
+
+## Test Suite Organization
+
+### Philosophy (Updated 2026-01-12)
+
+We maintain exactly **2 test workflows** for simplicity and clarity:
+
+**1. Comprehensive Test Suite** (Per-commit, <10 minutes)
+- ALL fast tests (not marked with `@pytest.mark.slow`)
+- Runs on every commit and PR
+- Must pass before merge
+- Auto-discovery via pytest markers
+
+**2. Nightly Test Suite** (Daily at 2 AM UTC, unlimited time)
+- ONLY slow tests (marked with `@pytest.mark.slow`)
+- Stress tests, performance benchmarks, fuzzing
+- Creates GitHub issue on failure
+
+### Workflow Structure
+
+```
+.github/workflows/
+├── test.yml                      # Comprehensive (per-commit)
+├── nightly-tests.yml             # Slow tests only (nightly)
+├── generate-visual-baselines.yml # Manual utility
+├── claude-code-review.yml        # PR utility
+└── claude.yml                    # @claude trigger
+```
+
+**Removed in Phase 0.5:**
+- ~~quick-tests.yml~~ (redundant with test.yml)
+- ~~frontend-tests.yml~~ (merged into test.yml)
+- ~~nightly-e2e.yml~~ (merged into nightly-tests.yml)
+
+### Running Tests Locally
+
+**Run all fast tests (what CI runs per-commit):**
+```bash
+PYTHONPATH=backend pytest backend/tests/ -m "not slow" -v
+```
+
+**Run only slow tests (what CI runs nightly):**
+```bash
+PYTHONPATH=backend pytest backend/tests/ -m "slow" -v
+```
+
+**Run ALL tests (comprehensive + slow):**
+```bash
+PYTHONPATH=backend pytest backend/tests/ -v
+```
+
+### Marking Tests
+
+**Default (fast tests):**
+```python
+def test_hand_evaluation():
+    # No marker needed - runs in comprehensive suite
+    pass
+```
+
+**Slow tests:**
+```python
+import pytest
+
+@pytest.mark.slow
+def test_200_game_marathon():
+    # Only runs in nightly suite
+    pass
+```
+
+### Adding New Tests
+
+**Decision tree:**
+1. Does your test take >60 seconds? → Mark with `@pytest.mark.slow`
+2. Otherwise → No marker needed (runs in comprehensive)
+
+**Guidelines:**
+- Comprehensive suite must stay <10 minutes total
+- If comprehensive exceeds 10 min, promote slowest tests to nightly
+- Nightly suite can be unlimited (within 180 min timeout)
 
 ---
 
 ## Quick Reference
 
-| Test Suite | Location | Command | Runtime | Local/CI |
-|------------|----------|---------|---------|----------|
-| **Backend Unit/Integration** | `backend/tests/` | `PYTHONPATH=backend pytest backend/tests/ -v` | ~2-3 min | Both |
-| **Backend Stress Tests** | `backend/tests/test_stress_*.py` | `pytest backend/tests/test_stress_*.py -v` | ~7-10 min | CI Only (Nightly) |
-| **Frontend Component Tests** | `frontend/__tests__/` | `cd frontend && npm test` | <30s | Both |
-| **E2E Functional Tests** | `tests/e2e/test_short_stack.spec.ts` | `npm run test:e2e` | ~2-3 min | Both |
-| **E2E Visual Regression** | `tests/e2e/test_visual_regression.spec.ts` | `npx playwright test test_visual_regression` | ~1-2 min | CI Only (Nightly) |
-| **Full Test Suite** | All tests | GitHub Actions trigger | ~8-10 min | CI |
+| Test Suite | Location | Command | Runtime | Runs When |
+|------------|----------|---------|---------|-----------|
+| **Comprehensive (Fast)** | `backend/tests/` | `pytest -m "not slow"` | ~8-10 min | Every commit/PR |
+| **Nightly (Slow)** | `backend/tests/` | `pytest -m "slow"` | 60-120 min | 2 AM UTC daily |
+| **Frontend Tests** | `frontend/__tests__/` | `npm test` | <30s | Every commit/PR |
+| **E2E Fast** | `tests/e2e/` | Python Playwright | ~3-4 min | Every commit/PR |
+| **E2E Slow** | `tests/e2e/*.spec.ts` | TypeScript Playwright | ~5-10 min | 2 AM UTC daily |
+
+**Coverage:**
+- Fast tests: ~240 backend + 9 frontend + 2 E2E = ~250 tests per commit
+- Slow tests: ~260 backend + 2 E2E = ~262 tests nightly
+- **Total: ~500+ tests**
 
 ---
 
