@@ -8,7 +8,7 @@ Phase 4: LLM-powered hand analysis with Claude AI
 from dotenv import load_dotenv
 load_dotenv()
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Query
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Query, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, Tuple, List
@@ -22,6 +22,10 @@ import logging
 
 from game.poker_engine import PokerGame, GameState
 from websocket_manager import manager, thread_safe_manager, process_ai_turns_with_events, serialize_game_state
+from auth import hash_password, verify_password, create_token, verify_token
+from models import User, Game, Hand, AnalysisCache
+from database import get_db
+from sqlalchemy.orm import Session
 
 # Phase 4: LLM Analysis imports
 try:
@@ -148,8 +152,93 @@ class GameResponse(BaseModel):
 
 # API Endpoints
 
+# Authentication Models
+class RegisterRequest(BaseModel):
+    """Register new user request."""
+    username: str
+    password: str
+
+class LoginRequest(BaseModel):
+    """Login request."""
+    username: str
+    password: str
+
+class AuthResponse(BaseModel):
+    """Authentication response."""
+    token: str
+    user_id: str
+    username: str
+
+# Authentication Endpoints
+@app.post("/auth/register", response_model=AuthResponse)
+async def register(request: RegisterRequest, db: Session = Depends(get_db)):
+    """
+    Register new user.
+
+    Validates:
+    - Username not empty
+    - Password not empty
+    - Username not already taken
+
+    Returns JWT token for immediate login.
+    """
+    # Validate input
+    if not request.username or not request.username.strip():
+        raise HTTPException(status_code=400, detail="Username cannot be empty")
+    if not request.password or not request.password.strip():
+        raise HTTPException(status_code=400, detail="Password cannot be empty")
+
+    # Check if username exists
+    existing_user = db.query(User).filter(User.username == request.username).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Username already exists")
+
+    # Create user
+    user_id = str(uuid.uuid4())
+    user = User(
+        user_id=user_id,
+        username=request.username,
+        password_hash=hash_password(request.password)
+    )
+    db.add(user)
+    db.commit()
+
+    return AuthResponse(
+        token=create_token(user_id),
+        user_id=user_id,
+        username=request.username
+    )
+
+@app.post("/auth/login", response_model=AuthResponse)
+async def login(request: LoginRequest, db: Session = Depends(get_db)):
+    """
+    Login user.
+
+    Validates credentials and returns JWT token.
+    Updates last_login timestamp.
+    """
+    # Find user
+    user = db.query(User).filter(User.username == request.username).first()
+    if not user or not verify_password(request.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    # Update last login
+    user.last_login = datetime.utcnow()
+    db.commit()
+
+    return AuthResponse(
+        token=create_token(user.user_id),
+        user_id=user.user_id,
+        username=request.username
+    )
+
+# Game Endpoints (require authentication)
 @app.post("/games", response_model=Dict[str, str])
-def create_game(request: CreateGameRequest):
+def create_game(
+    request: CreateGameRequest,
+    user_id: str = Depends(verify_token),
+    db: Session = Depends(get_db)
+):
     """
     Create a new poker game
     Returns: {"game_id": "uuid"}
@@ -162,10 +251,24 @@ def create_game(request: CreateGameRequest):
     game_id = str(uuid.uuid4())
     game = PokerGame(request.player_name, request.ai_count)
 
+    # Store user_id in game for later access
+    game.user_id = user_id
+
     # Start first hand
     # Bug Fix #9: Use process_ai=False so hand doesn't complete before WebSocket connects
     # WebSocket handler will process AI turns when client connects
     game.start_new_hand(process_ai=False)
+
+    # Save game to database
+    db_game = Game(
+        game_id=game_id,
+        user_id=user_id,
+        num_ai_players=request.ai_count,
+        starting_stack=game.players[0].stack,
+        status="active"
+    )
+    db.add(db_game)
+    db.commit()
 
     # Store in memory with timestamp
     games[game_id] = (game, time.time())
