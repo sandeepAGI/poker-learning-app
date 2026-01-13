@@ -13,6 +13,7 @@
 | `docs/MVP-DEPLOYMENT-SUMMARY.md` | **MVP deployment with CI/CD - Start here for deployment** | 2026-01-12 |
 | `docs/MVP-DAY1-TDD-PLAN-REVISED.md` | **Day 1 TDD execution plan (14-16 hours, ready for autonomous execution)** | 2026-01-13 |
 | `docs/MVP-BACKEND-COMPLETION-SUMMARY.md` | **Backend MVP completion summary (101 tests passing, production-ready)** | 2026-01-13 |
+| `docs/MVP-FRONTEND-COMPLETION-SUMMARY.md` | **Frontend MVP completion summary (23 tests passing, auth + history UI, game restoration needed)** | 2026-01-13 |
 | `docs/MVP-DEPLOYMENT-CHECKLIST.md` | Step-by-step MVP deployment guide (2 days, $27/month) | 2026-01-12 |
 | `docs/GITHUB-ACTIONS-SETUP.md` | Complete GitHub Actions CI/CD setup guide | 2026-01-12 |
 | `docs/CICD-QUICK-REFERENCE.md` | Quick reference for common CI/CD commands | 2026-01-12 |
