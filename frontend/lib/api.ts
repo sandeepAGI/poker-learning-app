@@ -6,6 +6,7 @@ import {
   CreateGameRequest,
   CreateGameResponse,
 } from './types';
+import { getToken, logout } from './auth';
 
 // Get API URL from environment variable or default to localhost
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -16,6 +17,29 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+// Add authentication interceptor
+api.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Handle 401 responses (logout on auth failure)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      logout();
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const pokerApi = {
   // Create a new game
@@ -86,6 +110,20 @@ export const pokerApi = {
     if (options.useCache !== undefined) params.set('use_cache', options.useCache.toString());
 
     const response = await api.get(`/games/${gameId}/analysis-session?${params}`);
+    return response.data;
+  },
+
+  // Get user's game history
+  async getMyGames(limit: number = 20): Promise<any> {
+    const response = await api.get('/users/me/games', {
+      params: { limit }
+    });
+    return response.data;
+  },
+
+  // Get hands for a specific game
+  async getGameHands(gameId: string): Promise<any> {
+    const response = await api.get(`/games/${gameId}/hands`);
     return response.data;
   },
 
