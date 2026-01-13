@@ -6,3 +6,15 @@ treys==0.1.8
 python-multipart==0.0.6
 anthropic>=0.39.0  # Claude API client (Haiku 4.5 + Sonnet 4.5) - Phase 4
 pytest-rerunfailures>=12.0  # E2E flaky test retry logic
+
+# Database & ORM - MVP Phase 1
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.9
+alembic>=1.13.0
+
+# Authentication - MVP Phase 1
+bcrypt>=4.0.1
+pyjwt>=2.8.0
+
+# Environment
+python-dotenv>=1.0.0
