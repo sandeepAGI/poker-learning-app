@@ -89,7 +89,17 @@ export function logout(): void {
  * @returns Auth token or null if not authenticated
  */
 export function getToken(): string | null {
+  if (typeof window === 'undefined') return null;
   return localStorage.getItem('auth_token');
+}
+
+/**
+ * Get stored username
+ * @returns Username or null if not authenticated
+ */
+export function getUsername(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('username');
 }
 
 /**
