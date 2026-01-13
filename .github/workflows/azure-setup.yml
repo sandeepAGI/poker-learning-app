@@ -1,0 +1,204 @@
+name: Azure Initial Setup
+
+# This workflow is run ONCE to set up Azure resources
+# After setup, use the deploy-backend and deploy-frontend workflows
+
+on:
+  workflow_dispatch:
+    inputs:
+      anthropic_api_key:
+        description: 'Anthropic API Key'
+        required: true
+        type: string
+      confirm_setup:
+        description: 'Type "setup" to confirm'
+        required: true
+        type: string
+
+jobs:
+  setup:
+    name: Create Azure Resources
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm_setup }}" != "setup" ]; then
+            echo "❌ Setup cancelled. You must type 'setup' to confirm."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Generate secrets
+        id: secrets
+        run: |
+          DB_PASSWORD=$(openssl rand -base64 32 | tr -d "=+/" | cut -c1-25)
+          JWT_SECRET=$(openssl rand -hex 32)
+
+          echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_OUTPUT
+          echo "JWT_SECRET=$JWT_SECRET" >> $GITHUB_OUTPUT
+
+          echo "::add-mask::$DB_PASSWORD"
+          echo "::add-mask::$JWT_SECRET"
+
+      - name: Create Resource Group
+        run: |
+          az group create \
+            --name poker-demo-rg \
+            --location eastus
+
+      - name: Create PostgreSQL Database
+        run: |
+          echo "Creating PostgreSQL server (this takes 5-10 minutes)..."
+
+          az postgres flexible-server create \
+            --name poker-db-demo \
+            --resource-group poker-demo-rg \
+            --location eastus \
+            --admin-user pokeradmin \
+            --admin-password "${{ steps.secrets.outputs.DB_PASSWORD }}" \
+            --tier Burstable \
+            --sku-name Standard_B1ms \
+            --storage-size 32 \
+            --version 15 \
+            --public-access 0.0.0.0 \
+            --yes
+
+          # Create database
+          az postgres flexible-server db create \
+            --server-name poker-db-demo \
+            --resource-group poker-demo-rg \
+            --database-name pokerapp
+
+      - name: Create App Service Plan
+        run: |
+          az appservice plan create \
+            --name poker-plan \
+            --resource-group poker-demo-rg \
+            --location eastus \
+            --sku B1 \
+            --is-linux
+
+      - name: Create Backend App Service
+        run: |
+          az webapp create \
+            --name poker-api-demo \
+            --resource-group poker-demo-rg \
+            --plan poker-plan \
+            --runtime "PYTHON:3.12"
+
+          # Enable WebSockets
+          az webapp config set \
+            --name poker-api-demo \
+            --resource-group poker-demo-rg \
+            --web-sockets-enabled true
+
+      - name: Configure Backend Environment Variables
+        run: |
+          DB_HOST="poker-db-demo.postgres.database.azure.com"
+          DATABASE_URL="postgresql://pokeradmin:${{ steps.secrets.outputs.DB_PASSWORD }}@${DB_HOST}/pokerapp?sslmode=require"
+
+          az webapp config appsettings set \
+            --name poker-api-demo \
+            --resource-group poker-demo-rg \
+            --settings \
+              ENVIRONMENT=production \
+              TEST_MODE=0 \
+              DATABASE_URL="$DATABASE_URL" \
+              JWT_SECRET="${{ steps.secrets.outputs.JWT_SECRET }}" \
+              ANTHROPIC_API_KEY="${{ github.event.inputs.anthropic_api_key }}" \
+              PYTHONUNBUFFERED=1 \
+              SCM_DO_BUILD_DURING_DEPLOYMENT=true \
+              WEBSITES_PORT=8000
+
+      - name: Create Static Web App
+        run: |
+          az staticwebapp create \
+            --name poker-web-demo \
+            --resource-group poker-demo-rg \
+            --location eastus
+
+      - name: Get Static Web App Token
+        id: swa_token
+        run: |
+          TOKEN=$(az staticwebapp secrets list \
+            --name poker-web-demo \
+            --resource-group poker-demo-rg \
+            --query "properties.apiKey" -o tsv)
+
+          echo "SWA_TOKEN=$TOKEN" >> $GITHUB_OUTPUT
+          echo "::add-mask::$TOKEN"
+
+      - name: Setup Summary
+        run: |
+          echo "🎉 Azure Setup Complete!"
+          echo ""
+          echo "Resources Created:"
+          echo "  - Resource Group: poker-demo-rg"
+          echo "  - Database: poker-db-demo.postgres.database.azure.com"
+          echo "  - Backend: https://poker-api-demo.azurewebsites.net"
+          echo "  - Frontend: (URL shown in Azure Portal for poker-web-demo)"
+          echo ""
+          echo "⚠️  IMPORTANT: Save these secrets in GitHub!"
+          echo ""
+          echo "Add these to Settings → Secrets → Actions:"
+          echo ""
+          echo "DATABASE_URL_PRODUCTION:"
+          DB_HOST="poker-db-demo.postgres.database.azure.com"
+          echo "postgresql://pokeradmin:${{ steps.secrets.outputs.DB_PASSWORD }}@${DB_HOST}/pokerapp?sslmode=require"
+          echo ""
+          echo "AZURE_STATIC_WEB_APPS_API_TOKEN:"
+          echo "${{ steps.swa_token.outputs.SWA_TOKEN }}"
+          echo ""
+          echo "Next steps:"
+          echo "1. Add the above secrets to GitHub"
+          echo "2. Run 'Database Migration' workflow to create tables"
+          echo "3. Push code to trigger automatic deployments"
+          echo ""
+          echo "Estimated monthly cost: ~$27"
+
+      - name: Save credentials to artifact
+        run: |
+          mkdir -p artifacts
+
+          cat > artifacts/CREDENTIALS.txt <<EOF
+          ================================================================================
+          POKER LEARNING APP - AZURE CREDENTIALS
+          ================================================================================
+          Created: $(date)
+
+          DATABASE:
+            Host: poker-db-demo.postgres.database.azure.com
+            Username: pokeradmin
+            Password: ${{ steps.secrets.outputs.DB_PASSWORD }}
+            Database: pokerapp
+            Connection String: postgresql://pokeradmin:${{ steps.secrets.outputs.DB_PASSWORD }}@poker-db-demo.postgres.database.azure.com/pokerapp?sslmode=require
+
+          JWT SECRET:
+            ${{ steps.secrets.outputs.JWT_SECRET }}
+
+          BACKEND:
+            URL: https://poker-api-demo.azurewebsites.net
+            App Name: poker-api-demo
+
+          FRONTEND:
+            App Name: poker-web-demo
+            Static Web App Token: ${{ steps.swa_token.outputs.SWA_TOKEN }}
+
+          ================================================================================
+          ⚠️  STORE THIS FILE SECURELY (1Password, etc.) AND DELETE AFTERWARD
+          ================================================================================
+          EOF
+
+      - name: Upload credentials artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: azure-credentials
+          path: artifacts/CREDENTIALS.txt
+          retention-days: 7

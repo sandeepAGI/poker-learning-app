@@ -9,7 +9,13 @@
 | `CLAUDE.md` | Working agreement, checklists | see git log |
 | `docs/HISTORY.md` | Chronological release / milestone notes | 2024-12-17 |
 | `docs/SETUP.md` | Detailed local setup & operations guide | 2024-11-18 |
-| `docs/AZURE-DEPLOYMENT-PLAN.md` | Production deployment plan for Azure (peer-reviewed, not yet implemented) | 2026-01-12 |
+| `docs/AZURE-DEPLOYMENT-PLAN.md` | Full production deployment plan for Azure (Auth0, Redis, 8 tables) | 2026-01-12 |
+| `docs/MVP-DEPLOYMENT-SUMMARY.md` | **MVP deployment with CI/CD - Start here for deployment** | 2026-01-12 |
+| `docs/MVP-DEPLOYMENT-CHECKLIST.md` | Step-by-step MVP deployment guide (2 days, $27/month) | 2026-01-12 |
+| `docs/GITHUB-ACTIONS-SETUP.md` | Complete GitHub Actions CI/CD setup guide | 2026-01-12 |
+| `docs/CICD-QUICK-REFERENCE.md` | Quick reference for common CI/CD commands | 2026-01-12 |
+| `docs/CICD-FLOW-DIAGRAM.md` | Visual diagrams of CI/CD flows (deployment, rollback, monitoring) | 2026-01-12 |
+| `docs/MVP-VS-FULL-COMPARISON.md` | Comparison of MVP vs full deployment (shows simplifications) | 2026-01-12 |
 | `docs/TESTING.md` | Central hub for test documentation with links to all test-related guides | 2026-01-12 |
 | `docs/TEST-CODE-REVIEW-GUIDE.md` | Standards for reviewing test code quality (poker-specific patterns) | 2026-01-12 |
 | `docs/TEST-SUITE-REFERENCE.md` | Complete reference for all test suites (backend, frontend, E2E, CI/CD) | 2026-01-12 |

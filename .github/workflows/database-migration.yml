@@ -1,0 +1,76 @@
+name: Database Migration
+
+on:
+  workflow_dispatch:  # Manual trigger only (for safety)
+    inputs:
+      environment:
+        description: 'Environment to migrate'
+        required: true
+        type: choice
+        options:
+          - production
+          - staging
+      confirm:
+        description: 'Type "migrate" to confirm'
+        required: true
+        type: string
+
+jobs:
+  migrate:
+    name: Run Database Migrations
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "migrate" ]; then
+            echo "❌ Migration cancelled. You must type 'migrate' to confirm."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install alembic psycopg2-binary sqlalchemy
+
+      - name: Show pending migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_PRODUCTION }}
+        run: |
+          cd backend
+          echo "📋 Pending migrations:"
+          alembic current
+          alembic history
+          echo ""
+          echo "🎯 Will upgrade to: head"
+
+      - name: Run migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_PRODUCTION }}
+        run: |
+          cd backend
+          alembic upgrade head
+          echo "✅ Migrations complete!"
+
+      - name: Verify migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_PRODUCTION }}
+        run: |
+          cd backend
+          alembic current
+          echo ""
+          echo "✅ Database is at latest version"
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Migration failed!"
+          echo "Check the logs above for errors."
+          echo "Database may be in an inconsistent state - investigate immediately."
