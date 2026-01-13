@@ -22,7 +22,7 @@ import logging
 
 from game.poker_engine import PokerGame, GameState
 from websocket_manager import manager, thread_safe_manager, process_ai_turns_with_events, serialize_game_state
-from auth import hash_password, verify_password, create_token, verify_token
+from auth import hash_password, verify_password, create_token, verify_token, verify_token_string
 from models import User, Game, Hand, AnalysisCache
 from database import get_db, save_completed_hand
 from sqlalchemy.orm import Session
@@ -1062,21 +1062,47 @@ def get_hand_history(game_id: str, limit: Optional[int] = 10):
 
 
 @app.websocket("/ws/{game_id}")
-async def websocket_endpoint(websocket: WebSocket, game_id: str):
+async def websocket_endpoint(
+    websocket: WebSocket,
+    game_id: str,
+    token: str = Query(None)
+):
     """
-    WebSocket endpoint for real-time game updates.
+    WebSocket endpoint for real-time game updates (requires authentication).
     Phase 3: Enables smooth AI turn-by-turn visibility.
 
+    Args:
+        websocket: WebSocket connection
+        game_id: Game ID
+        token: JWT token as query parameter (?token=xxx)
+
     Flow:
-    1. Client connects
+    1. Client connects with auth token
     2. Client sends action: {"action": "fold/call/raise", "amount": 100}
     3. Server processes human action
     4. Server processes AI turns ONE AT A TIME, emitting events for each
     5. Client receives events and animates each action
     """
+    # Validate token
+    if not token:
+        await websocket.close(code=1008, reason="Authentication required")
+        return
+
+    try:
+        user_id = verify_token_string(token)
+    except HTTPException:
+        await websocket.close(code=1008, reason="Invalid token")
+        return
+
     # Validate game exists
     if game_id not in games:
         await websocket.close(code=1008, reason="Game not found")
+        return
+
+    # Validate game ownership
+    game, _ = games[game_id]
+    if not hasattr(game, 'user_id') or game.user_id != user_id:
+        await websocket.close(code=1008, reason="Unauthorized")
         return
 
     # Connect to WebSocket manager
