@@ -567,6 +567,82 @@ def next_hand(
     return get_game_state(game_id)
 
 
+# Game history endpoints
+@app.get("/users/me/games")
+async def get_my_games(
+    user_id: str = Depends(verify_token),
+    db: Session = Depends(get_db),
+    limit: int = 20
+):
+    """
+    Get user's completed games.
+
+    Returns most recent games ordered by started_at descending.
+    Only returns completed games (not active).
+    """
+    games_list = db.query(Game).filter(
+        Game.user_id == user_id,
+        Game.status == "completed"
+    ).order_by(Game.started_at.desc()).limit(limit).all()
+
+    return {
+        "games": [
+            {
+                "game_id": g.game_id,
+                "started_at": g.started_at.isoformat() if g.started_at else None,
+                "completed_at": g.completed_at.isoformat() if g.completed_at else None,
+                "total_hands": g.total_hands,
+                "starting_stack": g.starting_stack,
+                "final_stack": g.final_stack,
+                "profit_loss": g.profit_loss,
+                "num_ai_players": g.num_ai_players
+            }
+            for g in games_list
+        ]
+    }
+
+@app.get("/games/{game_id}/hands")
+async def get_game_hands(
+    game_id: str,
+    user_id: str = Depends(verify_token),
+    db: Session = Depends(get_db)
+):
+    """
+    Get all hands for a game.
+
+    Verifies game belongs to user before returning hands.
+    Returns hands ordered by hand_number.
+    """
+    # Verify game ownership
+    game = db.query(Game).filter(
+        Game.game_id == game_id,
+        Game.user_id == user_id
+    ).first()
+
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    # Get hands
+    hands = db.query(Hand).filter(
+        Hand.game_id == game_id
+    ).order_by(Hand.hand_number).all()
+
+    return {
+        "hands": [
+            {
+                "hand_id": str(h.hand_id),
+                "hand_number": h.hand_number,
+                "hand_data": h.hand_data,
+                "user_hole_cards": h.user_hole_cards,
+                "user_won": h.user_won,
+                "pot": h.pot,
+                "created_at": h.created_at.isoformat() if h.created_at else None
+            }
+            for h in hands
+        ]
+    }
+
+
 @app.get("/games/{game_id}/analysis")
 def get_hand_analysis(game_id: str, hand_number: Optional[int] = None):
     """
