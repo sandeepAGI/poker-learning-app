@@ -24,7 +24,7 @@ from game.poker_engine import PokerGame, GameState
 from websocket_manager import manager, thread_safe_manager, process_ai_turns_with_events, serialize_game_state
 from auth import hash_password, verify_password, create_token, verify_token
 from models import User, Game, Hand, AnalysisCache
-from database import get_db
+from database import get_db, save_completed_hand
 from sqlalchemy.orm import Session
 
 # Phase 4: LLM Analysis imports
@@ -255,9 +255,8 @@ def create_game(
     game.user_id = user_id
 
     # Start first hand
-    # Bug Fix #9: Use process_ai=False so hand doesn't complete before WebSocket connects
-    # WebSocket handler will process AI turns when client connects
-    game.start_new_hand(process_ai=False)
+    # MVP: Use process_ai=True for REST API flow (WebSocket support comes later)
+    game.start_new_hand(process_ai=True)
 
     # Save game to database
     db_game = Game(
@@ -479,7 +478,12 @@ def get_game_state(game_id: str, show_ai_thinking: bool = False):
 
 
 @app.post("/games/{game_id}/actions")
-def submit_action(game_id: str, request: GameActionRequest):
+def submit_action(
+    game_id: str,
+    request: GameActionRequest,
+    user_id: str = Depends(verify_token),
+    db: Session = Depends(get_db)
+):
     """
     Submit a player action (fold/call/raise)
     Returns: Updated game state
@@ -506,12 +510,20 @@ def submit_action(game_id: str, request: GameActionRequest):
     if not success:
         raise HTTPException(status_code=400, detail="Invalid action. Check if it's your turn or the action is valid.")
 
+    # Save hand if completed (deduplication handled in save_completed_hand)
+    if game.last_hand_summary and hasattr(game, 'user_id'):
+        save_completed_hand(game_id, game.last_hand_summary, game.user_id, db)
+
     # Return updated game state
     return get_game_state(game_id)
 
 
 @app.post("/games/{game_id}/next")
-def next_hand(game_id: str):
+def next_hand(
+    game_id: str,
+    user_id: str = Depends(verify_token),
+    db: Session = Depends(get_db)
+):
     """
     Start next hand in the game
     Returns: Updated game state
@@ -528,9 +540,24 @@ def next_hand(game_id: str):
     if game.current_state != GameState.SHOWDOWN:
         raise HTTPException(status_code=400, detail="Current hand not finished. Complete showdown first.")
 
+    # Save previous hand before starting new one
+    if game.last_hand_summary and hasattr(game, 'user_id'):
+        save_completed_hand(game_id, game.last_hand_summary, game.user_id, db)
+
     # Check if any players are eliminated
     active_players = [p for p in game.players if p.stack > 0]
     if len(active_players) <= 1:
+        # Mark game as completed
+        db_game = db.query(Game).filter(Game.game_id == game_id).first()
+        if db_game:
+            db_game.status = "completed"
+            db_game.completed_at = datetime.utcnow()
+            human_player = next((p for p in game.players if p.is_human), None)
+            if human_player:
+                db_game.final_stack = human_player.stack
+                db_game.profit_loss = human_player.stack - db_game.starting_stack
+            db.commit()
+
         raise HTTPException(status_code=400, detail="Game over. Only one player remaining.")
 
     # Start new hand
