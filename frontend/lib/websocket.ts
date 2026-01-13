@@ -11,6 +11,7 @@
  */
 
 import { GameState } from './types';
+import { getToken } from './auth';
 
 // WebSocket message types from backend
 export interface WSMessage {
@@ -81,6 +82,7 @@ export class PokerWebSocket {
   /**
    * Get WebSocket URL (handles http/https → ws/wss conversion)
    * Issue #6: Properly handles APIs behind path prefixes (e.g., https://example.com/api)
+   * Phase 2.6: Includes auth token as query parameter
    */
   private getWebSocketUrl(): string {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -89,9 +91,13 @@ export class PokerWebSocket {
     const url = new URL(apiUrl);
     const wsProtocol = url.protocol === 'https:' ? 'wss' : 'ws';
 
+    // Get auth token
+    const token = getToken();
+
     // Use only host (no pathname) to avoid issues with reverse proxy prefixes
-    // e.g., https://example.com/api → wss://example.com/ws/{gameId}
-    return `${wsProtocol}://${url.host}/ws/${this.gameId}`;
+    // e.g., https://example.com/api → wss://example.com/ws/{gameId}?token=xxx
+    const baseUrl = `${wsProtocol}://${url.host}/ws/${this.gameId}`;
+    return token ? `${baseUrl}?token=${token}` : baseUrl;
   }
 
   /**
