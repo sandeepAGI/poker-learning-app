@@ -44,7 +44,7 @@ app = FastAPI(title="Poker Learning App API", version="2.0")
 # CORS middleware for Next.js development (port 3000)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Next.js default port
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],  # Next.js default port (3000 or 3001 if 3000 in use)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
