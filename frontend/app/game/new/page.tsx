@@ -15,9 +15,12 @@ export default function NewGamePage() {
   const { gameState, createGame, loading, initializeFromStorage, showAiThinking, decisionHistory } = useGameStore();
   const [playerName, setPlayerName] = useState(username || 'Player');
   const [aiCount, setAiCount] = useState(3);
+  const [mounted, setMounted] = useState(false);
 
   // Check authentication and initialize game state
   useEffect(() => {
+    setMounted(true); // Mark as client-side mounted
+
     if (!isAuthenticated()) {
       router.push('/login');
       return;
@@ -28,12 +31,17 @@ export default function NewGamePage() {
       setPlayerName(username);
     }
 
-    // Phase 7+: Check for existing game on mount (browser refresh recovery)
+    // Only restore game after mounted (prevents hydration mismatch)
     initializeFromStorage();
   }, [router, username, playerName, initializeFromStorage]);
 
   // Redirect if not authenticated
   if (!isAuthenticated()) {
+    return null;
+  }
+
+  // Prevent hydration mismatch
+  if (!mounted) {
     return null;
   }
 
