@@ -88,10 +88,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       // Connect to WebSocket for real-time updates
       get().connectWebSocket(gameId);
 
-      // Phase 7+: Navigate to game-specific URL
-      if (typeof window !== 'undefined') {
-        window.history.pushState({}, '', `/game/${gameId}`);
-      }
+      // Navigation now handled by component using Next.js router
     } catch (error: any) {
       console.error('Error creating game:', error);
       set({
