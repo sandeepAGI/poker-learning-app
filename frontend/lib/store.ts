@@ -209,8 +209,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (typeof window !== 'undefined') {
       localStorage.removeItem('poker_game_id');
       localStorage.removeItem('poker_player_name');
-      // Navigate back to home
-      window.history.pushState({}, '', '/');
+      // Navigation now handled by component using Next.js router
     }
 
     set({

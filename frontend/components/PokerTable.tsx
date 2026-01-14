@@ -10,6 +10,7 @@ import { SessionAnalysisModal } from './SessionAnalysisModal'; // Phase 4.5: Ses
 import { GameOverModal } from './GameOverModal';
 import { useGameStore } from '../lib/store';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import type { Player } from '../lib/types'; // Phase 0.5: For button indicator helper
 import { pokerApi } from '../lib/api'; // Phase 4.5: Session analysis API
 
@@ -33,6 +34,8 @@ export function PokerTable() {
     error,
     connectionState
   } = useGameStore();
+
+  const router = useRouter();
 
   if (!gameState) return null;
 
@@ -198,13 +201,19 @@ export function PokerTable() {
     }
   };
 
+  // Helper: Quit game and navigate using Next.js router
+  const handleQuit = () => {
+    quitGame(); // Clears state and localStorage
+    router.push('/'); // Use Next.js router
+  };
+
   // Phase 4.5: Handle quit with optional session analysis
   const handleQuitClick = () => {
     // Only show confirmation if multiple hands have been played
     if (gameState.hand_count && gameState.hand_count >= 5) {
       setShowQuitConfirmation(true);
     } else {
-      quitGame();
+      handleQuit();
     }
   };
 
@@ -216,7 +225,7 @@ export function PokerTable() {
 
   const handleQuitWithoutAnalysis = () => {
     setShowQuitConfirmation(false);
-    quitGame();
+    handleQuit();
   };
 
   // Show analysis modal when analysis is available (and not null)
@@ -240,7 +249,7 @@ export function PokerTable() {
   // Handle new game after elimination
   const handleNewGame = () => {
     setShowGameOverModal(false);
-    quitGame(); // Return to lobby to start fresh game
+    handleQuit(); // Return to lobby to start fresh game
   };
 
   // Phase 4: Debug - Log when awaitingContinue changes
