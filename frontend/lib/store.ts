@@ -315,6 +315,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       if (response) {
         console.log('[Store] Game found! Reconnecting...');
+
+        // Force component remount by clearing state first
+        set({ gameState: null });
+
+        // Wait for React to flush the update
+        await new Promise(resolve => setTimeout(resolve, 0));
+
+        // Then set the new state
         set({ gameId, gameState: response, loading: false });
 
         // Phase 3: Process AI decisions from reconnected state
