@@ -68,7 +68,13 @@ export function PlayerSeat({
       {/* Cards */}
       <div data-testid={`hole-cards-${player.player_id}`} className="flex gap-1 sm:gap-1.5 md:gap-2 mb-2 sm:mb-2.5 md:mb-3">
         {player.hole_cards.length > 0 ? (
-          player.hole_cards.map((card, i) => <Card key={i} card={card} data-testid={`hole-card-${player.player_id}-${i}`} />)
+          player.hole_cards.map((card, i) => (
+            <Card
+              key={`${player.player_id}-${card}-${i}`}
+              card={card}
+              data-testid={`hole-card-${player.player_id}-${i}`}
+            />
+          ))
         ) : (
           <>
             <Card card="" hidden data-testid={`hole-card-${player.player_id}-0`} />
