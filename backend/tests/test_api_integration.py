@@ -22,7 +22,8 @@ def server_is_running():
     try:
         requests.get(f"{BASE_URL}/", timeout=1)
         return True
-    except requests.exceptions.ConnectionError:
+    except Exception:
+        # Catch all exceptions to prevent pytest collection errors
         return False
 
 
