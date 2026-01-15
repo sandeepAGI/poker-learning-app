@@ -4,7 +4,7 @@ Tests complete game flow through FastAPI endpoints
 
 NOTE: These tests require a running server at localhost:8000
 Run with: python main.py (in a separate terminal)
-Then run: python -m pytest tests/test_api_integration.py -v
+Then run: python -m pytest tests/test_api_integration.py -v -m integration
 
 When server is not running, tests are automatically skipped.
 """
@@ -27,11 +27,15 @@ def server_is_running():
         return False
 
 
+# Mark all tests in this module as integration tests
 # Skip all tests if server isn't running
-pytestmark = pytest.mark.skipif(
-    not server_is_running(),
-    reason="Server not running at localhost:8000. Start with: python main.py"
-)
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.skipif(
+        not server_is_running(),
+        reason="Server not running at localhost:8000. Start with: python main.py"
+    )
+]
 
 
 def test_health_check():

@@ -24,11 +24,15 @@ def server_is_running():
         return False
 
 
+# Mark all tests in this module as integration tests
 # Skip all tests if server isn't running
-pytestmark = pytest.mark.skipif(
-    not server_is_running(),
-    reason="Server not running at localhost:8000. Start with: python main.py"
-)
+pytestmark = [
+    pytest.mark.integration,
+    pytest.mark.skipif(
+        not server_is_running(),
+        reason="Server not running at localhost:8000. Start with: python main.py"
+    )
+]
 
 
 def api_request(method, endpoint, **kwargs):

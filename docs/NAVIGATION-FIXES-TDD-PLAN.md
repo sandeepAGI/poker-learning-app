@@ -673,6 +673,90 @@ const handleCreateGame = async () => {
 
 ---
 
+### Test 4.2: Combined Navigation Scenarios (Integration Test)
+
+**File:** `frontend/__tests__/e2e/navigation-integration.spec.ts` (NEW)
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test.describe('Combined Navigation Scenarios', () => {
+  test('handles complex navigation flow: back → forward → quit → new game', async ({ page }) => {
+    // 1. Login and start game
+    await page.goto('http://localhost:3001');
+    await page.fill('input[id="username"]', 'nav_integration_test');
+    await page.fill('input[id="password"]', 'test12345');
+    await page.fill('input[id="confirmPassword"]', 'test12345');
+    await page.click('button[type="submit"]');
+    await page.waitForURL('http://localhost:3001');
+
+    await page.click('a[href="/game/new"]');
+    await page.waitForSelector('button:has-text("Start Game")');
+    await page.click('button:has-text("Start Game")');
+    await page.waitForSelector('button:has-text("Fold")');
+    const gameUrl = page.url();
+
+    // 2. Verify cards render correctly
+    await page.waitForSelector('[data-testid^="player-"][data-testid$="-card-0"]');
+    const initialCard = await page.locator('[data-testid="player-0-card-0"]').textContent();
+    expect(initialCard).toMatch(/[A2-9TJQK]/);
+
+    // 3. Navigate to home
+    await page.goto('http://localhost:3001');
+    await page.waitForURL('http://localhost:3001');
+
+    // 4. Browser back - should restore game
+    await page.goBack();
+    expect(page.url()).toBe(gameUrl);
+    await page.waitForSelector('button:has-text("Fold")');
+
+    // Verify cards still render after back
+    await page.waitForSelector('[data-testid^="player-"][data-testid$="-card-0"]');
+    const cardAfterBack = await page.locator('[data-testid="player-0-card-0"]').textContent();
+    expect(cardAfterBack).toMatch(/[A2-9TJQK]/);
+
+    // 5. Browser forward - should return to home
+    await page.goForward();
+    expect(page.url()).toBe('http://localhost:3001/');
+
+    // 6. Navigate back to game again
+    await page.goBack();
+    await page.waitForSelector('button:has-text("Fold")');
+
+    // 7. Quit game
+    await page.click('button:has-text("Quit")');
+    await page.waitForURL('http://localhost:3001/');
+
+    // 8. Start new game - should show creation form, not old game
+    await page.click('a[href="/game/new"]');
+    await page.waitForSelector('input[type="text"]');
+    expect(await page.locator('label').filter({ hasText: 'Your Name' })).toBeVisible();
+
+    // Should NOT show poker table from previous game
+    expect(await page.locator('button:has-text("Fold")').count()).toBe(0);
+
+    // 9. Verify no hydration errors occurred during entire flow
+    const consoleErrors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error' &&
+          (msg.text().includes('Hydration') || msg.text().includes('did not match'))) {
+        consoleErrors.push(msg.text());
+      }
+    });
+
+    expect(consoleErrors).toHaveLength(0);
+  });
+});
+```
+
+**Purpose:** Validates all navigation fixes work together in realistic user flow
+**Expected:** ❌ FAIL (Before all implementations)
+**After Phase 4 Complete:** ✅ PASS
+**Action:** Run test: `npm run test:e2e -- navigation-integration.spec.ts`
+**Commit:** `git commit -m "Add integration test for combined navigation scenarios"`
+
+---
+
 ## Phase 5: Fix Puppeteer Timeouts (Issue #5) ⚪ MINOR
 
 ### Test 5.1: WebSocket Disconnect Doesn't Block
@@ -809,9 +893,100 @@ Add 20% buffer for unexpected issues: **~6.5 hours total**
 
 - [ ] All 5 issues resolved
 - [ ] No regressions (existing tests still pass)
-- [ ] E2E tests demonstrate fixes
+- [ ] E2E tests demonstrate fixes (including new integration test)
 - [ ] Code coverage maintained or improved
-- [ ] Documentation updated
+- [ ] Documentation updated (see below)
+- [ ] Clean commit history
+
+---
+
+## Post-Implementation Documentation Updates
+
+After all phases complete successfully, update the following documents:
+
+### 1. Update E2E Test Report
+**File:** `docs/NAVIGATION-E2E-FINDINGS.md`
+
+Add a new section at the top:
+
+```markdown
+## Fixes Applied (2026-01-14)
+
+All critical navigation issues identified in this document have been resolved through TDD implementation:
+
+**Issue #1 - Hydration Error:** ✅ FIXED
+- Added mounted state guard to prevent SSR/client mismatch
+- E2E test: `hydration-error.spec.ts` passes
+
+**Issue #2 - Card Rendering:** ✅ FIXED
+- Added stable keys to Card components
+- Added key prop to PokerTable for remount on state change
+- Force state reset on reconnect to clear stale component state
+- E2E test: `navigation-card-rendering.spec.ts` passes
+
+**Issue #3 - Game State Persistence:** ✅ FIXED
+- Replaced window.history.pushState with Next.js router
+- Quit handler now properly navigates using router.push('/')
+- E2E test: `quit-and-new-game.spec.ts` passes
+
+**Issue #4 - Browser Forward Navigation:** ✅ FIXED
+- Removed window.history.pushState from createGame store action
+- Component handles navigation using Next.js router
+- E2E test: `browser-navigation.spec.ts` passes
+
+**Issue #5 - Puppeteer Timeouts:** ✅ FIXED
+- Made WebSocket disconnect non-blocking
+- Unit test: `store.test.ts` verifies disconnect performance
+
+**Integration Test:** ✅ PASSING
+- `navigation-integration.spec.ts` validates all fixes work together
+- Tests complete user flow: back → forward → quit → new game
+
+**Test Suite Summary:**
+- 5 new E2E test files added
+- 3 new unit test files added
+- All tests passing
+- Zero regression in existing test suite
+
+See `docs/navigation-fixes-tdd-plan.md` for implementation details.
+```
+
+### 2. Update STATUS.md
+**File:** `STATUS.md`
+
+Add to recent accomplishments:
+```markdown
+- ✅ Resolved 5 critical navigation issues identified in E2E testing (2026-01-14)
+  - Fixed hydration error on /game/new page
+  - Fixed card rendering after browser back navigation
+  - Fixed game state persistence after quit
+  - Fixed browser forward button navigation
+  - Fixed Puppeteer timeout issues
+  - Added comprehensive E2E integration tests
+```
+
+### 3. Update TEST-SUITE-REFERENCE.md
+**File:** `docs/TEST-SUITE-REFERENCE.md`
+
+Add new E2E test count and descriptions:
+```markdown
+### E2E Navigation Tests (New - 2026-01-14)
+- `navigation-card-rendering.spec.ts` - Cards render after browser back
+- `hydration-error.spec.ts` - No hydration mismatch on /game/new
+- `quit-and-new-game.spec.ts` - Game creation form after quit
+- `browser-navigation.spec.ts` - Browser forward returns to home
+- `navigation-integration.spec.ts` - Combined navigation scenarios
+```
+
+---
+
+## Success Criteria
+
+- [ ] All 5 issues resolved
+- [ ] No regressions (existing tests still pass)
+- [ ] E2E tests demonstrate fixes (including new integration test)
+- [ ] Code coverage maintained or improved
+- [ ] Documentation updated (3 files: NAVIGATION-E2E-FINDINGS.md, STATUS.md, TEST-SUITE-REFERENCE.md)
 - [ ] Clean commit history
 
 ---
