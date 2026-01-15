@@ -150,7 +150,7 @@ export default function NewGamePage() {
   return (
     <div className="flex h-screen overflow-hidden">
       <div className="flex-1 overflow-auto">
-        <PokerTable key={gameState?.current_hand || 'poker-table'} />
+        <PokerTable key={gameState?.hand_count || 'poker-table'} />
       </div>
       <AISidebar isOpen={showAiThinking} decisions={decisionHistory} />
     </div>
