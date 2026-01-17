@@ -1,4 +1,4 @@
-# Documentation Index (updated 2026-01-13)
+# Documentation Index (updated 2026-01-17)
 
 ## Active Documentation
 
@@ -33,8 +33,10 @@
 See `archive/` directory for completed work:
 - `archive/2026-planning/` - Completed planning documents (test optimization plan)
 - `archive/2025Q4/` - Code reviews from Dec 2024 (all issues resolved)
-- `archive/execution-logs/` - TDD execution logs (Phases 1-4 completed)
-- `archive/fix-logs/` - Completed Phase 4.5 fixes (FIX-01 through FIX-12 except FIX-04/05)
+- `archive/execution-logs/` - TDD execution logs (navigation fixes, E2E testing reports)
+- `archive/fix-logs/` - Completed Phase 4.5 fixes (FIX-01 through FIX-12 except FIX-04/05) and E2E flaky test fixes
+- `archive/issue-reports/` - Resolved issue investigations (navigation issues Jan 2026)
+- `archive/recommendations/` - Implemented recommendations (navigation fixes Jan 2026)
 - `archive/docs/` - Historical analysis and archived specifications
 
 _All other Markdown files should live under `archive/` unless explicitly added to this table._
