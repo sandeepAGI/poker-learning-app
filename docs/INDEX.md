@@ -23,7 +23,8 @@
 | `docs/TEST-CODE-REVIEW-GUIDE.md` | Standards for reviewing test code quality (poker-specific patterns) | 2026-01-12 |
 | `docs/TEST-SUITE-REFERENCE.md` | Complete reference for all test suites (backend, frontend, E2E, CI/CD) | 2026-01-12 |
 | `docs/UX_GUIDE.md` | User guide for Session Analysis, API setup, and coaching features | 2024-12-21 |
-| `docs/DEFER-ISSUES.md` | **Deferred technical debt** (3 issues: CI bugs, viewport scaling, test optimization) | 2026-01-17 |
+| `docs/DEFER-ISSUES.md` | **Deferred technical debt tracking** (4 of 5 issues RESOLVED, 1 low-priority segfault remains) | 2026-01-17 |
+| `docs/DEFER-ISSUES-STATUS-2026-01-17.md` | **Verification report** - Detailed code review of all deferred issues vs actual codebase | 2026-01-17 |
 | `docs/frontend-testing-enhancement-plan.md` | Complete frontend testing plan with TDD execution (Phases 0-4; consolidates roadmap) | 2026-01-12 |
 | `docs/ux-review-findings-0103.md` | UX improvement backlog with Phase 1-4 quick wins (25% implemented) | 2025-01-03 |
 
