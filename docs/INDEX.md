@@ -14,6 +14,7 @@
 | `docs/MVP-DAY1-TDD-PLAN-REVISED.md` | **Day 1 TDD execution plan (14-16 hours, ready for autonomous execution)** | 2026-01-13 |
 | `docs/MVP-BACKEND-COMPLETION-SUMMARY.md` | **Backend MVP completion summary (101 tests passing, production-ready)** | 2026-01-13 |
 | `docs/MVP-FRONTEND-COMPLETION-SUMMARY.md` | **Frontend MVP 100% complete** (23 tests passing, auth + history + game UI fully functional) | 2026-01-13 |
+| `docs/MVP-DAY2-TDD-PLAN.md` | **Day 2 Azure deployment plan** (TDD approach, 6 phases, 125 tests, $27/month, 6-8 hours) | 2026-01-17 |
 | `docs/MVP-DEPLOYMENT-CHECKLIST.md` | Step-by-step MVP deployment guide (2 days, $27/month) | 2026-01-12 |
 | `docs/GITHUB-ACTIONS-SETUP.md` | Complete GitHub Actions CI/CD setup guide | 2026-01-12 |
 | `docs/CICD-QUICK-REFERENCE.md` | Quick reference for common CI/CD commands | 2026-01-12 |
