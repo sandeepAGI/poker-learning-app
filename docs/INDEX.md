@@ -23,10 +23,9 @@
 | `docs/TEST-CODE-REVIEW-GUIDE.md` | Standards for reviewing test code quality (poker-specific patterns) | 2026-01-12 |
 | `docs/TEST-SUITE-REFERENCE.md` | Complete reference for all test suites (backend, frontend, E2E, CI/CD) | 2026-01-12 |
 | `docs/UX_GUIDE.md` | User guide for Session Analysis, API setup, and coaching features | 2024-12-21 |
-| `docs/CURRENT_FIX_LOG.md` | Active fix: FIX-04/05 Viewport Scaling (unresolved, needs comprehensive testing) | 2026-01-12 |
+| `docs/DEFER-ISSUES.md` | **Deferred technical debt** (3 issues: CI bugs, viewport scaling, test optimization) | 2026-01-17 |
 | `docs/frontend-testing-enhancement-plan.md` | Complete frontend testing plan with TDD execution (Phases 0-4; consolidates roadmap) | 2026-01-12 |
 | `docs/ux-review-findings-0103.md` | UX improvement backlog with Phase 1-4 quick wins (25% implemented) | 2025-01-03 |
-| `docs/CI-failure-fixes.md` | Active CI remediation plan (Phase 0.5 in progress) | 2026-01-12 |
 
 ## Archived Documentation
 
@@ -37,6 +36,7 @@ See `archive/` directory for completed work:
 - `archive/fix-logs/` - Completed Phase 4.5 fixes (FIX-01 through FIX-12 except FIX-04/05) and E2E flaky test fixes
 - `archive/issue-reports/` - Resolved issue investigations (navigation issues Jan 2026)
 - `archive/recommendations/` - Implemented recommendations (navigation fixes Jan 2026)
+- `archive/deferred/` - **Deferred technical debt** (CI failures, viewport scaling, test optimization - see DEFER-ISSUES.md)
 - `archive/docs/` - Historical analysis and archived specifications
 
 _All other Markdown files should live under `archive/` unless explicitly added to this table._
