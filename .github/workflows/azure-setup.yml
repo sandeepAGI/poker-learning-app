@@ -51,7 +51,7 @@ jobs:
         run: |
           az group create \
             --name poker-demo-rg \
-            --location eastus
+            --location centralus
 
       - name: Create PostgreSQL Database
         run: |
@@ -60,7 +60,7 @@ jobs:
           az postgres flexible-server create \
             --name poker-db-demo \
             --resource-group poker-demo-rg \
-            --location eastus \
+            --location centralus \
             --admin-user pokeradmin \
             --admin-password "${{ steps.secrets.outputs.DB_PASSWORD }}" \
             --tier Burstable \
@@ -81,7 +81,7 @@ jobs:
           az appservice plan create \
             --name poker-plan \
             --resource-group poker-demo-rg \
-            --location eastus \
+            --location centralus \
             --sku B1 \
             --is-linux
 
@@ -122,7 +122,7 @@ jobs:
           az staticwebapp create \
             --name poker-web-demo \
             --resource-group poker-demo-rg \
-            --location eastus
+            --location centralus
 
       - name: Get Static Web App Token
         id: swa_token

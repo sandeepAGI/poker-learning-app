@@ -54,6 +54,9 @@ htmlcov/
 .env.local
 .env.*.local
 
+# Azure credentials (contains sensitive service principal data)
+azure-credentials.json
+
 # Node.js (for frontend)
 node_modules/
 npm-debug.log*
