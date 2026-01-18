@@ -39,7 +39,14 @@ jobs:
           ANTHROPIC_API_KEY: test-key
         run: |
           cd backend
-          PYTHONPATH=. pytest tests/ -v --cov=. --cov-report=term-missing
+          # Run only fast regression tests (same as pre-commit hook)
+          # Full test suite runs in nightly-tests.yml
+          PYTHONPATH=. pytest \
+            tests/test_action_processing.py \
+            tests/test_state_advancement.py \
+            tests/test_turn_order.py \
+            tests/test_fold_resolution.py \
+            -v --tb=short
 
   deploy:
     name: Deploy to Azure
