@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd backend
-          pip install alembic psycopg2-binary sqlalchemy
+          pip install alembic psycopg2-binary sqlalchemy python-dotenv
 
       - name: Show pending migrations
         env:
