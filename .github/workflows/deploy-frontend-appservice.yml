@@ -47,8 +47,9 @@ jobs:
           # Create standalone deployment package
           mkdir -p deploy
           cp -r .next/standalone/* deploy/
+          mkdir -p deploy/.next
           cp -r .next/static deploy/.next/static
-          cp -r public deploy/public
+          cp -r public deploy/public 2>/dev/null || mkdir -p deploy/public
 
           # Create startup script
           cat > deploy/server.js << 'EOF'
