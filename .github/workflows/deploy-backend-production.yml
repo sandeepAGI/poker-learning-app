@@ -64,17 +64,15 @@ jobs:
       - name: Create deployment package
         run: |
           cd backend
-          # Install dependencies locally for deployment
-          pip install -r requirements.txt --target .python_packages/lib/site-packages
-
-          # Create zip (exclude tests, __pycache__, etc.)
+          # Create zip (Azure Oryx will install dependencies during deployment)
           zip -r ../backend-deploy.zip . \
             -x "tests/*" \
             -x "*.pyc" \
             -x "__pycache__/*" \
             -x "*.pytest_cache/*" \
             -x ".coverage" \
-            -x "htmlcov/*"
+            -x "htmlcov/*" \
+            -x ".python_packages/*"
 
       - name: Azure Login
         uses: azure/login@v1
