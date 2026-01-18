@@ -1,13 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable static export for Azure Static Web Apps
-  output: 'export',
-
-  // Disable image optimization for static export
-  images: {
-    unoptimized: true,
-  },
+  // Use standalone output for Azure Static Web Apps with SSR support
+  output: 'standalone',
 };
 
 export default nextConfig;
