@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Production Deployment
+
+Deployed to Azure Static Web Apps: `https://poker-web-demo.azurewebsites.net`
+
+Backend API: `https://poker-api-demo.azurewebsites.net`
+
 ## Getting Started
 
 First, run the development server:
