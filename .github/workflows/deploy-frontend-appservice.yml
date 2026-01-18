@@ -122,8 +122,9 @@ jobs:
             echo "✅ Frontend deployment successful!"
             echo "Frontend URL: https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
           else
-            echo "⚠️ Frontend returned HTTP $RESPONSE"
-            echo "Deployment may need more time to warm up"
+            echo "❌ Frontend returned HTTP $RESPONSE (expected 200)"
+            echo "Deployment verification failed!"
+            exit 1
           fi
 
       - name: Notify on failure
