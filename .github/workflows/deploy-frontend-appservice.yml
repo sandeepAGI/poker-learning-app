@@ -48,8 +48,9 @@ jobs:
           mkdir -p deploy
           cp -r .next/standalone/frontend/* deploy/
 
-          # Copy static assets to the correct location
-          cp -r .next/static deploy/.next/static
+          # Copy static assets (create .next/static directory)
+          mkdir -p deploy/.next/static
+          cp -r .next/static/* deploy/.next/static/
 
           # Copy public directory
           cp -r public deploy/public 2>/dev/null || mkdir -p deploy/public
