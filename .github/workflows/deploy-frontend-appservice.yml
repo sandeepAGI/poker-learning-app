@@ -1,0 +1,131 @@
+name: Deploy Frontend to App Service
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy-frontend-appservice.yml'
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  AZURE_WEBAPP_NAME: poker-frontend-demo
+  NODE_VERSION: '20'
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build Next.js application
+        env:
+          NEXT_PUBLIC_API_URL: https://poker-api-demo.azurewebsites.net
+          NEXT_PUBLIC_ENVIRONMENT: production
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Create deployment package
+        run: |
+          cd frontend
+          # Create standalone deployment package
+          mkdir -p deploy
+          cp -r .next/standalone/* deploy/
+          cp -r .next/static deploy/.next/static
+          cp -r public deploy/public
+
+          # Create startup script
+          cat > deploy/server.js << 'EOF'
+          const { createServer } = require('http')
+          const { parse } = require('url')
+          const next = require('next')
+
+          const dev = false
+          const hostname = '0.0.0.0'
+          const port = process.env.PORT || 3000
+
+          const app = next({ dev, hostname, port })
+          const handle = app.getRequestHandler()
+
+          app.prepare().then(() => {
+            createServer(async (req, res) => {
+              try {
+                const parsedUrl = parse(req.url, true)
+                await handle(req, res, parsedUrl)
+              } catch (err) {
+                console.error('Error occurred handling', req.url, err)
+                res.statusCode = 500
+                res.end('internal server error')
+              }
+            }).listen(port, (err) => {
+              if (err) throw err
+              console.log(`> Ready on http://${hostname}:${port}`)
+            })
+          })
+          EOF
+
+          # Create package.json for deployment
+          cat > deploy/package.json << 'EOF'
+          {
+            "name": "poker-frontend-production",
+            "version": "1.0.0",
+            "scripts": {
+              "start": "node server.js"
+            },
+            "dependencies": {
+              "next": "15.5.6"
+            }
+          }
+          EOF
+
+          # Zip the deployment package
+          cd deploy
+          zip -r ../../frontend-deploy.zip .
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: frontend-deploy.zip
+
+      - name: Verify deployment
+        run: |
+          echo "Waiting for deployment to complete..."
+          sleep 30
+
+          # Check if frontend is accessible
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net)
+
+          if [ "$RESPONSE" = "200" ]; then
+            echo "✅ Frontend deployment successful!"
+            echo "Frontend URL: https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
+          else
+            echo "⚠️ Frontend returned HTTP $RESPONSE"
+            echo "Deployment may need more time to warm up"
+          fi
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Deployment failed! Check logs above."
