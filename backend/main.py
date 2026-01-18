@@ -19,6 +19,7 @@ import time
 import asyncio
 import json
 import logging
+import os
 
 from game.poker_engine import PokerGame, GameState
 from websocket_manager import manager, thread_safe_manager, process_ai_turns_with_events, serialize_game_state
@@ -41,22 +42,38 @@ except Exception as e:
 # FastAPI app
 app = FastAPI(title="Poker Learning App API", version="2.0")
 
-# CORS middleware for Next.js development (port 3000)
+# CORS middleware - allow both local development and Azure production
+# Environment variable FRONTEND_URLS can override (comma-separated list)
+allowed_origins = os.getenv(
+    "FRONTEND_URLS",
+    "http://localhost:3000,http://localhost:3001,https://poker-web-demo.azurewebsites.net"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001"],  # Next.js default port (3000 or 3001 if 3000 in use)
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Test mode flag - ONLY enable in test environments
+TEST_MODE = os.getenv("TEST_MODE") == "1"
+
+# Health check endpoint for monitoring and deployment verification
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Azure App Service and monitoring"""
+    return {
+        "status": "healthy",
+        "version": "2.0",
+        "environment": "production" if not TEST_MODE else "test",
+        "llm_enabled": LLM_ENABLED
+    }
+
 # In-memory game storage with TTL (Time To Live)
 # Format: {game_id: (PokerGame, last_access_timestamp)}
 games: Dict[str, Tuple[PokerGame, float]] = {}
-
-# Test mode flag - ONLY enable in test environments
-import os
-TEST_MODE = os.getenv("TEST_MODE") == "1"
 
 # Setup logging
 logger = logging.getLogger(__name__)
