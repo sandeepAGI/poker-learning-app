@@ -443,19 +443,31 @@ export function PokerTable() {
         </motion.div>
       )}
 
-      {/* Main table - Circular Layout */}
-      <div className="flex-1 relative" data-testid="poker-table-main">
-        {/* Extract opponents into array for easier positioning */}
-        {(() => {
-          const opponents = gameState.players.filter((p) => !p.is_human);
+      {/* Main table - Elliptical Layout with Aspect Ratio Container */}
+      <div className="flex-1 flex items-center justify-center relative overflow-visible">
+        {/* Poker table container - FIXED ASPECT RATIO */}
+        <div
+          data-testid="poker-table-container"
+          className="relative bg-[#0D5F2F] rounded-[200px] border-4 border-[#0A4D26] shadow-2xl"
+          style={{
+            width: 'min(100vw - 2rem, 90vh * 1.6)',
+            aspectRatio: '16 / 10',
+            maxWidth: '1400px',
+            maxHeight: '85vh',
+            boxShadow: 'inset 0 2px 20px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 80px rgba(13, 95, 47, 0.5)'
+          }}
+        >
+          {/* Extract opponents into array for easier positioning */}
+          {(() => {
+            const opponents = gameState.players.filter((p) => !p.is_human);
 
-          // Phase 0.5: Helper function to check button positions
-          const getPlayerIndex = (player: Player) => {
-            return gameState.players.findIndex(p => p.player_id === player.player_id);
-          };
+            // Phase 0.5: Helper function to check button positions
+            const getPlayerIndex = (player: Player) => {
+              return gameState.players.findIndex(p => p.player_id === player.player_id);
+            };
 
-          return (
-            <>
+            return (
+              <>
               {/* Opponent 1 - Left Side (clickable) */}
               {opponents[0] && (
                 <div
@@ -612,13 +624,12 @@ export function PokerTable() {
             isBigBlind={gameState.players.findIndex(p => p.is_human) === gameState.big_blind_position}
           />
         </div>
+        </div>
 
-        {/* Action buttons - Click to bring to foreground */}
+        {/* Action buttons - OUTSIDE poker table container, always accessible */}
         <div
           data-testid="action-buttons-container"
-          className={`absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 cursor-pointer transition-all ${focusedElement === 'actions' ? 'z-50' : 'z-30'}`}
-          onClick={() => setFocusedElement(focusedElement === 'actions' ? null : 'actions')}
-          title="Click to bring action buttons to front"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 z-50"
         >
           <div className={`bg-[#0A4D26]/90 backdrop-blur-sm border-2 p-3 rounded-lg transition-all ${focusedElement === 'actions' ? 'border-yellow-400 shadow-lg shadow-yellow-400/50' : 'border-[#1F7A47]'}`}>
           {/* Feature: Game over when eliminated - don't show controls */}
