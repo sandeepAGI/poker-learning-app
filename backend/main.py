@@ -608,9 +608,16 @@ async def quit_game(
         # Already completed, just return success
         return {"message": "Game already completed"}
 
-    # Get in-memory game state to save final stack
-    game = game_states.get(game_id)
-    if game:
+    # Get in-memory game state to save final stack and hand history
+    game_tuple = games.get(game_id)
+    if game_tuple:
+        game, _ = game_tuple  # Extract PokerGame from tuple
+
+        # Save the last completed hand if it exists
+        if game.last_hand_summary and hasattr(game, 'user_id'):
+            save_completed_hand(game_id, game.last_hand_summary, game.user_id, db)
+
+        # Save final stack
         human_player = next((p for p in game.players if p.is_human), None)
         if human_player:
             db_game.final_stack = human_player.stack
@@ -622,8 +629,8 @@ async def quit_game(
     db.commit()
 
     # Clean up in-memory state
-    if game_id in game_states:
-        del game_states[game_id]
+    if game_id in games:
+        del games[game_id]
 
     return {"message": "Game quit successfully", "game_id": game_id}
 
@@ -1252,6 +1259,10 @@ async def websocket_endpoint(
                         "data": {"message": "Game over"}
                     })
                     continue
+
+                # Save previous hand before starting new one
+                if game.last_hand_summary and hasattr(game, 'user_id'):
+                    save_completed_hand(game_id, game.last_hand_summary, game.user_id)
 
                 # Start new hand (process_ai=False: let WebSocket handle AI turns async)
                 game.start_new_hand(process_ai=False)

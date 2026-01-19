@@ -92,7 +92,7 @@ def save_completed_hand(game_id: str, completed_hand: "CompletedHand", user_id: 
                 hand_number=completed_hand.hand_number,
                 hand_data=hand_data,
                 user_hole_cards=",".join(completed_hand.human_cards) if completed_hand.human_cards else None,
-                user_won=any(completed_hand.winner_ids) and (str(0) in completed_hand.winner_ids or "Human" in completed_hand.winner_names),
+                user_won="human" in completed_hand.winner_ids,
                 pot=completed_hand.pot_size
             )
             db.add(hand)
@@ -122,7 +122,7 @@ def save_completed_hand(game_id: str, completed_hand: "CompletedHand", user_id: 
                     hand_number=completed_hand.hand_number,
                     hand_data=hand_data,
                     user_hole_cards=",".join(completed_hand.human_cards) if completed_hand.human_cards else None,
-                    user_won=any(completed_hand.winner_ids) and (str(0) in completed_hand.winner_ids or "Human" in completed_hand.winner_names),
+                    user_won="human" in completed_hand.winner_ids,
                     pot=completed_hand.pot_size
                 )
                 db.add(hand)
