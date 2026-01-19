@@ -64,9 +64,12 @@ export function calculateOpponentPositions(
     }];
   }
 
-  // Distribute opponents across 180° arc (left to right)
-  const startAngle = 180; // Left side (180° = π radians)
-  const endAngle = 0;     // Right side (0° = 0 radians)
+  // Distribute opponents across arc (wider for more players)
+  // 4-player (3 opponents): 180° arc works well
+  // 6-player (5 opponents): 220° arc prevents overlap
+  const arcSize = numOpponents <= 3 ? 180 : 220;
+  const startAngle = arcSize === 180 ? 180 : 200;  // Left side
+  const endAngle = arcSize === 180 ? 0 : -20;      // Right side (negative = below horizontal)
   const angleStep = (startAngle - endAngle) / (numOpponents - 1);
 
   return Array.from({ length: numOpponents }, (_, i) => {
