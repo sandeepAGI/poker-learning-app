@@ -13,6 +13,11 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Player } from '../lib/types'; // Phase 0.5: For button indicator helper
 import { pokerApi } from '../lib/api'; // Phase 4.5: Session analysis API
+import {
+  calculateOpponentPositions,
+  getHumanPlayerPosition,
+  getCenterAreaPosition
+} from '../lib/poker-table-layout';
 
 export function PokerTable() {
   const {
@@ -457,136 +462,74 @@ export function PokerTable() {
             boxShadow: 'inset 0 2px 20px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 80px rgba(13, 95, 47, 0.5)'
           }}
         >
-          {/* Extract opponents into array for easier positioning */}
+          {/* Opponents - Positioned using calculated elliptical positions */}
           {(() => {
             const opponents = gameState.players.filter((p) => !p.is_human);
+            const opponentPositions = calculateOpponentPositions(opponents.length);
 
-            // Phase 0.5: Helper function to check button positions
+            // Helper function to check button positions
             const getPlayerIndex = (player: Player) => {
               return gameState.players.findIndex(p => p.player_id === player.player_id);
             };
 
-            return (
-              <>
-              {/* Opponent 1 - Left Side (clickable) */}
-              {opponents[0] && (
-                <div
-                  data-testid="opponent-seat-0"
-                  className={`absolute top-1/3 left-8 cursor-pointer transition-all ${focusedElement === 'opponent-0' ? 'z-50 scale-110' : 'z-10'}`}
-                  onClick={() => setFocusedElement(focusedElement === 'opponent-0' ? null : 'opponent-0')}
-                  title="Click to bring to front"
+            return opponents.map((opponent, index) => {
+              const position = opponentPositions[index];
+              const playerIndex = getPlayerIndex(opponent);
+
+              return (
+                <motion.div
+                  key={opponent.player_id}
+                  data-testid={`opponent-seat-${index}`}
+                  className="absolute cursor-pointer"
+                  style={{
+                    left: position.left,
+                    top: position.top,
+                    transform: position.transform,
+                    zIndex: focusedElement === `opponent-${index}` ? 50 : 10
+                  }}
+                  onClick={() => setFocusedElement(
+                    focusedElement === `opponent-${index}` ? null : `opponent-${index}`
+                  )}
+                  animate={{
+                    scale: focusedElement === `opponent-${index}` ? 1.1 : 1
+                  }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  whileHover={{ scale: 1.05 }}
                 >
                   <PlayerSeat
-                    key={opponents[0].player_id}
-                    player={opponents[0]}
-                    isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === opponents[0].player_id}
-                    aiDecision={gameState.last_ai_decisions[opponents[0].player_id]}
+                    player={opponent}
+                    isCurrentTurn={
+                      gameState.current_player_index !== null &&
+                      gameState.players[gameState.current_player_index]?.player_id === opponent.player_id
+                    }
+                    aiDecision={gameState.last_ai_decisions[opponent.player_id]}
                     showAiThinking={showAiThinking}
                     isShowdown={isShowdown}
-                    isDealer={getPlayerIndex(opponents[0]) === gameState.dealer_position}
-                    isSmallBlind={getPlayerIndex(opponents[0]) === gameState.small_blind_position}
-                    isBigBlind={getPlayerIndex(opponents[0]) === gameState.big_blind_position}
+                    isDealer={playerIndex === gameState.dealer_position}
+                    isSmallBlind={playerIndex === gameState.small_blind_position}
+                    isBigBlind={playerIndex === gameState.big_blind_position}
                   />
-                </div>
-              )}
+                </motion.div>
+              );
+            });
+          })()}
 
-              {/* Opponent 2 - Position depends on player count (clickable) */}
-              {opponents[1] && (
-                <div
-                  data-testid="opponent-seat-1"
-                  className={`${opponents.length === 3 ? "absolute top-8 left-1/2 -translate-x-1/2" : "absolute top-8 left-[25%] -translate-x-1/2"} cursor-pointer transition-all ${focusedElement === 'opponent-1' ? 'z-50 scale-110' : 'z-10'}`}
-                  onClick={() => setFocusedElement(focusedElement === 'opponent-1' ? null : 'opponent-1')}
-                  title="Click to bring to front"
-                >
-                  <PlayerSeat
-                    key={opponents[1].player_id}
-                    player={opponents[1]}
-                    isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === opponents[1].player_id}
-                    aiDecision={gameState.last_ai_decisions[opponents[1].player_id]}
-                    showAiThinking={showAiThinking}
-                    isShowdown={isShowdown}
-                    isDealer={getPlayerIndex(opponents[1]) === gameState.dealer_position}
-                    isSmallBlind={getPlayerIndex(opponents[1]) === gameState.small_blind_position}
-                    isBigBlind={getPlayerIndex(opponents[1]) === gameState.big_blind_position}
-                  />
-                </div>
-              )}
-
-              {/* Opponent 3 - Position depends on player count (clickable) */}
-              {opponents[2] && (
-                <div
-                  data-testid="opponent-seat-2"
-                  className={`${opponents.length === 3 ? "absolute top-1/3 right-8" : "absolute top-8 left-1/2 -translate-x-1/2"} cursor-pointer transition-all ${focusedElement === 'opponent-2' ? 'z-50 scale-110' : 'z-10'}`}
-                  onClick={() => setFocusedElement(focusedElement === 'opponent-2' ? null : 'opponent-2')}
-                  title="Click to bring to front"
-                >
-                  <PlayerSeat
-                    key={opponents[2].player_id}
-                    player={opponents[2]}
-                    isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === opponents[2].player_id}
-                    aiDecision={gameState.last_ai_decisions[opponents[2].player_id]}
-                    showAiThinking={showAiThinking}
-                    isShowdown={isShowdown}
-                    isDealer={getPlayerIndex(opponents[2]) === gameState.dealer_position}
-                    isSmallBlind={getPlayerIndex(opponents[2]) === gameState.small_blind_position}
-                    isBigBlind={getPlayerIndex(opponents[2]) === gameState.big_blind_position}
-                  />
-                </div>
-              )}
-
-              {/* Opponent 4 - Top Right (for 6-player tables, clickable) */}
-              {opponents[3] && (
-                <div
-                  data-testid="opponent-seat-3"
-                  className={`absolute top-8 left-[75%] -translate-x-1/2 cursor-pointer transition-all ${focusedElement === 'opponent-3' ? 'z-50 scale-110' : 'z-10'}`}
-                  onClick={() => setFocusedElement(focusedElement === 'opponent-3' ? null : 'opponent-3')}
-                  title="Click to bring to front"
-                >
-                  <PlayerSeat
-                    key={opponents[3].player_id}
-                    player={opponents[3]}
-                    isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === opponents[3].player_id}
-                    aiDecision={gameState.last_ai_decisions[opponents[3].player_id]}
-                    showAiThinking={showAiThinking}
-                    isShowdown={isShowdown}
-                    isDealer={getPlayerIndex(opponents[3]) === gameState.dealer_position}
-                    isSmallBlind={getPlayerIndex(opponents[3]) === gameState.small_blind_position}
-                    isBigBlind={getPlayerIndex(opponents[3]) === gameState.big_blind_position}
-                  />
-                </div>
-              )}
-
-              {/* Opponent 5 - Right Side (for 6-player tables, clickable) */}
-              {opponents[4] && (
-                <div
-                  data-testid="opponent-seat-4"
-                  className={`absolute top-1/3 right-8 cursor-pointer transition-all ${focusedElement === 'opponent-4' ? 'z-50 scale-110' : 'z-10'}`}
-                  onClick={() => setFocusedElement(focusedElement === 'opponent-4' ? null : 'opponent-4')}
-                  title="Click to bring to front"
-                >
-                  <PlayerSeat
-                    key={opponents[4].player_id}
-                    player={opponents[4]}
-                    isCurrentTurn={gameState.current_player_index !== null && gameState.players[gameState.current_player_index]?.player_id === opponents[4].player_id}
-                    aiDecision={gameState.last_ai_decisions[opponents[4].player_id]}
-                    showAiThinking={showAiThinking}
-                    isShowdown={isShowdown}
-                    isDealer={getPlayerIndex(opponents[4]) === gameState.dealer_position}
-                    isSmallBlind={getPlayerIndex(opponents[4]) === gameState.small_blind_position}
-                    isBigBlind={getPlayerIndex(opponents[4]) === gameState.big_blind_position}
-                  />
-                </div>
-              )}
-            </>
-          );
-        })()}
-
-        {/* Center Area - Community Cards and Pot - Click to bring to foreground */}
-        <div
+        {/* Center Area - Community Cards and Pot - Calculated position */}
+        <motion.div
           data-testid="community-cards-area"
-          className={`absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-4 cursor-pointer transition-all ${focusedElement === 'community' ? 'z-50 scale-105' : 'z-20'}`}
+          className="absolute flex flex-col items-center gap-4 cursor-pointer"
+          style={{
+            left: getCenterAreaPosition().left,
+            top: getCenterAreaPosition().top,
+            transform: getCenterAreaPosition().transform,
+            zIndex: focusedElement === 'community' ? 50 : 20
+          }}
           onClick={() => setFocusedElement(focusedElement === 'community' ? null : 'community')}
-          title="Click to bring community cards to front"
+          animate={{
+            scale: focusedElement === 'community' ? 1.05 : 1
+          }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          whileHover={{ scale: 1.03 }}
         >
           {/* Pot */}
           <motion.div
@@ -605,14 +548,24 @@ export function PokerTable() {
               gameState={gameState.state}
             />
           </div>
-        </div>
+        </motion.div>
 
-        {/* Human Player - Bottom (clickable) */}
-        <div
+        {/* Human Player - Bottom - Calculated position */}
+        <motion.div
           data-testid="human-player-seat"
-          className={`absolute human-player-position left-1/2 -translate-x-1/2 cursor-pointer transition-all ${focusedElement === 'human' ? 'z-50 scale-110' : 'z-10'}`}
+          className="absolute cursor-pointer"
+          style={{
+            left: getHumanPlayerPosition().left,
+            top: getHumanPlayerPosition().top,
+            transform: getHumanPlayerPosition().transform,
+            zIndex: focusedElement === 'human' ? 50 : 10
+          }}
           onClick={() => setFocusedElement(focusedElement === 'human' ? null : 'human')}
-          title="Click to bring to front"
+          animate={{
+            scale: focusedElement === 'human' ? 1.1 : 1
+          }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          whileHover={{ scale: 1.05 }}
         >
           <PlayerSeat
             player={gameState.human_player}
@@ -623,7 +576,7 @@ export function PokerTable() {
             isSmallBlind={gameState.players.findIndex(p => p.is_human) === gameState.small_blind_position}
             isBigBlind={gameState.players.findIndex(p => p.is_human) === gameState.big_blind_position}
           />
-        </div>
+        </motion.div>
         </div>
 
         {/* Action buttons - OUTSIDE poker table container, always accessible */}
