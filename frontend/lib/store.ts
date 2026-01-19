@@ -220,7 +220,19 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   // Bug fix: Quit game and return to lobby
-  quitGame: () => {
+  quitGame: async () => {
+    const gameId = get().gameId;
+
+    // Call backend to mark game as completed (for history)
+    if (gameId) {
+      try {
+        await pokerApi.quitGame(gameId);
+      } catch (error) {
+        // Log but don't block quit - user wants to leave
+        console.warn('Failed to mark game as quit:', error);
+      }
+    }
+
     // Disconnect WebSocket (Phase 1.4)
     get().disconnectWebSocket();
 

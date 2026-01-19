@@ -583,6 +583,50 @@ def next_hand(
     # Return updated game state
     return get_game_state(game_id)
 
+@app.post("/games/{game_id}/quit")
+async def quit_game(
+    game_id: str,
+    user_id: str = Depends(verify_token),
+    db: Session = Depends(get_db)
+):
+    """
+    Quit an active game and mark it as completed.
+
+    Called when player manually quits (closes browser, clicks quit button, etc.)
+    Saves current game state to history instead of losing it.
+    """
+    # Verify game exists and belongs to user
+    db_game = db.query(Game).filter(
+        Game.game_id == game_id,
+        Game.user_id == user_id
+    ).first()
+
+    if not db_game:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    if db_game.status == "completed":
+        # Already completed, just return success
+        return {"message": "Game already completed"}
+
+    # Get in-memory game state to save final stack
+    game = game_states.get(game_id)
+    if game:
+        human_player = next((p for p in game.players if p.is_human), None)
+        if human_player:
+            db_game.final_stack = human_player.stack
+            db_game.profit_loss = human_player.stack - db_game.starting_stack
+
+    # Mark as completed
+    db_game.status = "completed"
+    db_game.completed_at = datetime.utcnow()
+    db.commit()
+
+    # Clean up in-memory state
+    if game_id in game_states:
+        del game_states[game_id]
+
+    return {"message": "Game quit successfully", "game_id": game_id}
+
 
 # Game history endpoints
 @app.get("/users/me/games")

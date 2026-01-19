@@ -127,6 +127,12 @@ export const pokerApi = {
     return response.data;
   },
 
+  // Quit game and mark as completed
+  async quitGame(gameId: string): Promise<any> {
+    const response = await api.post(`/games/${gameId}/quit`);
+    return response.data;
+  },
+
   // Health check
   async healthCheck(): Promise<{ status: string }> {
     const response = await api.get('/');
