@@ -17,21 +17,23 @@ export default function NewGamePage() {
   const [playerName, setPlayerName] = useState(username || 'Player');
   const [aiCount, setAiCount] = useState(3);
   const [mounted, setMounted] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false); // Local loading state for button feedback
 
   // Debug logging
   console.log('[NewGamePage] Render:', {
     mounted,
     authenticated: isAuthenticated(),
     loading,
+    localLoading,
     hasGameState: !!gameState,
     error,
     connectionError
   });
 
-  // Check authentication and initialize game state
+  // Check authentication (only run once on mount)
   useEffect(() => {
-    console.log('[NewGamePage] useEffect running');
-    setMounted(true); // Mark as client-side mounted
+    console.log('[NewGamePage] Mount effect running');
+    setMounted(true);
 
     if (!isAuthenticated()) {
       console.log('[NewGamePage] Not authenticated, redirecting');
@@ -43,10 +45,14 @@ export default function NewGamePage() {
     if (username && !playerName) {
       setPlayerName(username);
     }
+  }, [router, username, playerName]);
 
-    // Only restore game after mounted (prevents hydration mismatch)
+  // Initialize from storage (only run once on mount)
+  useEffect(() => {
+    if (!mounted) return;
+    console.log('[NewGamePage] Initializing from storage');
     initializeFromStorage();
-  }, [router, username, playerName, initializeFromStorage]);
+  }, [mounted]); // Only depend on mounted, not the function
 
   // Redirect if not authenticated
   if (!isAuthenticated()) {
@@ -62,8 +68,27 @@ export default function NewGamePage() {
 
   console.log('[NewGamePage] Passed auth and mount checks');
 
+  // Clear local loading when game state is set or there's an error
+  useEffect(() => {
+    if (gameState || error || connectionError) {
+      setLocalLoading(false);
+    }
+  }, [gameState, error, connectionError]);
+
+  // Handler for creating game with local loading state
+  const handleCreateGame = async () => {
+    console.log('[NewGamePage] handleCreateGame called');
+    setLocalLoading(true);
+    try {
+      await createGame(playerName || username || 'Player', aiCount);
+    } catch (err) {
+      console.error('[NewGamePage] Error in handleCreateGame:', err);
+      setLocalLoading(false);
+    }
+  };
+
   // Show loading screen while connecting to game
-  if (loading && !gameState) {
+  if ((loading || localLoading) && !gameState) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-700 to-green-900">
         <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
@@ -81,7 +106,10 @@ export default function NewGamePage() {
               <p className="font-semibold">Connection Error</p>
               <p>{connectionError}</p>
               <button
-                onClick={() => window.location.href = '/game/new'}
+                onClick={() => {
+                  setLocalLoading(false);
+                  window.location.href = '/game/new';
+                }}
                 className="mt-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
               >
                 Try Again
@@ -162,12 +190,12 @@ export default function NewGamePage() {
             )}
 
             <button
-              onClick={() => createGame(playerName || username || 'Player', aiCount)}
+              onClick={handleCreateGame}
               data-testid="start-game-button"
-              disabled={loading || !playerName}
+              disabled={loading || localLoading || !playerName}
               className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? (
+              {(loading || localLoading) ? (
                 <span className="flex items-center justify-center">
                   <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
