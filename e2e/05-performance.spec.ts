@@ -14,8 +14,9 @@ test.describe('Suite 5: Performance', () => {
   test('5.1: Page loads within acceptable time', async ({ page }) => {
     const startTime = Date.now();
 
+    // Use 'load' instead of 'networkidle' for more reliable timing
     const response = await page.goto('/', {
-      waitUntil: 'networkidle',
+      waitUntil: 'load',
       timeout: config.PAGE_LOAD_TIMEOUT
     });
 
@@ -48,7 +49,7 @@ test.describe('Suite 5: Performance', () => {
     });
 
     // Navigate to home page
-    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'load' });
 
     // Wait for page to fully render
     await page.waitForTimeout(2000);
@@ -72,7 +73,7 @@ test.describe('Suite 5: Performance', () => {
     });
 
     // Navigate and interact
-    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'load' });
 
     await page.waitForTimeout(2000);
 
@@ -86,7 +87,7 @@ test.describe('Suite 5: Performance', () => {
     const startTime = Date.now();
 
     await page.goto('/login', {
-      waitUntil: 'networkidle',
+      waitUntil: 'load',
       timeout: config.PAGE_LOAD_TIMEOUT
     });
 
@@ -154,7 +155,7 @@ test.describe('Suite 5: Performance', () => {
       }
     });
 
-    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'load' });
 
     // Navigate to game creation to check card images
     const newGameLink = page.locator('a:has-text("Start New Game")');

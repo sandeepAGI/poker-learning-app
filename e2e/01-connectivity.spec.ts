@@ -22,8 +22,9 @@ test.describe('Suite 1: Frontend-Backend Connectivity', () => {
   });
 
   test('1.1: Frontend page loads with HTTP 200', async ({ page }) => {
+    // Use 'domcontentloaded' instead of 'networkidle' to avoid timeout on continuous requests
     const response = await page.goto('/', {
-      waitUntil: 'networkidle',
+      waitUntil: 'domcontentloaded',
       timeout: config.PAGE_LOAD_TIMEOUT
     });
 

@@ -15,34 +15,16 @@ import { registerUser, createGame, takeAction, waitForAITurn, quitGame } from '.
  */
 
 test.describe('Suite 3: Game Lifecycle', () => {
-  let testUsername: string;
-  let testPassword: string;
-
-  test.beforeAll(async ({ browser }) => {
-    // Create a test user for all game tests
-    const page = await browser.newPage();
-    const credentials = await registerUser(page);
-    testUsername = credentials.username;
-    testPassword = credentials.password;
-    await page.close();
-  });
-
   test('3.1: Navigate to game creation page', async ({ page }) => {
-    // Login first
-    await page.goto('/');
+    // Register and login
+    const { username } = await registerUser(page);
 
-    // If not logged in, the page should show login form
-    const hasLogin = await page.locator('input#username').isVisible().catch(() => false);
-    if (hasLogin) {
-      await page.fill('input#username', testUsername);
-      await page.fill('input#password', testPassword);
-      await page.click('button[type="submit"]');
-      await page.waitForURL('/');
-    }
+    // Should be redirected to home after registration
+    await page.waitForURL('/', { timeout: 10000 }).catch(() => {});
 
     // Click "Start New Game" link
-    const newGameLink = page.locator('a:has-text("Start New Game")');
-    await expect(newGameLink).toBeVisible();
+    const newGameLink = page.locator('a:has-text("Start New Game"), [data-testid="start-new-game-link"]');
+    await expect(newGameLink).toBeVisible({ timeout: 10000 });
 
     await newGameLink.click();
 
@@ -53,27 +35,20 @@ test.describe('Suite 3: Game Lifecycle', () => {
 
     // Should see game setup options
     await expect(page.locator('text=Poker Learning App')).toBeVisible();
-    await expect(page.locator('button:has-text("Start Game")')).toBeVisible();
+    await expect(page.locator('button:has-text("Start Game"), [data-testid="start-game-button"]')).toBeVisible();
   });
 
   test('3.2: Create new game', async ({ page }) => {
-    // Login
-    await page.goto('/');
-    const hasLogin = await page.locator('input#username').isVisible().catch(() => false);
-    if (hasLogin) {
-      await page.fill('input#username', testUsername);
-      await page.fill('input#password', testPassword);
-      await page.click('button[type="submit"]');
-      await page.waitForURL('/');
-    }
+    // Register and login
+    const { username } = await registerUser(page);
 
     // Create game using helper
-    await createGame(page, testUsername, 3);
+    await createGame(page, username, 3);
 
     await page.screenshot({ path: 'e2e/screenshots/03-game-loaded.png' });
 
-    // Verify poker table elements are visible
-    const hasActionButtons = await page.locator('button:has-text("Fold"), button:has-text("Check"), button:has-text("Call")').first().isVisible().catch(() => false);
+    // Verify poker table elements are visible with data-testid
+    const hasActionButtons = await page.locator('[data-testid="fold-button"], [data-testid="call-button"], button:has-text("Fold"), button:has-text("Call")').first().isVisible({ timeout: 15000 }).catch(() => false);
 
     expect(hasActionButtons).toBe(true);
 
@@ -83,17 +58,9 @@ test.describe('Suite 3: Game Lifecycle', () => {
   });
 
   test('3.3: Player can check when no bet', async ({ page }) => {
-    // Setup: Login and create game
-    await page.goto('/');
-    const hasLogin = await page.locator('input#username').isVisible().catch(() => false);
-    if (hasLogin) {
-      await page.fill('input#username', testUsername);
-      await page.fill('input#password', testPassword);
-      await page.click('button[type="submit"]');
-      await page.waitForURL('/');
-    }
-
-    await createGame(page, testUsername, 3);
+    // Setup: Register, login and create game
+    const { username } = await registerUser(page);
+    await createGame(page, username, 3);
 
     // Wait for action buttons
     await page.waitForTimeout(2000);
@@ -118,17 +85,9 @@ test.describe('Suite 3: Game Lifecycle', () => {
   });
 
   test('3.4: Player can fold', async ({ page }) => {
-    // Setup: Login and create game
-    await page.goto('/');
-    const hasLogin = await page.locator('input#username').isVisible().catch(() => false);
-    if (hasLogin) {
-      await page.fill('input#username', testUsername);
-      await page.fill('input#password', testPassword);
-      await page.click('button[type="submit"]');
-      await page.waitForURL('/');
-    }
-
-    await createGame(page, testUsername, 3);
+    // Setup: Register, login and create game
+    const { username } = await registerUser(page);
+    await createGame(page, username, 3);
 
     // Wait for action buttons to be enabled
     await page.waitForSelector('button:has-text("Fold"):not([disabled])', { timeout: 10000 }).catch(() => {
@@ -155,17 +114,9 @@ test.describe('Suite 3: Game Lifecycle', () => {
   });
 
   test('3.5: Game progresses as AI players act', async ({ page }) => {
-    // Setup: Login and create game
-    await page.goto('/');
-    const hasLogin = await page.locator('input#username').isVisible().catch(() => false);
-    if (hasLogin) {
-      await page.fill('input#username', testUsername);
-      await page.fill('input#password', testPassword);
-      await page.click('button[type="submit"]');
-      await page.waitForURL('/');
-    }
-
-    await createGame(page, testUsername, 3);
+    // Setup: Register, login and create game
+    const { username } = await registerUser(page);
+    await createGame(page, username, 3);
 
     // Fold to let AI players act
     await takeAction(page, 'fold');
@@ -183,17 +134,9 @@ test.describe('Suite 3: Game Lifecycle', () => {
   });
 
   test('3.6: Player can quit game', async ({ page }) => {
-    // Setup: Login and create game
-    await page.goto('/');
-    const hasLogin = await page.locator('input#username').isVisible().catch(() => false);
-    if (hasLogin) {
-      await page.fill('input#username', testUsername);
-      await page.fill('input#password', testPassword);
-      await page.click('button[type="submit"]');
-      await page.waitForURL('/');
-    }
-
-    await createGame(page, testUsername, 3);
+    // Setup: Register, login and create game
+    const { username } = await registerUser(page);
+    await createGame(page, username, 3);
 
     // Quit game
     const quitted = await quitGame(page);
@@ -215,18 +158,11 @@ test.describe('Suite 3: Game Lifecycle', () => {
   });
 
   test('3.7: Game appears in history', async ({ page }) => {
-    // First, play and complete a game
-    await page.goto('/');
-    const hasLogin = await page.locator('input#username').isVisible().catch(() => false);
-    if (hasLogin) {
-      await page.fill('input#username', testUsername);
-      await page.fill('input#password', testPassword);
-      await page.click('button[type="submit"]');
-      await page.waitForURL('/');
-    }
+    // Register, login and create a game
+    const { username } = await registerUser(page);
 
     // Create and immediately quit a game to add to history
-    await createGame(page, testUsername, 3);
+    await createGame(page, username, 3);
     await page.waitForTimeout(2000);
     await quitGame(page);
 
