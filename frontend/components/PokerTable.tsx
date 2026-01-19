@@ -448,19 +448,23 @@ export function PokerTable() {
         </motion.div>
       )}
 
-      {/* Main table - Elliptical Layout with Aspect Ratio Container */}
-      <div className="flex-1 flex items-center justify-center relative overflow-visible">
-        {/* Poker table container - FIXED ASPECT RATIO with mobile optimization */}
-        <div
-          data-testid="poker-table-container"
-          className="relative bg-[#0D5F2F] rounded-[200px] border-4 border-[#0A4D26] shadow-2xl max-h-[70vh] sm:max-h-[85vh]"
-          style={{
-            width: 'min(100vw - 2rem, 90vh * 1.6)',
-            aspectRatio: '16 / 10',
-            maxWidth: '1400px',
-            boxShadow: 'inset 0 2px 20px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 80px rgba(13, 95, 47, 0.5)'
-          }}
-        >
+      {/* Main Content - Two-column layout on desktop, vertical on mobile */}
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+
+        {/* LEFT COLUMN: Poker Table (70% on desktop, 100% on mobile) */}
+        <div className="flex-1 md:w-[70%] flex items-center justify-center p-2 sm:p-4 relative">
+          {/* Poker table container - FIXED ASPECT RATIO with mobile optimization */}
+          <div
+            data-testid="poker-table-container"
+            className="relative bg-[#0D5F2F] rounded-[200px] border-4 border-[#0A4D26] shadow-2xl"
+            style={{
+              width: '100%',
+              maxWidth: 'min(100%, 90vh * 1.6)',
+              aspectRatio: '16 / 10',
+              maxHeight: '70vh',
+              boxShadow: 'inset 0 2px 20px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 80px rgba(13, 95, 47, 0.5)'
+            }}
+          >
           {/* Opponents - Positioned using calculated elliptical positions */}
           {(() => {
             const opponents = gameState.players.filter((p) => !p.is_human);
@@ -576,14 +580,16 @@ export function PokerTable() {
             isBigBlind={gameState.players.findIndex(p => p.is_human) === gameState.big_blind_position}
           />
         </motion.div>
+          </div>
         </div>
 
-        {/* Action buttons - OUTSIDE poker table container, always accessible */}
+        {/* RIGHT COLUMN: Control Panel (30% on desktop, auto-height on mobile) */}
         <div
-          data-testid="action-buttons-container"
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 z-50"
+          data-testid="control-panel"
+          className="w-full md:w-[30%] bg-gray-900 border-t md:border-t-0 md:border-l border-gray-700 flex flex-col overflow-y-auto"
         >
-          <div className={`bg-[#0A4D26]/90 backdrop-blur-sm border-2 p-3 rounded-lg transition-all ${focusedElement === 'actions' ? 'border-yellow-400 shadow-lg shadow-yellow-400/50' : 'border-[#1F7A47]'}`}>
+          {/* Section 1: Action Buttons */}
+          <div className="p-3 sm:p-4 border-b border-gray-700">
           {/* Feature: Game over when eliminated - don't show controls */}
           {isEliminated ? (
             <div className="text-center py-4">
@@ -757,6 +763,99 @@ export function PokerTable() {
               {loading ? 'Processing...' : isAllIn ? "All-In! Waiting for hand to complete..." : "Waiting for other players..."}
             </div>
           )}
+          </div>
+
+          {/* Section 2: AI Thinking (collapsible, future integration) */}
+          <AnimatePresence>
+            {showAiThinking && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="border-b border-gray-700 overflow-hidden"
+              >
+                <div className="p-3 sm:p-4 max-h-[300px] overflow-y-auto">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-white text-sm font-semibold uppercase tracking-wide">AI Thinking</h3>
+                    <button
+                      onClick={() => toggleShowAiThinking()}
+                      className="text-gray-400 hover:text-white text-xs"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  {/* AI decisions display */}
+                  <div className="space-y-3">
+                    {(() => {
+                      const opponents = gameState.players.filter((p) => !p.is_human);
+                      const hasAnyDecisions = opponents.some(opp => gameState.last_ai_decisions[opp.player_id]);
+
+                      if (!hasAnyDecisions) {
+                        return (
+                          <div className="text-gray-500 text-xs text-center py-6">
+                            AI decisions will appear here after opponents act.
+                          </div>
+                        );
+                      }
+
+                      return opponents.map((opponent) => {
+                        const aiDecision = gameState.last_ai_decisions[opponent.player_id];
+                        if (!aiDecision) return null;
+
+                        return (
+                          <div key={opponent.player_id} className="bg-gray-800 rounded-lg p-3">
+                            <div className="flex items-center gap-2 mb-2">
+                              <div className="w-2 h-2 rounded-full bg-blue-500" />
+                              <span className="text-white text-xs font-semibold">{opponent.name}</span>
+                            </div>
+
+                            {/* Decision */}
+                            <div className="text-gray-300 text-xs mb-2">
+                              <strong>Action:</strong> {aiDecision.action}
+                              {aiDecision.amount && ` ($${aiDecision.amount})`}
+                            </div>
+
+                            {/* Reasoning (if available) */}
+                            {aiDecision.reasoning && (
+                              <div className="text-gray-400 text-xs">
+                                <strong>Reasoning:</strong> {aiDecision.reasoning}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Section 3: Game Controls */}
+          <div className="p-3 sm:p-4 mt-auto space-y-2">
+            <motion.button
+              onClick={() => toggleShowAiThinking()}
+              className="w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors flex items-center justify-between"
+              whileHover={{ scale: 1.02 }}
+            >
+              <span>{showAiThinking ? 'Hide' : 'Show'} AI Thinking</span>
+              <motion.span
+                animate={{ rotate: showAiThinking ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                ▼
+              </motion.span>
+            </motion.button>
+
+            <motion.button
+              onClick={handleQuitClick}
+              className="w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-red-400 rounded-lg text-sm transition-colors"
+              whileHover={{ scale: 1.02 }}
+            >
+              Quit Game
+            </motion.button>
           </div>
         </div>
       </div>
