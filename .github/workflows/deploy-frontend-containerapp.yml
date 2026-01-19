@@ -47,8 +47,9 @@ jobs:
           build-args: |
             NEXT_PUBLIC_API_URL=https://poker-api-demo.azurewebsites.net
             NEXT_PUBLIC_ENVIRONMENT=production
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+            BUILDKIT_INLINE_CACHE=1
+          cache-from: type=registry,ref=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
       - name: Azure Login
         uses: azure/login@v1
