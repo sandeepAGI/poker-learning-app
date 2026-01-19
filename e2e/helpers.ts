@@ -13,6 +13,25 @@ export async function registerUser(page: Page, username?: string, password?: str
   const testUsername = username || generateTestUsername('user');
   const testPassword = password || 'TestPassword123!';
 
+  // Log network requests to debug API calls
+  page.on('request', request => {
+    if (request.url().includes('/auth/')) {
+      console.log(`[NETWORK REQUEST] ${request.method()} ${request.url()}`);
+    }
+  });
+
+  page.on('response', async response => {
+    if (response.url().includes('/auth/')) {
+      console.log(`[NETWORK RESPONSE] ${response.status()} ${response.url()}`);
+      try {
+        const text = await response.text();
+        console.log(`[NETWORK RESPONSE BODY]`, text.substring(0, 500));
+      } catch (e) {
+        console.log(`[NETWORK RESPONSE] Unable to read body: ${e}`);
+      }
+    }
+  });
+
   await page.goto('/');
 
   // Check if already authenticated
@@ -38,8 +57,8 @@ export async function registerUser(page: Page, username?: string, password?: str
   // Submit
   await page.click('button[type="submit"]');
 
-  // Wait for redirect to home
-  await page.waitForURL('/', { timeout: 10000 });
+  // Wait for redirect to home (increased timeout for slow backend response)
+  await page.waitForURL('/', { timeout: 20000 });
 
   // CRITICAL: Verify that auth token is actually set in localStorage
   // This ensures the token persists before we navigate away

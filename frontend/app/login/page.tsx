@@ -35,18 +35,25 @@ export default function LoginPage() {
     }
 
     setLoading(true);
+    console.log('[LoginPage] Starting authentication, mode:', mode);
 
     try {
       if (mode === 'login') {
+        console.log('[LoginPage] Calling login()...');
         await login(username, password);
       } else {
+        console.log('[LoginPage] Calling register()...');
         await register(username, password);
+        console.log('[LoginPage] register() completed successfully');
       }
 
+      console.log('[LoginPage] Redirecting to /');
       router.push('/');
     } catch (err) {
+      console.error('[LoginPage] Authentication error:', err);
       setError(err instanceof Error ? err.message : 'Authentication failed');
     } finally {
+      console.log('[LoginPage] Setting loading to false');
       setLoading(false);
     }
   };
