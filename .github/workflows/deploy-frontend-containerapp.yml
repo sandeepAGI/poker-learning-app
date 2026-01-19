@@ -64,6 +64,9 @@ jobs:
           containerAppEnvironment: ${{ env.AZURE_CONTAINER_ENV }}
           targetPort: 8080
           ingress: external
+          acrName: ${{ env.AZURE_CONTAINER_REGISTRY }}
+          acrUsername: ${{ secrets.ACR_USERNAME }}
+          acrPassword: ${{ secrets.ACR_PASSWORD }}
 
       - name: Get Container App URL
         id: get-url
