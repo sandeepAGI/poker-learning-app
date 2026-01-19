@@ -370,21 +370,6 @@ export function PokerTable() {
                 📈 Session Analysis
               </button>
 
-              {/* Toggle AI Thinking */}
-              <button
-                data-testid="ai-thinking-toggle"
-                onClick={() => {
-                  toggleShowAiThinking();
-                  setShowSettingsMenu(false);
-                }}
-                className="w-full text-left px-4 py-3 hover:bg-[#1F7A47] rounded-lg text-white font-medium flex items-center gap-2"
-              >
-                <span className={showAiThinking ? 'text-[#FCD34D]' : 'text-gray-400'}>
-                  {showAiThinking ? '✓' : '○'}
-                </span>
-                🤖 Show AI Thinking
-              </button>
-
               {/* Toggle Step Mode */}
               <button
                 data-testid="step-mode-toggle"
@@ -461,7 +446,7 @@ export function PokerTable() {
               width: '100%',
               maxWidth: 'min(100%, 90vh * 1.6)',
               aspectRatio: '16 / 10',
-              maxHeight: '70vh',
+              maxHeight: '75vh',
               boxShadow: 'inset 0 2px 20px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 80px rgba(13, 95, 47, 0.5)'
             }}
           >
@@ -537,7 +522,7 @@ export function PokerTable() {
           {/* Pot */}
           <motion.div
             data-testid="pot-display"
-            className="bg-[#D97706] text-white px-6 py-3 rounded-full text-3xl font-bold shadow-2xl"
+            className="bg-[#D97706] text-white px-4 py-2 rounded-full text-xl font-bold shadow-2xl"
             animate={{ scale: [1, 1.05, 1] }}
             transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
           >
@@ -834,7 +819,7 @@ export function PokerTable() {
           </AnimatePresence>
 
           {/* Section 3: Game Controls */}
-          <div className="p-3 sm:p-4 mt-auto space-y-2">
+          <div className="p-3 sm:p-4 mt-auto">
             <motion.button
               onClick={() => toggleShowAiThinking()}
               className="w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors flex items-center justify-between"
@@ -847,14 +832,6 @@ export function PokerTable() {
               >
                 ▼
               </motion.span>
-            </motion.button>
-
-            <motion.button
-              onClick={handleQuitClick}
-              className="w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-red-400 rounded-lg text-sm transition-colors"
-              whileHover={{ scale: 1.02 }}
-            >
-              Quit Game
             </motion.button>
           </div>
         </div>

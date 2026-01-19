@@ -56,7 +56,7 @@ export function PlayerSeat({
       )}
 
       {/* Player name and personality */}
-      <div className="flex items-center gap-2 mb-2">
+      <div className="flex items-center gap-2 mb-1.5">
         <div data-testid={`player-name-${player.player_id}`} className="font-semibold text-sm">{player.name}</div>
         {/* Only reveal AI strategy at showdown */}
         {player.personality && isShowdown && (
@@ -66,7 +66,7 @@ export function PlayerSeat({
       </div>
 
       {/* Cards */}
-      <div data-testid={`hole-cards-${player.player_id}`} className="flex gap-1 sm:gap-1.5 md:gap-2 mb-2 sm:mb-2.5 md:mb-3">
+      <div data-testid={`hole-cards-${player.player_id}`} className="flex gap-1 sm:gap-1.5 md:gap-2 mb-1.5 sm:mb-2 md:mb-2.5">
         {player.hole_cards.length > 0 ? (
           player.hole_cards.map((card, i) => (
             <Card
@@ -84,7 +84,7 @@ export function PlayerSeat({
       </div>
 
       {/* Stack and bet */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <div data-testid={`stack-display-${player.player_id}`} className="flex justify-between items-center">
           <span className="text-sm text-gray-600">Stack:</span>
           <span className="text-lg font-bold">${player.stack}</span>
