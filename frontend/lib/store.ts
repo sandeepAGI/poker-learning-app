@@ -73,10 +73,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // Create a new game (Phase 1.4: Now uses WebSocket)
   createGame: async (playerName: string, aiCount: number) => {
+    console.log('[Store] createGame called:', { playerName, aiCount });
     set({ loading: true, error: null, connectionError: null });
     try {
+      console.log('[Store] Calling API to create game...');
       const response = await pokerApi.createGame(playerName, aiCount);
       const gameId = response.game_id;
+      console.log('[Store] Game created successfully:', gameId);
       set({ gameId });
 
       // Phase 7+: Persist gameId to localStorage for browser refresh recovery
@@ -86,13 +89,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
       }
 
       // Connect to WebSocket for real-time updates
+      console.log('[Store] Connecting to WebSocket...');
       get().connectWebSocket(gameId);
 
       // Add timeout for WebSocket connection
       setTimeout(() => {
         const { gameState, connectionState } = get();
+        console.log('[Store] WebSocket timeout check:', { hasGameState: !!gameState, connectionState });
         if (!gameState && connectionState !== ConnectionState.CONNECTED) {
-          console.error('WebSocket connection timeout');
+          console.error('[Store] WebSocket connection timeout');
           set({
             connectionError: 'Failed to connect to game server. Please try again.',
             loading: false
@@ -102,9 +107,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       // Navigation now handled by component using Next.js router
     } catch (error: any) {
-      console.error('Error creating game:', error);
+      console.error('[Store] Error creating game:', error);
+      console.error('[Store] Error details:', {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
       set({
-        error: error.response?.data?.detail || 'Failed to create game. Please try again.',
+        error: error.response?.data?.detail || error.message || 'Failed to create game. Please try again.',
         loading: false
       });
     }
