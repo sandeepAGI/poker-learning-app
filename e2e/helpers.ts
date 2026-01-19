@@ -87,6 +87,12 @@ export async function logoutUser(page: Page) {
  * Create a new game and wait for it to load
  */
 export async function createGame(page: Page, playerName?: string, aiCount: number = 3) {
+  // Capture any dialogs (alerts, confirms, prompts) and log them
+  page.on('dialog', async dialog => {
+    console.log(`[DIALOG DETECTED] Type: ${dialog.type()}, Message: ${dialog.message()}`);
+    await dialog.accept(); // Auto-accept to prevent blocking
+  });
+
   // Navigate to new game page
   await page.goto('/game/new');
 
@@ -114,10 +120,17 @@ export async function createGame(page: Page, playerName?: string, aiCount: numbe
     // Click Start Game
     await startButton.click();
 
-    // Wait for game to load (action buttons appear)
-    await page.waitForSelector('button:has-text("Fold"), button:has-text("Check")', {
-      timeout: 15000
-    });
+    // Wait for game to load (action buttons appear) OR error message
+    try {
+      await page.waitForSelector('button:has-text("Fold"), button:has-text("Check"), text=Connection Error, text=Something went wrong', {
+        timeout: 15000
+      });
+    } catch (e) {
+      // Log page content for debugging
+      const content = await page.content();
+      console.log('[DEBUG] Page content after game creation:', content.substring(0, 500));
+      throw e;
+    }
   }
 }
 

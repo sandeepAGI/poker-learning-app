@@ -18,11 +18,23 @@ export default function NewGamePage() {
   const [aiCount, setAiCount] = useState(3);
   const [mounted, setMounted] = useState(false);
 
+  // Debug logging
+  console.log('[NewGamePage] Render:', {
+    mounted,
+    authenticated: isAuthenticated(),
+    loading,
+    hasGameState: !!gameState,
+    error,
+    connectionError
+  });
+
   // Check authentication and initialize game state
   useEffect(() => {
+    console.log('[NewGamePage] useEffect running');
     setMounted(true); // Mark as client-side mounted
 
     if (!isAuthenticated()) {
+      console.log('[NewGamePage] Not authenticated, redirecting');
       router.push('/login');
       return;
     }
@@ -38,13 +50,17 @@ export default function NewGamePage() {
 
   // Redirect if not authenticated
   if (!isAuthenticated()) {
+    console.log('[NewGamePage] Rendering null: not authenticated');
     return null;
   }
 
   // Prevent hydration mismatch
   if (!mounted) {
+    console.log('[NewGamePage] Rendering null: not mounted');
     return null;
   }
+
+  console.log('[NewGamePage] Passed auth and mount checks');
 
   // Show loading screen while connecting to game
   if (loading && !gameState) {
