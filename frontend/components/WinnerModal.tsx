@@ -68,9 +68,6 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
 
   const totalAmount = winners.reduce((sum, w) => sum + w.amount, 0);
   const isMultipleWinners = winners.length > 1;
-
-  // Check if this was a fold win (no showdown)
-  const wonByFold = winners[0]?.won_by_fold === true;
   const hasShowdown = showdownHands.length > 0;
 
   return (
@@ -284,28 +281,6 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
                       {player.name}
                     </span>
                   ))}
-                </div>
-              </motion.div>
-            )}
-
-            {/* AI Strategy reveal (only for single AI winner who won by fold) */}
-            {wonByFold && !isMultipleWinners && !winners[0].is_human && winners[0].personality && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="bg-gray-900 rounded-xl p-3 mb-3 text-white"
-              >
-                <div className="text-yellow-400 text-xs font-bold uppercase tracking-wide mb-1">
-                  🤖 AI Strategy Revealed
-                </div>
-                <div className="text-base font-semibold">
-                  {winners[0].personality} Player
-                </div>
-                <div className="text-xs text-gray-400 mt-0.5">
-                  {winners[0].personality === 'Conservative' && 'Plays cautiously with premium hands'}
-                  {winners[0].personality === 'Aggressive' && 'Bets and raises frequently'}
-                  {winners[0].personality === 'Mathematical' && 'Uses pot odds and expected value'}
                 </div>
               </motion.div>
             )}
