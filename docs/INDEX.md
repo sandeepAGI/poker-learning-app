@@ -11,6 +11,7 @@
 | `docs/MVP-DAY2-TDD-PLAN.md` | **Day 2 Azure deployment plan** (TDD approach, 6 phases, 125 tests, $32/month, 6-8 hours) | 2026-01-17 |
 | `docs/MVP-DAY2-STATUS-2026-01-19.md` | **Day 2 deployment status** (Phase 4 E2E testing in progress) | 2026-01-19 |
 | `docs/E2E-FIX-COMPLETION-REPORT-2026-01-18.md` | **E2E test fix completion** (90% pass rate achieved, critical bug resolution) | 2026-01-18 |
+| `docs/CI-TEST-RATIONALIZATION-2026-01-19.md` | **CI test workflow analysis & deletion rationale** (removed all CI tests, rely on pre-commit hooks only) | 2026-01-19 |
 | `docs/CICD-QUICK-REFERENCE.md` | Quick reference for common CI/CD commands | 2026-01-12 |
 | `docs/TESTING.md` | Central hub for test documentation with links to all test-related guides | 2026-01-12 |
 | `docs/TEST-CODE-REVIEW-GUIDE.md` | Standards for reviewing test code quality (poker-specific patterns) | 2026-01-12 |
