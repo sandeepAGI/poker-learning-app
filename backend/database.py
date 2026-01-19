@@ -12,8 +12,20 @@ load_dotenv()
 # Get database URL from environment
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://sandeepmangaraj@localhost:5432/poker_dev")
 
-# Create engine
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+# Create engine with connection timeout for Azure
+# pool_pre_ping=True validates connections, connect_timeout prevents hanging
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    connect_args={
+        "connect_timeout": 10,  # 10 second timeout for initial connection
+        "options": "-c statement_timeout=30000"  # 30s query timeout
+    },
+    pool_size=5,
+    max_overflow=10,
+    pool_timeout=30,
+    pool_recycle=3600  # Recycle connections after 1 hour
+)
 
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
