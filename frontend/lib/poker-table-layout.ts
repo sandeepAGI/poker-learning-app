@@ -88,29 +88,36 @@ export function calculateOpponentPositions(
 }
 
 /**
- * Get human player position (always bottom-center)
- * Positioned near bottom of container for card visibility
+ * Get human player position (always at bottom of ellipse)
+ * Uses ellipse formula at 270° (bottom center)
  *
  * @returns Position object for human player
  */
-export function getHumanPlayerPosition(): PlayerPosition {
+export function getHumanPlayerPosition(config: EllipseConfig = DEFAULT_ELLIPSE_CONFIG): PlayerPosition {
+  // Human player at 270° (bottom of ellipse)
+  const angleRad = (270 * Math.PI) / 180;
+
+  // Elliptical formula: (x, y) = (cx + rx*cos(θ), cy - ry*sin(θ))
+  const x = config.centerX + config.radiusX * Math.cos(angleRad);
+  const y = config.centerY - config.radiusY * Math.sin(angleRad);
+
   return {
-    left: '50%',
-    top: '75%', // Moved higher to keep cards inside oval boundary
+    left: `${x.toFixed(2)}%`,
+    top: `${y.toFixed(2)}%`,
     transform: 'translate(-50%, -50%)'
   };
 }
 
 /**
- * Get center area position (pot + community cards)
- * Positioned at visual center of table
+ * Get center area position (community cards)
+ * Positioned at ellipse center (matches DEFAULT_ELLIPSE_CONFIG.centerY)
  *
  * @returns Position object for center area
  */
 export function getCenterAreaPosition(): PlayerPosition {
   return {
     left: '50%',
-    top: '50%',
+    top: '40%', // Match ellipse centerY
     transform: 'translate(-50%, -50%)'
   };
 }

@@ -502,10 +502,10 @@ export function PokerTable() {
             });
           })()}
 
-        {/* Center Area - Community Cards and Pot - Calculated position */}
+        {/* Center Area - Community Cards at ellipse center */}
         <motion.div
           data-testid="community-cards-area"
-          className="absolute flex flex-col items-center gap-4 cursor-pointer"
+          className="absolute flex items-center justify-center cursor-pointer"
           style={{
             left: getCenterAreaPosition().left,
             top: getCenterAreaPosition().top,
@@ -519,16 +519,6 @@ export function PokerTable() {
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           whileHover={{ scale: 1.03 }}
         >
-          {/* Pot */}
-          <motion.div
-            data-testid="pot-display"
-            className="bg-[#D97706] text-white px-4 py-2 rounded-full text-xl font-bold shadow-2xl"
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
-          >
-            Pot: ${gameState.pot}
-          </motion.div>
-
           {/* Community cards - Using new dedicated component */}
           <div className={`transition-all rounded-xl ${focusedElement === 'community' ? 'ring-4 ring-yellow-400 shadow-lg shadow-yellow-400/50 p-2' : ''}`}>
             <CommunityCards
@@ -573,6 +563,19 @@ export function PokerTable() {
           data-testid="control-panel"
           className="w-full md:w-[30%] bg-gray-900 border-t md:border-t-0 md:border-l border-gray-700 flex flex-col overflow-y-auto"
         >
+          {/* Pot Display - Above action buttons */}
+          <div className="p-3 sm:p-4 border-b border-gray-700">
+            <motion.div
+              data-testid="pot-display"
+              className="bg-[#D97706] text-white px-4 py-3 rounded-lg text-center font-bold shadow-lg"
+              animate={{ scale: [1, 1.02, 1] }}
+              transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
+            >
+              <div className="text-sm text-orange-200 mb-1">POT</div>
+              <div className="text-2xl">${gameState.pot}</div>
+            </motion.div>
+          </div>
+
           {/* Section 1: Action Buttons */}
           <div className="p-3 sm:p-4 border-b border-gray-700">
           {/* Feature: Game over when eliminated - don't show controls */}
