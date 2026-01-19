@@ -96,15 +96,13 @@ export function PokerTable() {
                   (gameState.human_player.current_bet > 0 && gameState.human_player.stack === 0);
 
   // Bug Fix #3: Check if player is busted (not in game anymore)
+  // Backend sets is_active=false ONLY when player has 0 chips at start of new hand
+  // This is the ONLY reliable way to detect true elimination
   const isBusted = gameState.human_player.stack === 0 && !gameState.human_player.is_active;
 
-  // Feature: Detect when human player is eliminated (game over)
-  // Bug Fix #10: Properly detect elimination:
-  // - stack=0 and NOT all-in → eliminated (busted out without going all-in)
-  // - stack=0 and all-in and at showdown → eliminated (lost the all-in)
-  // - stack=0 and all-in and NOT showdown → NOT eliminated (waiting for hand to complete)
-  const isEliminated = gameState.human_player.stack === 0 &&
-                       (!gameState.human_player.all_in || isShowdown);
+  // Use backend's is_active flag for elimination (don't try to infer from all_in state)
+  // Backend knows definitively when player is eliminated after all pot awards
+  const isEliminated = isBusted;
 
   // Player is all-in and waiting for hand to complete
   const isWaitingAllIn = gameState.human_player.all_in && !isShowdown && gameState.human_player.stack === 0;
@@ -236,15 +234,12 @@ export function PokerTable() {
   }, [handAnalysis]);
 
   // Show game over modal when human player is eliminated
+  // Backend sets is_active=false only after pot awards, so this is safe
   useEffect(() => {
-    if (isEliminated && isShowdown && !showGameOverModal) {
-      // Wait a moment to let the last showdown complete
-      const timer = setTimeout(() => {
-        setShowGameOverModal(true);
-      }, 2000);
-      return () => clearTimeout(timer);
+    if (isEliminated && !showGameOverModal) {
+      setShowGameOverModal(true);
     }
-  }, [isEliminated, isShowdown, showGameOverModal]);
+  }, [isEliminated, showGameOverModal]);
 
   // Handle new game after elimination
   const handleNewGame = () => {
