@@ -158,9 +158,9 @@ export async function createGame(page: Page, playerName?: string, aiCount: numbe
     // Click Start Game
     await startButton.click();
 
-    // Wait for game to load (action buttons appear) OR error message
+    // Wait for game to load (action buttons appear)
     try {
-      await page.waitForSelector('button:has-text("Fold"), button:has-text("Check"), text=Connection Error, text=Something went wrong', {
+      await page.locator('[data-testid="fold-button"], [data-testid="call-button"], button:has-text("Fold"), button:has-text("Check")').first().waitFor({
         timeout: 15000
       });
     } catch (e) {

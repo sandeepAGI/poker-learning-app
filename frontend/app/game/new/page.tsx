@@ -54,6 +54,14 @@ export default function NewGamePage() {
     initializeFromStorage();
   }, [mounted]); // Only depend on mounted, not the function
 
+  // Clear local loading when game state is set or there's an error
+  // IMPORTANT: Must be called before any conditional returns (Rules of Hooks)
+  useEffect(() => {
+    if (gameState || error || connectionError) {
+      setLocalLoading(false);
+    }
+  }, [gameState, error, connectionError]);
+
   // Prevent hydration mismatch - check mounted FIRST before accessing localStorage
   if (!mounted) {
     console.log('[NewGamePage] Rendering null: not mounted');
@@ -67,13 +75,6 @@ export default function NewGamePage() {
   }
 
   console.log('[NewGamePage] Passed auth and mount checks');
-
-  // Clear local loading when game state is set or there's an error
-  useEffect(() => {
-    if (gameState || error || connectionError) {
-      setLocalLoading(false);
-    }
-  }, [gameState, error, connectionError]);
 
   // Handler for creating game with local loading state
   const handleCreateGame = async () => {
