@@ -48,6 +48,10 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+test-results/
+e2e-report/
+playwright-report/
+*.log
 
 # Environment variables
 .env
@@ -70,3 +74,5 @@ yarn-error.log*
 # Temporary files
 *.tmp
 *.temp
+*.zip
+*-logs/

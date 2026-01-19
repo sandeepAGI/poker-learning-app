@@ -1,8 +1,70 @@
-# E2E Testing Plan with Puppeteer
+# E2E Testing Plan
+
+> **✅ IMPLEMENTED**: This plan has been migrated to **Playwright** (more modern, better features).
+> See `e2e/README.md` for current implementation and `e2e/MIGRATION-FROM-PUPPETEER.md` for migration details.
 
 **Purpose**: Comprehensive end-to-end testing before any user testing
 **Date Created**: 2026-01-19
+**Last Updated**: 2026-01-18 (Migrated to Playwright)
 **Prerequisites**: Frontend and backend deployed to Azure
+
+---
+
+## 🎉 Quick Start (Playwright Implementation)
+
+```bash
+# Run all E2E tests
+npm run test:e2e
+
+# Run with UI (recommended for development)
+npm run test:e2e:ui
+
+# Run specific suite
+npx playwright test 01-connectivity
+
+# Debug mode
+npm run test:e2e:debug
+```
+
+See `e2e/README.md` for complete documentation.
+
+---
+
+## Implementation Status
+
+**Status**: ✅ Complete (29 tests across 5 suites)
+**Framework**: Playwright (upgraded from Puppeteer plan)
+**Location**: `e2e/` directory
+
+| Suite | Status | Tests | File |
+|-------|--------|-------|------|
+| 1. Connectivity | ✅ Implemented | 5 tests | `e2e/01-connectivity.spec.ts` |
+| 2. Authentication | ✅ Implemented | 6 tests | `e2e/02-authentication.spec.ts` |
+| 3. Game Lifecycle | ✅ Implemented | 7 tests | `e2e/03-game-lifecycle.spec.ts` |
+| 4. Error Handling | ✅ Implemented | 5 tests | `e2e/04-error-handling.spec.ts` |
+| 5. Performance | ✅ Implemented | 6 tests | `e2e/05-performance.spec.ts` |
+
+**Total**: 29 tests (9 more than original plan)
+
+---
+
+## Why Playwright Instead of Puppeteer?
+
+1. ✅ **Already installed** in project dependencies
+2. ✅ **Auto-waiting** - no flaky `waitForTimeout()` calls
+3. ✅ **Better selectors** - text selectors work natively
+4. ✅ **UI mode** - interactive test runner for development
+5. ✅ **TypeScript support** - better IDE integration
+6. ✅ **Parallel execution** - faster test runs when needed
+7. ✅ **Built-in video/screenshots** - automatic on failure
+
+See `e2e/MIGRATION-FROM-PUPPETEER.md` for detailed comparison.
+
+---
+
+# Original Plan (Historical Reference)
+
+The sections below reflect the original Puppeteer-based plan. For the current implementation, see `e2e/` directory.
 
 ---
 

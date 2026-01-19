@@ -84,6 +84,7 @@ export default function HomePage() {
               </label>
               <input
                 id="username"
+                data-testid="username-input"
                 type="text"
                 value={loginUsername}
                 onChange={(e) => setLoginUsername(e.target.value)}
@@ -99,6 +100,7 @@ export default function HomePage() {
               </label>
               <input
                 id="password"
+                data-testid="password-input"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -115,6 +117,7 @@ export default function HomePage() {
                 </label>
                 <input
                   id="confirmPassword"
+                  data-testid="confirm-password-input"
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -126,13 +129,14 @@ export default function HomePage() {
             )}
 
             {error && (
-              <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-2 rounded text-sm">
+              <div data-testid="error-message" className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-2 rounded text-sm">
                 {error}
               </div>
             )}
 
             <button
               type="submit"
+              data-testid="submit-button"
               disabled={loading}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded transition"
             >
@@ -143,6 +147,7 @@ export default function HomePage() {
           <div className="mt-6 text-center">
             <button
               onClick={switchMode}
+              data-testid="switch-mode-button"
               className="text-blue-400 hover:text-blue-300 text-sm"
               disabled={loading}
             >
@@ -162,6 +167,7 @@ export default function HomePage() {
           <h1 className="text-2xl font-bold text-white">Welcome, {username}!</h1>
           <button
             onClick={handleLogout}
+            data-testid="logout-button"
             className="text-gray-400 hover:text-white text-sm transition"
           >
             Logout
@@ -171,6 +177,7 @@ export default function HomePage() {
         <div className="space-y-4">
           <Link
             href="/game/new"
+            data-testid="start-new-game-link"
             className="block bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-3 px-4 rounded transition"
           >
             Start New Game
@@ -178,6 +185,7 @@ export default function HomePage() {
 
           <Link
             href="/history"
+            data-testid="game-history-link"
             className="block bg-gray-700 hover:bg-gray-600 text-white text-center font-bold py-3 px-4 rounded transition"
           >
             View Game History

@@ -79,6 +79,7 @@ export default function NewGamePage() {
               </label>
               <input
                 type="text"
+                data-testid="player-name-input"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -92,6 +93,7 @@ export default function NewGamePage() {
               </label>
               <select
                 value={aiCount}
+                data-testid="ai-count-select"
                 onChange={(e) => setAiCount(parseInt(e.target.value))}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               >
@@ -106,6 +108,7 @@ export default function NewGamePage() {
 
             <button
               onClick={() => createGame(playerName || username || 'Player', aiCount)}
+              data-testid="start-game-button"
               disabled={loading}
               className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors disabled:opacity-50"
             >
