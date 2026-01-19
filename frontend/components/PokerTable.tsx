@@ -450,15 +450,14 @@ export function PokerTable() {
 
       {/* Main table - Elliptical Layout with Aspect Ratio Container */}
       <div className="flex-1 flex items-center justify-center relative overflow-visible">
-        {/* Poker table container - FIXED ASPECT RATIO */}
+        {/* Poker table container - FIXED ASPECT RATIO with mobile optimization */}
         <div
           data-testid="poker-table-container"
-          className="relative bg-[#0D5F2F] rounded-[200px] border-4 border-[#0A4D26] shadow-2xl"
+          className="relative bg-[#0D5F2F] rounded-[200px] border-4 border-[#0A4D26] shadow-2xl max-h-[70vh] sm:max-h-[85vh]"
           style={{
             width: 'min(100vw - 2rem, 90vh * 1.6)',
             aspectRatio: '16 / 10',
             maxWidth: '1400px',
-            maxHeight: '85vh',
             boxShadow: 'inset 0 2px 20px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 80px rgba(13, 95, 47, 0.5)'
           }}
         >
