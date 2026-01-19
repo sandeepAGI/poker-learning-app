@@ -20,6 +20,9 @@ interface AuthResponse {
  * @throws Error if registration fails
  */
 export async function register(username: string, password: string): Promise<AuthResponse> {
+  console.log('[Auth] Starting registration for:', username);
+  console.log('[Auth] API URL:', `${API_BASE_URL}/auth/register`);
+
   const response = await fetch(`${API_BASE_URL}/auth/register`, {
     method: 'POST',
     headers: {
@@ -28,17 +31,23 @@ export async function register(username: string, password: string): Promise<Auth
     body: JSON.stringify({ username, password }),
   });
 
+  console.log('[Auth] Registration response status:', response.status);
+
   if (!response.ok) {
     const error = await response.json();
+    console.error('[Auth] Registration failed:', error);
     throw new Error(error.detail || 'Registration failed');
   }
 
   const data: AuthResponse = await response.json();
+  console.log('[Auth] Registration successful, got data:', { ...data, token: '***' });
 
   // Store auth data in localStorage
+  console.log('[Auth] Setting localStorage...');
   localStorage.setItem('auth_token', data.token);
   localStorage.setItem('user_id', data.user_id);
   localStorage.setItem('username', data.username);
+  console.log('[Auth] localStorage set successfully');
 
   return data;
 }

@@ -41,6 +41,18 @@ export async function registerUser(page: Page, username?: string, password?: str
   // Wait for redirect to home
   await page.waitForURL('/', { timeout: 10000 });
 
+  // CRITICAL: Verify that auth token is actually set in localStorage
+  // This ensures the token persists before we navigate away
+  const hasToken = await page.evaluate(() => {
+    return localStorage.getItem('auth_token') !== null;
+  });
+
+  if (!hasToken) {
+    throw new Error('Auth token was not set in localStorage after registration');
+  }
+
+  console.log('[REGISTER] Auth token confirmed in localStorage');
+
   return { username: testUsername, password: testPassword, alreadyLoggedIn: false };
 }
 
