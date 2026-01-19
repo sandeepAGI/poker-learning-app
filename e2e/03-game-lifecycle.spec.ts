@@ -39,6 +39,17 @@ test.describe('Suite 3: Game Lifecycle', () => {
   });
 
   test('3.2: Create new game', async ({ page }) => {
+    // Capture all browser console messages
+    page.on('console', msg => console.log('[BROWSER]', msg.type(), msg.text()));
+
+    // Capture page errors
+    page.on('pageerror', err => console.error('[PAGE ERROR]', err.message));
+
+    // Capture failed requests
+    page.on('requestfailed', request => {
+      console.error('[REQUEST FAILED]', request.url(), request.failure()?.errorText);
+    });
+
     // Register and login
     const { username } = await registerUser(page);
 
