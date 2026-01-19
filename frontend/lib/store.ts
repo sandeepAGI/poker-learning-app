@@ -73,7 +73,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   // Create a new game (Phase 1.4: Now uses WebSocket)
   createGame: async (playerName: string, aiCount: number) => {
-    set({ loading: true, error: null });
+    set({ loading: true, error: null, connectionError: null });
     try {
       const response = await pokerApi.createGame(playerName, aiCount);
       const gameId = response.game_id;
@@ -87,6 +87,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
       // Connect to WebSocket for real-time updates
       get().connectWebSocket(gameId);
+
+      // Add timeout for WebSocket connection
+      setTimeout(() => {
+        const { gameState, connectionState } = get();
+        if (!gameState && connectionState !== ConnectionState.CONNECTED) {
+          console.error('WebSocket connection timeout');
+          set({
+            connectionError: 'Failed to connect to game server. Please try again.',
+            loading: false
+          });
+        }
+      }, 10000); // 10 second timeout
 
       // Navigation now handled by component using Next.js router
     } catch (error: any) {
@@ -243,7 +255,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       },
 
       onError: (error: string) => {
-        set({ connectionError: error }); // Issue #3: WebSocket errors are connection errors
+        set({ connectionError: error, loading: false }); // Issue #3: WebSocket errors are connection errors
       },
 
       onGameOver: () => {

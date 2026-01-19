@@ -97,7 +97,10 @@ export class PokerWebSocket {
     // Use only host (no pathname) to avoid issues with reverse proxy prefixes
     // e.g., https://example.com/api → wss://example.com/ws/{gameId}?token=xxx
     const baseUrl = `${wsProtocol}://${url.host}/ws/${this.gameId}`;
-    return token ? `${baseUrl}?token=${token}` : baseUrl;
+    const wsUrl = token ? `${baseUrl}?token=${token}` : baseUrl;
+
+    console.log(`[WebSocket] Connecting to: ${wsUrl.replace(/token=.+/, 'token=***')}`);
+    return wsUrl;
   }
 
   /**
