@@ -19,6 +19,8 @@
 | `docs/DEFER-ISSUES.md` | **Deferred technical debt tracking** (2 of 3 issues RESOLVED, 1 low-priority remains) | 2026-01-17 |
 | `docs/DEFER-ISSUES-STATUS-2026-01-17.md` | **Verification report** - Detailed code review of all deferred issues vs actual codebase | 2026-01-17 |
 | `docs/ux-review-findings-0103.md` | **UX improvement backlog** with Phase 1-4 quick wins (25% implemented, active work planned) | 2025-01-03 |
+| `docs/SPLIT-PANEL-LAYOUT-COMPLETE.md` | **Split-panel layout completion** (70/30 desktop split, responsive mobile, AI thinking panel integration) | 2026-01-19 |
+| `docs/POKER-TABLE-ELLIPTICAL-LAYOUT-PLAN.md` | **Split-panel layout plan** (replaced centered-oval with two-column design, learning-app focused) | 2026-01-19 |
 
 ## Archived Documentation
 
