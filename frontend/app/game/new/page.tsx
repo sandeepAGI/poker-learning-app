@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PokerTable } from '@/components/PokerTable';
 import { AISidebar } from '@/components/AISidebar';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { useGameStore } from '@/lib/store';
 import { isAuthenticated, getUsername } from '@/lib/auth';
 import { motion } from 'framer-motion';
@@ -12,7 +13,7 @@ import Link from 'next/link';
 export default function NewGamePage() {
   const router = useRouter();
   const username = getUsername();
-  const { gameState, createGame, loading, initializeFromStorage, showAiThinking, decisionHistory } = useGameStore();
+  const { gameState, createGame, loading, error, connectionError, initializeFromStorage, showAiThinking, decisionHistory } = useGameStore();
   const [playerName, setPlayerName] = useState(username || 'Player');
   const [aiCount, setAiCount] = useState(3);
   const [mounted, setMounted] = useState(false);
@@ -106,13 +107,28 @@ export default function NewGamePage() {
               </div>
             </div>
 
+            {(error || connectionError) && (
+              <div data-testid="game-creation-error" className="bg-red-50 border border-red-500 text-red-700 px-4 py-3 rounded-lg text-sm">
+                <p className="font-semibold">Error</p>
+                <p>{error || connectionError}</p>
+              </div>
+            )}
+
             <button
               onClick={() => createGame(playerName || username || 'Player', aiCount)}
               data-testid="start-game-button"
-              disabled={loading}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors disabled:opacity-50"
+              disabled={loading || !playerName}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Creating Game...' : 'Start Game'}
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating Game...
+                </span>
+              ) : 'Start Game'}
             </button>
           </div>
 
@@ -151,11 +167,13 @@ export default function NewGamePage() {
 
   // Show active game (PokerTable + AISidebar)
   return (
-    <div className="flex h-screen overflow-hidden">
-      <div className="flex-1 overflow-auto">
-        <PokerTable key={gameState?.hand_count || 'poker-table'} />
+    <ErrorBoundary>
+      <div className="flex h-screen overflow-hidden">
+        <div className="flex-1 overflow-auto">
+          <PokerTable key={gameState?.hand_count || 'poker-table'} />
+        </div>
+        <AISidebar isOpen={showAiThinking} decisions={decisionHistory} />
       </div>
-      <AISidebar isOpen={showAiThinking} decisions={decisionHistory} />
-    </div>
+    </ErrorBoundary>
   );
 }
