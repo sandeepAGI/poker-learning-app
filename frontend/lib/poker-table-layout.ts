@@ -95,7 +95,7 @@ export function calculateOpponentPositions(
 export function getHumanPlayerPosition(): PlayerPosition {
   return {
     left: '50%',
-    top: '82%', // Near bottom but inside container boundary
+    top: '75%', // Moved higher to keep cards inside oval boundary
     transform: 'translate(-50%, -50%)'
   };
 }

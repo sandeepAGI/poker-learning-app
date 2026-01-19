@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { PokerTable } from '../../../components/PokerTable';
-import { AISidebar } from '../../../components/AISidebar';
 import { useGameStore } from '../../../lib/store';
 import { motion } from 'framer-motion';
 
@@ -19,7 +18,7 @@ import { motion } from 'framer-motion';
 
 export default function GamePage({ params }: { params: Promise<{ gameId: string }> }) {
   const router = useRouter();
-  const { gameState, loading, error, connectionError, reconnectToGame, showAiThinking, decisionHistory } = useGameStore();
+  const { gameState, loading, error, connectionError, reconnectToGame } = useGameStore();
   const [gameId, setGameId] = useState<string>('');
 
   // Await params in Next.js 15
@@ -96,13 +95,6 @@ export default function GamePage({ params }: { params: Promise<{ gameId: string 
     );
   }
 
-  // Render the poker table with AI sidebar once reconnected
-  return (
-    <div className="flex h-screen overflow-hidden">
-      <div className="flex-1 overflow-auto">
-        <PokerTable />
-      </div>
-      <AISidebar isOpen={showAiThinking} decisions={decisionHistory} />
-    </div>
-  );
+  // Render the poker table once reconnected
+  return <PokerTable />;
 }

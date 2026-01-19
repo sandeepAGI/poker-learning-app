@@ -750,89 +750,67 @@ export function PokerTable() {
           )}
           </div>
 
-          {/* Section 2: AI Thinking (collapsible, future integration) */}
-          <AnimatePresence>
-            {showAiThinking && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="border-b border-gray-700 overflow-hidden"
-              >
-                <div className="p-3 sm:p-4 max-h-[300px] overflow-y-auto">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-white text-sm font-semibold uppercase tracking-wide">AI Thinking</h3>
-                    <button
-                      onClick={() => toggleShowAiThinking()}
-                      className="text-gray-400 hover:text-white text-xs"
-                    >
-                      ✕
-                    </button>
-                  </div>
+          {/* Section 2: AI Reasoning Stream (toggleable) */}
+          {showAiThinking && (
+            <div className="border-b border-gray-700">
+              <div className="p-3 sm:p-4 max-h-[300px] overflow-y-auto">
+                <h3 className="text-white text-sm font-semibold uppercase tracking-wide mb-3">AI Reasoning Stream</h3>
 
-                  {/* AI decisions display */}
-                  <div className="space-y-3">
-                    {(() => {
-                      const opponents = gameState.players.filter((p) => !p.is_human);
-                      const hasAnyDecisions = opponents.some(opp => gameState.last_ai_decisions[opp.player_id]);
+                {/* AI decisions display */}
+                <div className="space-y-3">
+                  {(() => {
+                    const opponents = gameState.players.filter((p) => !p.is_human);
+                    const hasAnyDecisions = opponents.some(opp => gameState.last_ai_decisions[opp.player_id]);
 
-                      if (!hasAnyDecisions) {
-                        return (
-                          <div className="text-gray-500 text-xs text-center py-6">
-                            AI decisions will appear here after opponents act.
+                    if (!hasAnyDecisions) {
+                      return (
+                        <div className="text-gray-500 text-xs text-center py-6">
+                          AI decisions will appear here after opponents act.
+                        </div>
+                      );
+                    }
+
+                    return opponents.map((opponent) => {
+                      const aiDecision = gameState.last_ai_decisions[opponent.player_id];
+                      if (!aiDecision) return null;
+
+                      return (
+                        <div key={opponent.player_id} className="bg-gray-800 rounded-lg p-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-2 h-2 rounded-full bg-blue-500" />
+                            <span className="text-white text-xs font-semibold">{opponent.name}</span>
                           </div>
-                        );
-                      }
 
-                      return opponents.map((opponent) => {
-                        const aiDecision = gameState.last_ai_decisions[opponent.player_id];
-                        if (!aiDecision) return null;
-
-                        return (
-                          <div key={opponent.player_id} className="bg-gray-800 rounded-lg p-3">
-                            <div className="flex items-center gap-2 mb-2">
-                              <div className="w-2 h-2 rounded-full bg-blue-500" />
-                              <span className="text-white text-xs font-semibold">{opponent.name}</span>
-                            </div>
-
-                            {/* Decision */}
-                            <div className="text-gray-300 text-xs mb-2">
-                              <strong>Action:</strong> {aiDecision.action}
-                              {aiDecision.amount && ` ($${aiDecision.amount})`}
-                            </div>
-
-                            {/* Reasoning (if available) */}
-                            {aiDecision.reasoning && (
-                              <div className="text-gray-400 text-xs">
-                                <strong>Reasoning:</strong> {aiDecision.reasoning}
-                              </div>
-                            )}
+                          {/* Decision */}
+                          <div className="text-gray-300 text-xs mb-2">
+                            <strong>Action:</strong> {aiDecision.action}
+                            {aiDecision.amount && ` ($${aiDecision.amount})`}
                           </div>
-                        );
-                      });
-                    })()}
-                  </div>
+
+                          {/* Reasoning (if available) */}
+                          {aiDecision.reasoning && (
+                            <div className="text-gray-400 text-xs">
+                              <strong>Reasoning:</strong> {aiDecision.reasoning}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    });
+                  })()}
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </div>
+          )}
 
           {/* Section 3: Game Controls */}
           <div className="p-3 sm:p-4 mt-auto">
-            <motion.button
+            <button
               onClick={() => toggleShowAiThinking()}
               className="w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors flex items-center justify-between"
-              whileHover={{ scale: 1.02 }}
             >
-              <span>{showAiThinking ? 'Hide' : 'Show'} AI Thinking</span>
-              <motion.span
-                animate={{ rotate: showAiThinking ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                ▼
-              </motion.span>
-            </motion.button>
+              <span>{showAiThinking ? 'Hide' : 'Show'} AI Reasoning</span>
+              <span>{showAiThinking ? '▲' : '▼'}</span>
+            </button>
           </div>
         </div>
       </div>

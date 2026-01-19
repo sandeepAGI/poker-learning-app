@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PokerTable } from '@/components/PokerTable';
-import { AISidebar } from '@/components/AISidebar';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { useGameStore } from '@/lib/store';
 import { isAuthenticated, getUsername } from '@/lib/auth';
@@ -13,7 +12,7 @@ import Link from 'next/link';
 export default function NewGamePage() {
   const router = useRouter();
   const username = getUsername();
-  const { gameState, createGame, loading, error, connectionError, initializeFromStorage, showAiThinking, decisionHistory } = useGameStore();
+  const { gameState, createGame, loading, error, connectionError, initializeFromStorage } = useGameStore();
   const [playerName, setPlayerName] = useState(username || 'Player');
   const [aiCount, setAiCount] = useState(3);
   const [mounted, setMounted] = useState(false);
@@ -241,15 +240,10 @@ export default function NewGamePage() {
     );
   }
 
-  // Show active game (PokerTable + AISidebar)
+  // Show active game (PokerTable with built-in AI Reasoning Stream)
   return (
     <ErrorBoundary>
-      <div className="flex h-screen overflow-hidden">
-        <div className="flex-1 overflow-auto">
-          <PokerTable key={gameState?.hand_count || 'poker-table'} />
-        </div>
-        <AISidebar isOpen={showAiThinking} decisions={decisionHistory} />
-      </div>
+      <PokerTable key={gameState?.hand_count || 'poker-table'} />
     </ErrorBoundary>
   );
 }
