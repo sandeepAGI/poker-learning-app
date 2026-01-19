@@ -436,8 +436,8 @@ export function PokerTable() {
       {/* Main Content - Two-column layout on desktop, vertical on mobile */}
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
 
-        {/* LEFT COLUMN: Poker Table (80% on desktop, 100% on mobile) */}
-        <div className="flex-1 md:w-[80%] flex items-center justify-center p-2 sm:p-4 relative">
+        {/* LEFT COLUMN: Poker Table (75% on desktop, 100% on mobile) */}
+        <div className="flex-1 md:w-[75%] flex items-center justify-center p-2 sm:p-4 relative">
           {/* Poker table container - FIXED ASPECT RATIO with mobile optimization */}
           <div
             data-testid="poker-table-container"
@@ -558,10 +558,10 @@ export function PokerTable() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Control Panel (20% on desktop, auto-height on mobile) */}
+        {/* RIGHT COLUMN: Control Panel (25% on desktop, auto-height on mobile) */}
         <div
           data-testid="control-panel"
-          className="w-full md:w-[20%] bg-gray-900 border-t md:border-t-0 md:border-l border-gray-700 flex flex-col overflow-y-auto"
+          className="w-full md:w-[25%] bg-gray-900 border-t md:border-t-0 md:border-l border-gray-700 flex flex-col overflow-y-auto"
         >
           {/* Pot Display - Above action buttons */}
           <div className="p-3 sm:p-4 border-b border-gray-700">

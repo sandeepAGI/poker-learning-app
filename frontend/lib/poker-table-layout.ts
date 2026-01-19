@@ -22,13 +22,14 @@ export interface PlayerPosition {
 /**
  * Default ellipse configuration for poker table
  * Centered slightly above middle (centerY: 40%) for visual balance
- * radiusX: 36% (reduced from 42% to prevent overlap with right panel)
+ * radiusX: 40% (optimized for 75/25 split - balanced horizontal distribution)
+ * radiusY: 30% (slightly increased vertical radius for better spacing)
  */
 export const DEFAULT_ELLIPSE_CONFIG: EllipseConfig = {
   centerX: 50,
   centerY: 40,
-  radiusX: 36,
-  radiusY: 28
+  radiusX: 40,
+  radiusY: 30
 };
 
 /**
