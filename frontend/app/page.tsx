@@ -19,40 +19,51 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log('[HomePage] handleSubmit called, mode:', mode);
     e.preventDefault();
     setError('');
 
     // Validate
     if (!loginUsername || !password) {
+      console.log('[HomePage] Validation failed: missing username or password');
       setError('Username and password are required');
       return;
     }
 
     if (mode === 'register') {
       if (password !== confirmPassword) {
+        console.log('[HomePage] Validation failed: passwords do not match');
         setError('Passwords do not match');
         return;
       }
       if (password.length < 6) {
+        console.log('[HomePage] Validation failed: password too short');
         setError('Password must be at least 6 characters');
         return;
       }
     }
 
     setLoading(true);
+    console.log('[HomePage] Starting authentication...');
 
     try {
       if (mode === 'login') {
+        console.log('[HomePage] Calling login()...');
         await login(loginUsername, password);
       } else {
+        console.log('[HomePage] Calling register()...');
         await register(loginUsername, password);
+        console.log('[HomePage] register() completed successfully');
       }
 
+      console.log('[HomePage] Reloading page...');
       // Force page refresh to update authentication state
       window.location.reload();
     } catch (err) {
+      console.error('[HomePage] Authentication error:', err);
       setError(err instanceof Error ? err.message : 'Authentication failed');
     } finally {
+      console.log('[HomePage] Setting loading to false');
       setLoading(false);
     }
   };
