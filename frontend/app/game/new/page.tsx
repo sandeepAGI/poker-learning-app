@@ -54,15 +54,15 @@ export default function NewGamePage() {
     initializeFromStorage();
   }, [mounted]); // Only depend on mounted, not the function
 
-  // Redirect if not authenticated
-  if (!isAuthenticated()) {
-    console.log('[NewGamePage] Rendering null: not authenticated');
+  // Prevent hydration mismatch - check mounted FIRST before accessing localStorage
+  if (!mounted) {
+    console.log('[NewGamePage] Rendering null: not mounted');
     return null;
   }
 
-  // Prevent hydration mismatch
-  if (!mounted) {
-    console.log('[NewGamePage] Rendering null: not mounted');
+  // Redirect if not authenticated (only check after mounted to ensure localStorage is available)
+  if (!isAuthenticated()) {
+    console.log('[NewGamePage] Rendering null: not authenticated');
     return null;
   }
 

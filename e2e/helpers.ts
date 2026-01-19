@@ -87,10 +87,22 @@ export async function logoutUser(page: Page) {
  * Create a new game and wait for it to load
  */
 export async function createGame(page: Page, playerName?: string, aiCount: number = 3) {
+  // Capture console messages from the browser
+  page.on('console', msg => {
+    const type = msg.type();
+    const text = msg.text();
+    console.log(`[BROWSER ${type.toUpperCase()}]`, text);
+  });
+
   // Capture any dialogs (alerts, confirms, prompts) and log them
   page.on('dialog', async dialog => {
     console.log(`[DIALOG DETECTED] Type: ${dialog.type()}, Message: ${dialog.message()}`);
     await dialog.accept(); // Auto-accept to prevent blocking
+  });
+
+  // Capture page errors
+  page.on('pageerror', error => {
+    console.log(`[PAGE ERROR]`, error.message);
   });
 
   // Navigate to new game page
