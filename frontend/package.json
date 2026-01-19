@@ -31,8 +31,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chai": "^6.2.2",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "mocha": "^11.7.5",
+    "puppeteer": "^24.35.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "undefined": "^0.1.0"
