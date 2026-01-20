@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { pokerApi } from '@/lib/api';
 import { isAuthenticated } from '@/lib/auth';
 import Link from 'next/link';
+import { LLMAnalysisContent } from '@/components/AnalysisModalLLM';
 
 interface Hand {
   hand_id: string;
@@ -23,7 +24,7 @@ export default function HandReviewPage() {
 
   const [hands, setHands] = useState<Hand[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [analysis, setAnalysis] = useState<any>(null);
+  const [analysisMap, setAnalysisMap] = useState<Record<number, any>>({});
   const [loadingAnalysis, setLoadingAnalysis] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -61,7 +62,12 @@ export default function HandReviewPage() {
       const data = await pokerApi.getHandAnalysisLLM(gameId, {
         handNumber: currentHand.hand_number
       });
-      setAnalysis(data);
+
+      // Store analysis for this specific hand
+      setAnalysisMap(prev => ({
+        ...prev,
+        [currentHand.hand_number]: data.analysis
+      }));
     } catch (err: any) {
       if (err.response?.status === 429) {
         setError('Rate limited. Please wait before requesting another analysis.');
@@ -76,12 +82,12 @@ export default function HandReviewPage() {
 
   const goToPrevious = () => {
     setCurrentIndex(Math.max(0, currentIndex - 1));
-    setAnalysis(null);
+    setError(''); // Clear any errors
   };
 
   const goToNext = () => {
     setCurrentIndex(Math.min(hands.length - 1, currentIndex + 1));
-    setAnalysis(null);
+    setError(''); // Clear any errors
   };
 
   if (loading) {
@@ -164,7 +170,11 @@ export default function HandReviewPage() {
                 disabled={loadingAnalysis}
                 className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded transition"
               >
-                {loadingAnalysis ? 'Loading...' : 'Get AI Analysis'}
+                {loadingAnalysis
+                  ? 'Loading...'
+                  : analysisMap[currentHand.hand_number]
+                    ? 'Refresh Analysis'
+                    : 'Get AI Analysis'}
               </button>
             </div>
 
@@ -190,19 +200,13 @@ export default function HandReviewPage() {
             )}
 
             {/* Analysis Display */}
-            {analysis && (
+            {analysisMap[currentHand.hand_number] && (
               <div className="bg-gray-700 rounded p-4">
                 <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-white font-semibold">AI Analysis</h3>
-                  <div className="text-sm text-gray-400">
-                    Model: {analysis.model_used} | Cost: ${analysis.cost.toFixed(3)}
-                    {analysis.cached && <span className="ml-2">(Cached)</span>}
-                  </div>
+                  <h3 className="text-white font-semibold">🎓 AI Analysis</h3>
                 </div>
-                <div className="text-gray-200 text-sm">
-                  <pre className="whitespace-pre-wrap font-sans">
-                    {JSON.stringify(analysis.analysis, null, 2)}
-                  </pre>
+                <div className="text-gray-200">
+                  <LLMAnalysisContent analysis={analysisMap[currentHand.hand_number]} />
                 </div>
               </div>
             )}

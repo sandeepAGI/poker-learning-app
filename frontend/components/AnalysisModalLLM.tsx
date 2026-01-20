@@ -176,8 +176,8 @@ export function AnalysisModalLLM({ isOpen, onClose, gameId, ruleBasedAnalysis }:
   );
 }
 
-// LLM Analysis Content Renderer
-function LLMAnalysisContent({ analysis }: { analysis: any }) {
+// LLM Analysis Content Renderer (exported for reuse in history page)
+export function LLMAnalysisContent({ analysis }: { analysis: any }) {
   return (
     <div className="space-y-6">
       {/* Summary */}
