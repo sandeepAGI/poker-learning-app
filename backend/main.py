@@ -763,11 +763,15 @@ def get_hand_analysis(game_id: str, hand_number: Optional[int] = None):
 async def get_llm_hand_analysis(
     game_id: str,
     hand_number: Optional[int] = None,
-    use_cache: bool = True
+    use_cache: bool = True,
+    user_id: str = Depends(verify_token),
+    db: Session = Depends(get_db)
 ):
     """
     Get LLM-powered hand analysis using Claude AI (Haiku 4.5 only).
     Phase 4: LLM-Powered Hand Analysis (Quick Analysis)
+
+    Supports both active games (in-memory) and completed games (from database).
 
     Args:
         game_id: Game ID
@@ -790,12 +794,22 @@ async def get_llm_hand_analysis(
             detail="LLM analysis not available. Set ANTHROPIC_API_KEY environment variable."
         )
 
-    # Check game exists
-    if game_id not in games:
-        raise HTTPException(status_code=404, detail="Game not found")
+    # Check if game is in active games (in-memory)
+    game = None
+    is_active_game = game_id in games
 
-    game, _ = games[game_id]
-    games[game_id] = (game, time.time())  # Update access time
+    if is_active_game:
+        game, _ = games[game_id]
+        games[game_id] = (game, time.time())  # Update access time
+    else:
+        # Query database for completed game
+        game_record = db.query(Game).filter(
+            Game.game_id == game_id,
+            Game.user_id == user_id
+        ).first()
+
+        if not game_record:
+            raise HTTPException(status_code=404, detail="Game not found")
 
     # Rate limiting: 1 analysis per 30 seconds per game
     now = time.time()
@@ -807,17 +821,53 @@ async def get_llm_hand_analysis(
             detail=f"Rate limit: Wait {wait_time}s before next analysis"
         )
 
-    # Get target hand
-    if hand_number is not None and hasattr(game, 'hand_history'):
-        target_hand = next(
-            (h for h in game.hand_history if h.hand_number == hand_number),
-            None
-        )
-    else:
-        target_hand = game.last_hand_summary
+    # Get target hand and hand history
+    if is_active_game:
+        # Active game: use in-memory data
+        if hand_number is not None and hasattr(game, 'hand_history'):
+            target_hand = next(
+                (h for h in game.hand_history if h.hand_number == hand_number),
+                None
+            )
+        else:
+            target_hand = game.last_hand_summary
 
-    if not target_hand:
-        raise HTTPException(status_code=404, detail="No hand to analyze")
+        if not target_hand:
+            raise HTTPException(status_code=404, detail="No hand to analyze")
+
+        hand_history = game.hand_history if hasattr(game, 'hand_history') else []
+        analysis_count = getattr(game, 'analysis_count', 0)
+        game.analysis_count = analysis_count + 1
+    else:
+        # Completed game: reconstruct from database
+        from game.poker_engine import CompletedHand
+
+        # Get the specific hand or latest hand
+        if hand_number is not None:
+            hand_record = db.query(Hand).filter(
+                Hand.game_id == game_id,
+                Hand.hand_number == hand_number
+            ).first()
+        else:
+            # Get latest hand
+            hand_record = db.query(Hand).filter(
+                Hand.game_id == game_id
+            ).order_by(Hand.hand_number.desc()).first()
+
+        if not hand_record:
+            raise HTTPException(status_code=404, detail="No hand to analyze")
+
+        # Reconstruct CompletedHand from database JSONB
+        hand_data = hand_record.hand_data
+        target_hand = CompletedHand(**hand_data)
+
+        # Get all hands for context (hand history)
+        all_hands = db.query(Hand).filter(
+            Hand.game_id == game_id
+        ).order_by(Hand.hand_number).all()
+
+        hand_history = [CompletedHand(**h.hand_data) for h in all_hands]
+        analysis_count = 0  # No persistent analysis count for completed games
 
     # Check cache (always use "quick" for single hands)
     cache_key = f"{game_id}_hand_{target_hand.hand_number}_quick"
@@ -828,13 +878,7 @@ async def get_llm_hand_analysis(
             "cached": True
         }
 
-    # Get analysis count for context management
-    analysis_count = getattr(game, 'analysis_count', 0)
-    game.analysis_count = analysis_count + 1
-
     try:
-        # Get hand history
-        hand_history = game.hand_history if hasattr(game, 'hand_history') else []
 
         # Call LLM analyzer (always use "quick" for single hands)
         analysis = llm_analyzer.analyze_hand(

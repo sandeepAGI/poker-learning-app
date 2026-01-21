@@ -82,6 +82,7 @@ export function PokerTable() {
   const [sessionAnalysisDepth, setSessionAnalysisDepth] = useState<'quick' | 'deep'>('quick');
   const [sessionHandsAnalyzed, setSessionHandsAnalyzed] = useState<number>(0);
   const [showQuitConfirmation, setShowQuitConfirmation] = useState(false);
+  const [isQuittingAfterAnalysis, setIsQuittingAfterAnalysis] = useState(false);
 
   // FIX-06: Click-to-focus for ALL elements (learning app - simple & intuitive)
   const [focusedElement, setFocusedElement] = useState<string | null>(null);
@@ -222,6 +223,7 @@ export function PokerTable() {
 
   const handleQuitWithAnalysis = async () => {
     setShowQuitConfirmation(false);
+    setIsQuittingAfterAnalysis(true);
     await handleSessionAnalysisClick('quick');
     // Don't quit yet - let user review analysis first
   };
@@ -848,7 +850,13 @@ export function PokerTable() {
         analysis={sessionAnalysis}
         isLoading={sessionAnalysisLoading}
         error={sessionAnalysisError}
-        onClose={() => setShowSessionAnalysisModal(false)}
+        onClose={() => {
+          setShowSessionAnalysisModal(false);
+          if (isQuittingAfterAnalysis) {
+            setIsQuittingAfterAnalysis(false);
+            handleQuit(); // Navigate to home page
+          }
+        }}
         onAnalyze={handleSessionAnalysisClick}
         currentDepth={sessionAnalysisDepth}
         handsAnalyzed={sessionHandsAnalyzed}
