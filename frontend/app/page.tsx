@@ -144,7 +144,10 @@ export default function HomePage() {
             )}
 
             {error && (
-              <div data-testid="error-message" className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-2 rounded text-sm">
+              <div
+                data-testid="error-message"
+                className="bg-red-900 border border-red-500 text-red-200 px-4 py-2 rounded text-sm"
+              >
                 {error}
               </div>
             )}
