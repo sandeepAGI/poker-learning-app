@@ -191,6 +191,15 @@
 
 ### Key Differences
 
+#### Post-Implementation Findings (Jan 2026)
+
+- Even after the split-panel refactor, the felt container is still capped at `maxWidth: min(100%, 90vh * 1.6)` and `maxHeight: 75vh` (see `frontend/components/PokerTable.tsx` `style` block). We added this clamp during early testing to avoid overlapping the control panel, but it leaves large bands of unused space on wide monitors and makes the table feel undersized. A new responsive sizing strategy (see Phase 6 in the plan) is required.
+- Opponent seats still use the original 180°/220° arc logic. Our first attempts to fan seats further around the ellipse caused collisions with the right-hand panel because we had no guardrails for the x-radius. Instead of reverting to full hardcoding again, we will extend `calculateOpponentPositions()` to reserve a small safety margin near the control panel while still filling the lower quadrants.
+- The hero highlight currently floods the player card stack with `bg-yellow-100`. We tried inlining Tailwind utility classes to get a quick "active" state, but it clashes with the darker felt palette. The next iteration will replace this with a ring/glow layer so the table keeps a calm tone.
+- The action/AI panel mixes orange, neon green, red, blue, and teal buttons on top of `bg-gray-900`. That palette came from the first split-panel sketch just to prove the feature fit; the docs never described the final art direction, so the implementation never converged. The new UX plan (below) aligns colors with the felt.
+- The raise slider still lives inside a collapsible panel. During implementation we hid it in order to keep parity with the earlier single-panel layout. That decision makes the slider discoverability poor. We will expose it inline and cover it with Playwright regression tests.
+- Playwright runs keep logging React hydration error #418 on `/game/[id]`. This was ignored during the sprint because functionality worked, but the warning survives in every e2e run. We need to reproduce it locally and add a regression that fails when console errors appear.
+
 #### 1. Container Structure (New)
 ```tsx
 // Outer flex container for centering

@@ -957,6 +957,34 @@ docs/POKER-TABLE-ELLIPTICAL-LAYOUT-PLAN.md      Replaced (this document)
 
 ---
 
+### Phase 6: Responsive Polish & Verification *(Added Jan 2026)*
+**Duration:** 1–2 days (UX + QA)
+
+**Why now?** Early split-panel iterations clamped the felt size and used only the upper half of the ellipse to avoid colliding with the new control panel. That shipped the feature, but we now see the table looking undersized, opponents stuck near the top edge, neon hero highlights, and a raise slider hidden behind a collapsible panel. Playwright logs also keep reporting React hydration error #418 every time `/game/[gameId]` renders. This phase documents the cleanup plus the test matrix to prevent regressions.
+
+**Tasks**
+1. **Responsive felt sizing** – Replace the `maxWidth: min(100%, 90vh * 1.6)` / `maxHeight: 75vh` clamp with CSS `clamp()` logic tied to the actual left-column width (`width: clamp(640px, calc(100vw - panelWidth - 4rem), 1200px)` and `height: calc(width / 1.6)` with a fallback `max-height: 85vh`). Verify the felt stays centered at 1280×720, 1440×900, 1920×1080, and 2560×1440.
+2. **Full-ellipse seat distribution** – Extend `calculateOpponentPositions()` so 4-player tables span ~240° and 6-player tables span ~280° while reserving a 10% horizontal margin next to the control panel. Update the Jest layout tests accordingly.
+3. **Palette & hero highlight cleanup** – Swap the `bg-yellow-100` hero fill for a subtle ring/glow, harmonize the control-panel palette (single accent hue, lighter background), and expose the raise slider inline under the action buttons instead of hiding it behind a dropdown.
+4. **Hydration warning fix** – Reproduce the React 418 console error locally, audit the `/game/[gameId]` markup (especially conditional rendering around `gameState`), and eliminate the mismatch so Playwright no longer logs console errors.
+
+**Testing Plan (Playwright additions)**
+- Add `e2e/06-layout-ux.spec.ts` that runs twice: once with 3 AI opponents (4-player table) and once with 5 AI opponents (6-player table). Each scenario should:
+  1. Register a user, start a game, and wait for `[data-testid="poker-table-container"]`.
+  2. Measure opponent seat bounding boxes and assert at least one lies in each quadrant and that no seat’s top coordinate sits above 30% of the ellipse (prevents top-heavy layouts).
+  3. Compare the felt width to the left-column width (±5%) and ensure the control panel consumes 22–28% of the viewport width on desktop.
+  4. Assert the raise slider (`[data-testid="raise-slider"]`) is visible without toggles and that the confirm button text reflects the slider value.
+  5. Listen for `page.on('console')` and fail if any console `error` occurs (catches the hydration warning).
+- Update `03-game-lifecycle.spec.ts` to explicitly run both 4-player and 6-player scenarios so the main flow continues to cover both layouts.
+- Keep exporting screenshots for 1280×720, 1440×900, 1920×1080, and 2560×1440 as UX artifacts.
+
+**Exit Criteria**
+- UX review signs off on new screenshots for both table sizes at all target resolutions.
+- The new Playwright suite and existing e2e suites pass with zero console errors.
+- Layout unit tests reflect the revised ellipse math and safety margins.
+
+---
+
 ## Next Steps
 
 1. **Commit this plan:** `git add docs/ && git commit -m "docs: replace elliptical plan with split-panel layout"`
