@@ -71,6 +71,9 @@ yarn-error.log*
 *.tgz
 *.tar.gz
 
+# SWC compiler cache
+.swc/
+
 # Temporary files
 *.tmp
 *.temp
