@@ -21,14 +21,26 @@ Commit: `e2b4832d` -- 4,918 lines deleted, 41/41 pre-commit tests pass.
 | `frontend/.pytest_cache/` | Cache dir | Removed (local) |
 | `frontend/.swc/` | SWC compiler cache | Removed (local), added to .gitignore |
 
-### Phase 2: Increase Test Coverage on poker_engine.py
+### Phase 2: Increase Test Coverage on poker_engine.py -- COMPLETE (2026-03-07)
 
-Add targeted boundary tests for:
-- AIStrategy decision logic (per personality)
-- HandEvaluator edge cases
-- DeckManager deal/reset
+Commit: `07823424` -- 62 new boundary tests, 28 redundant tests removed, 9 fixed, 1 bug fix.
 
-Goal: safe extraction in Phase 3, not 100% coverage.
+**New tests** (`test_extraction_boundaries.py`, 62 tests):
+- DeckManager: reset (5), deal_cards (8)
+- HandEvaluator: Monte Carlo eval (5), side pot edges (6)
+- AIStrategy: amount capping (12), default fallback (3), last_raise (2), SPR (4), decision fields (5)
+- Engine edge cases: call-as-check, showdown rejection, invalid actions (12)
+
+**Broken test cleanup** (net -19 tests):
+- Deleted `test_user_scenarios.py` (12 redundant)
+- Deleted 16 redundant WebSocket/REST tests across 3 files
+- Fixed auth in 9 unique WebSocket tests (JWT tokens)
+- Added shared auth helpers to `conftest.py`
+- Added `slow`/`monthly` marker filtering to `pytest.ini`
+
+**Bug fix**: `create_game` now saves completed hands when AI finishes hand during `start_new_hand` (heads-up AI fold edge case).
+
+**Result**: 421 passed, 0 failed (was 377 passed, 1 failed, 43 broken + 5 timeout)
 
 ### Phase 3: Extract Modules from poker_engine.py (2002 lines)
 
