@@ -65,7 +65,7 @@ async def test_hand_count_parameter_slices_history(game_with_history):
     analysis_cache.clear()
 
     # Mock the LLM analyzer to track what it receives
-    with patch('routes.analysis.llm_analyzer') as mock_analyzer:
+    with patch('app_state.llm_analyzer') as mock_analyzer:
         # Configure mock to return success
         mock_analyzer.analyze_session.return_value = {
             "session_summary": "Test summary",
@@ -74,7 +74,7 @@ async def test_hand_count_parameter_slices_history(game_with_history):
         }
 
         # Mock LLM_ENABLED
-        with patch('routes.analysis.LLM_ENABLED', True):
+        with patch('app_state.LLM_ENABLED', True):
             # Call endpoint directly
             result = await get_session_analysis(
                 game_id=game_id,
@@ -125,8 +125,8 @@ async def test_rate_limiting_enforced_regardless_of_cache_flag(game_with_history
     last_analysis_time.clear()
 
     # Mock the LLM analyzer to avoid actual API calls
-    with patch('routes.analysis.llm_analyzer') as mock_analyzer, \
-         patch('routes.analysis.LLM_ENABLED', True):
+    with patch('app_state.llm_analyzer') as mock_analyzer, \
+         patch('app_state.LLM_ENABLED', True):
         mock_analyzer.analyze_session.return_value = {
             "session_summary": "Test summary",
             "hands_analyzed": 10,
@@ -181,8 +181,8 @@ async def test_hands_analyzed_count_matches_actual_sliced_history(game_with_hist
     analysis_cache.clear()
 
     # Mock analyzer and track actual call
-    with patch('routes.analysis.llm_analyzer') as mock_analyzer, \
-         patch('routes.analysis.LLM_ENABLED', True):
+    with patch('app_state.llm_analyzer') as mock_analyzer, \
+         patch('app_state.LLM_ENABLED', True):
         # Track the hand_history length that was passed
         actual_history_length = None
 

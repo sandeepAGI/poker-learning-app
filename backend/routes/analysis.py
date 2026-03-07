@@ -11,9 +11,10 @@ from game.poker_engine import CompletedHand, GameState
 from auth import verify_token
 from models import Game, Hand
 from database import get_db
+import app_state
 from app_state import (
     games, analysis_cache, analysis_metrics, last_analysis_time,
-    llm_analyzer, LLM_ENABLED, track_analysis_metrics,
+    track_analysis_metrics,
 )
 
 router = APIRouter(tags=["analysis"])
@@ -98,7 +99,7 @@ async def get_llm_hand_analysis(
         }
     """
     # Check if LLM is enabled
-    if not LLM_ENABLED:
+    if not app_state.LLM_ENABLED:
         raise HTTPException(
             status_code=503,
             detail="LLM analysis not available. Set ANTHROPIC_API_KEY environment variable."
@@ -189,7 +190,7 @@ async def get_llm_hand_analysis(
     try:
 
         # Call LLM analyzer (always use "quick" for single hands)
-        analysis = llm_analyzer.analyze_hand(
+        analysis = app_state.llm_analyzer.analyze_hand(
             completed_hand=target_hand,
             hand_history=hand_history,
             analysis_count=analysis_count,
@@ -270,7 +271,7 @@ async def get_session_analysis(
         }
     """
     # Check if LLM is enabled
-    if not LLM_ENABLED:
+    if not app_state.LLM_ENABLED:
         raise HTTPException(
             status_code=503,
             detail="LLM analysis not available. Set ANTHROPIC_API_KEY environment variable."
@@ -326,7 +327,7 @@ async def get_session_analysis(
         ending_stack = human_player.stack
 
         # Call LLM analyzer with SLICED history (not full history)
-        analysis = llm_analyzer.analyze_session(
+        analysis = app_state.llm_analyzer.analyze_session(
             hand_history=sliced_history,
             starting_stack=starting_stack,
             ending_stack=ending_stack,
