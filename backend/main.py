@@ -275,7 +275,7 @@ def create_game(
     # MVP: Use process_ai=True for REST API flow (WebSocket support comes later)
     game.start_new_hand(process_ai=True)
 
-    # Save game to database
+    # Save game to database (must happen before save_completed_hand for FK)
     db_game = Game(
         game_id=game_id,
         user_id=user_id,
@@ -288,6 +288,10 @@ def create_game(
 
     # Store in memory with timestamp
     games[game_id] = (game, time.time())
+
+    # If hand completed during start_new_hand (e.g., heads-up AI fold), save it
+    if game.last_hand_summary:
+        save_completed_hand(game_id, game.last_hand_summary, user_id, db)
 
     return {"game_id": game_id}
 

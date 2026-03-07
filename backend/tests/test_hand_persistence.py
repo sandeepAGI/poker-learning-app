@@ -1,7 +1,9 @@
 """Test hand persistence to database."""
 import pytest
+import uuid
 from fastapi.testclient import TestClient
 from main import app
+from game.poker_engine import GameState
 from database import get_db
 from models import Base, User, Game, Hand
 from sqlalchemy import create_engine
@@ -27,8 +29,9 @@ def auth_client():
     app.dependency_overrides[get_db] = override_get_db
     client = TestClient(app)
 
-    # Register and login
-    response = client.post("/auth/register", json={"username": "testuser", "password": "test123"})
+    # Register and login with unique username to avoid collisions
+    username = f"testuser_{uuid.uuid4().hex[:8]}"
+    response = client.post("/auth/register", json={"username": username, "password": "test123"})
     token = response.json()["token"]
     client.headers = {"Authorization": f"Bearer {token}"}
 
@@ -44,12 +47,16 @@ class TestHandPersistence:
         """When hand completes, should save to database."""
         client, SessionLocal = auth_client
 
-        # Create game
         game_response = client.post("/games", json={"player_name": "Test", "ai_count": 1})
         game_id = game_response.json()["game_id"]
 
         # Play hand to completion (fold to finish)
-        client.post(f"/games/{game_id}/actions", json={"action": "fold"})
+        # In heads-up, the AI may fold during game creation (completing the hand).
+        # In that case, the hand is saved by create_game and we skip the fold.
+        from main import games as games_dict  # noqa: E402
+        game_obj, _ = games_dict[game_id]
+        if game_obj.current_state != GameState.SHOWDOWN:
+            client.post(f"/games/{game_id}/actions", json={"action": "fold"})
 
         # Check database has hand record
         db = SessionLocal()

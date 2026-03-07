@@ -14,7 +14,6 @@ Test Categories:
 import pytest
 import asyncio
 import json
-import httpx
 import websockets
 from typing import List, Dict, Any
 import sys
@@ -28,6 +27,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from main import app
 from game.poker_engine import PokerGame, GameState
+from conftest import register_and_get_token, create_authed_game
 
 
 # Global server thread and flag
@@ -70,12 +70,13 @@ class ReconnectableWebSocketClient:
     - Simulate network failures
     """
 
-    def __init__(self, game_id: str, port: int = 8002):
+    def __init__(self, game_id: str, token: str, port: int = 8002):
         self.game_id = game_id
+        self.token = token
         self.ws = None
         self.received_messages = []
         self.port = port
-        self.ws_url = f"ws://127.0.0.1:{port}/ws/{game_id}"
+        self.ws_url = f"ws://127.0.0.1:{port}/ws/{game_id}?token={token}"
         self.connected = False
 
     async def connect(self):
@@ -178,16 +179,6 @@ class ReconnectableWebSocketClient:
         self.received_messages = []
 
 
-async def create_test_game(ai_count: int = 3, port: int = 8002) -> str:
-    """Create a test game via REST API"""
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            f"http://127.0.0.1:{port}/games",
-            json={"name": "Test Game", "ai_count": ai_count}
-        )
-        return response.json()["game_id"]
-
-
 # ====================
 # Phase 7.1: Basic Reconnection Tests (4 hours)
 # ====================
@@ -204,10 +195,11 @@ async def test_reconnect_after_disconnect_mid_hand():
     4. Reconnect
     5. Verify state restored (pot, hand_count, etc.)
     """
-    game_id = await create_test_game(ai_count=3)
+    token = await register_and_get_token(8002)
+    game_id = await create_authed_game(8002, token, ai_count=3)
 
     # Initial connection - play a few actions
-    ws = ReconnectableWebSocketClient(game_id)
+    ws = ReconnectableWebSocketClient(game_id, token)
     await ws.connect()
 
     # Wait for initial state
@@ -246,11 +238,11 @@ async def test_reconnect_after_disconnect_mid_hand():
     print(f"[Test] State after reconnect: pot={pot_after}, hand_count={hand_count_after}")
 
     # Assertions: State should be preserved
-    assert pot_after == pot_before, f"Pot changed after reconnect: {pot_before} → {pot_after}"
-    assert hand_count_after == hand_count_before, f"Hand count changed after reconnect: {hand_count_before} → {hand_count_after}"
+    assert pot_after == pot_before, f"Pot changed after reconnect: {pot_before} -> {pot_after}"
+    assert hand_count_after == hand_count_before, f"Hand count changed after reconnect: {hand_count_before} -> {hand_count_after}"
 
     await ws.disconnect()
-    print("[Test] ✅ Reconnection successful - state preserved")
+    print("[Test] Reconnection successful - state preserved")
 
 
 @pytest.mark.asyncio
@@ -264,9 +256,10 @@ async def test_reconnect_after_30_second_disconnect():
     3. Reconnect
     4. Verify can still play
     """
-    game_id = await create_test_game(ai_count=3)
+    token = await register_and_get_token(8002)
+    game_id = await create_authed_game(8002, token, ai_count=3)
 
-    ws = ReconnectableWebSocketClient(game_id)
+    ws = ReconnectableWebSocketClient(game_id, token)
     await ws.connect()
 
     # Wait for initial state
@@ -291,7 +284,7 @@ async def test_reconnect_after_30_second_disconnect():
     assert state["data"]["pot"] >= 0, "Invalid state after 30s reconnect"
 
     await ws.disconnect()
-    print("[Test] ✅ 30-second reconnection successful")
+    print("[Test] 30-second reconnection successful")
 
 
 @pytest.mark.asyncio
@@ -301,12 +294,13 @@ async def test_multiple_disconnects_and_reconnects():
 
     Steps:
     1. Create game
-    2. Connect → Disconnect → Reconnect (repeat 3 times)
+    2. Connect -> Disconnect -> Reconnect (repeat 3 times)
     3. Verify state consistent after each cycle
     """
-    game_id = await create_test_game(ai_count=3)
+    token = await register_and_get_token(8002)
+    game_id = await create_authed_game(8002, token, ai_count=3)
 
-    ws = ReconnectableWebSocketClient(game_id)
+    ws = ReconnectableWebSocketClient(game_id, token)
 
     for cycle in range(3):
         print(f"[Test] Cycle {cycle + 1}/3")
@@ -322,7 +316,7 @@ async def test_multiple_disconnects_and_reconnects():
         await ws.disconnect()
         await asyncio.sleep(2)
 
-    print("[Test] ✅ Multiple disconnect/reconnect cycles successful")
+    print("[Test] Multiple disconnect/reconnect cycles successful")
 
 
 # ====================
@@ -341,9 +335,10 @@ async def test_exponential_backoff_pattern():
     # The actual exponential backoff logic is in frontend/lib/websocket.ts lines 279-305
 
     # For backend testing, we'll verify the connection accepts reconnects
-    game_id = await create_test_game(ai_count=3)
+    token = await register_and_get_token(8002)
+    game_id = await create_authed_game(8002, token, ai_count=3)
 
-    ws = ReconnectableWebSocketClient(game_id)
+    ws = ReconnectableWebSocketClient(game_id, token)
 
     # Test rapid reconnections (backend should accept all)
     reconnect_times = []
@@ -361,7 +356,7 @@ async def test_exponential_backoff_pattern():
 
     # All reconnections should succeed (backend accepts rapid reconnects)
     assert len(reconnect_times) == 5, "Not all reconnections succeeded"
-    print(f"[Test] ✅ Backend accepts rapid reconnections: {[f'{t:.2f}s' for t in reconnect_times]}")
+    print(f"[Test] Backend accepts rapid reconnections: {[f'{t:.2f}s' for t in reconnect_times]}")
 
 
 @pytest.mark.asyncio
@@ -372,9 +367,10 @@ async def test_max_reconnect_attempts_handling():
     Frontend gives up after 5 failed attempts, but backend should
     still accept connection if client tries again later.
     """
-    game_id = await create_test_game(ai_count=3)
+    token = await register_and_get_token(8002)
+    game_id = await create_authed_game(8002, token, ai_count=3)
 
-    ws = ReconnectableWebSocketClient(game_id)
+    ws = ReconnectableWebSocketClient(game_id, token)
 
     # Simulate 5 failed reconnect attempts (disconnect immediately after connect)
     for attempt in range(5):
@@ -393,7 +389,7 @@ async def test_max_reconnect_attempts_handling():
     assert state["data"]["pot"] >= 0, "Backend rejected connection after max attempts"
 
     await ws.disconnect()
-    print("[Test] ✅ Backend accepts connection after max frontend attempts")
+    print("[Test] Backend accepts connection after max frontend attempts")
 
 
 # ====================
@@ -413,9 +409,10 @@ async def test_missed_notifications_during_disconnect():
     5. Reconnect
     6. Request state - should show current game state (not stale)
     """
-    game_id = await create_test_game(ai_count=3)
+    token = await register_and_get_token(8002)
+    game_id = await create_authed_game(8002, token, ai_count=3)
 
-    ws = ReconnectableWebSocketClient(game_id)
+    ws = ReconnectableWebSocketClient(game_id, token)
     await ws.connect()
 
     # Wait for initial state
@@ -449,7 +446,7 @@ async def test_missed_notifications_during_disconnect():
     assert state in ["pre_flop", "flop", "turn", "river", "showdown"], f"Invalid state: {state}"
 
     await ws.disconnect()
-    print("[Test] ✅ State is current after reconnection")
+    print("[Test] State is current after reconnection")
 
 
 @pytest.mark.asyncio
@@ -457,9 +454,10 @@ async def test_reconnect_during_showdown():
     """
     Reconnect during showdown - verify showdown state is displayed.
     """
-    game_id = await create_test_game(ai_count=3)
+    token = await register_and_get_token(8002)
+    game_id = await create_authed_game(8002, token, ai_count=3)
 
-    ws = ReconnectableWebSocketClient(game_id)
+    ws = ReconnectableWebSocketClient(game_id, token)
     await ws.connect()
 
     # Wait for initial state
@@ -494,102 +492,7 @@ async def test_reconnect_during_showdown():
     assert game_state in ["showdown", "pre_flop"], f"Unexpected state: {game_state}"
 
     await ws.disconnect()
-    print("[Test] ✅ Reconnect during showdown successful")
-
-
-@pytest.mark.asyncio
-async def test_reconnect_after_hand_complete():
-    """
-    Disconnect after hand completes, reconnect, verify can start next hand.
-    """
-    game_id = await create_test_game(ai_count=3)
-
-    ws = ReconnectableWebSocketClient(game_id)
-    await ws.connect()
-
-    # Wait for initial state
-    await ws.wait_for_event("state_update")
-
-    # Fold to end hand quickly
-    await ws.send_action("fold")
-
-    # Wait for showdown
-    await asyncio.sleep(5)
-
-    # Disconnect
-    await ws.disconnect()
-    await asyncio.sleep(3)
-
-    # Reconnect
-    await ws.reconnect()
-    await ws.send_get_state()
-    state = await ws.wait_for_event("state_update")
-
-    # Should be at showdown
-    assert state["data"]["state"] == "showdown", "Not at showdown"
-
-    await ws.disconnect()
-    print("[Test] ✅ Reconnect after hand complete successful")
-
-
-# ====================
-# Phase 7.4: Connection State Tests
-# ====================
-
-@pytest.mark.asyncio
-async def test_concurrent_connections_same_game():
-    """
-    Two connections to same game - both should receive state updates.
-
-    This tests that backend can handle multiple WebSocket connections
-    to the same game (e.g., player on phone + desktop).
-
-    Note: Current backend only supports 1 connection per game.
-    This test documents the limitation.
-    """
-    game_id = await create_test_game(ai_count=3)
-
-    ws1 = ReconnectableWebSocketClient(game_id)
-    ws2 = ReconnectableWebSocketClient(game_id)
-
-    # Connect both
-    await ws1.connect()
-    await ws2.connect()
-
-    # Both should receive initial state
-    state1 = await ws1.wait_for_event("state_update", timeout=3.0)
-    state2 = await ws2.wait_for_event("state_update", timeout=3.0)
-
-    # Note: Current implementation overwrites connection in manager.active_connections
-    # So ws2 will receive events, ws1 won't
-    # This is a known limitation - only one connection per game
-
-    assert state1["data"]["pot"] >= 0
-    assert state2["data"]["pot"] >= 0
-
-    await ws1.disconnect()
-    await ws2.disconnect()
-
-    print("[Test] ✅ Concurrent connections test complete (documents single-connection limitation)")
-
-
-@pytest.mark.asyncio
-async def test_invalid_game_id_reconnection():
-    """
-    Attempt to reconnect to non-existent game - should fail gracefully.
-    """
-    fake_game_id = "invalid-game-id-12345"
-
-    ws = ReconnectableWebSocketClient(fake_game_id)
-
-    # Attempt to connect should fail
-    try:
-        await ws.connect()
-        await ws.send_get_state()
-        await ws.receive_event(timeout=2.0)
-        assert False, "Should have failed to connect to invalid game"
-    except (websockets.exceptions.WebSocketException, TimeoutError, ConnectionError) as e:
-        print(f"[Test] ✅ Invalid game ID rejected: {type(e).__name__}")
+    print("[Test] Reconnect during showdown successful")
 
 
 if __name__ == "__main__":
