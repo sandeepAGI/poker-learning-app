@@ -6,20 +6,20 @@
 
 ## Phases
 
-### Phase 1: Safe Deletions (zero risk)
+### Phase 1: Safe Deletions (zero risk) -- COMPLETE (2026-03-07)
 
-| Target | Reason |
-|--------|--------|
-| `frontend/frontend/` | Empty nested dirs from bad deploy/copy |
-| `frontend-latest-logs/` | Azure deploy logs (1MB, not source) |
-| `backend/test_api_key.py` | One-off script, not part of test suite |
-| `tests/e2e/` | Duplicate of `./e2e/` |
-| `.claude/worktrees/angry-stonebraker/` | Stale worktree |
-| `backend/venv/` | Virtual env committed to git |
-| `frontend/.pytest_cache/` | Cache dir |
-| `frontend/.swc/` | SWC compiler cache |
+Commit: `e2b4832d` -- 4,918 lines deleted, 41/41 pre-commit tests pass.
 
-Add to `.gitignore`: `backend/venv/`, `frontend-latest-logs/`, `.pytest_cache/`, `.swc/`
+| Target | Reason | Status |
+|--------|--------|--------|
+| `frontend/frontend/` | Empty nested dirs from bad deploy/copy | Removed (local) |
+| `frontend-latest-logs/` | Azure deploy logs (1MB, not source) | Removed (local) |
+| `backend/test_api_key.py` | One-off script, not part of test suite | git rm |
+| `tests/e2e/` | Duplicate of `./e2e/` | git rm (52 files) |
+| `.claude/worktrees/angry-stonebraker/` | Stale worktree | Removed (local) |
+| `backend/venv/` | Virtual env committed to git | Already gitignored, not tracked |
+| `frontend/.pytest_cache/` | Cache dir | Removed (local) |
+| `frontend/.swc/` | SWC compiler cache | Removed (local), added to .gitignore |
 
 ### Phase 2: Increase Test Coverage on poker_engine.py
 
