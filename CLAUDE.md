@@ -11,8 +11,20 @@ Human vs AI poker training. Players face opponents with distinct styles (rule-ba
 
 - `backend/game/poker_engine.py` — core game logic + AI strategy classes
 - `backend/main.py` — REST + WebSocket endpoints
+- `backend/auth.py` — JWT authentication
+- `backend/database.py` — SQLAlchemy DB session
+- `backend/models.py` — ORM models (User, Game, Hand, AnalysisCache)
+- `backend/llm_analyzer.py` — LLM coaching integration (Anthropic SDK)
+- `backend/websocket_manager.py` — WebSocket connection management
 - `frontend/components/PokerTable.tsx` — main game UI
+- `frontend/components/AISidebar.tsx` — AI coaching sidebar (split-panel right)
 - `frontend/lib/store.ts` — Zustand state; `websocket.ts` — real-time client
+- `frontend/lib/api.ts` — REST API client
+- `backend/alembic/` — DB migrations (run `alembic upgrade head` after schema changes)
+
+## Architecture
+
+See `docs/gameplay-flow.md` for end-to-end gameplay trace (game creation → WebSocket → AI turns → showdown → coaching).
 
 ## Commands
 
@@ -21,7 +33,18 @@ cd backend && python main.py              # API :8000
 cd frontend && npm run dev                # UI :3000
 PYTHONPATH=backend pytest backend/tests/ -v   # tests (run before commits)
 cd frontend && npm run build              # verify build
+cd frontend && npm run test               # frontend Jest unit tests
+npm run test:e2e                          # Playwright E2E (both servers must be running)
+npm run test:e2e:ui                       # E2E with interactive UI
 ```
+
+## Environment Setup
+
+```bash
+alembic -c backend/alembic.ini upgrade head   # initialize DB
+```
+
+LLM coaching requires `ANTHROPIC_API_KEY` in `backend/.env` (already configured). Game works without it — coaching is just disabled.
 
 ## Workflows
 
@@ -50,58 +73,12 @@ chmod +x .git/hooks/pre-commit
 git commit --no-verify -m "message"
 ```
 
-## Test Infrastructure Changes
+## Test Infrastructure
 
-### Before Committing Test Changes
-
-1. **Run affected tests locally** (100% pass rate required)
-2. **Check platform assumptions** (macOS vs Linux rendering differences)
-3. **Validate configuration** (jest.config.ts, pytest.ini work locally)
-4. **Update test count** in docs/TEST-SUITE-REFERENCE.md
-
-### CI Workflow Changes
-
-1. **Test in personal fork first** (or use `workflow_dispatch` for testing)
-2. **Use Infrastructure Change Checklist** (`.github/INFRASTRUCTURE_CHANGE_CHECKLIST.md`)
-3. **Monitor first run after merge** (don't walk away from CI)
-4. **Have rollback plan ready** (know commit hash to revert)
-
-### Visual/Snapshot Tests
-
-- **Generate baselines in CI environment (Linux)**, never locally (macOS)
-- Use `generate-visual-baselines.yml` workflow for updates
-- Chromium renders differently across platforms (fonts, anti-aliasing)
-- Document baseline generation in test comments
-
-### Coverage Thresholds
-
-- **Set to current baseline**, not aspirational targets
-- Increase gradually (+5% per sprint max)
-- **Always test locally before enforcing** in CI
-- Never add thresholds without tests that meet them
-
-### Velocity Guidelines
-
-- **Maximum 5-7 commits per day** during infrastructure work
-- **Pause every 5 commits** to validate (run full test suite)
-- **Don't merge large changes on Fridays** (need monitoring time)
-- One logical change per commit
-
-### Code Review for Tests
-
-Test code gets same rigor as production code:
-
-**Check for:**
-
-- Correct player indices (use `enumerate()`, not manual search)
-- Meaningful assertions (not just "no crash")
-- Proper test isolation (no global state dependencies)
-
-**Red flags:**
-
-- Intermittent failures (race condition or flaky test)
-- Always-passing assertions (`assert x is not None` from iteration)
-- Tests requiring specific order to pass
+- Run affected tests locally before committing (100% pass rate required)
+- Update test count in docs/TEST-SUITE-REFERENCE.md when adding/removing tests
+- All CI workflows removed (2026-01-19) — rely on pre-commit hooks only
+- See docs/TESTING.md for detailed test review guidelines
 
 ## Gotchas
 
