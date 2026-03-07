@@ -219,7 +219,7 @@ export default function HomePage() {
             href="/guide"
             className="block bg-gray-700 hover:bg-gray-600 text-white text-center py-3 px-4 rounded transition"
           >
-            Hand Rankings Guide
+            Help
           </Link>
         </div>
       </div>
