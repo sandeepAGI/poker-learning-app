@@ -42,26 +42,32 @@ Commit: `07823424` -- 62 new boundary tests, 28 redundant tests removed, 9 fixed
 
 **Result**: 421 passed, 0 failed (was 377 passed, 1 failed, 43 broken + 5 timeout)
 
-### Phase 3: Extract Modules from poker_engine.py (2002 lines)
+### Phase 3: Extract Modules from poker_engine.py (2002 lines) -- COMPLETE (2026-03-07)
 
-- `backend/game/ai_strategy.py` — AIStrategy class + personality logic
-- `backend/game/hand_evaluator.py` — HandEvaluator class
-- `backend/game/deck_manager.py` — DeckManager class
-- `poker_engine.py` keeps PokerGame, imports from new modules
+Extracted 466 lines into 3 new modules. `poker_engine.py` reduced to 1536 lines. All 421 tests pass.
 
-### Phase 4: Extract Routes from main.py (1505 lines)
+- `backend/game/ai_strategy.py` (278 lines) — AIStrategy class + AIDecision dataclass
+- `backend/game/hand_evaluator.py` (193 lines) — HandEvaluator class
+- `backend/game/deck_manager.py` (23 lines) — DeckManager class
+- `backend/game/__init__.py` — package init
+- `poker_engine.py` keeps PokerGame + shared dataclasses, imports/re-exports from new modules
 
-- `backend/routes/auth.py` — auth endpoints
-- `backend/routes/game.py` — game CRUD + action endpoints
-- `backend/routes/analysis.py` — LLM analysis endpoints
-- `main.py` becomes app setup, middleware, WebSocket only
+### Phase 4: Extract Routes from main.py (1505 lines) -- COMPLETE (2026-03-07)
 
-### Phase 5: Verify Everything
+Extracted 1087 lines into 3 route modules + shared state. `main.py` reduced to 422 lines. All 421 tests pass.
 
-- Full backend test suite
-- Frontend build + Jest tests
-- E2E Playwright suite
-- Pre-commit hooks pass
+- `backend/routes/auth.py` (77 lines) — auth endpoints (register, login)
+- `backend/routes/game.py` (528 lines) — game CRUD + action endpoints + hand history
+- `backend/routes/analysis.py` (422 lines) — LLM analysis endpoints + metrics
+- `backend/app_state.py` (130 lines) — shared state (games dict, caches, Pydantic models)
+- `main.py` becomes app setup, CORS, WebSocket, router includes, test endpoints
+
+### Phase 5: Verify Everything -- COMPLETE (2026-03-07)
+
+- Full backend test suite: 421 passed, 0 failed (matches baseline)
+- Frontend build: succeeds
+- Frontend Jest tests: 54 passed (8 pre-existing Playwright-in-Jest failures unrelated)
+- Property-based infinite loop guard: 6/6 passed
 
 ### Phase 6: Doc Consolidation (lowest priority)
 

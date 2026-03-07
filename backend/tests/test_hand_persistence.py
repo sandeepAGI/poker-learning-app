@@ -53,7 +53,7 @@ class TestHandPersistence:
         # Play hand to completion (fold to finish)
         # In heads-up, the AI may fold during game creation (completing the hand).
         # In that case, the hand is saved by create_game and we skip the fold.
-        from main import games as games_dict  # noqa: E402
+        from app_state import games as games_dict  # noqa: E402
         game_obj, _ = games_dict[game_id]
         if game_obj.current_state != GameState.SHOWDOWN:
             client.post(f"/games/{game_id}/actions", json={"action": "fold"})

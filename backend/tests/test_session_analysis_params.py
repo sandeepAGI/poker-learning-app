@@ -11,8 +11,9 @@ import pytest
 import time
 from unittest.mock import Mock, patch, MagicMock, AsyncMock
 from game.poker_engine import PokerGame, CompletedHand, BettingRound, ActionRecord
-import main
-from main import app, games, last_analysis_time, analysis_cache
+from main import app
+from app_state import games, last_analysis_time, analysis_cache
+from routes.analysis import get_session_analysis
 
 
 # Fixture to set up test game with hand history
@@ -64,7 +65,7 @@ async def test_hand_count_parameter_slices_history(game_with_history):
     analysis_cache.clear()
 
     # Mock the LLM analyzer to track what it receives
-    with patch('main.llm_analyzer') as mock_analyzer:
+    with patch('routes.analysis.llm_analyzer') as mock_analyzer:
         # Configure mock to return success
         mock_analyzer.analyze_session.return_value = {
             "session_summary": "Test summary",
@@ -73,9 +74,9 @@ async def test_hand_count_parameter_slices_history(game_with_history):
         }
 
         # Mock LLM_ENABLED
-        with patch('main.LLM_ENABLED', True):
+        with patch('routes.analysis.LLM_ENABLED', True):
             # Call endpoint directly
-            result = await main.get_session_analysis(
+            result = await get_session_analysis(
                 game_id=game_id,
                 depth="quick",
                 hand_count=5,
@@ -124,8 +125,8 @@ async def test_rate_limiting_enforced_regardless_of_cache_flag(game_with_history
     last_analysis_time.clear()
 
     # Mock the LLM analyzer to avoid actual API calls
-    with patch('main.llm_analyzer') as mock_analyzer, \
-         patch('main.LLM_ENABLED', True):
+    with patch('routes.analysis.llm_analyzer') as mock_analyzer, \
+         patch('routes.analysis.LLM_ENABLED', True):
         mock_analyzer.analyze_session.return_value = {
             "session_summary": "Test summary",
             "hands_analyzed": 10,
@@ -133,7 +134,7 @@ async def test_rate_limiting_enforced_regardless_of_cache_flag(game_with_history
         }
 
         # First request should succeed
-        result1 = await main.get_session_analysis(
+        result1 = await get_session_analysis(
             game_id=game_id,
             depth="quick",
             hand_count=None,
@@ -146,7 +147,7 @@ async def test_rate_limiting_enforced_regardless_of_cache_flag(game_with_history
         # Currently, rate limiting is bypassed when use_cache=false
         from fastapi import HTTPException
         with pytest.raises(HTTPException) as exc_info:
-            await main.get_session_analysis(
+            await get_session_analysis(
                 game_id=game_id,
                 depth="quick",
                 hand_count=None,
@@ -180,8 +181,8 @@ async def test_hands_analyzed_count_matches_actual_sliced_history(game_with_hist
     analysis_cache.clear()
 
     # Mock analyzer and track actual call
-    with patch('main.llm_analyzer') as mock_analyzer, \
-         patch('main.LLM_ENABLED', True):
+    with patch('routes.analysis.llm_analyzer') as mock_analyzer, \
+         patch('routes.analysis.LLM_ENABLED', True):
         # Track the hand_history length that was passed
         actual_history_length = None
 
@@ -197,7 +198,7 @@ async def test_hands_analyzed_count_matches_actual_sliced_history(game_with_hist
         mock_analyzer.analyze_session.side_effect = capture_history_length
 
         # Request 3 hands
-        result = await main.get_session_analysis(
+        result = await get_session_analysis(
             game_id=game_id,
             depth="quick",
             hand_count=3,
