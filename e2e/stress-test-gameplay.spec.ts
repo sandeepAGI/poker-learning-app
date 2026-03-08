@@ -508,7 +508,206 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
       console.log(`GAME ${gameNum}/${TOTAL_GAMES}`);
       console.log(`${'='.repeat(60)}`);
 
-      // TODO: Implement game loop (Task 5)
+      const gameDir = path.join(RESULTS_DIR, `game-${String(gameNum).padStart(2, '0')}`);
+      fs.mkdirSync(gameDir, { recursive: true });
+
+      const result: GameResult = {
+        gameNumber: gameNum,
+        handsPlayed: 0,
+        initialChipTotal: 0,
+        finalChipTotal: 0,
+        failures: [],
+        analysisTriggered: [],
+        endReason: 'max_hands',
+      };
+
+      try {
+        // ── Setup: Register + Create Game ──
+        const { username } = await registerUser(page);
+        await createGame(page, username, 3);
+        await page.waitForTimeout(2000);
+
+        // Record initial chip total
+        result.initialChipTotal = await readTotalChips(page);
+        console.log(`  Initial chips: $${result.initialChipTotal}`);
+
+        let prevButtonPositions: Awaited<ReturnType<typeof readButtonPositions>> | null = null;
+        let prevCommunityCardCount = 0;
+        let gameOver = false;
+
+        // ── Hand Loop ──
+        for (let handNum = 1; handNum <= MAX_HANDS_PER_GAME && !gameOver; handNum++) {
+          console.log(`  Hand ${handNum}...`);
+          result.handsPlayed = handNum;
+
+          // Wait for hand to start (action buttons or game-over)
+          const hasAction = await page.locator(
+            '[data-testid="fold-button"], [data-testid="call-button"], [data-testid="next-hand-button"]'
+          ).first().waitFor({ timeout: 30000 }).then(() => true).catch(() => false);
+
+          // Check for game over modal
+          const gameOverText = page.locator('text=Game Over');
+          if (await gameOverText.isVisible().catch(() => false)) {
+            console.log(`  🏁 Game over! Player eliminated at hand ${handNum}`);
+            result.endReason = 'elimination';
+            await screenshotTo(page, path.join(gameDir, 'game-end.png'));
+            gameOver = true;
+            break;
+          }
+
+          if (!hasAction) {
+            console.log(`  ⚠️ No action buttons found, waiting...`);
+            await page.waitForTimeout(5000);
+            continue;
+          }
+
+          // ── Validate button rotation ──
+          prevButtonPositions = await validateButtonRotation(
+            page, result.failures, gameNum, handNum, prevButtonPositions
+          );
+
+          // ── Validate UI visibility ──
+          await validateUIVisibility(page, result.failures, gameNum, handNum);
+
+          // ── Validate chip conservation ──
+          if (result.initialChipTotal > 0) {
+            await validateChipConservation(
+              page, result.failures, gameNum, handNum, result.initialChipTotal
+            );
+          }
+
+          // ── Reset community card tracking for new hand ──
+          prevCommunityCardCount = 0;
+
+          // ── Action Loop: Keep acting until hand ends ──
+          let handComplete = false;
+          let actionCount = 0;
+          const MAX_ACTIONS_PER_HAND = 20; // Safety valve
+
+          while (!handComplete && actionCount < MAX_ACTIONS_PER_HAND) {
+            actionCount++;
+
+            // Check if winner modal is showing (hand ended)
+            const winnerModal = page.locator('[data-testid="winner-modal"]');
+            if (await winnerModal.isVisible().catch(() => false)) {
+              // Validate winner modal
+              await validateWinnerModal(page, result.failures, gameNum, handNum);
+
+              // Click Next Hand
+              const nextBtn = winnerModal.locator('button:has-text("Next Hand")');
+              if (await nextBtn.isVisible().catch(() => false)) {
+                await nextBtn.click();
+                await page.waitForTimeout(2000);
+              }
+              handComplete = true;
+              break;
+            }
+
+            // Check for next-hand button (showdown in control panel)
+            const nextHandBtn = page.locator('[data-testid="next-hand-button"]');
+            if (await nextHandBtn.isVisible().catch(() => false)) {
+              await nextHandBtn.click();
+              await page.waitForTimeout(2000);
+              handComplete = true;
+              break;
+            }
+
+            // Check for game over
+            if (await page.locator('text=Game Over').isVisible().catch(() => false)) {
+              result.endReason = 'elimination';
+              gameOver = true;
+              handComplete = true;
+              break;
+            }
+
+            // Check if it's our turn
+            const callBtn = page.locator('[data-testid="call-button"]:not([disabled])');
+            const foldBtn = page.locator('[data-testid="fold-button"]:not([disabled])');
+
+            const canCall = await callBtn.isVisible().catch(() => false);
+            const canFold = await foldBtn.isVisible().catch(() => false);
+
+            if (canCall) {
+              // Record pre-action state
+              const prePot = await readPot(page);
+
+              // Always call
+              await callBtn.click();
+              await page.waitForTimeout(1500);
+
+              // Validate post-action: pot should have changed
+              const postPot = await readPot(page);
+              if (postPot > 0 && prePot > 0 && postPot < prePot) {
+                await recordFailure(
+                  page, result.failures, gameNum, handNum, 'pot-decreased',
+                  `Pot decreased after call: ${prePot} → ${postPot}`
+                );
+              }
+
+              // Validate community cards
+              prevCommunityCardCount = await validateCommunityCards(
+                page, result.failures, gameNum, handNum, prevCommunityCardCount
+              );
+            } else if (canFold) {
+              // Fallback: fold (shouldn't normally reach here with call available)
+              await foldBtn.click();
+              await page.waitForTimeout(2000);
+            } else {
+              // Waiting for AI or other players — check for all-in state
+              const allInMsg = page.locator('[data-testid="all-in-message"]');
+              const waitingMsg = page.locator('text=Waiting for other players');
+
+              if (await allInMsg.isVisible().catch(() => false) ||
+                  await waitingMsg.isVisible().catch(() => false)) {
+                // We're all-in or waiting — just wait for resolution
+                await page.waitForTimeout(3000);
+              } else {
+                // Unknown state — wait a bit
+                await page.waitForTimeout(2000);
+              }
+            }
+
+            // Check community cards after each action
+            prevCommunityCardCount = await validateCommunityCards(
+              page, result.failures, gameNum, handNum, prevCommunityCardCount
+            );
+          }
+
+          // ── Analysis Triggers ──
+          if (handNum === ANALYSIS_TRIGGER_HAND) {
+            if (SESSION_ANALYSIS_GAMES.includes(gameNum)) {
+              const success = await triggerSessionAnalysis(page, gameNum, result.failures);
+              result.analysisTriggered.push({ type: 'session', success });
+            }
+            if (HAND_ANALYSIS_GAMES.includes(gameNum)) {
+              const success = await triggerHandAnalysis(page, gameNum, handNum, result.failures);
+              result.analysisTriggered.push({ type: 'hand', success });
+            }
+          }
+        }
+
+        // ── Game End ──
+        result.finalChipTotal = await readTotalChips(page);
+        await screenshotTo(page, path.join(gameDir, 'game-end.png'));
+
+        // Quit game
+        await quitGame(page);
+        await page.waitForTimeout(1000);
+
+      } catch (e) {
+        console.log(`  💥 Game ${gameNum} error: ${e}`);
+        result.endReason = 'error';
+        await screenshotTo(page, path.join(gameDir, 'game-error.png'));
+
+        // Try to recover by navigating home
+        await page.goto('/');
+        await page.waitForTimeout(2000);
+      }
+
+      allResults.push(result);
+
+      const failCount = result.failures.length;
+      console.log(`  Game ${gameNum} complete: ${result.handsPlayed} hands, ${failCount} failures, end: ${result.endReason}`);
     }
 
     // TODO: Write summary report (Task 6)
