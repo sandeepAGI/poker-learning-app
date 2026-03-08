@@ -403,8 +403,8 @@ async function triggerSessionAnalysis(
     // Screenshot the analysis modal
     await screenshotTo(page, path.join(gameDir, 'session-analysis.png'));
 
-    // Wait for loading to complete (up to 30 seconds)
-    await page.waitForTimeout(15000);
+    // Wait for loading to complete
+    await page.waitForTimeout(10000);
     await screenshotTo(page, path.join(gameDir, 'session-analysis-loaded.png'));
 
     // Verify no crash — page should still be responsive
@@ -609,6 +609,19 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
             await validateChipConservation(
               page, result.failures, gameNum, handNum, result.initialChipTotal
             );
+          }
+
+          // ── Check if human is eliminated (stack = $0, no action possible) ──
+          const heroSeat = page.locator('[data-testid="human-player-seat"]');
+          if (await heroSeat.isVisible().catch(() => false)) {
+            const heroStack = await heroSeat.locator('[data-testid^="stack-display-"]').textContent().catch(() => '');
+            if (heroStack && parseDollarAmount(heroStack) === 0) {
+              console.log(`  🏁 Human eliminated (stack $0) at hand ${handNum}`);
+              result.endReason = 'elimination';
+              await screenshotTo(page, path.join(gameDir, 'game-end.png'));
+              gameOver = true;
+              break;
+            }
           }
 
           // ── Reset community card tracking for new hand ──
