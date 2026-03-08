@@ -21,20 +21,23 @@ export interface PlayerPosition {
 
 /**
  * Default ellipse configuration for poker table
- * Centered slightly above middle (centerY: 40%) for visual balance
- * radiusX: 40% (optimized for 75/25 split - balanced horizontal distribution)
- * radiusY: 30% (slightly increased vertical radius for better spacing)
+ * Centered slightly above middle (centerY: 42%) so hero seat stays visible
+ * radiusX: 40% (leaves safety margin near control panel)
+ * radiusY: 32% (uses lower quadrants without overflowing bottom)
  */
 export const DEFAULT_ELLIPSE_CONFIG: EllipseConfig = {
   centerX: 50,
-  centerY: 40,
+  centerY: 42,
   radiusX: 40,
-  radiusY: 30
+  radiusY: 32
 };
 
 /**
  * Calculate elliptical positions for opponents
- * Distributes players evenly across 180° arc (top-left to top-right)
+ * Distributes players across a wide arc that uses lower quadrants too.
+ * 4-player (3 opponents): ~240° arc (from 210° to -30°)
+ * 6-player (5 opponents): ~280° arc (from 220° to -60°)
+ * A gap is left at the bottom (270°) where the human hero sits.
  *
  * Formula: (x, y) = (cx + rx*cos(θ), cy - ry*sin(θ))
  * Note: Y is subtracted because CSS Y-axis is inverted (0 at top)
@@ -42,15 +45,6 @@ export const DEFAULT_ELLIPSE_CONFIG: EllipseConfig = {
  * @param numOpponents - Number of AI opponents (typically 1, 3, or 5)
  * @param config - Ellipse configuration (optional, uses defaults if not provided)
  * @returns Array of position objects for each opponent
- *
- * @example
- * // 3 opponents (4-player table)
- * const positions = calculateOpponentPositions(3);
- * // Returns: [
- * //   { left: "8.00%", top: "40.00%", ... },   // Left side (180°)
- * //   { left: "50.00%", top: "12.00%", ... },  // Top center (90°)
- * //   { left: "92.00%", top: "40.00%", ... }   // Right side (0°)
- * // ]
  */
 export function calculateOpponentPositions(
   numOpponents: number,
@@ -59,34 +53,32 @@ export function calculateOpponentPositions(
   // Edge case: single opponent (heads-up poker)
   if (numOpponents === 1) {
     return [{
-      left: '50%',
-      top: '8%',
+      left: `${config.centerX.toFixed(2)}%`,
+      top: `${(config.centerY - config.radiusY).toFixed(2)}%`,
       transform: 'translate(-50%, -50%)'
     }];
   }
 
-  // Distribute opponents across arc (wider for more players)
-  // 4-player (3 opponents): 180° arc works well
-  // 6-player (5 opponents): 220° arc prevents overlap
-  const arcSize = numOpponents <= 3 ? 180 : 220;
-  const startAngle = arcSize === 180 ? 180 : 200;  // Left side
-  const endAngle = arcSize === 180 ? 0 : -20;      // Right side (negative = below horizontal)
-  const angleStep = (startAngle - endAngle) / (numOpponents - 1);
+  // Full-ellipse placement: wider arcs that use lower quadrants
+  // 4-player (3 opponents): 240° arc (210° to -30°) — uses lower-left and lower-right
+  // 6-player (5 opponents): 280° arc (230° to -50°) — even wider spread
+  // Safety: reserve gap around 270° (bottom) where the hero sits
+  const arcSize = numOpponents <= 3 ? 240 : 280;
+  const startAngle = numOpponents <= 3 ? 210 : 230;  // Left-lower quadrant
+  const endAngle = startAngle - arcSize;               // Right-lower quadrant
+  const angleStep = arcSize / (numOpponents - 1);
 
   return Array.from({ length: numOpponents }, (_, i) => {
-    // Calculate angle for this opponent
     const angleDeg = startAngle - i * angleStep;
     const angleRad = (angleDeg * Math.PI) / 180;
 
-    // Elliptical formula: (x, y) = (cx + rx*cos(θ), cy - ry*sin(θ))
-    // Note: Subtract sin(θ) because CSS Y-axis is inverted (0 at top)
     const x = config.centerX + config.radiusX * Math.cos(angleRad);
     const y = config.centerY - config.radiusY * Math.sin(angleRad);
 
     return {
       left: `${x.toFixed(2)}%`,
       top: `${y.toFixed(2)}%`,
-      transform: 'translate(-50%, -50%)' // Center the element on the calculated point
+      transform: 'translate(-50%, -50%)'
     };
   });
 }
@@ -114,14 +106,14 @@ export function getHumanPlayerPosition(config: EllipseConfig = DEFAULT_ELLIPSE_C
 
 /**
  * Get center area position (community cards)
- * Positioned at ellipse center (matches DEFAULT_ELLIPSE_CONFIG.centerY)
+ * Positioned at ellipse center
  *
  * @returns Position object for center area
  */
-export function getCenterAreaPosition(): PlayerPosition {
+export function getCenterAreaPosition(config: EllipseConfig = DEFAULT_ELLIPSE_CONFIG): PlayerPosition {
   return {
-    left: '50%',
-    top: '40%', // Match ellipse centerY
+    left: `${config.centerX}%`,
+    top: `${config.centerY}%`,
     transform: 'translate(-50%, -50%)'
   };
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { PokerTable } from '../../../components/PokerTable';
 import { useGameStore } from '../../../lib/store';
@@ -19,12 +19,8 @@ import { motion } from 'framer-motion';
 export default function GamePage({ params }: { params: Promise<{ gameId: string }> }) {
   const router = useRouter();
   const { gameState, loading, error, connectionError, reconnectToGame } = useGameStore();
-  const [gameId, setGameId] = useState<string>('');
-
-  // Await params in Next.js 15
-  useEffect(() => {
-    params.then(p => setGameId(p.gameId));
-  }, [params]);
+  // Use React.use() to unwrap params synchronously — prevents hydration mismatch
+  const { gameId } = use(params);
 
   useEffect(() => {
     // Only attempt reconnection if gameId is set

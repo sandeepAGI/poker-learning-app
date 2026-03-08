@@ -174,6 +174,7 @@ def serialize_game_state(game: PokerGame, show_ai_thinking: bool = False) -> Dic
         "current_bet": human_player.current_bet,
         "hole_cards": human_player.hole_cards,
         "is_active": human_player.is_active,
+        "is_human": True,
         "is_current_turn": game.get_current_player() == human_player if game.get_current_player() else False
     }
 
