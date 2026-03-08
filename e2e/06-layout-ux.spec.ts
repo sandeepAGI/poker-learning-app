@@ -176,6 +176,41 @@ test.describe('Suite 6: Layout & UX', () => {
     await quitGame(page);
   });
 
+  test('6.5: Hero seat fully visible at 1280x720', async ({ page }) => {
+    const { username } = await registerUser(page);
+    await createGame(page, username, 3);
+
+    const heroSeat = page.locator('[data-testid="human-player-seat"]');
+    await expect(heroSeat).toBeVisible({ timeout: 15000 });
+
+    const viewport = page.viewportSize()!;
+    const heroBounds = await heroSeat.boundingBox();
+    expect(heroBounds).not.toBeNull();
+
+    // Hero seat bottom must be within viewport
+    expect(heroBounds!.y + heroBounds!.height).toBeLessThan(viewport.height);
+    expect(heroBounds!.y).toBeGreaterThanOrEqual(0);
+
+    await quitGame(page);
+  });
+
+  test('6.6: Hero seat fully visible at 1024x768', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    const { username } = await registerUser(page);
+    await createGame(page, username, 3);
+
+    const heroSeat = page.locator('[data-testid="human-player-seat"]');
+    await expect(heroSeat).toBeVisible({ timeout: 15000 });
+
+    const viewport = page.viewportSize()!;
+    const heroBounds = await heroSeat.boundingBox();
+    expect(heroBounds).not.toBeNull();
+
+    expect(heroBounds!.y + heroBounds!.height).toBeLessThan(viewport.height);
+
+    await quitGame(page);
+  });
+
   test('6.4: Control panel uses harmonized palette', async ({ page }) => {
     const { username } = await registerUser(page);
     await createGame(page, username, 3);

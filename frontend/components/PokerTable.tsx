@@ -9,14 +9,15 @@ import { AnalysisModalLLM } from './AnalysisModalLLM'; // Phase 4: LLM-powered a
 import { SessionAnalysisModal } from './SessionAnalysisModal'; // Phase 4.5: Session analysis
 import { GameOverModal } from './GameOverModal';
 import { useGameStore } from '../lib/store';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Player } from '../lib/types'; // Phase 0.5: For button indicator helper
 import { pokerApi } from '../lib/api'; // Phase 4.5: Session analysis API
 import {
   calculateOpponentPositions,
   getHumanPlayerPosition,
-  getCenterAreaPosition
+  getCenterAreaPosition,
+  calculateContainerSize
 } from '../lib/poker-table-layout';
 
 export function PokerTable() {
@@ -83,6 +84,22 @@ export function PokerTable() {
   const [sessionHandsAnalyzed, setSessionHandsAnalyzed] = useState<number>(0);
   const [showQuitConfirmation, setShowQuitConfirmation] = useState(false);
   const [isQuittingAfterAnalysis, setIsQuittingAfterAnalysis] = useState(false);
+
+  // Dynamic table sizing — height-driven to prevent vertical clipping
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [tableSize, setTableSize] = useState<{ width: string; height: string } | null>(null);
+
+  useEffect(() => {
+    const updateSize = () => {
+      const headerH = headerRef.current?.offsetHeight ?? 90;
+      const leftColWidth = window.innerWidth * 0.75;
+      const size = calculateContainerSize(leftColWidth, window.innerHeight, headerH + 16);
+      setTableSize(size);
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   // FIX-06: Click-to-focus for ALL elements (learning app - simple & intuitive)
   const [focusedElement, setFocusedElement] = useState<string | null>(null);
@@ -285,7 +302,7 @@ export function PokerTable() {
   return (
     <div className="flex flex-col h-screen bg-[#0D5F2F] p-2 sm:p-4">
       {/* Header */}
-      <div className="flex justify-between items-center mb-2 sm:mb-4 text-white" data-testid="poker-table-header">
+      <div ref={headerRef} className="flex justify-between items-center mb-2 sm:mb-4 text-white" data-testid="poker-table-header">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold">Poker Learning App</h1>
           <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm opacity-80">
@@ -445,9 +462,10 @@ export function PokerTable() {
             data-testid="poker-table-container"
             className="relative bg-[#0D5F2F] rounded-[200px] border-4 border-[#0A4D26] shadow-2xl"
             style={{
-              width: 'clamp(360px, calc(100vw - 25vw - 4rem), 1200px)',
-              aspectRatio: '16 / 10',
-              maxHeight: '85vh',
+              width: tableSize?.width ?? 'clamp(360px, calc(100vw - 25vw - 4rem), 1200px)',
+              height: tableSize?.height ?? 'auto',
+              aspectRatio: tableSize ? undefined : '16 / 10',
+              maxHeight: tableSize ? undefined : '85vh',
               boxShadow: 'inset 0 2px 20px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 80px rgba(13, 95, 47, 0.5)'
             }}
           >
