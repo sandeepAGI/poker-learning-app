@@ -561,15 +561,23 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
           }
 
           // If winner modal is showing (leftover from previous hand or quick showdown),
-          // dismiss it before proceeding
+          // dismiss it before proceeding — but check for game-over first
           const leftoverModal = page.locator('[data-testid="winner-modal"]');
           if (await leftoverModal.isVisible().catch(() => false)) {
+            // Game-over overlay may be on top — check before clicking
+            if (await page.locator('text=Game Over').isVisible().catch(() => false)) {
+              console.log(`  🏁 Game over detected at start of hand ${handNum}`);
+              result.endReason = 'elimination';
+              await screenshotTo(page, path.join(gameDir, 'game-end.png'));
+              gameOver = true;
+              break;
+            }
             console.log(`  Dismissing winner modal at start of hand ${handNum}...`);
             try {
               await validateWinnerModal(page, result.failures, gameNum, handNum);
               const nextBtn = leftoverModal.locator('button:has-text("Next Hand")');
               if (await nextBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-                await nextBtn.click();
+                await nextBtn.click({ force: true }).catch(() => {});
                 await page.waitForTimeout(2000);
               }
             } catch (e) {
@@ -614,16 +622,26 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
           while (!handComplete && actionCount < MAX_ACTIONS_PER_HAND) {
             actionCount++;
 
+            // Check for game over FIRST — it overlays everything else
+            if (await page.locator('text=Game Over').isVisible().catch(() => false)) {
+              console.log(`  🏁 Game over detected in action loop (hand ${handNum})`);
+              result.endReason = 'elimination';
+              await screenshotTo(page, path.join(gameDir, 'game-end.png'));
+              gameOver = true;
+              handComplete = true;
+              break;
+            }
+
             // Check if winner modal is showing (hand ended)
             const winnerModal = page.locator('[data-testid="winner-modal"]');
             if (await winnerModal.isVisible().catch(() => false)) {
               // Validate winner modal
               await validateWinnerModal(page, result.failures, gameNum, handNum);
 
-              // Click Next Hand
+              // Click Next Hand (use force:true in case game-over overlay is partially visible)
               const nextBtn = winnerModal.locator('button:has-text("Next Hand")');
               if (await nextBtn.isVisible().catch(() => false)) {
-                await nextBtn.click();
+                await nextBtn.click({ force: true }).catch(() => {});
                 await page.waitForTimeout(2000);
               }
               handComplete = true;
@@ -635,14 +653,6 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
             if (await nextHandBtn.isVisible().catch(() => false)) {
               await nextHandBtn.click();
               await page.waitForTimeout(2000);
-              handComplete = true;
-              break;
-            }
-
-            // Check for game over
-            if (await page.locator('text=Game Over').isVisible().catch(() => false)) {
-              result.endReason = 'elimination';
-              gameOver = true;
               handComplete = true;
               break;
             }
