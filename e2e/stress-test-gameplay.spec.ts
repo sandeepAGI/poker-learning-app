@@ -522,7 +522,12 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
       };
 
       try {
-        // ── Setup: Register + Create Game ──
+        // ── Setup: Clean slate for each game ──
+        // Clear all browser state to avoid stale modals/WebSocket from previous game
+        await page.evaluate(() => localStorage.clear());
+        await page.goto('/');
+        await page.waitForTimeout(1000);
+
         const { username } = await registerUser(page);
         await createGame(page, username, 3);
         await page.waitForTimeout(2000);
@@ -562,10 +567,15 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
           const leftoverModal = page.locator('[data-testid="winner-modal"]');
           if (await leftoverModal.isVisible().catch(() => false)) {
             console.log(`  Dismissing winner modal at start of hand ${handNum}...`);
-            await validateWinnerModal(page, result.failures, gameNum, handNum);
-            const nextBtn = leftoverModal.locator('button:has-text("Next Hand")');
-            if (await nextBtn.isVisible().catch(() => false)) {
-              await nextBtn.click();
+            try {
+              await validateWinnerModal(page, result.failures, gameNum, handNum);
+              const nextBtn = leftoverModal.locator('button:has-text("Next Hand")');
+              if (await nextBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+                await nextBtn.click();
+                await page.waitForTimeout(2000);
+              }
+            } catch (e) {
+              console.log(`  ⚠️ Failed to dismiss modal, continuing: ${e}`);
               await page.waitForTimeout(2000);
             }
             // Now wait for the actual new hand to start
@@ -715,9 +725,10 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
       } catch (e) {
         console.log(`  💥 Game ${gameNum} error: ${e}`);
         result.endReason = 'error';
-        await screenshotTo(page, path.join(gameDir, 'game-error.png'));
+        await screenshotTo(page, path.join(gameDir, 'game-error.png')).catch(() => {});
 
-        // Try to recover by navigating home
+        // Try to recover: clear state and navigate home
+        await page.evaluate(() => localStorage.clear()).catch(() => {});
         await page.goto('/');
         await page.waitForTimeout(2000);
       }
