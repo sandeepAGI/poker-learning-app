@@ -260,6 +260,35 @@ test.describe('Suite 6: Layout & UX', () => {
     await quitGame(page);
   });
 
+  test('6.9: Community cards do not overlap top opponent at 1280x720', async ({ page }) => {
+    const { username } = await registerUser(page);
+    await createGame(page, username, 3);
+    await page.waitForTimeout(3000);
+
+    // Need to be on flop+ to see community cards — call to advance
+    const callBtn = page.locator('[data-testid="call-button"]');
+    if (await callBtn.isVisible({ timeout: 10000 }).catch(() => false)) {
+      await callBtn.click();
+      await page.waitForTimeout(5000);
+    }
+
+    const communityArea = page.locator('[data-testid="community-cards-area"]');
+    const topOpponent = page.locator('[data-testid="opponent-seat-1"]');
+
+    if (await communityArea.isVisible().catch(() => false) && await topOpponent.isVisible().catch(() => false)) {
+      const communityBounds = await communityArea.boundingBox();
+      const opponentBounds = await topOpponent.boundingBox();
+
+      if (communityBounds && opponentBounds) {
+        // Community cards top should be below opponent bottom (no overlap)
+        const opponentBottom = opponentBounds.y + opponentBounds.height;
+        expect(communityBounds.y).toBeGreaterThanOrEqual(opponentBottom - 10); // 10px tolerance
+      }
+    }
+
+    await quitGame(page);
+  });
+
   test('6.4: Control panel uses harmonized palette', async ({ page }) => {
     const { username } = await registerUser(page);
     await createGame(page, username, 3);
