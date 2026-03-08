@@ -88,9 +88,11 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.8, y: 50 }}
             transition={{ type: 'spring', damping: 20 }}
-            className="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-2xl shadow-2xl p-5 max-w-md w-full max-h-[90vh] overflow-y-auto border-4 border-yellow-300 pointer-events-auto relative z-10"
+            className="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-2xl shadow-2xl max-w-md w-full max-h-[80vh] flex flex-col border-4 border-yellow-300 pointer-events-auto relative z-10"
             data-testid="winner-modal"
           >
+            {/* Scrollable content area */}
+            <div className="overflow-y-auto flex-1 p-5">
             {/* Trophy icon */}
             <div className="text-center mb-3">
               <motion.div
@@ -285,16 +287,20 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
               </motion.div>
             )}
 
-            {/* Close button */}
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              onClick={onClose}
-              className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors"
-            >
-              Next Hand
-            </motion.button>
+            </div>
+
+            {/* Sticky footer — always visible */}
+            <div className="p-4 pt-3 border-t border-yellow-300/50">
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                onClick={onClose}
+                className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors"
+              >
+                Next Hand
+              </motion.button>
+            </div>
           </motion.div>
         </motion.div>
       )}

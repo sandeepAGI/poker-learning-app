@@ -234,6 +234,32 @@ test.describe('Suite 6: Layout & UX', () => {
     await quitGame(page);
   });
 
+  test('6.8: Winner modal Next Hand button reachable at 1024x768', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    const { username } = await registerUser(page);
+    await createGame(page, username, 3);
+
+    const foldBtn = page.locator('[data-testid="fold-button"]');
+    if (await foldBtn.isVisible({ timeout: 15000 }).catch(() => false)) {
+      await foldBtn.click();
+      await page.waitForTimeout(3000);
+
+      const modal = page.locator('[data-testid="winner-modal"]');
+      if (await modal.isVisible({ timeout: 5000 }).catch(() => false)) {
+        const nextBtn = modal.locator('button:has-text("Next Hand")');
+        // Button should be visible without scrolling (sticky footer)
+        await expect(nextBtn).toBeVisible({ timeout: 3000 });
+
+        const bounds = await nextBtn.boundingBox();
+        expect(bounds).not.toBeNull();
+        const viewport = page.viewportSize()!;
+        expect(bounds!.y + bounds!.height).toBeLessThan(viewport.height);
+      }
+    }
+
+    await quitGame(page);
+  });
+
   test('6.4: Control panel uses harmonized palette', async ({ page }) => {
     const { username } = await registerUser(page);
     await createGame(page, username, 3);
