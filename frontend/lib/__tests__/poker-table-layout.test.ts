@@ -241,8 +241,58 @@ describe('calculateContainerSize', () => {
       const result = calculateContainerSize(2000, 600);
       const width = parseFloat(result.width);
       const height = parseFloat(result.height);
-      expect(height).toBe(510);
+      // Available height: 600 - 0 - 32 = 568
+      expect(height).toBe(568);
       expect(width / height).toBeCloseTo(aspectRatio, 2);
+    });
+  });
+
+  describe('height-driven sizing with headerHeight', () => {
+    it('should subtract headerHeight from available height', () => {
+      const result = calculateContainerSize(1280, 720, 90);
+      const height = parseFloat(result.height);
+      // Available: 720 - 90 - 32 = 598
+      expect(height).toBeLessThanOrEqual(598);
+      expect(height).toBeGreaterThan(0);
+      expect(parseFloat(result.width) / height).toBeCloseTo(aspectRatio, 1);
+    });
+
+    it('should pick height-constrained size at 1024x600', () => {
+      const result = calculateContainerSize(1024, 600, 90);
+      const height = parseFloat(result.height);
+      // Available height: 600 - 90 - 32 = 478
+      expect(height).toBeLessThanOrEqual(478);
+      expect(parseFloat(result.width) / height).toBeCloseTo(aspectRatio, 1);
+    });
+
+    it('should pick width-constrained size at wide viewports', () => {
+      const result = calculateContainerSize(800, 1200, 90);
+      const width = parseFloat(result.width);
+      // Available width: 800 - 32 = 768, height would be 768/1.6 = 480
+      // Available height: 1200 - 90 - 32 = 1078, plenty of room
+      expect(width).toBe(768);
+    });
+
+    it('should default headerHeight to 0 for backward compatibility', () => {
+      const result1 = calculateContainerSize(1000, 1000);
+      const result2 = calculateContainerSize(1000, 1000, 0);
+      expect(result1).toEqual(result2);
+    });
+
+    it('should respect max width of 1400px', () => {
+      const result = calculateContainerSize(2000, 2000, 90);
+      expect(parseFloat(result.width)).toBe(1400);
+    });
+
+    it('should maintain aspect ratio at all tested viewports', () => {
+      const viewports = [
+        [1440, 900, 90], [1280, 720, 90], [1024, 768, 90], [1024, 600, 90]
+      ];
+      viewports.forEach(([w, h, header]) => {
+        const result = calculateContainerSize(w, h, header);
+        const ratio = parseFloat(result.width) / parseFloat(result.height);
+        expect(ratio).toBeCloseTo(aspectRatio, 1);
+      });
     });
   });
 

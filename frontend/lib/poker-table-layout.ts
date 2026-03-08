@@ -128,29 +128,39 @@ export function getCenterAreaPosition(config: EllipseConfig = DEFAULT_ELLIPSE_CO
  */
 export function calculateContainerSize(
   viewportWidth: number,
-  viewportHeight: number
+  viewportHeight: number,
+  headerHeight: number = 0
 ): { width: string; height: string } {
   const aspectRatio = 16 / 10;
   const padding = 32; // 2rem total padding
 
-  // Try fitting by width first
-  const widthConstrainedWidth = Math.min(viewportWidth - padding, 1400);
-  const widthConstrainedHeight = widthConstrainedWidth / aspectRatio;
+  const availableWidth = Math.min(viewportWidth - padding, 1400);
+  const availableHeight = viewportHeight - headerHeight - padding;
 
-  // Check if height fits
-  if (widthConstrainedHeight <= viewportHeight * 0.85) {
-    return {
-      width: `${widthConstrainedWidth}px`,
-      height: `${widthConstrainedHeight}px`
-    };
+  // Width-driven dimensions
+  const wWidth = availableWidth;
+  const wHeight = wWidth / aspectRatio;
+
+  // Height-driven dimensions
+  const hHeight = availableHeight;
+  const hWidth = hHeight * aspectRatio;
+
+  // Pick the one that fits in both dimensions
+  let finalWidth: number;
+  let finalHeight: number;
+
+  if (wHeight <= availableHeight) {
+    // Width-driven fits vertically — use it (maximizes table size)
+    finalWidth = wWidth;
+    finalHeight = wHeight;
+  } else {
+    // Height-constrained — derive width from height
+    finalWidth = Math.min(hWidth, availableWidth);
+    finalHeight = finalWidth / aspectRatio;
   }
 
-  // Fit by height instead
-  const heightConstrainedHeight = viewportHeight * 0.85;
-  const heightConstrainedWidth = heightConstrainedHeight * aspectRatio;
-
   return {
-    width: `${heightConstrainedWidth}px`,
-    height: `${heightConstrainedHeight}px`
+    width: `${finalWidth}px`,
+    height: `${finalHeight}px`
   };
 }
