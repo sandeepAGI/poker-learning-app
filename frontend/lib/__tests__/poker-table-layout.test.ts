@@ -22,31 +22,31 @@ describe('calculateOpponentPositions', () => {
       const positions = calculateOpponentPositions(3);
       const pos = positions[0];
       // 210°: cos(210°) ≈ -0.866, sin(210°) = -0.5
-      // x = 50 + 40*(-0.866) ≈ 15.4, y = 42 - 32*(-0.5) = 58
+      // x = 50 + 40*(-0.866) ≈ 15.4, y = 38 - 30*(-0.5) = 53
       expect(parseFloat(pos.left)).toBeGreaterThan(12);
       expect(parseFloat(pos.left)).toBeLessThan(22);
-      expect(parseFloat(pos.top)).toBeGreaterThan(50);
-      expect(parseFloat(pos.top)).toBeLessThan(65);
+      expect(parseFloat(pos.top)).toBeGreaterThan(45);
+      expect(parseFloat(pos.top)).toBeLessThan(60);
     });
 
     it('should position second opponent at top center (~90°)', () => {
       const positions = calculateOpponentPositions(3);
       const pos = positions[1];
       // 90°: cos(90°) ≈ 0, sin(90°) = 1
-      // x ≈ 50, y = 42 - 32 = 10
+      // x ≈ 50, y = 38 - 30 = 8
       expect(parseFloat(pos.left)).toBeCloseTo(50, 0);
-      expect(parseFloat(pos.top)).toBeLessThan(15);
+      expect(parseFloat(pos.top)).toBeLessThan(12);
     });
 
     it('should position third opponent in lower-right quadrant (~-30°)', () => {
       const positions = calculateOpponentPositions(3);
       const pos = positions[2];
       // -30°: cos(-30°) ≈ 0.866, sin(-30°) = -0.5
-      // x = 50 + 40*(0.866) ≈ 84.6, y = 42 - 32*(-0.5) = 58
+      // x = 50 + 40*(0.866) ≈ 84.6, y = 38 - 30*(-0.5) = 53
       expect(parseFloat(pos.left)).toBeGreaterThan(78);
       expect(parseFloat(pos.left)).toBeLessThan(90);
-      expect(parseFloat(pos.top)).toBeGreaterThan(50);
-      expect(parseFloat(pos.top)).toBeLessThan(65);
+      expect(parseFloat(pos.top)).toBeGreaterThan(45);
+      expect(parseFloat(pos.top)).toBeLessThan(60);
     });
 
     it('should have symmetric left and right positions', () => {
@@ -64,8 +64,8 @@ describe('calculateOpponentPositions', () => {
 
     it('should place opponents in multiple quadrants (not just top arc)', () => {
       const positions = calculateOpponentPositions(3);
-      // At least one opponent should be in lower half (top > 42% center)
-      const hasLowerQuadrant = positions.some(p => parseFloat(p.top) > 42);
+      // At least one opponent should be in lower half (top > 38% center)
+      const hasLowerQuadrant = positions.some(p => parseFloat(p.top) > 38);
       expect(hasLowerQuadrant).toBe(true);
     });
 
@@ -88,15 +88,15 @@ describe('calculateOpponentPositions', () => {
 
       // Position 0: ~230° (lower-left)
       expect(parseFloat(positions[0].left)).toBeLessThan(30);
-      expect(parseFloat(positions[0].top)).toBeGreaterThan(42);
+      expect(parseFloat(positions[0].top)).toBeGreaterThan(38);
 
       // Position 2: ~90° (top center)
       expect(parseFloat(positions[2].left)).toBeCloseTo(50, 0);
-      expect(parseFloat(positions[2].top)).toBeLessThan(15);
+      expect(parseFloat(positions[2].top)).toBeLessThan(12);
 
       // Position 4: ~-50° (lower-right)
       expect(parseFloat(positions[4].left)).toBeGreaterThan(70);
-      expect(parseFloat(positions[4].top)).toBeGreaterThan(42);
+      expect(parseFloat(positions[4].top)).toBeGreaterThan(38);
     });
 
     it('should have symmetric left and right positions', () => {
@@ -115,14 +115,14 @@ describe('calculateOpponentPositions', () => {
 
     it('should place opponents in all four quadrants', () => {
       const positions = calculateOpponentPositions(5);
-      // Upper-left: left < 50, top < 42
-      const hasUpperLeft = positions.some(p => parseFloat(p.left) < 50 && parseFloat(p.top) < 42);
-      // Upper-right: left > 50, top < 42
-      const hasUpperRight = positions.some(p => parseFloat(p.left) > 50 && parseFloat(p.top) < 42);
-      // Lower-left: left < 50, top > 42
-      const hasLowerLeft = positions.some(p => parseFloat(p.left) < 50 && parseFloat(p.top) > 42);
-      // Lower-right: left > 50, top > 42
-      const hasLowerRight = positions.some(p => parseFloat(p.left) > 50 && parseFloat(p.top) > 42);
+      // Upper-left: left < 50, top < 38
+      const hasUpperLeft = positions.some(p => parseFloat(p.left) < 50 && parseFloat(p.top) < 38);
+      // Upper-right: left > 50, top < 38
+      const hasUpperRight = positions.some(p => parseFloat(p.left) > 50 && parseFloat(p.top) < 38);
+      // Lower-left: left < 50, top > 38
+      const hasLowerLeft = positions.some(p => parseFloat(p.left) < 50 && parseFloat(p.top) > 38);
+      // Lower-right: left > 50, top > 38
+      const hasLowerRight = positions.some(p => parseFloat(p.left) > 50 && parseFloat(p.top) > 38);
 
       expect(hasUpperLeft).toBe(true);
       expect(hasUpperRight).toBe(true);
@@ -143,9 +143,9 @@ describe('calculateOpponentPositions', () => {
     it('should return single position at top center', () => {
       const positions = calculateOpponentPositions(1);
       expect(positions).toHaveLength(1);
-      // x = centerX = 50, y = centerY - radiusY = 42 - 32 = 10
+      // x = centerX = 50, y = centerY - radiusY = 38 - 30 = 8
       expect(parseFloat(positions[0].left)).toBeCloseTo(50, 0);
-      expect(parseFloat(positions[0].top)).toBeCloseTo(10, 0);
+      expect(parseFloat(positions[0].top)).toBeCloseTo(8, 0);
       expect(positions[0].transform).toBe('translate(-50%, -50%)');
     });
   });
@@ -190,9 +190,9 @@ describe('calculateOpponentPositions', () => {
 describe('getHumanPlayerPosition', () => {
   it('should return bottom-center position', () => {
     const position = getHumanPlayerPosition();
-    // 270°: cos(270°) = 0 → x = 50, sin(270°) = -1 → y = 42 + 32 = 74
+    // 270°: cos(270°) = 0 → x = 50, sin(270°) = -1 → y = 38 + 30 = 68
     expect(parseFloat(position.left)).toBeCloseTo(50, 0);
-    expect(parseFloat(position.top)).toBeCloseTo(74, 0);
+    expect(parseFloat(position.top)).toBeCloseTo(68, 0);
     expect(position.transform).toBe('translate(-50%, -50%)');
   });
 
@@ -215,6 +215,20 @@ describe('getCenterAreaPosition', () => {
     const position1 = getCenterAreaPosition();
     const position2 = getCenterAreaPosition();
     expect(position1).toEqual(position2);
+  });
+});
+
+describe('vertical separation between center and hero', () => {
+  it('should maintain at least 25% gap between center and hero', () => {
+    const center = getCenterAreaPosition();
+    const hero = getHumanPlayerPosition();
+    const gap = parseFloat(hero.top) - parseFloat(center.top);
+    expect(gap).toBeGreaterThanOrEqual(25);
+  });
+
+  it('should keep hero position below 72% to prevent bottom clipping', () => {
+    const hero = getHumanPlayerPosition();
+    expect(parseFloat(hero.top)).toBeLessThanOrEqual(72);
   });
 });
 

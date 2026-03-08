@@ -21,15 +21,15 @@ export interface PlayerPosition {
 
 /**
  * Default ellipse configuration for poker table
- * Centered slightly above middle (centerY: 42%) so hero seat stays visible
+ * Centered above middle (centerY: 38%) to prevent community card / hero overlap
  * radiusX: 40% (leaves safety margin near control panel)
- * radiusY: 32% (uses lower quadrants without overflowing bottom)
+ * radiusY: 30% (prevents hero from clipping below viewport)
  */
 export const DEFAULT_ELLIPSE_CONFIG: EllipseConfig = {
   centerX: 50,
-  centerY: 42,
+  centerY: 38,
   radiusX: 40,
-  radiusY: 32
+  radiusY: 30
 };
 
 /**
