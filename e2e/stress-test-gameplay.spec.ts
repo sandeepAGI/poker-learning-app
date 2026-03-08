@@ -540,9 +540,11 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
           console.log(`  Hand ${handNum}...`);
           result.handsPlayed = handNum;
 
-          // Wait for hand to start (action buttons or game-over)
-          const hasAction = await page.locator(
-            '[data-testid="fold-button"], [data-testid="call-button"], [data-testid="next-hand-button"]'
+          // Wait for ANY meaningful game state: action buttons, winner modal, or game over
+          // This is critical — after clicking "Next Hand", AI may act first so our
+          // action buttons won't appear immediately. We need to wait for any sign of life.
+          const meaningfulState = await page.locator(
+            '[data-testid="fold-button"], [data-testid="call-button"], [data-testid="winner-modal"], [data-testid="next-hand-button"]'
           ).first().waitFor({ timeout: 30000 }).then(() => true).catch(() => false);
 
           // Check for game over modal
@@ -555,8 +557,25 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
             break;
           }
 
-          if (!hasAction) {
-            console.log(`  ⚠️ No action buttons found, waiting...`);
+          // If winner modal is showing (leftover from previous hand or quick showdown),
+          // dismiss it before proceeding
+          const leftoverModal = page.locator('[data-testid="winner-modal"]');
+          if (await leftoverModal.isVisible().catch(() => false)) {
+            console.log(`  Dismissing winner modal at start of hand ${handNum}...`);
+            await validateWinnerModal(page, result.failures, gameNum, handNum);
+            const nextBtn = leftoverModal.locator('button:has-text("Next Hand")');
+            if (await nextBtn.isVisible().catch(() => false)) {
+              await nextBtn.click();
+              await page.waitForTimeout(2000);
+            }
+            // Now wait for the actual new hand to start
+            await page.locator(
+              '[data-testid="fold-button"], [data-testid="call-button"]'
+            ).first().waitFor({ timeout: 30000 }).catch(() => {});
+          }
+
+          if (!meaningfulState) {
+            console.log(`  ⚠️ No game state found, waiting...`);
             await page.waitForTimeout(5000);
             continue;
           }
@@ -653,17 +672,16 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
               await foldBtn.click();
               await page.waitForTimeout(2000);
             } else {
-              // Waiting for AI or other players — check for all-in state
-              const allInMsg = page.locator('[data-testid="all-in-message"]');
-              const waitingMsg = page.locator('text=Waiting for other players');
+              // Not our turn — wait for something to happen (AI acting, showdown, etc.)
+              // Use a smart wait: poll for any state change up to 10 seconds
+              const stateChanged = await page.locator(
+                '[data-testid="call-button"]:not([disabled]), [data-testid="fold-button"]:not([disabled]), [data-testid="winner-modal"], text=Game Over'
+              ).first().waitFor({ timeout: 10000 }).then(() => true).catch(() => false);
 
-              if (await allInMsg.isVisible().catch(() => false) ||
-                  await waitingMsg.isVisible().catch(() => false)) {
-                // We're all-in or waiting — just wait for resolution
+              if (!stateChanged) {
+                // Still nothing — take a screenshot for debugging and wait more
+                console.log(`    Action ${actionCount}: no state change after 10s, waiting...`);
                 await page.waitForTimeout(3000);
-              } else {
-                // Unknown state — wait a bit
-                await page.waitForTimeout(2000);
               }
             }
 
