@@ -79,3 +79,6 @@ yarn-error.log*
 *.temp
 *.zip
 *-logs/
+
+# Stress test results (one-off, run sparingly)
+e2e/stress-test-results/
