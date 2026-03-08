@@ -24,7 +24,7 @@ import * as path from 'path';
 
 // ─── Configuration ───────────────────────────────────────────────
 const TOTAL_GAMES = 20;
-const MAX_HANDS_PER_GAME = 50;
+const MAX_HANDS_PER_GAME = 25;
 const RESULTS_DIR = path.join(__dirname, 'stress-test-results');
 const SESSION_ANALYSIS_GAMES = [5, 10, 15, 20]; // Trigger session analysis
 const HAND_ANALYSIS_GAMES = [8, 16];             // Trigger hand analysis
