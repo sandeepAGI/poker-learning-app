@@ -289,6 +289,32 @@ test.describe('Suite 6: Layout & UX', () => {
     await quitGame(page);
   });
 
+  test('6.10: Clicking community cards shows focus highlight', async ({ page }) => {
+    const { username } = await registerUser(page);
+    await createGame(page, username, 3);
+    await page.waitForTimeout(3000);
+
+    // Advance to flop to see community cards
+    const callBtn = page.locator('[data-testid="call-button"]');
+    if (await callBtn.isVisible({ timeout: 10000 }).catch(() => false)) {
+      await callBtn.click();
+      await page.waitForTimeout(5000);
+    }
+
+    const communityArea = page.locator('[data-testid="community-cards-area"]');
+    if (await communityArea.isVisible().catch(() => false)) {
+      await communityArea.click();
+      await page.waitForTimeout(500);
+
+      // Should have outline after click
+      const innerDiv = communityArea.locator('.outline-yellow-400');
+      const isHighlighted = await innerDiv.isVisible().catch(() => false);
+      expect(isHighlighted).toBe(true);
+    }
+
+    await quitGame(page);
+  });
+
   test('6.4: Control panel uses harmonized palette', async ({ page }) => {
     const { username } = await registerUser(page);
     await createGame(page, username, 3);

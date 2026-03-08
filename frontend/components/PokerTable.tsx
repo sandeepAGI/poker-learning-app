@@ -539,7 +539,7 @@ export function PokerTable() {
           whileHover={{ scale: 1.03 }}
         >
           {/* Community cards - Using new dedicated component */}
-          <div className={`transition-all rounded-xl ${focusedElement === 'community' ? 'ring-4 ring-yellow-400 shadow-lg shadow-yellow-400/50 p-2' : ''}`}>
+          <div className={`transition-all rounded-xl ${focusedElement === 'community' ? 'outline outline-4 outline-yellow-400 shadow-lg shadow-yellow-400/50 p-2' : ''}`}>
             <CommunityCards
               cards={gameState.community_cards}
               gameState={gameState.state}
