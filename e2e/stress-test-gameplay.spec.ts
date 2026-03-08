@@ -372,6 +372,124 @@ async function validateWinnerModal(
   return winAmount;
 }
 
+// ─── Analysis Trigger Helpers ────────────────────────────────────
+
+/** Trigger session analysis via Settings menu and validate */
+async function triggerSessionAnalysis(
+  page: Page,
+  gameNum: number,
+  failures: Failure[]
+): Promise<boolean> {
+  console.log(`  📈 Triggering session analysis (Game ${gameNum})...`);
+  const gameDir = path.join(RESULTS_DIR, `game-${String(gameNum).padStart(2, '0')}`);
+
+  try {
+    // Open settings menu
+    const settingsBtn = page.locator('[data-testid="settings-button"]');
+    if (!await settingsBtn.isVisible({ timeout: 3000 }).catch(() => false)) return false;
+    await settingsBtn.click();
+
+    // Wait for menu
+    await page.locator('[data-testid="settings-menu"]').waitFor({ timeout: 3000 });
+
+    // Click session analysis
+    const analysisBtn = page.locator('[data-testid="session-analysis-button"]');
+    if (!await analysisBtn.isVisible().catch(() => false)) return false;
+    await analysisBtn.click();
+
+    // Wait for modal to appear (loading or content)
+    await page.waitForTimeout(2000);
+
+    // Screenshot the analysis modal
+    await screenshotTo(page, path.join(gameDir, 'session-analysis.png'));
+
+    // Wait for loading to complete (up to 30 seconds)
+    await page.waitForTimeout(15000);
+    await screenshotTo(page, path.join(gameDir, 'session-analysis-loaded.png'));
+
+    // Verify no crash — page should still be responsive
+    const stillHasQuit = await page.locator('button:has-text("Quit")').isVisible().catch(() => false);
+    const hasModal = await page.locator('.fixed').first().isVisible().catch(() => false);
+
+    if (!stillHasQuit && !hasModal) {
+      await recordFailure(page, failures, gameNum, 0, 'session-analysis-crash',
+        'Page unresponsive after session analysis');
+      return false;
+    }
+
+    // Close the modal (click close button or press Escape)
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(1000);
+
+    // If modal still visible, try clicking a close button
+    const closeBtn = page.locator('button:has-text("Close"), button:has-text("×")');
+    if (await closeBtn.isVisible().catch(() => false)) {
+      await closeBtn.click();
+      await page.waitForTimeout(500);
+    }
+
+    console.log(`  ✅ Session analysis completed`);
+    return true;
+  } catch (e) {
+    console.log(`  ⚠️ Session analysis error: ${e}`);
+    await screenshotTo(page, path.join(gameDir, 'session-analysis-error.png'));
+    return false;
+  }
+}
+
+/** Trigger hand analysis via Settings menu and validate */
+async function triggerHandAnalysis(
+  page: Page,
+  gameNum: number,
+  handNum: number,
+  failures: Failure[]
+): Promise<boolean> {
+  console.log(`  📊 Triggering hand analysis (Game ${gameNum}, Hand ${handNum})...`);
+  const gameDir = path.join(RESULTS_DIR, `game-${String(gameNum).padStart(2, '0')}`);
+
+  try {
+    // Open settings menu
+    const settingsBtn = page.locator('[data-testid="settings-button"]');
+    if (!await settingsBtn.isVisible({ timeout: 3000 }).catch(() => false)) return false;
+    await settingsBtn.click();
+
+    // Wait for menu
+    await page.locator('[data-testid="settings-menu"]').waitFor({ timeout: 3000 });
+
+    // Click analyze hand
+    const analyzeBtn = page.locator('[data-testid="analyze-hand-button"]');
+    if (!await analyzeBtn.isVisible().catch(() => false)) return false;
+    await analyzeBtn.click();
+
+    // Wait for modal
+    await page.waitForTimeout(2000);
+
+    // Screenshot
+    await screenshotTo(page, path.join(gameDir, `hand-${String(handNum).padStart(2, '0')}-hand-analysis.png`));
+
+    // Wait for loading
+    await page.waitForTimeout(15000);
+    await screenshotTo(page, path.join(gameDir, `hand-${String(handNum).padStart(2, '0')}-hand-analysis-loaded.png`));
+
+    // Close modal
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(1000);
+
+    const closeBtn = page.locator('button:has-text("Close"), button:has-text("×")');
+    if (await closeBtn.isVisible().catch(() => false)) {
+      await closeBtn.click();
+      await page.waitForTimeout(500);
+    }
+
+    console.log(`  ✅ Hand analysis completed`);
+    return true;
+  } catch (e) {
+    console.log(`  ⚠️ Hand analysis error: ${e}`);
+    await screenshotTo(page, path.join(gameDir, `hand-${String(handNum).padStart(2, '0')}-hand-analysis-error.png`));
+    return false;
+  }
+}
+
 // ─── Main Test ───────────────────────────────────────────────────
 test.describe('Stress Test: 20 Full Poker Games', () => {
   test.setTimeout(3600000); // 1 hour timeout
