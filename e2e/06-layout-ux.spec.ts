@@ -211,6 +211,29 @@ test.describe('Suite 6: Layout & UX', () => {
     await quitGame(page);
   });
 
+  test('6.7: Control panel buttons visible at 1024x768', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    const { username } = await registerUser(page);
+    await createGame(page, username, 3);
+
+    const foldBtn = page.locator('[data-testid="fold-button"]');
+    const isPlayerTurn = await foldBtn.isVisible({ timeout: 15000 }).catch(() => false);
+
+    if (isPlayerTurn) {
+      const controlPanel = page.locator('[data-testid="control-panel"]');
+      const panelBounds = await controlPanel.boundingBox();
+      expect(panelBounds).not.toBeNull();
+
+      // Control panel should be scrollable — verify fold button is within viewport
+      const foldBounds = await foldBtn.boundingBox();
+      expect(foldBounds).not.toBeNull();
+      const viewport = page.viewportSize()!;
+      expect(foldBounds!.y + foldBounds!.height).toBeLessThan(viewport.height);
+    }
+
+    await quitGame(page);
+  });
+
   test('6.4: Control panel uses harmonized palette', async ({ page }) => {
     const { username } = await registerUser(page);
     await createGame(page, username, 3);

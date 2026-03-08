@@ -453,7 +453,7 @@ export function PokerTable() {
       )}
 
       {/* Main Content - Two-column layout on desktop, vertical on mobile */}
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row min-h-0">
 
         {/* LEFT COLUMN: Poker Table (75% on desktop, 100% on mobile) */}
         <div className="flex-1 md:w-[75%] flex items-center justify-center p-2 sm:p-4 relative">
