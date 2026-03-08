@@ -503,6 +503,10 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
 
     const allResults: GameResult[] = [];
 
+    // ── Register once, reuse for all games ──
+    const { username } = await registerUser(page);
+    console.log(`Registered user: ${username}`);
+
     for (let gameNum = 1; gameNum <= TOTAL_GAMES; gameNum++) {
       console.log(`\n${'='.repeat(60)}`);
       console.log(`GAME ${gameNum}/${TOTAL_GAMES}`);
@@ -522,13 +526,7 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
       };
 
       try {
-        // ── Setup: Clean slate for each game ──
-        // Clear all browser state to avoid stale modals/WebSocket from previous game
-        await page.evaluate(() => localStorage.clear());
-        await page.goto('/');
-        await page.waitForTimeout(1000);
-
-        const { username } = await registerUser(page);
+        // ── Setup: Create new game (same user) ──
         await createGame(page, username, 3);
         await page.waitForTimeout(2000);
 
@@ -727,8 +725,8 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
         result.endReason = 'error';
         await screenshotTo(page, path.join(gameDir, 'game-error.png')).catch(() => {});
 
-        // Try to recover: clear state and navigate home
-        await page.evaluate(() => localStorage.clear()).catch(() => {});
+        // Try to recover: quit current game and navigate home
+        await quitGame(page).catch(() => {});
         await page.goto('/');
         await page.waitForTimeout(2000);
       }
