@@ -710,6 +710,67 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
       console.log(`  Game ${gameNum} complete: ${result.handsPlayed} hands, ${failCount} failures, end: ${result.endReason}`);
     }
 
-    // TODO: Write summary report (Task 6)
+    // ─── Summary Report ──────────────────────────────────────────
+    const totalFailures = allResults.reduce((sum, r) => sum + r.failures.length, 0);
+    const totalHands = allResults.reduce((sum, r) => sum + r.handsPlayed, 0);
+    const gamesCompleted = allResults.filter(r => r.endReason !== 'error').length;
+
+    // Count failures by category
+    const failuresByCategory: Record<string, number> = {};
+    for (const result of allResults) {
+      for (const failure of result.failures) {
+        failuresByCategory[failure.category] = (failuresByCategory[failure.category] || 0) + 1;
+      }
+    }
+
+    const report: SummaryReport = {
+      timestamp: new Date().toISOString(),
+      totalGames: TOTAL_GAMES,
+      gamesCompleted,
+      totalHands,
+      totalFailures,
+      failuresByCategory,
+      games: allResults,
+      verdict: totalFailures === 0 ? 'PASS' : 'FAIL',
+    };
+
+    // Write JSON report
+    fs.writeFileSync(
+      path.join(RESULTS_DIR, 'summary-report.json'),
+      JSON.stringify(report, null, 2)
+    );
+
+    // Print human-readable summary
+    console.log(`\n${'═'.repeat(60)}`);
+    console.log('STRESS TEST SUMMARY');
+    console.log(`${'═'.repeat(60)}`);
+    console.log(`Games completed: ${gamesCompleted}/${TOTAL_GAMES}`);
+    console.log(`Total hands played: ${totalHands}`);
+    console.log(`Total failures: ${totalFailures}`);
+
+    if (totalFailures > 0) {
+      console.log(`\nFailures by category:`);
+      for (const [cat, count] of Object.entries(failuresByCategory).sort((a, b) => b[1] - a[1])) {
+        console.log(`  ${cat}: ${count}`);
+      }
+    }
+
+    console.log(`\nPer-game summary:`);
+    for (const result of allResults) {
+      const status = result.failures.length === 0 ? '✅' : `❌ (${result.failures.length} failures)`;
+      const analysis = result.analysisTriggered.length > 0
+        ? ` | Analysis: ${result.analysisTriggered.map(a => `${a.type}:${a.success ? 'ok' : 'fail'}`).join(', ')}`
+        : '';
+      console.log(`  Game ${result.gameNumber}: ${result.handsPlayed} hands, ${result.endReason} ${status}${analysis}`);
+    }
+
+    console.log(`\nVerdict: ${report.verdict}`);
+    console.log(`Report saved to: ${path.join(RESULTS_DIR, 'summary-report.json')}`);
+    console.log(`${'═'.repeat(60)}\n`);
+
+    // Soft assertion — don't fail the test on game logic issues,
+    // just report them. The report is the deliverable.
+    // Uncomment the line below to make it a hard fail:
+    // expect(totalFailures).toBe(0);
   });
 });
