@@ -265,6 +265,18 @@ export async function quitGame(page: Page) {
     // Wait for redirect to home
     await page.waitForURL('/', { timeout: 5000 }).catch(() => {});
 
+    // Wait for all pending network requests (WebSocket teardown, API calls) to settle
+    await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+    // Clear any stale game state from localStorage to prevent leakage into next game
+    await page.evaluate(() => {
+      localStorage.removeItem('game_id');
+      localStorage.removeItem('game_state');
+    });
+
+    // Allow backend to fully clean up the game (AI turn processing, game dict removal)
+    await page.waitForTimeout(2000);
+
     return true;
   }
 

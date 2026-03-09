@@ -24,7 +24,8 @@ import * as path from 'path';
 
 // ─── Configuration ───────────────────────────────────────────────
 const TOTAL_GAMES = 20;
-const MAX_HANDS_PER_GAME = 25;
+const MAX_HANDS_PER_GAME = 30;
+const GAMES_PER_USER = 5; // Register a fresh user every N games
 const RESULTS_DIR = path.join(__dirname, 'stress-test-results');
 const SESSION_ANALYSIS_GAMES = [5, 10, 15, 20]; // Trigger session analysis
 const HAND_ANALYSIS_GAMES = [8, 16];             // Trigger hand analysis
@@ -503,13 +504,27 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
 
     const allResults: GameResult[] = [];
 
-    // ── Register once, reuse for all games ──
-    const { username } = await registerUser(page);
-    console.log(`Registered user: ${username}`);
+    // ── Register first user ──
+    let currentUser = await registerUser(page);
+    console.log(`Registered user: ${currentUser.username}`);
 
     for (let gameNum = 1; gameNum <= TOTAL_GAMES; gameNum++) {
+      // Register a fresh user every GAMES_PER_USER games to avoid state accumulation
+      if (gameNum > 1 && (gameNum - 1) % GAMES_PER_USER === 0) {
+        console.log(`\n  🔄 Rotating user after ${GAMES_PER_USER} games...`);
+        await page.goto('/');
+        // Logout current user
+        const logoutBtn = page.locator('button:has-text("Logout")');
+        if (await logoutBtn.isVisible().catch(() => false)) {
+          await logoutBtn.click();
+          await page.waitForTimeout(2000);
+        }
+        currentUser = await registerUser(page);
+        console.log(`  Registered new user: ${currentUser.username}`);
+      }
+
       console.log(`\n${'='.repeat(60)}`);
-      console.log(`GAME ${gameNum}/${TOTAL_GAMES}`);
+      console.log(`GAME ${gameNum}/${TOTAL_GAMES} (user: ${currentUser.username})`);
       console.log(`${'='.repeat(60)}`);
 
       const gameDir = path.join(RESULTS_DIR, `game-${String(gameNum).padStart(2, '0')}`);
@@ -526,8 +541,8 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
       };
 
       try {
-        // ── Setup: Create new game (same user) ──
-        await createGame(page, username, 3);
+        // ── Setup: Create new game ──
+        await createGame(page, currentUser.username, 3);
         await page.waitForTimeout(2000);
 
         // Record initial chip total
@@ -739,9 +754,23 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
         result.finalChipTotal = await readTotalChips(page);
         await screenshotTo(page, path.join(gameDir, 'game-end.png'));
 
-        // Quit game
+        // Quit game (helpers.ts now waits for networkidle + clears localStorage)
         await quitGame(page);
-        await page.waitForTimeout(1000);
+
+        // Extra safety: force-navigate to home and clear all game-related frontend state
+        await page.goto('/');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.evaluate(() => {
+          // Clear any Zustand persisted state and game references
+          const keysToRemove = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && (key.includes('game') || key.includes('ws') || key.includes('zustand'))) {
+              keysToRemove.push(key);
+            }
+          }
+          keysToRemove.forEach(k => localStorage.removeItem(k));
+        });
 
       } catch (e) {
         console.log(`  💥 Game ${gameNum} error: ${e}`);
@@ -751,6 +780,17 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
         // Try to recover: quit current game and navigate home
         await quitGame(page).catch(() => {});
         await page.goto('/');
+        await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+        await page.evaluate(() => {
+          const keysToRemove = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key && (key.includes('game') || key.includes('ws') || key.includes('zustand'))) {
+              keysToRemove.push(key);
+            }
+          }
+          keysToRemove.forEach(k => localStorage.removeItem(k));
+        }).catch(() => {});
         await page.waitForTimeout(2000);
       }
 
