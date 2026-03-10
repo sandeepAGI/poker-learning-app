@@ -133,6 +133,18 @@ export const pokerApi = {
     return response.data;
   },
 
+  // Delete user account
+  async deleteAccount(): Promise<{ message: string }> {
+    const response = await api.delete('/auth/account');
+    return response.data;
+  },
+
+  // Clear all game history
+  async clearHistory(): Promise<{ message: string; deleted_count: number }> {
+    const response = await api.delete('/games/history');
+    return response.data;
+  },
+
   // Health check
   async healthCheck(): Promise<{ status: string }> {
     const response = await api.get('/');

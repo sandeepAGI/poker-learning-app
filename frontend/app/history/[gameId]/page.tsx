@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { pokerApi } from '@/lib/api';
 import { isAuthenticated } from '@/lib/auth';
 import Link from 'next/link';
 import { LLMAnalysisContent } from '@/components/AnalysisModalLLM';
+import { SessionAnalysisModal } from '@/components/SessionAnalysisModal';
 
 interface Hand {
   hand_id: string;
@@ -20,7 +21,9 @@ interface Hand {
 export default function HandReviewPage() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const gameId = params.gameId as string;
+  const autoAnalyze = searchParams.get('analyze') === 'true';
 
   const [hands, setHands] = useState<Hand[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -28,6 +31,14 @@ export default function HandReviewPage() {
   const [loadingAnalysis, setLoadingAnalysis] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  // Session analysis state
+  const [showSessionAnalysis, setShowSessionAnalysis] = useState(false);
+  const [sessionAnalysis, setSessionAnalysis] = useState<any>(null);
+  const [sessionLoading, setSessionLoading] = useState(false);
+  const [sessionError, setSessionError] = useState<string | null>(null);
+  const [sessionDepth, setSessionDepth] = useState<'quick' | 'deep'>('quick');
+  const [sessionHandsAnalyzed, setSessionHandsAnalyzed] = useState(0);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -49,6 +60,13 @@ export default function HandReviewPage() {
 
     fetchHands();
   }, [gameId, router]);
+
+  // Auto-trigger session analysis if ?analyze=true
+  useEffect(() => {
+    if (autoAnalyze && !loading && hands.length > 0 && !showSessionAnalysis) {
+      handleSessionAnalysis('quick');
+    }
+  }, [autoAnalyze, loading, hands.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const currentHand = hands[currentIndex];
 
@@ -88,6 +106,30 @@ export default function HandReviewPage() {
   const goToNext = () => {
     setCurrentIndex(Math.min(hands.length - 1, currentIndex + 1));
     setError(''); // Clear any errors
+  };
+
+  const handleSessionAnalysis = async (depth: 'quick' | 'deep') => {
+    setSessionLoading(true);
+    setSessionError(null);
+    setSessionDepth(depth);
+    setShowSessionAnalysis(true);
+    try {
+      const result = await pokerApi.getSessionAnalysis(gameId, { depth });
+      if (result.error) {
+        setSessionError(result.error);
+      } else {
+        setSessionAnalysis(result.analysis);
+        setSessionHandsAnalyzed(result.hands_analyzed);
+      }
+    } catch (err: any) {
+      if (err.response?.status === 429) {
+        setSessionError('Rate limited. Please wait before requesting another analysis.');
+      } else {
+        setSessionError(err instanceof Error ? err.message : 'Session analysis failed');
+      }
+    } finally {
+      setSessionLoading(false);
+    }
   };
 
   if (loading) {
@@ -134,8 +176,18 @@ export default function HandReviewPage() {
           >
             ← Back to History
           </Link>
-          <div className="text-gray-400">
-            Hand {currentIndex + 1} of {hands.length}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => handleSessionAnalysis('quick')}
+              disabled={sessionLoading}
+              data-testid="session-analysis-button"
+              className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded text-sm transition"
+            >
+              {sessionLoading ? 'Analyzing...' : 'Analyze Session'}
+            </button>
+            <div className="text-gray-400">
+              Hand {currentIndex + 1} of {hands.length}
+            </div>
           </div>
         </div>
 
@@ -238,6 +290,18 @@ export default function HandReviewPage() {
           </button>
         </div>
       </div>
+
+      {/* Session Analysis Modal */}
+      <SessionAnalysisModal
+        isOpen={showSessionAnalysis}
+        analysis={sessionAnalysis}
+        isLoading={sessionLoading}
+        error={sessionError}
+        onClose={() => setShowSessionAnalysis(false)}
+        onAnalyze={handleSessionAnalysis}
+        currentDepth={sessionDepth}
+        handsAnalyzed={sessionHandsAnalyzed}
+      />
     </div>
   );
 }

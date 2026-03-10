@@ -5,21 +5,16 @@ import { Card } from './Card';
 
 interface CommunityCardsProps {
   cards: string[];
-  gameState: string;
 }
 
-export function CommunityCards({ cards, gameState }: CommunityCardsProps) {
+export function CommunityCards({ cards }: CommunityCardsProps) {
   if (cards.length === 0) return null;
 
-  // Determine stage label
+  // Determine stage label from card count only (avoids race condition with gameState)
   let stageLabel = '';
-  if (cards.length === 3 && gameState === 'flop') {
-    stageLabel = 'FLOP';
-  } else if (cards.length === 4 && gameState === 'turn') {
-    stageLabel = 'TURN';
-  } else if (cards.length === 5 && gameState === 'river') {
-    stageLabel = 'RIVER';
-  }
+  if (cards.length === 3) stageLabel = 'FLOP';
+  else if (cards.length === 4) stageLabel = 'TURN';
+  else if (cards.length === 5) stageLabel = 'RIVER';
 
   return (
     <div data-testid="community-cards-container" className="flex flex-col items-center">

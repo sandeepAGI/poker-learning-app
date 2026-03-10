@@ -77,7 +77,7 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 pointer-events-none"
         >
           {/* Backdrop */}
           <div className="absolute inset-0 bg-black bg-opacity-75 pointer-events-none" />
@@ -153,7 +153,7 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
                 <div className="space-y-3">
                   {winners.map((winner, index) => (
                     <div
-                      key={winner.player_id}
+                      key={`winner-${winner.player_id}`}
                       className="bg-gray-50 rounded-lg p-3"
                       data-testid={`winner-${index}`}
                     >
@@ -166,8 +166,8 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
                         </span>
                       </div>
 
-                      {/* Show hand rank and cards if showdown */}
-                      {hasShowdown && winner.hand_rank && winner.hole_cards && winner.hole_cards.length > 0 && (
+                      {/* Show hand rank and cards only if NO showdown section below */}
+                      {!hasShowdown && winner.hand_rank && winner.hole_cards && winner.hole_cards.length > 0 && (
                         <div className="mt-2">
                           <div className="text-xs text-gray-600 font-semibold mb-1">
                             {winner.hand_rank}
@@ -200,8 +200,8 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
                   ${winners[0].amount}
                 </div>
 
-                {/* Show hand rank and cards if showdown */}
-                {hasShowdown && winners[0].hand_rank && winners[0].hole_cards && winners[0].hole_cards.length > 0 && (
+                {/* Show hand rank and cards only if NO showdown section below (avoids duplicate display) */}
+                {!hasShowdown && winners[0].hand_rank && winners[0].hole_cards && winners[0].hole_cards.length > 0 && (
                   <div className="mt-2">
                     <div className="text-sm text-gray-600 font-semibold mb-2">
                       {winners[0].hand_rank}
@@ -232,7 +232,7 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
                 <div className="space-y-1.5">
                   {showdownHands.map((participant, index) => (
                     <div
-                      key={participant.player_id}
+                      key={`showdown-${participant.player_id}`}
                       className={`bg-gray-700 rounded-lg p-1.5 ${participant.amount_won > 0 ? 'border-2 border-green-500' : ''}`}
                     >
                       <div className="flex justify-between items-start mb-1">
@@ -277,7 +277,7 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
                 <div className="flex flex-wrap gap-1">
                   {foldedPlayers.map((player) => (
                     <span
-                      key={player.player_id}
+                      key={`folded-${player.player_id}`}
                       className="bg-gray-300 text-gray-700 px-2 py-0.5 rounded text-xs font-medium"
                     >
                       {player.name}

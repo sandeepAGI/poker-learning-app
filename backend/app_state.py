@@ -3,9 +3,10 @@ Shared application state - accessed by routes and main.py.
 
 Contains in-memory game storage, analysis caching, and LLM configuration.
 """
+import asyncio
 import time
 import logging
-from typing import Dict, Tuple, List, Optional, Any
+from typing import Dict, Tuple, List, Optional, Any, Set
 from dataclasses import dataclass
 from datetime import datetime
 from pydantic import BaseModel
@@ -17,6 +18,12 @@ logger = logging.getLogger(__name__)
 # In-memory game storage with TTL (Time To Live)
 # Format: {game_id: (PokerGame, last_access_timestamp)}
 games: Dict[str, Tuple[PokerGame, float]] = {}
+
+# Track deleted game IDs to prevent re-insertion by background tasks
+deleted_games: Set[str] = set()
+
+# Track asyncio tasks per game for cancellation on game deletion
+game_tasks: Dict[str, asyncio.Task] = {}
 
 # Memory management constants
 GAME_MAX_IDLE_SECONDS = 3600  # Remove games idle > 1 hour

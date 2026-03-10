@@ -120,12 +120,12 @@ export function PokerTable() {
 
   // Bug Fix #3: Check if player is busted (not in game anymore)
   // Backend sets is_active=false ONLY when player has 0 chips at start of new hand
-  // This is the ONLY reliable way to detect true elimination
   const isBusted = gameState.human_player.stack === 0 && !gameState.human_player.is_active;
 
-  // Use backend's is_active flag for elimination (don't try to infer from all_in state)
-  // Backend knows definitively when player is eliminated after all pot awards
-  const isEliminated = isBusted;
+  // Detect elimination: either backend confirmed (is_active=false) OR
+  // during showdown with stack=0 (pot already awarded, player lost everything)
+  const isEliminatedAtShowdown = isShowdown && gameState.human_player.stack === 0;
+  const isEliminated = isBusted || isEliminatedAtShowdown;
 
   // Player is all-in and waiting for hand to complete
   const isWaitingAllIn = gameState.human_player.all_in && !isShowdown && gameState.human_player.stack === 0;
@@ -170,10 +170,13 @@ export function PokerTable() {
     }
   }, [gameState.winner_info]);
 
-  // Handle winner modal close - advance to next hand
+  // Handle winner modal close - advance to next hand (or show game-over if eliminated)
   const handleWinnerModalClose = () => {
     setShowWinnerModal(false);
-    nextHand();
+    if (!isEliminated) {
+      nextHand();
+    }
+    // If eliminated, the game-over useEffect will trigger now that showWinnerModal is false
   };
 
   // UX Phase 2: Handle analysis button click
@@ -259,11 +262,12 @@ export function PokerTable() {
 
   // Show game over modal when human player is eliminated
   // Backend sets is_active=false only after pot awards, so this is safe
+  // Delay until winner modal is dismissed to prevent overlay blocking
   useEffect(() => {
-    if (isEliminated && !showGameOverModal) {
+    if (isEliminated && !showGameOverModal && !showWinnerModal) {
       setShowGameOverModal(true);
     }
-  }, [isEliminated, showGameOverModal]);
+  }, [isEliminated, showGameOverModal, showWinnerModal]);
 
   // Handle new game after elimination
   const handleNewGame = () => {
@@ -409,7 +413,7 @@ export function PokerTable() {
           {/* Phase 2: Help button */}
           <button
             data-testid="help-button"
-            onClick={() => window.open('/guide', '_blank')}
+            onClick={() => window.open('/guide?from=game', '_blank')}
             className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-4 py-2 rounded-lg font-semibold mr-2"
             title="Open game guide in new tab"
           >
@@ -542,7 +546,6 @@ export function PokerTable() {
           <div className={`transition-all rounded-xl ${focusedElement === 'community' ? 'outline outline-4 outline-yellow-400 shadow-lg shadow-yellow-400/50 p-2' : ''}`}>
             <CommunityCards
               cards={gameState.community_cards}
-              gameState={gameState.state}
             />
           </div>
         </motion.div>

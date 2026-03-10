@@ -22,6 +22,7 @@ export default function HistoryPage() {
   const [games, setGames] = useState<GameSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [clearing, setClearing] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -54,6 +55,24 @@ export default function HistoryPage() {
     });
   };
 
+  const handleClearHistory = async () => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete all ${games.length} game(s)? This cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    setClearing(true);
+    try {
+      await pokerApi.clearHistory();
+      setGames([]);
+    } catch (err) {
+      setError('Failed to clear history');
+      console.error(err);
+    } finally {
+      setClearing(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -80,7 +99,17 @@ export default function HistoryPage() {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-white">Game History</h1>
-          <div className="space-x-4">
+          <div className="flex items-center space-x-4">
+            {games.length > 0 && (
+              <button
+                onClick={handleClearHistory}
+                disabled={clearing}
+                data-testid="clear-history-button"
+                className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded text-sm transition"
+              >
+                {clearing ? 'Clearing...' : 'Clear All'}
+              </button>
+            )}
             <Link
               href="/"
               className="text-blue-400 hover:text-blue-300 transition"
@@ -149,12 +178,20 @@ export default function HistoryPage() {
                     </div>
                   </div>
 
-                  <Link
-                    href={`/history/${game.game_id}`}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm transition ml-4"
-                  >
-                    Review Hands
-                  </Link>
+                  <div className="flex gap-2 ml-4">
+                    <Link
+                      href={`/history/${game.game_id}?analyze=true`}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded text-sm transition"
+                    >
+                      Analyze
+                    </Link>
+                    <Link
+                      href={`/history/${game.game_id}`}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm transition"
+                    >
+                      Review
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

@@ -249,11 +249,15 @@ async def get_session_analysis(
     game_id: str,
     depth: str = Query("quick", regex="^(quick|deep)$"),
     hand_count: Optional[int] = None,
-    use_cache: bool = True
+    use_cache: bool = True,
+    user_id: str = Depends(verify_token),
+    db: Session = Depends(get_db)
 ):
     """
     Get LLM-powered session analysis across multiple hands.
     Phase 4.5: Session Analysis
+
+    Supports both active (in-memory) and completed (database) games.
 
     Args:
         game_id: Game ID
@@ -277,15 +281,38 @@ async def get_session_analysis(
             detail="LLM analysis not available. Set ANTHROPIC_API_KEY environment variable."
         )
 
-    # Check game exists
-    if game_id not in games:
-        raise HTTPException(status_code=404, detail="Game not found")
+    # Try in-memory game first, then fall back to database
+    game = None
+    hand_history = []
+    ending_stack = 1000
 
-    game, _ = games[game_id]
-    games[game_id] = (game, time.time())  # Update access time
+    if game_id in games:
+        game, _ = games[game_id]
+        games[game_id] = (game, time.time())
+        hand_history = game.hand_history if hasattr(game, 'hand_history') else []
+        human_player = next((p for p in game.players if p.is_human), None)
+        if human_player:
+            ending_stack = human_player.stack
+    else:
+        # Load from database (completed games)
+        db_game = db.query(Game).filter(
+            Game.game_id == game_id,
+            Game.user_id == user_id
+        ).first()
+        if not db_game:
+            raise HTTPException(status_code=404, detail="Game not found")
 
-    # Get hand history
-    hand_history = game.hand_history if hasattr(game, 'hand_history') else []
+        # Load hands from database and convert to CompletedHand-like dicts
+        db_hands = db.query(Hand).filter(
+            Hand.game_id == game_id
+        ).order_by(Hand.hand_number).all()
+
+        if not db_hands:
+            raise HTTPException(status_code=404, detail="No hands to analyze")
+
+        # Convert DB hands to the format expected by the analyzer
+        hand_history = [h.hand_data for h in db_hands]
+        ending_stack = db_game.final_stack or 1000
 
     if not hand_history:
         raise HTTPException(status_code=404, detail="No hands to analyze")
@@ -319,12 +346,6 @@ async def get_session_analysis(
     try:
         # Get starting stack (from first hand or default)
         starting_stack = 1000  # Default starting stack
-        # Note: We use a default since CompletedHand doesn't track starting stack per hand
-        # The human_final_stack only shows ending stack for that hand
-
-        # Get current stack - use the same pattern as rest of codebase
-        human_player = next(p for p in game.players if p.is_human)
-        ending_stack = human_player.stack
 
         # Call LLM analyzer with SLICED history (not full history)
         analysis = app_state.llm_analyzer.analyze_session(

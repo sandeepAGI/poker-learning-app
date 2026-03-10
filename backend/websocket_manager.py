@@ -355,6 +355,12 @@ async def process_ai_turns_with_events(game: PokerGame, game_id: str, show_ai_th
     while game.current_player_index is not None:
         iteration_count += 1
 
+        # Check if game was deleted while AI was processing
+        from app_state import games, deleted_games
+        if game_id in deleted_games or game_id not in games:
+            print(f"[WebSocket] Game {game_id} was deleted, stopping AI turns")
+            break
+
         # SAFETY: Detect infinite loop
         if iteration_count > max_iterations:
             print(f"[WebSocket] ⚠️  INFINITE LOOP DETECTED! Stopping after {iteration_count} iterations")

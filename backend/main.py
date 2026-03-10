@@ -155,7 +155,8 @@ async def websocket_endpoint(
         # Note: Initial connection always starts without step mode - user can enable it later
         current = game.get_current_player()
         if current and not current.is_human:
-            asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking=False, step_mode=False))
+            task = asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking=False, step_mode=False))
+            app_state.game_tasks[game_id] = task
 
         print(f"[WebSocket] Client connected to game {game_id}, awaiting actions...")
 
@@ -165,8 +166,9 @@ async def websocket_endpoint(
             data = await websocket.receive_json()
             print(f"[WebSocket] Received: {data}")
 
-            # Update game access time
-            games[game_id] = (game, time.time())
+            # Update game access time (guard against re-inserting deleted games)
+            if game_id not in app_state.deleted_games:
+                games[game_id] = (game, time.time())
 
             # Handle different message types
             message_type = data.get("type", "action")
@@ -203,7 +205,8 @@ async def websocket_endpoint(
                     await manager.broadcast_state(game_id, game, show_ai_thinking)
 
                     # Process AI turns in background task (so we can continue receiving messages)
-                    asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking, step_mode))
+                    task = asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking, step_mode))
+                    app_state.game_tasks[game_id] = task
                     return True
 
                 # Execute action with lock (only one action per game at a time)
@@ -243,7 +246,8 @@ async def websocket_endpoint(
                 # Process AI turns if game starts with AI (background task)
                 current = game.get_current_player()
                 if current and not current.is_human:
-                    asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking, step_mode))
+                    task = asyncio.create_task(process_ai_turns_with_events(game, game_id, show_ai_thinking, step_mode))
+                    app_state.game_tasks[game_id] = task
 
             elif message_type == "continue":
                 # Phase 4: User clicked "Continue" button in step mode
@@ -361,8 +365,9 @@ if TEST_MODE:
         # Disable chip conservation for test scenarios
         game.qc_enabled = False
 
-        # Update access time
-        games[game_id] = (game, time.time())
+        # Update access time (guard against re-inserting deleted games)
+        if game_id not in app_state.deleted_games:
+            games[game_id] = (game, time.time())
 
         # Serialize and return new state
         state = serialize_game_state(game, show_ai_thinking=False)

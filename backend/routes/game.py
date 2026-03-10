@@ -203,6 +203,14 @@ def _build_game_response(game_id: str, game: PokerGame, show_ai_thinking: bool =
     )
 
 
+@router.delete("/games/history")
+async def clear_game_history(user_id: str = Depends(verify_token), db: Session = Depends(get_db)):
+    """Delete all completed games and associated data for the authenticated user."""
+    deleted = db.query(Game).filter(Game.user_id == user_id).delete()
+    db.commit()
+    return {"message": f"Deleted {deleted} game(s)", "deleted_count": deleted}
+
+
 @router.post("/games", response_model=Dict[str, str])
 def create_game(
     request: CreateGameRequest,
@@ -406,7 +414,12 @@ async def quit_game(
     db_game.completed_at = datetime.utcnow()
     db.commit()
 
-    # Clean up in-memory state
+    # Clean up in-memory state — cancel AI tasks and mark as deleted
+    from app_state import deleted_games, game_tasks
+    if game_id in game_tasks:
+        game_tasks[game_id].cancel()
+        del game_tasks[game_id]
+    deleted_games.add(game_id)
     if game_id in games:
         del games[game_id]
 
