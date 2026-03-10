@@ -88,7 +88,7 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.8, y: 50 }}
             transition={{ type: 'spring', damping: 20 }}
-            className="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-2xl shadow-2xl max-w-md w-full max-h-[80vh] flex flex-col border-4 border-yellow-300 pointer-events-auto relative z-10"
+            className="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-2xl shadow-2xl max-w-md w-full max-h-[80dvh] flex flex-col border-4 border-yellow-300 pointer-events-auto relative z-10"
             data-testid="winner-modal"
           >
             {/* Scrollable content area */}

@@ -42,7 +42,7 @@ export function SessionAnalysisModal({
 
           {/* Modal */}
           <motion.div
-            className="relative bg-gray-900 text-white rounded-2xl shadow-2xl max-w-4xl w-full mx-4 max-h-[85vh] overflow-y-auto pointer-events-auto z-10"
+            className="relative bg-gray-900 text-white rounded-2xl shadow-2xl max-w-4xl w-full mx-4 max-h-[85dvh] overflow-y-auto pointer-events-auto z-10"
             initial={{ scale: 0.9, y: 50 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, y: 50 }}
@@ -57,7 +57,7 @@ export function SessionAnalysisModal({
                   </p>
                 </div>
                 {/* Quick/Deep Toggle */}
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <button
                     onClick={() => onAnalyze('quick')}
                     disabled={isLoading}

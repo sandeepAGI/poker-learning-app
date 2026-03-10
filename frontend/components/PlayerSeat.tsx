@@ -28,7 +28,7 @@ export function PlayerSeat({
   return (
     <motion.div
       data-testid={`player-seat-${player.player_id}`}
-      className={`relative p-2 sm:p-3 md:p-4 rounded-lg bg-gray-100 ${
+      className={`relative min-w-[80px] sm:min-w-[120px] p-2 sm:p-3 md:p-4 rounded-lg bg-gray-100 ${
         isCurrentTurn ? 'ring-4 ring-amber-300 border-2 border-amber-200 shadow-lg shadow-amber-300/40' : 'border-2 border-gray-300'
       } ${!player.is_active ? 'opacity-50' : ''}`}
       animate={{
@@ -38,26 +38,26 @@ export function PlayerSeat({
     >
       {/* Phase 0.5: Button Indicators */}
       {isDealer && (
-        <div data-testid={`dealer-button-${player.player_id}`} className="absolute -top-3 -right-3 w-10 h-10 bg-white rounded-full border-4 border-amber-500 flex items-center justify-center text-sm font-bold shadow-lg z-10">
+        <div data-testid={`dealer-button-${player.player_id}`} className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-white rounded-full border-4 border-amber-500 flex items-center justify-center text-[10px] sm:text-xs md:text-sm font-bold shadow-lg z-10">
           D
         </div>
       )}
 
       {isSmallBlind && (
-        <div data-testid={`small-blind-button-${player.player_id}`} className="absolute -top-3 -left-3 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg z-10">
+        <div data-testid={`small-blind-button-${player.player_id}`} className="absolute -top-2 -left-2 sm:-top-3 sm:-left-3 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-[10px] sm:text-xs font-bold shadow-lg z-10">
           SB
         </div>
       )}
 
       {isBigBlind && (
-        <div data-testid={`big-blind-button-${player.player_id}`} className="absolute -top-3 left-8 w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg z-10">
+        <div data-testid={`big-blind-button-${player.player_id}`} className="absolute -top-2 left-5 sm:-top-3 sm:left-8 w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 bg-red-500 rounded-full flex items-center justify-center text-white text-[10px] sm:text-xs font-bold shadow-lg z-10">
           BB
         </div>
       )}
 
       {/* Player name and personality */}
       <div className="flex items-center gap-2 mb-1.5">
-        <div data-testid={`player-name-${player.player_id}`} className="font-semibold text-sm">{player.is_human ? 'You' : player.name}</div>
+        <div data-testid={`player-name-${player.player_id}`} className="font-semibold text-xs sm:text-sm">{player.is_human ? 'You' : player.name}</div>
         {/* Only reveal AI strategy at showdown */}
         {player.personality && isShowdown && (
           <div data-testid={`personality-${player.player_id}`} className="text-xs bg-blue-200 px-2 py-0.5 rounded">{player.personality}</div>
@@ -87,7 +87,7 @@ export function PlayerSeat({
       <div className="space-y-1.5">
         <div data-testid={`stack-display-${player.player_id}`} className="flex justify-between items-center">
           <span className="text-sm text-gray-600">Stack:</span>
-          <span className="text-lg font-bold">${player.stack}</span>
+          <span className="text-sm sm:text-lg font-bold">${player.stack}</span>
         </div>
         {player.current_bet > 0 && (
           <motion.div

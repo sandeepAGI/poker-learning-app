@@ -33,6 +33,18 @@ export const DEFAULT_ELLIPSE_CONFIG: EllipseConfig = {
 };
 
 /**
+ * Mobile ellipse configuration
+ * Tighter horizontal radius to prevent seats clipping off-screen on 375px
+ * Taller vertical radius to use the portrait-oriented table better
+ */
+export const MOBILE_ELLIPSE_CONFIG: EllipseConfig = {
+  centerX: 50,
+  centerY: 38,
+  radiusX: 33,
+  radiusY: 28
+};
+
+/**
  * Calculate elliptical positions for opponents
  * Distributes players across a wide arc that uses lower quadrants too.
  * 4-player (3 opponents): ~240° arc (from 210° to -30°)
@@ -129,13 +141,17 @@ export function getCenterAreaPosition(config: EllipseConfig = DEFAULT_ELLIPSE_CO
 export function calculateContainerSize(
   viewportWidth: number,
   viewportHeight: number,
-  headerHeight: number = 0
+  headerHeight: number = 0,
+  isMobile: boolean = false
 ): { width: string; height: string } {
-  const aspectRatio = 16 / 10;
-  const padding = 32; // 2rem total padding
+  // On mobile, use a squarer aspect ratio so the table fills more vertical space
+  const aspectRatio = isMobile ? 4 / 5 : 16 / 10;
+  const padding = isMobile ? 16 : 32;
+  // On mobile, reserve space for the fixed bottom action bar (~140px)
+  const bottomBarHeight = isMobile ? 140 : 0;
 
   const availableWidth = Math.min(viewportWidth - padding, 1400);
-  const availableHeight = viewportHeight - headerHeight - padding;
+  const availableHeight = viewportHeight - headerHeight - padding - bottomBarHeight;
 
   // Width-driven dimensions
   const wWidth = availableWidth;

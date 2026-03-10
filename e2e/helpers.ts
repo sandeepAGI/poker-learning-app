@@ -2,6 +2,17 @@ import { Page, expect } from '@playwright/test';
 import { generateTestUsername } from './config';
 
 /**
+ * Dismiss the mobile gate if visible (for mobile viewport tests)
+ */
+export async function dismissMobileGate(page: Page) {
+  const gate = page.locator('[data-testid="mobile-gate"]');
+  if (await gate.isVisible({ timeout: 3000 }).catch(() => false)) {
+    await page.locator('[data-testid="mobile-gate-continue"]').click();
+    await expect(gate).not.toBeVisible({ timeout: 3000 });
+  }
+}
+
+/**
  * E2E Test Helpers
  * Reusable functions for common test operations
  */
@@ -33,6 +44,9 @@ export async function registerUser(page: Page, username?: string, password?: str
   });
 
   await page.goto('/');
+
+  // Dismiss mobile gate if present (for mobile viewport tests)
+  await dismissMobileGate(page);
 
   // Check if already authenticated
   const isAuth = await page.locator('text=Start New Game').isVisible().catch(() => false);
@@ -134,6 +148,9 @@ export async function createGame(page: Page, playerName?: string, aiCount: numbe
   // Navigate to new game page
   await page.goto('/game/new');
 
+  // Dismiss mobile gate if present
+  await dismissMobileGate(page);
+
   // Check if already in a game
   const inGame = await page.locator('button:has-text("Fold")').isVisible().catch(() => false);
   if (inGame) {
@@ -158,9 +175,9 @@ export async function createGame(page: Page, playerName?: string, aiCount: numbe
     // Click Start Game
     await startButton.click();
 
-    // Wait for game to load (action buttons appear)
+    // Wait for game to load — poker table header appears on both mobile and desktop
     try {
-      await page.locator('[data-testid="fold-button"], [data-testid="call-button"], button:has-text("Fold"), button:has-text("Check")').first().waitFor({
+      await page.locator('[data-testid="poker-table-header"]').waitFor({
         timeout: 15000
       });
     } catch (e) {

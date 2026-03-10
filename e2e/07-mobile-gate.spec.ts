@@ -36,8 +36,7 @@ test.describe('Suite 7: Mobile Gate', () => {
     await expect(page.locator('[data-testid="mobile-gate"]')).not.toBeVisible();
 
     // Game creation page content should be visible
-    const pageContent = await page.locator('button:has-text("Start Game"), text=Start New Game').first().isVisible().catch(() => false);
-    expect(pageContent).toBe(true);
+    await expect(page.locator('button:has-text("Start Game")').first()).toBeVisible({ timeout: 10000 });
   });
 
   test('7.3: Mobile shows gate message with "Continue anyway" link', async ({ page }) => {
@@ -49,7 +48,7 @@ test.describe('Suite 7: Mobile Gate', () => {
     await expect(gate).toBeVisible({ timeout: 5000 });
 
     // Should contain the heading
-    await expect(gate.locator('text=Best Experienced on Desktop')).toBeVisible();
+    await expect(gate.locator('h1:has-text("Optimized for Larger Screens")')).toBeVisible();
 
     // Should contain the continue button
     await expect(page.locator('[data-testid="mobile-gate-continue"]')).toBeVisible();

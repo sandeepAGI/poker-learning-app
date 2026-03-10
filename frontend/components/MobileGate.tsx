@@ -7,6 +7,12 @@ export default function MobileGate({ children }: { children: React.ReactNode }) 
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
+    // Check sessionStorage for previous dismissal
+    const wasDismissed = sessionStorage.getItem('mobile_gate_dismissed');
+    if (wasDismissed === 'true') {
+      setDismissed(true);
+    }
+
     const mql = window.matchMedia('(max-width: 767px)');
     setIsMobile(mql.matches);
 
@@ -37,20 +43,23 @@ export default function MobileGate({ children }: { children: React.ReactNode }) 
         </svg>
 
         <h1 className="text-2xl font-bold mb-3 text-center">
-          Best Experienced on Desktop
+          Optimized for Larger Screens
         </h1>
 
         <p className="text-gray-400 text-center mb-8 max-w-sm">
-          The poker table is optimized for larger screens. For the best
-          experience, please visit on a desktop or laptop computer.
+          This app works on mobile but is optimized for larger screens.
+          For the best experience, visit on a desktop or laptop.
         </p>
 
         <button
           data-testid="mobile-gate-continue"
-          onClick={() => setDismissed(true)}
-          className="text-gray-500 hover:text-gray-300 text-sm underline transition-colors"
+          onClick={() => {
+            sessionStorage.setItem('mobile_gate_dismissed', 'true');
+            setDismissed(true);
+          }}
+          className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white px-6 py-3 rounded-lg font-semibold transition-colors"
         >
-          Continue anyway
+          Continue on Mobile
         </button>
       </div>
     );

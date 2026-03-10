@@ -17,7 +17,8 @@ import {
   calculateOpponentPositions,
   getHumanPlayerPosition,
   getCenterAreaPosition,
-  calculateContainerSize
+  calculateContainerSize,
+  MOBILE_ELLIPSE_CONFIG
 } from '../lib/poker-table-layout';
 
 export function PokerTable() {
@@ -88,18 +89,24 @@ export function PokerTable() {
   // Dynamic table sizing — height-driven to prevent vertical clipping
   const headerRef = useRef<HTMLDivElement>(null);
   const [tableSize, setTableSize] = useState<{ width: string; height: string } | null>(null);
+  const [isMobileView, setIsMobileView] = useState(false);
 
   useEffect(() => {
     const updateSize = () => {
       const headerH = headerRef.current?.offsetHeight ?? 90;
-      const leftColWidth = window.innerWidth * 0.75;
-      const size = calculateContainerSize(leftColWidth, window.innerHeight, headerH + 16);
+      const mobile = window.innerWidth < 768;
+      setIsMobileView(mobile);
+      const leftColWidth = mobile ? window.innerWidth : window.innerWidth * 0.75;
+      const size = calculateContainerSize(leftColWidth, window.innerHeight, headerH + 16, mobile);
       setTableSize(size);
     };
     updateSize();
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
+
+  // Choose ellipse config based on viewport
+  const ellipseConfig = isMobileView ? MOBILE_ELLIPSE_CONFIG : undefined;
 
   // FIX-06: Click-to-focus for ALL elements (learning app - simple & intuitive)
   const [focusedElement, setFocusedElement] = useState<string | null>(null);
@@ -304,15 +311,26 @@ export function PokerTable() {
   }, [showSettingsMenu]);
 
   return (
-    <div className="flex flex-col h-screen bg-[#0D5F2F] p-2 sm:p-4">
+    <div className="flex flex-col h-[100dvh] bg-[#0D5F2F] p-2 sm:p-4 overflow-x-hidden">
       {/* Header */}
       <div ref={headerRef} className="flex justify-between items-center mb-2 sm:mb-4 text-white" data-testid="poker-table-header">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold">Poker Learning App</h1>
-          <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm opacity-80">
+        <div className="min-w-0 flex-1">
+          <h1 className="hidden sm:block text-xl sm:text-2xl font-bold">Poker Learning App</h1>
+          {/* Mobile compact header: Hand # + connection dot */}
+          <div className="sm:hidden flex items-center gap-2">
+            <span className="font-bold text-sm" data-testid="hand-count">Hand #{gameState.hand_count || 1}</span>
+            <span data-testid="connection-status">
+              {connectionState === 'connected' && <span className="text-green-400">●</span>}
+              {connectionState === 'connecting' && <span className="text-yellow-400">⟳</span>}
+              {connectionState === 'reconnecting' && <span className="text-orange-400">⟳</span>}
+              {connectionState === 'disconnected' && <span className="text-gray-400">○</span>}
+              {connectionState === 'failed' && <span className="text-red-400">✗</span>}
+            </span>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 sm:gap-3 text-xs sm:text-sm opacity-80">
             <span className="hidden sm:inline">Game State: {gameState.state.toUpperCase()}</span>
             {/* WebSocket connection status */}
-            <span className="flex items-center gap-1" data-testid="connection-status">
+            <span className="flex items-center gap-1" data-testid="connection-status-desktop">
               {connectionState === 'connected' && <span className="text-green-400">● Connected</span>}
               {connectionState === 'connecting' && <span className="text-yellow-400">⟳ Connecting...</span>}
               {connectionState === 'reconnecting' && <span className="text-orange-400">⟳ Reconnecting...</span>}
@@ -321,8 +339,8 @@ export function PokerTable() {
             </span>
           </div>
           {/* Issue #1 fix: Display blind levels and hand count */}
-          <div className="text-sm opacity-80 mt-1">
-            <span data-testid="hand-count">Hand #{gameState.hand_count || 1}</span> | <span data-testid="blind-levels">Blinds: ${gameState.small_blind || 5}/${gameState.big_blind || 10}</span>
+          <div className="hidden sm:block text-sm opacity-80 mt-1">
+            <span data-testid="hand-count-desktop">Hand #{gameState.hand_count || 1}</span> | <span data-testid="blind-levels">Blinds: ${gameState.small_blind || 5}/${gameState.big_blind || 10}</span>
             {/* Debug: Show step mode state */}
             {stepMode && <span className="ml-2 text-yellow-300">| Step Mode: ON</span>}
             {awaitingContinue && <span className="ml-2 text-green-300 font-bold">| WAITING FOR CONTINUE</span>}
@@ -330,7 +348,7 @@ export function PokerTable() {
         </div>
 
         {/* Header Controls - Consolidated */}
-        <div className="flex gap-3 items-center relative settings-menu-container">
+        <div className="flex gap-1 sm:gap-3 items-center relative settings-menu-container flex-shrink-0">
           {/* Phase 4: Continue button (shown only in Step Mode when waiting) */}
           {awaitingContinue && (
             <motion.button
@@ -339,13 +357,14 @@ export function PokerTable() {
                 console.log('[PokerTable] Continue button clicked!');
                 sendContinue();
               }}
-              className="bg-[#10B981] hover:bg-[#059669] text-white px-6 py-2 rounded-lg font-bold shadow-lg border-2 border-white"
+              className="bg-[#10B981] hover:bg-[#059669] text-white px-3 sm:px-6 py-2 rounded-lg font-bold shadow-lg border-2 border-white min-w-[44px] min-h-[44px]"
               title="Continue to next AI action"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              ▶️ Continue
+              <span className="sm:hidden">▶</span>
+              <span className="hidden sm:inline">▶️ Continue</span>
             </motion.button>
           )}
 
@@ -353,10 +372,10 @@ export function PokerTable() {
           <button
             data-testid="settings-button"
             onClick={() => setShowSettingsMenu(!showSettingsMenu)}
-            className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
+            className="bg-[#1F7A47] hover:bg-[#0A4D26] text-white px-3 sm:px-4 py-2 rounded-lg font-semibold flex items-center gap-2 min-w-[44px] min-h-[44px] justify-center"
             title="Game settings and options"
           >
-            ⚙️ Settings
+            ⚙️<span className="hidden sm:inline"> Settings</span>
           </button>
 
           {/* Settings Dropdown Menu */}
@@ -365,7 +384,7 @@ export function PokerTable() {
               data-testid="settings-menu"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute top-12 right-20 bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg shadow-2xl p-2 min-w-[250px] z-50"
+              className="absolute top-12 right-0 bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg shadow-2xl p-2 min-w-[250px] max-w-[calc(100vw-2rem)] z-50"
             >
               {/* Analyze Last Hand */}
               <button
@@ -414,20 +433,20 @@ export function PokerTable() {
           <button
             data-testid="help-button"
             onClick={() => window.open('/guide?from=game', '_blank')}
-            className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-4 py-2 rounded-lg font-semibold mr-2"
+            className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-3 sm:px-4 py-2 rounded-lg font-semibold min-w-[44px] min-h-[44px] flex items-center justify-center"
             title="Open game guide in new tab"
           >
-            ❓ Help
+            ❓<span className="hidden sm:inline"> Help</span>
           </button>
 
           {/* Quit Game button */}
           <button
             data-testid="quit-button"
             onClick={handleQuitClick}
-            className="bg-[#DC2626] hover:bg-[#B91C1C] text-white px-4 py-2 rounded-lg font-semibold"
+            className="bg-[#DC2626] hover:bg-[#B91C1C] text-white px-3 sm:px-4 py-2 rounded-lg font-semibold min-w-[44px] min-h-[44px] flex items-center justify-center"
             title="Quit game and return to lobby"
           >
-            ❌ Quit
+            ❌<span className="hidden sm:inline"> Quit</span>
           </button>
         </div>
       </div>
@@ -440,7 +459,8 @@ export function PokerTable() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          ⏸️ PAUSED - Click the green "Continue" button to see the next AI action
+          <span className="hidden sm:inline">⏸️ PAUSED - Click the green "Continue" button to see the next AI action</span>
+          <span className="sm:hidden">⏸️ PAUSED - Tap Continue</span>
         </motion.div>
       )}
 
@@ -460,7 +480,7 @@ export function PokerTable() {
       <div className="flex-1 flex flex-col md:flex-row min-h-0">
 
         {/* LEFT COLUMN: Poker Table (75% on desktop, 100% on mobile) */}
-        <div className="flex-1 md:w-[75%] flex items-center justify-center p-2 sm:p-4 relative">
+        <div className="flex-1 md:w-[75%] flex items-center justify-center p-2 sm:p-4 relative pb-[160px] md:pb-0">
           {/* Poker table container - FIXED ASPECT RATIO with mobile optimization */}
           <div
             data-testid="poker-table-container"
@@ -476,7 +496,7 @@ export function PokerTable() {
           {/* Opponents - Positioned using calculated elliptical positions */}
           {(() => {
             const opponents = gameState.players.filter((p) => !p.is_human);
-            const opponentPositions = calculateOpponentPositions(opponents.length);
+            const opponentPositions = calculateOpponentPositions(opponents.length, ellipseConfig);
 
             // Helper function to check button positions
             const getPlayerIndex = (player: Player) => {
@@ -530,9 +550,9 @@ export function PokerTable() {
           data-testid="community-cards-area"
           className="absolute flex items-center justify-center cursor-pointer"
           style={{
-            left: getCenterAreaPosition().left,
-            top: getCenterAreaPosition().top,
-            transform: getCenterAreaPosition().transform,
+            left: getCenterAreaPosition(ellipseConfig).left,
+            top: getCenterAreaPosition(ellipseConfig).top,
+            transform: getCenterAreaPosition(ellipseConfig).transform,
             zIndex: focusedElement === 'community' ? 50 : 20
           }}
           onClick={() => setFocusedElement(focusedElement === 'community' ? null : 'community')}
@@ -555,9 +575,9 @@ export function PokerTable() {
           data-testid="human-player-seat"
           className="absolute cursor-pointer"
           style={{
-            left: getHumanPlayerPosition().left,
-            top: getHumanPlayerPosition().top,
-            transform: getHumanPlayerPosition().transform,
+            left: getHumanPlayerPosition(ellipseConfig).left,
+            top: getHumanPlayerPosition(ellipseConfig).top,
+            transform: getHumanPlayerPosition(ellipseConfig).transform,
             zIndex: focusedElement === 'human' ? 50 : 10
           }}
           onClick={() => setFocusedElement(focusedElement === 'human' ? null : 'human')}
@@ -580,10 +600,10 @@ export function PokerTable() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Control Panel (25% on desktop, auto-height on mobile) */}
+        {/* RIGHT COLUMN: Control Panel (25% on desktop, hidden on mobile — mobile uses bottom bar) */}
         <div
           data-testid="control-panel"
-          className="w-full md:w-[25%] bg-[#122a1c] border-t md:border-t-0 md:border-l border-[#1F7A47]/30 flex flex-col overflow-y-auto"
+          className="hidden md:flex md:flex-col md:w-[25%] bg-[#122a1c] md:border-l border-[#1F7A47]/30 overflow-y-auto"
         >
           {/* Pot Display - Above action buttons */}
           <div className="p-3 sm:p-4 border-b border-[#1F7A47]/30">
@@ -829,6 +849,134 @@ export function PokerTable() {
               <span>{showAiThinking ? '▲' : '▼'}</span>
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* MOBILE BOTTOM ACTION BAR — fixed at bottom, hidden on desktop */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#122a1c] border-t border-[#1F7A47]/30" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+        {/* Compact pot display */}
+        <div className="px-3 py-1.5 border-b border-[#1F7A47]/20 flex items-center justify-between">
+          <span className="text-teal-200 text-xs font-medium">POT</span>
+          <span className="text-white text-lg font-bold" data-testid="mobile-pot-display">${gameState.pot}</span>
+          <span className="text-gray-400 text-xs">Blinds ${gameState.small_blind || 5}/${gameState.big_blind || 10}</span>
+        </div>
+
+        {/* Mobile raise panel — slides up when Raise tapped */}
+        <AnimatePresence>
+          {showRaisePanel && isMyTurn && canRaise && (
+            <motion.div
+              className="px-3 py-2 border-b border-[#1F7A47]/20 bg-[#0a1f14]"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {/* Quick bet buttons */}
+              <div className="flex gap-1.5 justify-center flex-wrap mb-2">
+                <button onClick={() => handleRaiseAmountChange(minRaise)} className="bg-[#1F7A47] text-white text-xs font-semibold py-1.5 px-2.5 rounded">
+                  Min ${minRaise}
+                </button>
+                <button onClick={() => handleRaiseAmountChange(Math.floor(gameState.pot * 0.5))} className="bg-[#1F7A47] text-white text-xs font-semibold py-1.5 px-2.5 rounded">
+                  ½ Pot
+                </button>
+                <button onClick={() => handleRaiseAmountChange(gameState.pot)} className="bg-[#1F7A47] text-white text-xs font-semibold py-1.5 px-2.5 rounded">
+                  Pot
+                </button>
+                <button onClick={handleAllIn} className="bg-[#F59E0B] text-black text-xs font-bold py-1.5 px-2.5 rounded">
+                  All-In ${maxRaise}
+                </button>
+              </div>
+              {/* Slider */}
+              <div className="mb-2">
+                <input
+                  type="range"
+                  value={raiseAmount}
+                  onChange={(e) => handleRaiseAmountChange(parseInt(e.target.value))}
+                  min={minRaise}
+                  max={maxRaise}
+                  step={gameState.big_blind || 10}
+                  className="w-full h-2 bg-[#1F7A47] rounded-lg appearance-none cursor-pointer accent-[#10B981]"
+                />
+                <div className="flex justify-between text-white text-xs mt-0.5">
+                  <span>${minRaise}</span>
+                  <span className="font-bold text-[#10B981]">${raiseAmount}</span>
+                  <span>${maxRaise}</span>
+                </div>
+              </div>
+              {/* Confirm */}
+              <button
+                onClick={handleRaiseSubmit}
+                disabled={loading || raiseAmount < minRaise || raiseAmount > maxRaise}
+                className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-bold py-2.5 rounded-lg disabled:opacity-50"
+              >
+                Confirm Raise ${raiseAmount}
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Action buttons row */}
+        <div className="px-3 py-2">
+          {isEliminated ? (
+            <div className="text-center py-2">
+              <div className="text-red-400 font-bold text-lg">Game Over</div>
+            </div>
+          ) : isWaitingAllIn ? (
+            <div className="text-center py-2 text-yellow-400 font-bold" data-testid="mobile-all-in-message">
+              All-In! Waiting...
+            </div>
+          ) : isShowdown ? (
+            <button
+              data-testid="mobile-next-hand-button"
+              onClick={() => nextHand()}
+              disabled={loading}
+              className="w-full bg-[#10B981] hover:bg-[#059669] text-white font-bold py-3 rounded-lg text-lg disabled:opacity-50 min-h-[44px]"
+            >
+              {loading ? 'Loading...' : 'Next Hand'}
+            </button>
+          ) : isMyTurn ? (
+            <div className="flex gap-2">
+              <button
+                data-testid="mobile-fold-button"
+                onClick={() => submitAction('fold')}
+                disabled={loading}
+                className="flex-1 bg-[#DC2626] hover:bg-[#B91C1C] text-white font-bold py-3 rounded-lg text-base disabled:opacity-50 min-h-[44px]"
+              >
+                Fold
+              </button>
+              <button
+                data-testid="mobile-call-button"
+                onClick={() => submitAction('call')}
+                disabled={loading || !canCall}
+                className="flex-1 bg-[#0D7377] hover:bg-[#0a5c5f] text-white font-bold py-3 rounded-lg text-base disabled:opacity-50 min-h-[44px]"
+              >
+                {gameState.human_player.stack < callAmount
+                  ? `All-In $${gameState.human_player.stack}`
+                  : `Call $${callAmount}`}
+              </button>
+              {canRaise ? (
+                <button
+                  data-testid="mobile-raise-button"
+                  onClick={() => setShowRaisePanel(!showRaisePanel)}
+                  disabled={loading}
+                  className={`flex-1 ${showRaisePanel ? 'bg-[#059669]' : 'bg-[#10B981]'} hover:bg-[#059669] text-white font-bold py-3 rounded-lg text-base disabled:opacity-50 min-h-[44px]`}
+                >
+                  Raise {showRaisePanel ? '▼' : '▲'}
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="flex-1 bg-[#1F7A47]/50 text-gray-400 font-bold py-3 rounded-lg text-base opacity-50 cursor-not-allowed min-h-[44px]"
+                >
+                  Raise
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="text-white text-center py-2 text-sm">
+              {loading ? 'Processing...' : isAllIn ? 'All-In! Waiting...' : 'Waiting for other players...'}
+            </div>
+          )}
         </div>
       </div>
 
