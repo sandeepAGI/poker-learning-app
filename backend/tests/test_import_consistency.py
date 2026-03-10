@@ -29,9 +29,12 @@ def test_main_module_imports():
         # This import will fail if there are mixed import paths
         import main
 
-        # Verify HandEvaluator is accessible
-        # The bug occurs in get_game_state when it tries to import HandEvaluator
-        assert hasattr(main, 'get_game_state'), "get_game_state function should exist"
+        # Verify app is accessible (routes are now in separate modules)
+        assert hasattr(main, 'app'), "FastAPI app should exist"
+
+        # Verify routes are importable (HandEvaluator is used in routes.game)
+        from routes.game import get_game_state
+        assert get_game_state is not None, "get_game_state should be importable from routes.game"
 
     except ModuleNotFoundError as e:
         if 'backend' in str(e):

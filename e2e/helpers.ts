@@ -256,14 +256,26 @@ export async function quitGame(page: Page) {
   if (await quitBtn.isVisible().catch(() => false)) {
     await quitBtn.click();
 
-    // Handle confirmation modal if present
-    const confirmBtn = page.locator('button:has-text("Yes"), button:has-text("Confirm")');
-    if (await confirmBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await confirmBtn.click();
+    // Handle quit confirmation modal if present (has "Just Quit" and "Analyze Session First")
+    const justQuitBtn = page.locator('button:has-text("Just Quit")');
+    if (await justQuitBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await justQuitBtn.click();
     }
 
     // Wait for redirect to home
     await page.waitForURL('/', { timeout: 5000 }).catch(() => {});
+
+    // Wait for all pending network requests (WebSocket teardown, API calls) to settle
+    await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+
+    // Clear any stale game state from localStorage to prevent leakage into next game
+    await page.evaluate(() => {
+      localStorage.removeItem('game_id');
+      localStorage.removeItem('game_state');
+    });
+
+    // Allow backend to fully clean up the game (AI turn processing, game dict removal)
+    await page.waitForTimeout(2000);
 
     return true;
   }

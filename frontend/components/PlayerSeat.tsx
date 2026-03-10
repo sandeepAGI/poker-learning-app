@@ -28,8 +28,8 @@ export function PlayerSeat({
   return (
     <motion.div
       data-testid={`player-seat-${player.player_id}`}
-      className={`relative p-2 sm:p-3 md:p-4 rounded-lg ${
-        isCurrentTurn ? 'bg-yellow-100 border-4 border-yellow-400' : 'bg-gray-100 border-2 border-gray-300'
+      className={`relative p-2 sm:p-3 md:p-4 rounded-lg bg-gray-100 ${
+        isCurrentTurn ? 'ring-4 ring-amber-300 border-2 border-amber-200 shadow-lg shadow-amber-300/40' : 'border-2 border-gray-300'
       } ${!player.is_active ? 'opacity-50' : ''}`}
       animate={{
         scale: isCurrentTurn ? 1.05 : 1,
@@ -57,7 +57,7 @@ export function PlayerSeat({
 
       {/* Player name and personality */}
       <div className="flex items-center gap-2 mb-1.5">
-        <div data-testid={`player-name-${player.player_id}`} className="font-semibold text-sm">{player.name}</div>
+        <div data-testid={`player-name-${player.player_id}`} className="font-semibold text-sm">{player.is_human ? 'You' : player.name}</div>
         {/* Only reveal AI strategy at showdown */}
         {player.personality && isShowdown && (
           <div data-testid={`personality-${player.player_id}`} className="text-xs bg-blue-200 px-2 py-0.5 rounded">{player.personality}</div>

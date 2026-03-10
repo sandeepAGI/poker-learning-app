@@ -71,8 +71,14 @@ yarn-error.log*
 *.tgz
 *.tar.gz
 
+# SWC compiler cache
+.swc/
+
 # Temporary files
 *.tmp
 *.temp
 *.zip
 *-logs/
+
+# Stress test results (one-off, run sparingly)
+e2e/stress-test-results/

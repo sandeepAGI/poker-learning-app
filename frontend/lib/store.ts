@@ -329,12 +329,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   disconnectWebSocket: () => {
     const { wsClient } = get();
     if (wsClient) {
-      // Don't wait for disconnect to complete (non-blocking)
-      Promise.resolve().then(() => {
-        wsClient.disconnect();
-      });
-
-      // Immediately update state
+      wsClient.disconnect();  // Synchronous — sets shouldReconnect=false, closes ws
       set({ wsClient: null, connectionState: ConnectionState.DISCONNECTED });
     }
   },

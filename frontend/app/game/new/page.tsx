@@ -217,7 +217,7 @@ export default function NewGamePage() {
             </a>
             <span className="text-gray-400">•</span>
             <a
-              href="/guide"
+              href="/guide?from=setup"
               className="text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline"
             >
               ❓ How to Use This App

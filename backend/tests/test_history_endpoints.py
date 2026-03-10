@@ -255,3 +255,60 @@ class TestGetGameHandsEndpoint:
         response = client.get("/games/nonexistent/hands")
 
         assert response.status_code == 404
+
+
+class TestClearHistoryEndpoint:
+    """Test DELETE /games/history endpoint."""
+
+    def test_clear_all_history(self, client_with_history):
+        """Should delete all games and associated data for user."""
+        client, user_id, _ = client_with_history
+
+        # Verify games exist first
+        response = client.get("/users/me/games")
+        assert len(response.json()["games"]) == 3
+
+        # Clear history
+        response = client.delete("/games/history")
+        assert response.status_code == 200
+        assert response.json()["deleted_count"] == 3
+
+        # Verify games list is empty
+        response = client.get("/users/me/games")
+        assert response.json()["games"] == []
+
+    def test_clear_history_requires_auth(self):
+        """Should require authentication."""
+        client = TestClient(app)
+        response = client.delete("/games/history")
+        assert response.status_code == 403
+
+    def test_clear_history_only_own_games(self, client_with_history):
+        """Should only delete own games, not other users'."""
+        client, user_id, SessionLocal = client_with_history
+
+        # Create another user's game
+        db = SessionLocal()
+        from auth import hash_password
+        other_user = User(user_id="other-user-2", username="other2", password_hash=hash_password("password123"))
+        db.add(other_user)
+        db.commit()
+        other_game = Game(
+            game_id="other-game-2",
+            user_id="other-user-2",
+            starting_stack=1000,
+            status="completed",
+            completed_at=datetime.utcnow()
+        )
+        db.add(other_game)
+        db.commit()
+        db.close()
+
+        # Clear own history
+        client.delete("/games/history")
+
+        # Verify other user's game still exists
+        db = SessionLocal()
+        other = db.query(Game).filter(Game.game_id == "other-game-2").first()
+        assert other is not None
+        db.close()

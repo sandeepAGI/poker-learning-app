@@ -181,3 +181,41 @@ class TestAuthProtectedEndpoint:
 
         assert response.status_code == 200
         assert "game_id" in response.json()
+
+
+class TestDeleteAccountEndpoint:
+    """Test DELETE /auth/account endpoint."""
+
+    def test_delete_account_success(self, client):
+        """Should delete account and all associated data."""
+        response = client.post("/auth/register", json={"username": "deluser", "password": "test123"})
+        token = response.json()["token"]
+
+        response = client.delete(
+            "/auth/account",
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert response.status_code == 200
+        assert "deleted" in response.json()["message"].lower()
+
+        # Verify can't login anymore
+        response = client.post("/auth/login", json={"username": "deluser", "password": "test123"})
+        assert response.status_code == 401
+
+    def test_delete_account_unauthenticated_fails(self, client):
+        """Should reject unauthenticated deletion."""
+        response = client.delete("/auth/account")
+        assert response.status_code == 403
+
+    def test_delete_account_cascades_games(self, client):
+        """Should cascade delete to games and hands."""
+        response = client.post("/auth/register", json={"username": "cascadeuser", "password": "test123"})
+        token = response.json()["token"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        # Create a game
+        client.post("/games", json={"player_name": "Test", "ai_count": 1}, headers=headers)
+
+        # Delete account
+        response = client.delete("/auth/account", headers=headers)
+        assert response.status_code == 200

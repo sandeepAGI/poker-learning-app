@@ -5,37 +5,19 @@ import { Card } from './Card';
 
 interface CommunityCardsProps {
   cards: string[];
-  gameState: string;
 }
 
-export function CommunityCards({ cards, gameState }: CommunityCardsProps) {
+export function CommunityCards({ cards }: CommunityCardsProps) {
   if (cards.length === 0) return null;
 
-  // Determine stage label
+  // Determine stage label from card count only (avoids race condition with gameState)
   let stageLabel = '';
-  if (cards.length === 3 && gameState === 'flop') {
-    stageLabel = 'FLOP';
-  } else if (cards.length === 4 && gameState === 'turn') {
-    stageLabel = 'TURN';
-  } else if (cards.length === 5 && gameState === 'river') {
-    stageLabel = 'RIVER';
-  }
+  if (cards.length === 3) stageLabel = 'FLOP';
+  else if (cards.length === 4) stageLabel = 'TURN';
+  else if (cards.length === 5) stageLabel = 'RIVER';
 
   return (
     <div data-testid="community-cards-container" className="flex flex-col items-center">
-      {/* Stage Label */}
-      {stageLabel && (
-        <motion.div
-          data-testid="stage-label"
-          className="text-[#FCD34D] font-bold text-base mb-2 tracking-wider"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {stageLabel}
-        </motion.div>
-      )}
-
       {/* Community Cards Container */}
       <motion.div
         className="bg-[#0A4D26]/80 backdrop-blur-sm px-2 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 rounded-xl border-2 border-[#1F7A47]/60 shadow-2xl"
@@ -61,6 +43,19 @@ export function CommunityCards({ cards, gameState }: CommunityCardsProps) {
           ))}
         </div>
       </motion.div>
+
+      {/* Stage Label — below cards to prevent overlap with top opponent */}
+      {stageLabel && (
+        <motion.div
+          data-testid="stage-label"
+          className="text-[#FCD34D] font-bold text-sm mt-1 tracking-wider"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {stageLabel}
+        </motion.div>
+      )}
     </div>
   );
 }

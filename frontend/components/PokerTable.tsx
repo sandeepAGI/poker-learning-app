@@ -9,14 +9,15 @@ import { AnalysisModalLLM } from './AnalysisModalLLM'; // Phase 4: LLM-powered a
 import { SessionAnalysisModal } from './SessionAnalysisModal'; // Phase 4.5: Session analysis
 import { GameOverModal } from './GameOverModal';
 import { useGameStore } from '../lib/store';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Player } from '../lib/types'; // Phase 0.5: For button indicator helper
 import { pokerApi } from '../lib/api'; // Phase 4.5: Session analysis API
 import {
   calculateOpponentPositions,
   getHumanPlayerPosition,
-  getCenterAreaPosition
+  getCenterAreaPosition,
+  calculateContainerSize
 } from '../lib/poker-table-layout';
 
 export function PokerTable() {
@@ -84,6 +85,22 @@ export function PokerTable() {
   const [showQuitConfirmation, setShowQuitConfirmation] = useState(false);
   const [isQuittingAfterAnalysis, setIsQuittingAfterAnalysis] = useState(false);
 
+  // Dynamic table sizing — height-driven to prevent vertical clipping
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [tableSize, setTableSize] = useState<{ width: string; height: string } | null>(null);
+
+  useEffect(() => {
+    const updateSize = () => {
+      const headerH = headerRef.current?.offsetHeight ?? 90;
+      const leftColWidth = window.innerWidth * 0.75;
+      const size = calculateContainerSize(leftColWidth, window.innerHeight, headerH + 16);
+      setTableSize(size);
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
   // FIX-06: Click-to-focus for ALL elements (learning app - simple & intuitive)
   const [focusedElement, setFocusedElement] = useState<string | null>(null);
 
@@ -103,12 +120,12 @@ export function PokerTable() {
 
   // Bug Fix #3: Check if player is busted (not in game anymore)
   // Backend sets is_active=false ONLY when player has 0 chips at start of new hand
-  // This is the ONLY reliable way to detect true elimination
   const isBusted = gameState.human_player.stack === 0 && !gameState.human_player.is_active;
 
-  // Use backend's is_active flag for elimination (don't try to infer from all_in state)
-  // Backend knows definitively when player is eliminated after all pot awards
-  const isEliminated = isBusted;
+  // Detect elimination: either backend confirmed (is_active=false) OR
+  // during showdown with stack=0 (pot already awarded, player lost everything)
+  const isEliminatedAtShowdown = isShowdown && gameState.human_player.stack === 0;
+  const isEliminated = isBusted || isEliminatedAtShowdown;
 
   // Player is all-in and waiting for hand to complete
   const isWaitingAllIn = gameState.human_player.all_in && !isShowdown && gameState.human_player.stack === 0;
@@ -153,10 +170,13 @@ export function PokerTable() {
     }
   }, [gameState.winner_info]);
 
-  // Handle winner modal close - advance to next hand
+  // Handle winner modal close - advance to next hand (or show game-over if eliminated)
   const handleWinnerModalClose = () => {
     setShowWinnerModal(false);
-    nextHand();
+    if (!isEliminated) {
+      nextHand();
+    }
+    // If eliminated, the game-over useEffect will trigger now that showWinnerModal is false
   };
 
   // UX Phase 2: Handle analysis button click
@@ -242,11 +262,12 @@ export function PokerTable() {
 
   // Show game over modal when human player is eliminated
   // Backend sets is_active=false only after pot awards, so this is safe
+  // Delay until winner modal is dismissed to prevent overlay blocking
   useEffect(() => {
-    if (isEliminated && !showGameOverModal) {
+    if (isEliminated && !showGameOverModal && !showWinnerModal) {
       setShowGameOverModal(true);
     }
-  }, [isEliminated, showGameOverModal]);
+  }, [isEliminated, showGameOverModal, showWinnerModal]);
 
   // Handle new game after elimination
   const handleNewGame = () => {
@@ -285,7 +306,7 @@ export function PokerTable() {
   return (
     <div className="flex flex-col h-screen bg-[#0D5F2F] p-2 sm:p-4">
       {/* Header */}
-      <div className="flex justify-between items-center mb-2 sm:mb-4 text-white" data-testid="poker-table-header">
+      <div ref={headerRef} className="flex justify-between items-center mb-2 sm:mb-4 text-white" data-testid="poker-table-header">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold">Poker Learning App</h1>
           <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm opacity-80">
@@ -392,7 +413,7 @@ export function PokerTable() {
           {/* Phase 2: Help button */}
           <button
             data-testid="help-button"
-            onClick={() => window.open('/guide', '_blank')}
+            onClick={() => window.open('/guide?from=game', '_blank')}
             className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white px-4 py-2 rounded-lg font-semibold mr-2"
             title="Open game guide in new tab"
           >
@@ -436,7 +457,7 @@ export function PokerTable() {
       )}
 
       {/* Main Content - Two-column layout on desktop, vertical on mobile */}
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row min-h-0">
 
         {/* LEFT COLUMN: Poker Table (75% on desktop, 100% on mobile) */}
         <div className="flex-1 md:w-[75%] flex items-center justify-center p-2 sm:p-4 relative">
@@ -445,10 +466,10 @@ export function PokerTable() {
             data-testid="poker-table-container"
             className="relative bg-[#0D5F2F] rounded-[200px] border-4 border-[#0A4D26] shadow-2xl"
             style={{
-              width: '100%',
-              maxWidth: 'min(100%, 90vh * 1.6)',
-              aspectRatio: '16 / 10',
-              maxHeight: '75vh',
+              width: tableSize?.width ?? 'clamp(360px, calc(100vw - 25vw - 4rem), 1200px)',
+              height: tableSize?.height ?? 'auto',
+              aspectRatio: tableSize ? undefined : '16 / 10',
+              maxHeight: tableSize ? undefined : '85vh',
               boxShadow: 'inset 0 2px 20px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 80px rgba(13, 95, 47, 0.5)'
             }}
           >
@@ -522,10 +543,9 @@ export function PokerTable() {
           whileHover={{ scale: 1.03 }}
         >
           {/* Community cards - Using new dedicated component */}
-          <div className={`transition-all rounded-xl ${focusedElement === 'community' ? 'ring-4 ring-yellow-400 shadow-lg shadow-yellow-400/50 p-2' : ''}`}>
+          <div className={`transition-all rounded-xl ${focusedElement === 'community' ? 'outline outline-4 outline-yellow-400 shadow-lg shadow-yellow-400/50 p-2' : ''}`}>
             <CommunityCards
               cards={gameState.community_cards}
-              gameState={gameState.state}
             />
           </div>
         </motion.div>
@@ -563,23 +583,23 @@ export function PokerTable() {
         {/* RIGHT COLUMN: Control Panel (25% on desktop, auto-height on mobile) */}
         <div
           data-testid="control-panel"
-          className="w-full md:w-[25%] bg-gray-900 border-t md:border-t-0 md:border-l border-gray-700 flex flex-col overflow-y-auto"
+          className="w-full md:w-[25%] bg-[#122a1c] border-t md:border-t-0 md:border-l border-[#1F7A47]/30 flex flex-col overflow-y-auto"
         >
           {/* Pot Display - Above action buttons */}
-          <div className="p-3 sm:p-4 border-b border-gray-700">
+          <div className="p-3 sm:p-4 border-b border-[#1F7A47]/30">
             <motion.div
               data-testid="pot-display"
-              className="bg-[#D97706] text-white px-4 py-3 rounded-lg text-center font-bold shadow-lg"
+              className="bg-[#0D7377] text-white px-4 py-3 rounded-lg text-center font-bold shadow-lg"
               animate={{ scale: [1, 1.02, 1] }}
               transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
             >
-              <div className="text-sm text-orange-200 mb-1">POT</div>
+              <div className="text-sm text-teal-200 mb-1">POT</div>
               <div className="text-2xl">${gameState.pot}</div>
             </motion.div>
           </div>
 
           {/* Section 1: Action Buttons */}
-          <div className="p-3 sm:p-4 border-b border-gray-700">
+          <div className="p-3 sm:p-4 border-b border-[#1F7A47]/30">
           {/* Feature: Game over when eliminated - don't show controls */}
           {isEliminated ? (
             <div className="text-center py-4">
@@ -632,7 +652,7 @@ export function PokerTable() {
                   data-testid="call-button"
                   onClick={() => submitAction('call')}
                   disabled={loading || !canCall}
-                  className="flex-1 bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]"
+                  className="flex-1 bg-[#0D7377] hover:bg-[#0a5c5f] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]"
                   title={gameState.human_player.stack < callAmount ? 'Call All-In with remaining chips' : ''}
                 >
                   {gameState.human_player.stack < callAmount
@@ -640,13 +660,13 @@ export function PokerTable() {
                     : `Call $${callAmount}`}
                 </button>
 
-                {/* Raise - Opens expandable panel */}
+                {/* Raise - Opens expandable panel on mobile, always visible on desktop */}
                 {canRaise ? (
                   <button
                     data-testid="raise-button"
                     onClick={() => setShowRaisePanel(!showRaisePanel)}
                     disabled={loading}
-                    className={`flex-1 ${showRaisePanel ? 'bg-[#059669]' : 'bg-[#10B981]'} hover:bg-[#059669] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]`}
+                    className={`flex-1 md:hidden ${showRaisePanel ? 'bg-[#059669]' : 'bg-[#10B981]'} hover:bg-[#059669] text-white font-bold py-2 sm:py-3 px-3 sm:px-4 rounded-lg text-lg sm:text-xl disabled:opacity-50 transition-colors min-h-[44px]`}
                   >
                     Raise {showRaisePanel ? '▲' : '▼'}
                   </button>
@@ -662,17 +682,10 @@ export function PokerTable() {
                 )}
               </div>
 
-              {/* Expandable Raise Panel */}
-              <AnimatePresence>
-                {showRaisePanel && canRaise && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="bg-[#0A4D26]/95 backdrop-blur-sm border-2 border-[#1F7A47] rounded-lg p-3 space-y-3" data-testid="raise-panel">
+              {/* Raise Panel - Always visible on desktop, expandable on mobile */}
+              {canRaise && (
+                <div className={`${showRaisePanel ? 'block' : 'hidden'} md:block`}>
+                    <div className="bg-[#0a1f14] border-2 border-[#1F7A47]/40 rounded-lg p-3 space-y-3" data-testid="raise-panel">
                       {/* Quick bet buttons */}
                       <div className="flex gap-2 justify-center flex-wrap">
                         <button
@@ -744,9 +757,8 @@ export function PokerTable() {
                         Confirm Raise ${raiseAmount}
                       </button>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-white text-center py-4">
@@ -757,7 +769,7 @@ export function PokerTable() {
 
           {/* Section 2: AI Reasoning Stream (toggleable) */}
           {showAiThinking && (
-            <div className="border-b border-gray-700">
+            <div className="border-b border-[#1F7A47]/30">
               <div className="p-3 sm:p-4 max-h-[300px] overflow-y-auto">
                 <h3 className="text-white text-sm font-semibold uppercase tracking-wide mb-3">AI Reasoning Stream</h3>
 
@@ -780,7 +792,7 @@ export function PokerTable() {
                       if (!aiDecision) return null;
 
                       return (
-                        <div key={opponent.player_id} className="bg-gray-800 rounded-lg p-3">
+                        <div key={opponent.player_id} className="bg-[#0a1f14] rounded-lg p-3">
                           <div className="flex items-center gap-2 mb-2">
                             <div className="w-2 h-2 rounded-full bg-blue-500" />
                             <span className="text-white text-xs font-semibold">{opponent.name}</span>
@@ -811,7 +823,7 @@ export function PokerTable() {
           <div className="p-3 sm:p-4 mt-auto">
             <button
               onClick={() => toggleShowAiThinking()}
-              className="w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm transition-colors flex items-center justify-between"
+              className="w-full px-4 py-2 bg-[#1a3d2a] hover:bg-[#1F7A47] text-white rounded-lg text-sm transition-colors flex items-center justify-between"
             >
               <span>{showAiThinking ? 'Hide' : 'Show'} AI Reasoning</span>
               <span>{showAiThinking ? '▲' : '▼'}</span>

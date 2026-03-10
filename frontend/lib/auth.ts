@@ -120,3 +120,24 @@ export function isAuthenticated(): boolean {
   const token = getToken();
   return token !== null && token !== '';
 }
+
+/**
+ * Delete user account and clear local auth state
+ * @throws Error if deletion fails
+ */
+export async function deleteAccount(): Promise<void> {
+  const token = getToken();
+  if (!token) throw new Error('Not authenticated');
+
+  const response = await fetch(`${API_BASE_URL}/auth/account`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || 'Failed to delete account');
+  }
+
+  logout();
+}
