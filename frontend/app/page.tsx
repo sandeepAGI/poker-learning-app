@@ -216,10 +216,18 @@ export default function HomePage() {
           </Link>
 
           <Link
-            href="/guide"
+            href="/guide?from=home"
             className="block bg-gray-700 hover:bg-gray-600 text-white text-center py-3 px-4 rounded transition"
           >
             Help
+          </Link>
+
+          <Link
+            href="/settings"
+            data-testid="settings-link"
+            className="block bg-gray-700 hover:bg-gray-600 text-white text-center py-3 px-4 rounded transition"
+          >
+            Settings
           </Link>
         </div>
       </div>
