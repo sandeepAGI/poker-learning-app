@@ -297,6 +297,18 @@ function GuideContent() {
                 <p className="text-sm text-gray-700 mt-2">Shows your Win Rate, VPIP, PFR, top strengths, biggest leaks, and a coach&apos;s overall assessment.</p>
               </div>
 
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="font-semibold text-gray-800 mb-2">Step Mode</h3>
+                <p className="text-sm text-gray-700 mb-2">
+                  Toggle <strong>&ldquo;Step Mode&rdquo;</strong> in the settings menu to pause the game after each AI action. This lets you study each decision one at a time.
+                </p>
+                <ul className="text-sm text-gray-700 space-y-1 ml-4 list-disc">
+                  <li>When paused, a &ldquo;Continue&rdquo; banner appears &mdash; click it to advance</li>
+                  <li>If you don&apos;t click continue within 60 seconds, the game auto-resumes</li>
+                  <li>Great for beginners who want to carefully study AI reasoning</li>
+                </ul>
+              </div>
+
               <div className="bg-purple-50 border-l-4 border-purple-500 p-4 rounded">
                 <p className="text-sm text-purple-900">
                   <strong>Pro Tip:</strong> You can also run session analysis on completed games from the <strong>Game History</strong> page &mdash; great for reviewing older sessions.
@@ -354,7 +366,7 @@ function GuideContent() {
               </div>
 
               <div className="bg-gray-50 rounded-lg p-4">
-                <h3 className="font-semibold text-gray-800 mb-2">Settings Page</h3>
+                <h3 className="font-semibold text-gray-800 mb-2">Account Settings</h3>
                 <p className="text-sm text-gray-700">
                   Access from the home screen. View your account info and manage your account, including the option to permanently delete your account and all game history.
                 </p>

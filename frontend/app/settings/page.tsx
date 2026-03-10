@@ -38,7 +38,7 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center px-4">
       <div className="bg-gray-800 rounded-lg p-8 max-w-md w-full">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-white">Settings</h1>
+          <h1 className="text-2xl font-bold text-white">Account Settings</h1>
           <Link
             href="/"
             className="text-gray-400 hover:text-white text-sm transition"

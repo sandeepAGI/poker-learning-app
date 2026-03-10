@@ -227,7 +227,7 @@ export default function HomePage() {
             data-testid="settings-link"
             className="block bg-gray-700 hover:bg-gray-600 text-white text-center py-3 px-4 rounded transition"
           >
-            Settings
+            Account Settings
           </Link>
         </div>
       </div>
