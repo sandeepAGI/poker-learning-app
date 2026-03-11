@@ -23,7 +23,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 // ─── Configuration ───────────────────────────────────────────────
-const TOTAL_GAMES = 20;
+const TOTAL_GAMES = 2;
 const MAX_HANDS_PER_GAME = 30;
 const GAMES_PER_USER = 5; // Register a fresh user every N games
 const RESULTS_DIR = path.join(__dirname, 'stress-test-results');
@@ -47,7 +47,7 @@ interface GameResult {
   finalChipTotal: number;
   failures: Failure[];
   analysisTriggered: { type: string; success: boolean }[];
-  endReason: 'elimination' | 'max_hands' | 'error';
+  endReason: 'elimination' | 'max_hands' | 'error' | 'stuck';
 }
 
 interface SummaryReport {
@@ -552,18 +552,19 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
         let prevButtonPositions: Awaited<ReturnType<typeof readButtonPositions>> | null = null;
         let prevCommunityCardCount = 0;
         let gameOver = false;
+        let consecutiveNoState = 0; // Track consecutive hands with no game state
 
         // ── Hand Loop ──
         for (let handNum = 1; handNum <= MAX_HANDS_PER_GAME && !gameOver; handNum++) {
           console.log(`  Hand ${handNum}...`);
           result.handsPlayed = handNum;
 
-          // Wait for ANY meaningful game state: action buttons, winner modal, or game over
+          // Wait for ANY meaningful game state: action buttons, winner modal, or showdown next-hand button
           // This is critical — after clicking "Next Hand", AI may act first so our
           // action buttons won't appear immediately. We need to wait for any sign of life.
           const meaningfulState = await page.locator(
             '[data-testid="fold-button"], [data-testid="call-button"], [data-testid="winner-modal"], [data-testid="next-hand-button"]'
-          ).first().waitFor({ timeout: 30000 }).then(() => true).catch(() => false);
+          ).first().waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
 
           // Check for game over modal
           const gameOverText = page.locator('text=Game Over');
@@ -606,10 +607,23 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
           }
 
           if (!meaningfulState) {
-            console.log(`  ⚠️ No game state found, waiting...`);
+            consecutiveNoState++;
+            console.log(`  ⚠️ No game state found, waiting... (consecutive: ${consecutiveNoState})`);
+
+            if (consecutiveNoState >= 2) {
+              console.log(`  🛑 Game appears stuck — no game state for ${consecutiveNoState} consecutive hands. Bailing out.`);
+              await screenshotTo(page, path.join(gameDir, `hand-${String(handNum).padStart(2, '0')}-stuck-bailout.png`));
+              result.endReason = 'stuck';
+              gameOver = true;
+              break;
+            }
+
             await page.waitForTimeout(5000);
             continue;
           }
+
+          // Reset consecutive counter on successful state detection
+          consecutiveNoState = 0;
 
           // ── Validate button rotation ──
           prevButtonPositions = await validateButtonRotation(

@@ -7,7 +7,8 @@ from datetime import datetime
 from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.orm import Session
 
-from game.poker_engine import CompletedHand, GameState
+from game.poker_engine import CompletedHand, GameState, HandEvent, ActionRecord, BettingRound
+from game.ai_strategy import AIDecision
 from auth import verify_token
 from models import Game, Hand
 from database import get_db
@@ -18,6 +19,37 @@ from app_state import (
 )
 
 router = APIRouter(tags=["analysis"])
+
+
+def deserialize_completed_hand(data: dict) -> CompletedHand:
+    """Reconstruct a CompletedHand from a dict (e.g. from DB JSONB).
+
+    dataclasses.asdict() flattens nested dataclasses to plain dicts.
+    This function reconstructs the nested types so attribute access works.
+    """
+    d = dict(data)  # shallow copy
+
+    # Reconstruct events: List[HandEvent]
+    if "events" in d and d["events"]:
+        d["events"] = [HandEvent(**e) for e in d["events"]]
+
+    # Reconstruct ai_decisions: Dict[str, AIDecision]
+    if "ai_decisions" in d and d["ai_decisions"]:
+        d["ai_decisions"] = {
+            k: AIDecision(**v) for k, v in d["ai_decisions"].items()
+        }
+
+    # Reconstruct betting_rounds: List[BettingRound]
+    if "betting_rounds" in d and d["betting_rounds"]:
+        rounds = []
+        for br in d["betting_rounds"]:
+            br_copy = dict(br)
+            if "actions" in br_copy and br_copy["actions"]:
+                br_copy["actions"] = [ActionRecord(**a) for a in br_copy["actions"]]
+            rounds.append(BettingRound(**br_copy))
+        d["betting_rounds"] = rounds
+
+    return CompletedHand(**d)
 
 logger = logging.getLogger(__name__)
 
@@ -168,14 +200,14 @@ async def get_llm_hand_analysis(
 
         # Reconstruct CompletedHand from database JSONB
         hand_data = hand_record.hand_data
-        target_hand = CompletedHand(**hand_data)
+        target_hand = deserialize_completed_hand(hand_data)
 
         # Get all hands for context (hand history)
         all_hands = db.query(Hand).filter(
             Hand.game_id == game_id
         ).order_by(Hand.hand_number).all()
 
-        hand_history = [CompletedHand(**h.hand_data) for h in all_hands]
+        hand_history = [deserialize_completed_hand(h.hand_data) for h in all_hands]
         analysis_count = 0  # No persistent analysis count for completed games
 
     # Check cache (always use "quick" for single hands)
@@ -310,8 +342,8 @@ async def get_session_analysis(
         if not db_hands:
             raise HTTPException(status_code=404, detail="No hands to analyze")
 
-        # Convert DB hands to the format expected by the analyzer
-        hand_history = [h.hand_data for h in db_hands]
+        # Convert DB hands to CompletedHand objects (analyzer uses attribute access like .winner_ids)
+        hand_history = [deserialize_completed_hand(h.hand_data) for h in db_hands]
         ending_stack = db_game.final_stack or 1000
 
     if not hand_history:

@@ -295,6 +295,7 @@ export function WinnerModal({ isOpen, winnerInfo, players, communityCards, onClo
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
+                data-testid="next-hand-button"
                 onClick={onClose}
                 className="w-full bg-gray-900 hover:bg-gray-800 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors"
               >

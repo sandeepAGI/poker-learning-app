@@ -24,24 +24,27 @@ export async function registerUser(page: Page, username?: string, password?: str
   const testUsername = username || generateTestUsername('user');
   const testPassword = password || 'TestPassword123!';
 
-  // Log network requests to debug API calls
-  page.on('request', request => {
-    if (request.url().includes('/auth/')) {
-      console.log(`[NETWORK REQUEST] ${request.method()} ${request.url()}`);
-    }
-  });
-
-  page.on('response', async response => {
-    if (response.url().includes('/auth/')) {
-      console.log(`[NETWORK RESPONSE] ${response.status()} ${response.url()}`);
-      try {
-        const text = await response.text();
-        console.log(`[NETWORK RESPONSE BODY]`, text.substring(0, 500));
-      } catch (e) {
-        console.log(`[NETWORK RESPONSE] Unable to read body: ${e}`);
+  // Log network requests to debug API calls (only register once per page)
+  if (!(page as any).__authListenersAdded) {
+    (page as any).__authListenersAdded = true;
+    page.on('request', request => {
+      if (request.url().includes('/auth/')) {
+        console.log(`[NETWORK REQUEST] ${request.method()} ${request.url()}`);
       }
-    }
-  });
+    });
+
+    page.on('response', async response => {
+      if (response.url().includes('/auth/')) {
+        console.log(`[NETWORK RESPONSE] ${response.status()} ${response.url()}`);
+        try {
+          const text = await response.text();
+          console.log(`[NETWORK RESPONSE BODY]`, text.substring(0, 500));
+        } catch (e) {
+          console.log(`[NETWORK RESPONSE] Unable to read body: ${e}`);
+        }
+      }
+    });
+  }
 
   await page.goto('/');
 
@@ -127,23 +130,26 @@ export async function logoutUser(page: Page) {
  * Create a new game and wait for it to load
  */
 export async function createGame(page: Page, playerName?: string, aiCount: number = 3) {
-  // Capture console messages from the browser
-  page.on('console', msg => {
-    const type = msg.type();
-    const text = msg.text();
-    console.log(`[BROWSER ${type.toUpperCase()}]`, text);
-  });
+  // Capture console messages from the browser (only register once per page)
+  if (!(page as any).__gameListenersAdded) {
+    (page as any).__gameListenersAdded = true;
+    page.on('console', msg => {
+      const type = msg.type();
+      const text = msg.text();
+      console.log(`[BROWSER ${type.toUpperCase()}]`, text);
+    });
 
-  // Capture any dialogs (alerts, confirms, prompts) and log them
-  page.on('dialog', async dialog => {
-    console.log(`[DIALOG DETECTED] Type: ${dialog.type()}, Message: ${dialog.message()}`);
-    await dialog.accept(); // Auto-accept to prevent blocking
-  });
+    // Capture any dialogs (alerts, confirms, prompts) and log them
+    page.on('dialog', async dialog => {
+      console.log(`[DIALOG DETECTED] Type: ${dialog.type()}, Message: ${dialog.message()}`);
+      await dialog.accept(); // Auto-accept to prevent blocking
+    });
 
-  // Capture page errors
-  page.on('pageerror', error => {
-    console.log(`[PAGE ERROR]`, error.message);
-  });
+    // Capture page errors
+    page.on('pageerror', error => {
+      console.log(`[PAGE ERROR]`, error.message);
+    });
+  }
 
   // Navigate to new game page
   await page.goto('/game/new');

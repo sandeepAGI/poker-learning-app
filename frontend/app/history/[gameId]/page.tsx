@@ -81,6 +81,11 @@ export default function HandReviewPage() {
         handNumber: currentHand.hand_number
       });
 
+      if (data.error) {
+        setError(data.error);
+        return;
+      }
+
       // Store analysis for this specific hand
       setAnalysisMap(prev => ({
         ...prev,
