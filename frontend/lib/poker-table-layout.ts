@@ -59,8 +59,9 @@ const MOBILE_SEATS: Record<number, Array<[number, number]>> = {
 };
 
 // Human player seat: always bottom center
-const HUMAN_DESKTOP: [number, number] = [50, 78];
-const HUMAN_MOBILE:  [number, number] = [50, 78];
+// 72% keeps the hero card within viewport at 1280x720 (header ~90px, table ~630px tall)
+const HUMAN_DESKTOP: [number, number] = [50, 72];
+const HUMAN_MOBILE:  [number, number] = [50, 72];
 
 function toPosition([left, top]: [number, number]): PlayerPosition {
   return {
