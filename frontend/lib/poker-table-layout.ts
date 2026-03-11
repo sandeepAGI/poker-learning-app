@@ -1,142 +1,125 @@
 /**
- * Poker Table Elliptical Layout Utilities
+ * Poker Table Seat Layout Utilities
  *
- * Calculates positions for poker table elements using elliptical mathematics.
- * Opponents are distributed evenly across a 180° arc (top-left to top-right).
- * Human player is positioned at bottom-center.
+ * Defines fixed seat positions for each player count.
+ * Positions are percentages of the table container, which maintains
+ * a fixed aspect ratio (16:10 desktop, 4:5 mobile) via calculateContainerSize().
+ * Percentage-based positions therefore scale automatically on window resize.
+ *
+ * Seat order: opponents are assigned seats in array order (index 0 = first opponent).
+ * The human player always sits at bottom-center.
  */
-
-export interface EllipseConfig {
-  centerX: number;      // % of container width (default: 50)
-  centerY: number;      // % of container height (default: 40)
-  radiusX: number;      // Horizontal radius % (default: 42)
-  radiusY: number;      // Vertical radius % (default: 28)
-}
 
 export interface PlayerPosition {
-  left: string;         // CSS left value (e.g., "50%")
-  top: string;          // CSS top value (e.g., "15%")
-  transform: string;    // CSS transform (centering)
+  left: string;       // CSS left value as percentage (e.g., "50%")
+  top: string;        // CSS top value as percentage (e.g., "15%")
+  transform: string;  // CSS transform for centering (always "translate(-50%, -50%)")
+}
+
+// ---------------------------------------------------------------------------
+// Seat maps: [left%, top%] per seat, indexed by opponent seat number.
+// Desktop (16:10 aspect ratio container)
+// ---------------------------------------------------------------------------
+
+const DESKTOP_SEATS: Record<number, Array<[number, number]>> = {
+  1: [
+    [50, 15],   // heads-up: top center
+  ],
+  3: [
+    [50, 12],   // top center
+    [10, 45],   // left
+    [78, 45],   // right
+  ],
+  5: [
+    [50,  8],   // top center
+    [20, 15],   // top left
+    [80, 15],   // top right
+    [ 8, 48],   // left
+    [78, 48],   // right
+  ],
+};
+
+// Mobile (4:5 aspect ratio container) — tighter horizontal to fit 375px+
+const MOBILE_SEATS: Record<number, Array<[number, number]>> = {
+  1: [
+    [50, 15],
+  ],
+  3: [
+    [50, 12],
+    [ 8, 45],
+    [76, 45],
+  ],
+  5: [
+    [50,  8],
+    [20, 15],
+    [78, 15],
+    [ 6, 48],
+    [76, 48],
+  ],
+};
+
+// Human player seat: always bottom center
+const HUMAN_DESKTOP: [number, number] = [50, 78];
+const HUMAN_MOBILE:  [number, number] = [50, 78];
+
+function toPosition([left, top]: [number, number]): PlayerPosition {
+  return {
+    left: `${left}%`,
+    top: `${top}%`,
+    transform: 'translate(-50%, -50%)',
+  };
 }
 
 /**
- * Default ellipse configuration for poker table
- * Centered above middle (centerY: 38%) to prevent community card / hero overlap
- * radiusX: 40% (leaves safety margin near control panel)
- * radiusY: 30% (prevents hero from clipping below viewport)
- */
-export const DEFAULT_ELLIPSE_CONFIG: EllipseConfig = {
-  centerX: 50,
-  centerY: 38,
-  radiusX: 40,
-  radiusY: 30
-};
-
-/**
- * Mobile ellipse configuration
- * Tighter horizontal radius to prevent seats clipping off-screen on 375px
- * Taller vertical radius to use the portrait-oriented table better
- */
-export const MOBILE_ELLIPSE_CONFIG: EllipseConfig = {
-  centerX: 50,
-  centerY: 38,
-  radiusX: 33,
-  radiusY: 28
-};
-
-/**
- * Calculate elliptical positions for opponents
- * Distributes players across a wide arc that uses lower quadrants too.
- * 4-player (3 opponents): ~240° arc (from 210° to -30°)
- * 6-player (5 opponents): ~280° arc (from 220° to -60°)
- * A gap is left at the bottom (270°) where the human hero sits.
+ * Returns seat positions for AI opponents.
  *
- * Formula: (x, y) = (cx + rx*cos(θ), cy - ry*sin(θ))
- * Note: Y is subtracted because CSS Y-axis is inverted (0 at top)
- *
- * @param numOpponents - Number of AI opponents (typically 1, 3, or 5)
- * @param config - Ellipse configuration (optional, uses defaults if not provided)
- * @returns Array of position objects for each opponent
+ * @param numOpponents - Number of AI opponents (1, 3, or 5)
+ * @param isMobile - Use tighter mobile layout (default: false)
  */
 export function calculateOpponentPositions(
   numOpponents: number,
-  config: EllipseConfig = DEFAULT_ELLIPSE_CONFIG
+  isMobile: boolean = false
 ): PlayerPosition[] {
-  // Edge case: single opponent (heads-up poker)
-  if (numOpponents === 1) {
-    return [{
-      left: `${config.centerX.toFixed(2)}%`,
-      top: `${(config.centerY - config.radiusY).toFixed(2)}%`,
-      transform: 'translate(-50%, -50%)'
-    }];
+  const map = isMobile ? MOBILE_SEATS : DESKTOP_SEATS;
+  const seats = map[numOpponents];
+
+  if (!seats) {
+    // Fallback: evenly distribute along top arc for unsupported counts
+    console.warn(`No seat map for ${numOpponents} opponents, falling back`);
+    return Array.from({ length: numOpponents }, (_, i) => ({
+      left: `${10 + (i * 80) / Math.max(numOpponents - 1, 1)}%`,
+      top: '15%',
+      transform: 'translate(-50%, -50%)',
+    }));
   }
 
-  // Full-ellipse placement: wider arcs that use lower quadrants
-  // 4-player (3 opponents): 240° arc (210° to -30°) — uses lower-left and lower-right
-  // 6-player (5 opponents): 280° arc (230° to -50°) — even wider spread
-  // Safety: reserve gap around 270° (bottom) where the hero sits
-  const arcSize = numOpponents <= 3 ? 240 : 280;
-  const startAngle = numOpponents <= 3 ? 210 : 230;  // Left-lower quadrant
-  const endAngle = startAngle - arcSize;               // Right-lower quadrant
-  const angleStep = arcSize / (numOpponents - 1);
-
-  return Array.from({ length: numOpponents }, (_, i) => {
-    const angleDeg = startAngle - i * angleStep;
-    const angleRad = (angleDeg * Math.PI) / 180;
-
-    const x = config.centerX + config.radiusX * Math.cos(angleRad);
-    const y = config.centerY - config.radiusY * Math.sin(angleRad);
-
-    return {
-      left: `${x.toFixed(2)}%`,
-      top: `${y.toFixed(2)}%`,
-      transform: 'translate(-50%, -50%)'
-    };
-  });
+  return seats.map(toPosition);
 }
 
 /**
- * Get human player position (always at bottom of ellipse)
- * Uses ellipse formula at 270° (bottom center)
+ * Returns the human player's seat position (always bottom center).
  *
- * @returns Position object for human player
+ * @param isMobile - Use mobile layout (default: false)
  */
-export function getHumanPlayerPosition(config: EllipseConfig = DEFAULT_ELLIPSE_CONFIG): PlayerPosition {
-  // Human player at 270° (bottom of ellipse)
-  const angleRad = (270 * Math.PI) / 180;
+export function getHumanPlayerPosition(isMobile: boolean = false): PlayerPosition {
+  return toPosition(isMobile ? HUMAN_MOBILE : HUMAN_DESKTOP);
+}
 
-  // Elliptical formula: (x, y) = (cx + rx*cos(θ), cy - ry*sin(θ))
-  const x = config.centerX + config.radiusX * Math.cos(angleRad);
-  const y = config.centerY - config.radiusY * Math.sin(angleRad);
-
+/**
+ * Get center area position (community cards).
+ * Positioned at 50% horizontal, 45% vertical — center of the table.
+ */
+export function getCenterAreaPosition(): PlayerPosition {
   return {
-    left: `${x.toFixed(2)}%`,
-    top: `${y.toFixed(2)}%`,
-    transform: 'translate(-50%, -50%)'
+    left: '50%',
+    top: '45%',
+    transform: 'translate(-50%, -50%)',
   };
 }
 
 /**
- * Get center area position (community cards)
- * Positioned at ellipse center
- *
- * @returns Position object for center area
- */
-export function getCenterAreaPosition(config: EllipseConfig = DEFAULT_ELLIPSE_CONFIG): PlayerPosition {
-  return {
-    left: `${config.centerX}%`,
-    top: `${config.centerY}%`,
-    transform: 'translate(-50%, -50%)'
-  };
-}
-
-/**
- * Calculate container size to fit viewport
- * Maintains 16:10 aspect ratio while fitting in available space
- *
- * @param viewportWidth - Available viewport width (px)
- * @param viewportHeight - Available viewport height (px)
- * @returns Object with width and height strings
+ * Calculate container size to fit viewport while maintaining aspect ratio.
+ * 16:10 on desktop, 4:5 on mobile.
  */
 export function calculateContainerSize(
   viewportWidth: number,
@@ -144,39 +127,32 @@ export function calculateContainerSize(
   headerHeight: number = 0,
   isMobile: boolean = false
 ): { width: string; height: string } {
-  // On mobile, use a squarer aspect ratio so the table fills more vertical space
   const aspectRatio = isMobile ? 4 / 5 : 16 / 10;
   const padding = isMobile ? 16 : 32;
-  // On mobile, reserve space for the fixed bottom action bar (~140px)
   const bottomBarHeight = isMobile ? 140 : 0;
 
   const availableWidth = Math.min(viewportWidth - padding, 1400);
   const availableHeight = viewportHeight - headerHeight - padding - bottomBarHeight;
 
-  // Width-driven dimensions
   const wWidth = availableWidth;
   const wHeight = wWidth / aspectRatio;
 
-  // Height-driven dimensions
   const hHeight = availableHeight;
   const hWidth = hHeight * aspectRatio;
 
-  // Pick the one that fits in both dimensions
   let finalWidth: number;
   let finalHeight: number;
 
   if (wHeight <= availableHeight) {
-    // Width-driven fits vertically — use it (maximizes table size)
     finalWidth = wWidth;
     finalHeight = wHeight;
   } else {
-    // Height-constrained — derive width from height
     finalWidth = Math.min(hWidth, availableWidth);
     finalHeight = finalWidth / aspectRatio;
   }
 
   return {
     width: `${finalWidth}px`,
-    height: `${finalHeight}px`
+    height: `${finalHeight}px`,
   };
 }
