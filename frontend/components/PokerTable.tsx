@@ -18,7 +18,6 @@ import {
   getHumanPlayerPosition,
   getCenterAreaPosition,
   calculateContainerSize,
-  MOBILE_ELLIPSE_CONFIG
 } from '../lib/poker-table-layout';
 
 export function PokerTable() {
@@ -104,9 +103,6 @@ export function PokerTable() {
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
-
-  // Choose ellipse config based on viewport
-  const ellipseConfig = isMobileView ? MOBILE_ELLIPSE_CONFIG : undefined;
 
   // FIX-06: Click-to-focus for ALL elements (learning app - simple & intuitive)
   const [focusedElement, setFocusedElement] = useState<string | null>(null);
@@ -496,7 +492,7 @@ export function PokerTable() {
           {/* Opponents - Positioned using calculated elliptical positions */}
           {(() => {
             const opponents = gameState.players.filter((p) => !p.is_human);
-            const opponentPositions = calculateOpponentPositions(opponents.length, ellipseConfig);
+            const opponentPositions = calculateOpponentPositions(opponents.length, isMobileView);
 
             // Helper function to check button positions
             const getPlayerIndex = (player: Player) => {
@@ -550,9 +546,9 @@ export function PokerTable() {
           data-testid="community-cards-area"
           className="absolute flex items-center justify-center cursor-pointer"
           style={{
-            left: getCenterAreaPosition(ellipseConfig).left,
-            top: getCenterAreaPosition(ellipseConfig).top,
-            transform: getCenterAreaPosition(ellipseConfig).transform,
+            left: getCenterAreaPosition().left,
+            top: getCenterAreaPosition().top,
+            transform: getCenterAreaPosition().transform,
             zIndex: focusedElement === 'community' ? 50 : 20
           }}
           onClick={() => setFocusedElement(focusedElement === 'community' ? null : 'community')}
@@ -575,9 +571,9 @@ export function PokerTable() {
           data-testid="human-player-seat"
           className="absolute cursor-pointer"
           style={{
-            left: getHumanPlayerPosition(ellipseConfig).left,
-            top: getHumanPlayerPosition(ellipseConfig).top,
-            transform: getHumanPlayerPosition(ellipseConfig).transform,
+            left: getHumanPlayerPosition(isMobileView).left,
+            top: getHumanPlayerPosition(isMobileView).top,
+            transform: getHumanPlayerPosition(isMobileView).transform,
             zIndex: focusedElement === 'human' ? 50 : 10
           }}
           onClick={() => setFocusedElement(focusedElement === 'human' ? null : 'human')}
