@@ -23,7 +23,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 // ─── Configuration ───────────────────────────────────────────────
-const TOTAL_GAMES = 2;
+const TOTAL_GAMES = 30;
 const MAX_HANDS_PER_GAME = 30;
 const GAMES_PER_USER = 5; // Register a fresh user every N games
 const RESULTS_DIR = path.join(__dirname, 'stress-test-results');
@@ -262,11 +262,22 @@ async function validateButtonRotation(
   failures: Failure[],
   game: number,
   hand: number,
-  prevPositions: { dealer: string | null; smallBlind: string | null; bigBlind: string | null } | null
+  prevPositions: { dealer: string | null; smallBlind: string | null; bigBlind: string | null } | null,
+  prevActiveCount?: number
 ): Promise<{ dealer: string | null; smallBlind: string | null; bigBlind: string | null }> {
   const current = await readButtonPositions(page);
 
   if (prevPositions && hand > 1) {
+    // Count current active players (non-zero stacks) to detect eliminations
+    const activeCount = await countActivePlayers(page);
+
+    // Skip rotation validation if a player was eliminated since last hand —
+    // eliminations cause the button to skip positions, which is correct behavior
+    if (prevActiveCount !== undefined && activeCount < prevActiveCount) {
+      console.log(`    ℹ️ Player eliminated (${prevActiveCount} → ${activeCount} active), skipping rotation check`);
+      return current;
+    }
+
     // Dealer should have moved
     if (current.dealer && prevPositions.dealer && current.dealer === prevPositions.dealer) {
       await recordFailure(
@@ -293,6 +304,18 @@ async function validateButtonRotation(
   }
 
   return current;
+}
+
+/** Count players with non-zero stacks (active in the game) */
+async function countActivePlayers(page: Page): Promise<number> {
+  const stacks = page.locator('[data-testid^="stack-display-"]');
+  const count = await stacks.count();
+  let active = 0;
+  for (let i = 0; i < count; i++) {
+    const text = await stacks.nth(i).textContent().catch(() => '$0');
+    if (parseDollarAmount(text || '$0') > 0) active++;
+  }
+  return active;
 }
 
 /** Validate UI elements are visible (no clipping) */
@@ -550,6 +573,7 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
         console.log(`  Initial chips: $${result.initialChipTotal}`);
 
         let prevButtonPositions: Awaited<ReturnType<typeof readButtonPositions>> | null = null;
+        let prevActiveCount: number | undefined = undefined;
         let prevCommunityCardCount = 0;
         let gameOver = false;
         let consecutiveNoState = 0; // Track consecutive hands with no game state
@@ -626,9 +650,11 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
           consecutiveNoState = 0;
 
           // ── Validate button rotation ──
+          const currentActiveCount = await countActivePlayers(page);
           prevButtonPositions = await validateButtonRotation(
-            page, result.failures, gameNum, handNum, prevButtonPositions
+            page, result.failures, gameNum, handNum, prevButtonPositions, prevActiveCount
           );
+          prevActiveCount = currentActiveCount;
 
           // ── Validate UI visibility ──
           await validateUIVisibility(page, result.failures, gameNum, handNum);
@@ -686,6 +712,14 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
                 await nextBtn.click({ force: true }).catch(() => {});
                 await page.waitForTimeout(2000);
               }
+
+              // After clicking Next Hand, check if game ended (player eliminated)
+              if (await page.locator('text=Game Over').isVisible().catch(() => false)) {
+                console.log(`  🏁 Game over after Next Hand click (hand ${handNum})`);
+                result.endReason = 'elimination';
+                await screenshotTo(page, path.join(gameDir, 'game-end.png'));
+                gameOver = true;
+              }
               handComplete = true;
               break;
             }
@@ -695,6 +729,14 @@ test.describe('Stress Test: 20 Full Poker Games', () => {
             if (await nextHandBtn.isVisible().catch(() => false)) {
               await nextHandBtn.click();
               await page.waitForTimeout(2000);
+
+              // After clicking Next Hand, check if game ended
+              if (await page.locator('text=Game Over').isVisible().catch(() => false)) {
+                console.log(`  🏁 Game over after Next Hand click (hand ${handNum})`);
+                result.endReason = 'elimination';
+                await screenshotTo(page, path.join(gameDir, 'game-end.png'));
+                gameOver = true;
+              }
               handComplete = true;
               break;
             }
