@@ -49,13 +49,13 @@ describe('calculateOpponentPositions', () => {
       expect(Math.abs(leftTop - rightTop)).toBeLessThan(10);
     });
 
-    it('all seats are within table bounds (8%–82% horizontal, 5%–82% vertical)', () => {
+    it('all seats are within table bounds (8%–90% horizontal, 5%–82% vertical)', () => {
       const positions = calculateOpponentPositions(3);
       positions.forEach(pos => {
         const left = parseFloat(pos.left);
         const top = parseFloat(pos.top);
         expect(left).toBeGreaterThanOrEqual(8);
-        expect(left).toBeLessThanOrEqual(82);
+        expect(left).toBeLessThanOrEqual(90);
         expect(top).toBeGreaterThanOrEqual(5);
         expect(top).toBeLessThanOrEqual(82);
       });
@@ -65,6 +65,15 @@ describe('calculateOpponentPositions', () => {
       calculateOpponentPositions(3).forEach(pos => {
         expect(pos.transform).toBe('translate(-50%, -50%)');
       });
+    });
+
+    it('has seats at the equator (left and right near 50% vertical)', () => {
+      const positions = calculateOpponentPositions(3);
+      const midSeats = positions.filter(p => {
+        const top = parseFloat(p.top);
+        return top > 40 && top < 60;
+      });
+      expect(midSeats.length).toBe(2); // 9 o'clock and 3 o'clock
     });
   });
 
@@ -93,13 +102,36 @@ describe('calculateOpponentPositions', () => {
         expect(top).toBeLessThanOrEqual(82);
       });
     });
+
+    it('has seats in the lower half (below 50%)', () => {
+      const positions = calculateOpponentPositions(5);
+      const tops = positions.map(p => parseFloat(p.top));
+      const belowCenter = tops.filter(t => t > 50);
+      expect(belowCenter.length).toBe(2); // 7 o'clock and 5 o'clock
+    });
+
+    it('opponents are left-right symmetric', () => {
+      const positions = calculateOpponentPositions(5);
+      const sorted = [...positions].sort((a, b) => parseFloat(a.top) - parseFloat(b.top));
+      // Top center is alone at ~15%
+      const topCenter = sorted[0];
+      expect(parseFloat(topCenter.left)).toBeCloseTo(50, 0);
+      // Upper pair
+      const upperLeft = parseFloat(sorted[1].left);
+      const upperRight = parseFloat(sorted[2].left);
+      expect(upperLeft + upperRight).toBeCloseTo(100, 5);
+      // Lower pair
+      const lowerLeft = parseFloat(sorted[3].left);
+      const lowerRight = parseFloat(sorted[4].left);
+      expect(lowerLeft + lowerRight).toBeCloseTo(100, 5);
+    });
   });
 
   describe('mobile variant', () => {
-    it('4-player right seat is within mobile bounds (left < 80%)', () => {
+    it('4-player right seat is within mobile bounds (left < 88%)', () => {
       const positions = calculateOpponentPositions(3, true);
       const lefts = positions.map(p => parseFloat(p.left));
-      expect(lefts.every(l => l <= 80)).toBe(true);
+      expect(lefts.every(l => l <= 88)).toBe(true);
     });
   });
 });

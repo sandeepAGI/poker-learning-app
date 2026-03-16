@@ -504,25 +504,28 @@ export function PokerTable() {
               const playerIndex = getPlayerIndex(opponent);
 
               return (
-                <motion.div
+                <div
                   key={opponent.player_id}
                   data-testid={`opponent-seat-${index}`}
-                  className="absolute cursor-pointer"
+                  className="absolute"
                   style={{
                     left: position.left,
                     top: position.top,
                     transform: position.transform,
                     zIndex: focusedElement === `opponent-${index}` ? 50 : 10
                   }}
-                  onClick={() => setFocusedElement(
-                    focusedElement === `opponent-${index}` ? null : `opponent-${index}`
-                  )}
-                  animate={{
-                    scale: focusedElement === `opponent-${index}` ? 1.1 : 1
-                  }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  whileHover={{ scale: 1.05 }}
                 >
+                  <motion.div
+                    className="cursor-pointer"
+                    onClick={() => setFocusedElement(
+                      focusedElement === `opponent-${index}` ? null : `opponent-${index}`
+                    )}
+                    animate={{
+                      scale: focusedElement === `opponent-${index}` ? 1.1 : 1
+                    }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    whileHover={{ scale: 1.05 }}
+                  >
                   <PlayerSeat
                     player={opponent}
                     isCurrentTurn={
@@ -536,53 +539,61 @@ export function PokerTable() {
                     isSmallBlind={playerIndex === gameState.small_blind_position}
                     isBigBlind={playerIndex === gameState.big_blind_position}
                   />
-                </motion.div>
+                  </motion.div>
+                </div>
               );
             });
           })()}
 
         {/* Center Area - Community Cards at ellipse center */}
-        <motion.div
+        <div
           data-testid="community-cards-area"
-          className="absolute flex items-center justify-center cursor-pointer"
+          className="absolute flex items-center justify-center"
           style={{
             left: getCenterAreaPosition().left,
             top: getCenterAreaPosition().top,
             transform: getCenterAreaPosition().transform,
             zIndex: focusedElement === 'community' ? 50 : 20
           }}
-          onClick={() => setFocusedElement(focusedElement === 'community' ? null : 'community')}
-          animate={{
-            scale: focusedElement === 'community' ? 1.05 : 1
-          }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          whileHover={{ scale: 1.03 }}
         >
+          <motion.div
+            className="cursor-pointer"
+            onClick={() => setFocusedElement(focusedElement === 'community' ? null : 'community')}
+            animate={{
+              scale: focusedElement === 'community' ? 1.05 : 1
+            }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            whileHover={{ scale: 1.03 }}
+          >
           {/* Community cards - Using new dedicated component */}
           <div className={`transition-all rounded-xl ${focusedElement === 'community' ? 'outline outline-4 outline-yellow-400 shadow-lg shadow-yellow-400/50 p-2' : ''}`}>
             <CommunityCards
               cards={gameState.community_cards}
             />
           </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
         {/* Human Player - Bottom - Calculated position */}
-        <motion.div
+        <div
           data-testid="human-player-seat"
-          className="absolute cursor-pointer"
+          className="absolute"
           style={{
             left: getHumanPlayerPosition(isMobileView).left,
             top: getHumanPlayerPosition(isMobileView).top,
             transform: getHumanPlayerPosition(isMobileView).transform,
             zIndex: focusedElement === 'human' ? 50 : 10
           }}
-          onClick={() => setFocusedElement(focusedElement === 'human' ? null : 'human')}
-          animate={{
-            scale: focusedElement === 'human' ? 1.1 : 1
-          }}
-          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          whileHover={{ scale: 1.05 }}
         >
+          <motion.div
+            className="cursor-pointer"
+            onClick={() => setFocusedElement(focusedElement === 'human' ? null : 'human')}
+            animate={{
+              scale: focusedElement === 'human' ? 1.1 : 1
+            }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            whileHover={{ scale: 1.05 }}
+          >
           <PlayerSeat
             player={gameState.human_player}
             isCurrentTurn={isMyTurn}
@@ -592,7 +603,8 @@ export function PokerTable() {
             isSmallBlind={gameState.players.findIndex(p => p.is_human) === gameState.small_blind_position}
             isBigBlind={gameState.players.findIndex(p => p.is_human) === gameState.big_blind_position}
           />
-        </motion.div>
+          </motion.div>
+        </div>
           </div>
         </div>
 

@@ -21,47 +21,49 @@ export interface PlayerPosition {
 // Desktop (16:10 aspect ratio container)
 // ---------------------------------------------------------------------------
 
+// Ellipse geometry: center=(50,50), a=38 (horizontal), b=35 (vertical)
+// Seat at angle θ: left = 50 + 38·cos(θ), top = 50 − 35·sin(θ)
+// Hero at 6 o'clock (270°), opponents distributed evenly over remaining positions.
 const DESKTOP_SEATS: Record<number, Array<[number, number]>> = {
   1: [
-    [50, 15],   // heads-up: top center
+    [50, 15],   // 12 o'clock (90°)
   ],
   3: [
-    [50, 12],   // top center
-    [10, 45],   // left
-    [78, 45],   // right
+    [12, 50],   //  9 o'clock (180°)
+    [50, 15],   // 12 o'clock (90°)
+    [88, 50],   //  3 o'clock (0°)
   ],
   5: [
-    [50,  8],   // top center
-    [20, 15],   // top left
-    [80, 15],   // top right
-    [ 8, 48],   // left
-    [78, 48],   // right
+    [17, 33],   // 10 o'clock (150°)
+    [50, 15],   // 12 o'clock (90°)
+    [83, 33],   //  2 o'clock (30°)
+    [17, 67],   //  8 o'clock (210°)
+    [83, 67],   //  4 o'clock (330°)
   ],
 };
 
-// Mobile (4:5 aspect ratio container) — tighter horizontal to fit 375px+
+// Mobile (4:5 aspect ratio container) — tighter semi-axes: a=36, b=33
 const MOBILE_SEATS: Record<number, Array<[number, number]>> = {
   1: [
-    [50, 15],
+    [50, 17],   // 12 o'clock
   ],
   3: [
-    [50, 12],
-    [ 8, 45],
-    [76, 45],
+    [14, 50],   //  9 o'clock
+    [50, 17],   // 12 o'clock
+    [86, 50],   //  3 o'clock
   ],
   5: [
-    [50,  8],
-    [20, 15],
-    [78, 15],
-    [ 6, 48],
-    [76, 48],
+    [19, 34],   // 10 o'clock
+    [50, 17],   // 12 o'clock
+    [81, 34],   //  2 o'clock
+    [19, 66],   //  8 o'clock
+    [81, 66],   //  4 o'clock
   ],
 };
 
-// Human player seat: always bottom center
-// 72% keeps the hero card within viewport at 1280x720 (header ~90px, table ~630px tall)
-const HUMAN_DESKTOP: [number, number] = [50, 72];
-const HUMAN_MOBILE:  [number, number] = [50, 72];
+// Human player seat: always 6 o'clock (270°) → top = 50 + 35 = 85, clamped to 82%
+const HUMAN_DESKTOP: [number, number] = [50, 82];
+const HUMAN_MOBILE:  [number, number] = [50, 80];
 
 function toPosition([left, top]: [number, number]): PlayerPosition {
   return {

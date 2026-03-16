@@ -75,10 +75,13 @@ test.describe('Suite 6: Layout & UX', () => {
       }
     }
 
-    // With 240-degree arc, opponents should NOT all be in top half
-    // At least one should be in lower portion (relY > 0.5)
-    const hasLowerPosition = opponentPositions.some(p => p.relY > 0.5);
-    expect(hasLowerPosition).toBe(true);
+    // With ellipse layout, 4-player has left (9 o'clock), top (12), right (3 o'clock)
+    const hasLeft = opponentPositions.some(p => p.relX < 0.25);
+    const hasRight = opponentPositions.some(p => p.relX > 0.75);
+    const hasTop = opponentPositions.some(p => p.relY < 0.3);
+    expect(hasLeft).toBe(true);
+    expect(hasRight).toBe(true);
+    expect(hasTop).toBe(true);
 
     await page.screenshot({ path: 'e2e/screenshots/06-4player-layout.png' });
 
@@ -310,6 +313,201 @@ test.describe('Suite 6: Layout & UX', () => {
       const innerDiv = communityArea.locator('.outline-yellow-400');
       const isHighlighted = await innerDiv.isVisible().catch(() => false);
       expect(isHighlighted).toBe(true);
+    }
+
+    await quitGame(page);
+  });
+
+  test('6.11: All seat cards are inside the table ellipse', async ({ page }) => {
+    const { username } = await registerUser(page);
+    await createGame(page, username, 5);
+    await page.waitForTimeout(2000);
+
+    const tableContainer = page.locator('[data-testid="poker-table-container"]');
+    const tableBounds = await tableContainer.boundingBox();
+    expect(tableBounds).not.toBeNull();
+    if (!tableBounds) return;
+
+    // Model the table as an ellipse
+    const cx = tableBounds.x + tableBounds.width / 2;
+    const cy = tableBounds.y + tableBounds.height / 2;
+    const a = tableBounds.width / 2;
+    const b = tableBounds.height / 2;
+
+    // Check all seats (5 opponents + hero)
+    const seatSelectors = [
+      ...Array.from({ length: 5 }, (_, i) => `[data-testid="opponent-seat-${i}"]`),
+      '[data-testid="human-player-seat"]',
+    ];
+
+    for (const selector of seatSelectors) {
+      const seat = page.locator(selector);
+      if (!await seat.isVisible().catch(() => false)) continue;
+      const bounds = await seat.boundingBox();
+      if (!bounds) continue;
+
+      // All 4 corners must be inside the ellipse (with 10% tolerance for rounded-rect shape)
+      const corners = [
+        [bounds.x, bounds.y],
+        [bounds.x + bounds.width, bounds.y],
+        [bounds.x, bounds.y + bounds.height],
+        [bounds.x + bounds.width, bounds.y + bounds.height],
+      ];
+      for (const [px, py] of corners) {
+        const ellipseVal = ((px - cx) / a) ** 2 + ((py - cy) / b) ** 2;
+        expect(ellipseVal).toBeLessThan(1.1); // inside ellipse with 10% tolerance
+      }
+    }
+
+    await quitGame(page);
+  });
+
+  test('6.12: 6-player opponents are evenly distributed around the table', async ({ page }) => {
+    const { username } = await registerUser(page);
+    await createGame(page, username, 5);
+    await page.waitForTimeout(2000);
+
+    const tableContainer = page.locator('[data-testid="poker-table-container"]');
+    const tableBounds = await tableContainer.boundingBox();
+    if (!tableBounds) return;
+
+    const cx = tableBounds.x + tableBounds.width / 2;
+    const cy = tableBounds.y + tableBounds.height / 2;
+
+    // Collect angles of all seats relative to center
+    const angles: number[] = [];
+    for (let i = 0; i < 5; i++) {
+      const seat = page.locator(`[data-testid="opponent-seat-${i}"]`);
+      const bounds = await seat.boundingBox();
+      if (bounds) {
+        const sx = bounds.x + bounds.width / 2 - cx;
+        const sy = bounds.y + bounds.height / 2 - cy;
+        angles.push(Math.atan2(sy, sx) * 180 / Math.PI);
+      }
+    }
+    // Add hero
+    const hero = page.locator('[data-testid="human-player-seat"]');
+    const heroBounds = await hero.boundingBox();
+    if (heroBounds) {
+      angles.push(Math.atan2(heroBounds.y + heroBounds.height / 2 - cy, heroBounds.x + heroBounds.width / 2 - cx) * 180 / Math.PI);
+    }
+
+    // Sort angles and check spacing is roughly 60° (±25° tolerance for seat card size offset)
+    angles.sort((a, b) => a - b);
+    for (let i = 0; i < angles.length; i++) {
+      const next = (i + 1) % angles.length;
+      let gap = angles[next] - angles[i];
+      if (gap < 0) gap += 360;
+      expect(gap).toBeGreaterThan(35);
+      expect(gap).toBeLessThan(85);
+    }
+
+    await quitGame(page);
+  });
+
+  test('6.13: Seat positions scale proportionally across viewport sizes', async ({ page }) => {
+    const { username } = await registerUser(page);
+
+    // Helper to capture relative seat positions
+    async function captureRelativePositions() {
+      const tableContainer = page.locator('[data-testid="poker-table-container"]');
+      const tableBounds = await tableContainer.boundingBox();
+      if (!tableBounds) return null;
+
+      const positions: { relX: number; relY: number }[] = [];
+
+      // Capture opponent positions
+      for (let i = 0; i < 3; i++) {
+        const seat = page.locator(`[data-testid="opponent-seat-${i}"]`);
+        if (!await seat.isVisible().catch(() => false)) continue;
+        const bounds = await seat.boundingBox();
+        if (bounds) {
+          positions.push({
+            relX: (bounds.x + bounds.width / 2 - tableBounds.x) / tableBounds.width,
+            relY: (bounds.y + bounds.height / 2 - tableBounds.y) / tableBounds.height,
+          });
+        }
+      }
+
+      // Capture hero position
+      const hero = page.locator('[data-testid="human-player-seat"]');
+      const heroBounds = await hero.boundingBox();
+      if (heroBounds) {
+        positions.push({
+          relX: (heroBounds.x + heroBounds.width / 2 - tableBounds.x) / tableBounds.width,
+          relY: (heroBounds.y + heroBounds.height / 2 - tableBounds.y) / tableBounds.height,
+        });
+      }
+
+      return { positions, tableWidth: tableBounds.width, tableHeight: tableBounds.height };
+    }
+
+    // Capture at default viewport (1280x720)
+    await createGame(page, username, 3);
+    await page.waitForTimeout(2000);
+    const defaultResult = await captureRelativePositions();
+    expect(defaultResult).not.toBeNull();
+    await quitGame(page);
+
+    // Resize to 1024x768 and capture again
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await createGame(page, username, 3);
+    await page.waitForTimeout(2000);
+    const smallResult = await captureRelativePositions();
+    expect(smallResult).not.toBeNull();
+    await quitGame(page);
+
+    if (!defaultResult || !smallResult) return;
+
+    // Table should be a different pixel size
+    expect(smallResult.tableWidth).not.toBeCloseTo(defaultResult.tableWidth, 0);
+
+    // But relative positions should be the same (within 5% tolerance for rounding/font scaling)
+    for (let i = 0; i < Math.min(defaultResult.positions.length, smallResult.positions.length); i++) {
+      expect(smallResult.positions[i].relX).toBeCloseTo(defaultResult.positions[i].relX, 1);
+      expect(smallResult.positions[i].relY).toBeCloseTo(defaultResult.positions[i].relY, 1);
+    }
+  });
+
+  test('6.14: Seat cards stay inside ellipse at 1024x768', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    const { username } = await registerUser(page);
+    await createGame(page, username, 5);
+    await page.waitForTimeout(2000);
+
+    const tableContainer = page.locator('[data-testid="poker-table-container"]');
+    const tableBounds = await tableContainer.boundingBox();
+    expect(tableBounds).not.toBeNull();
+    if (!tableBounds) return;
+
+    const cx = tableBounds.x + tableBounds.width / 2;
+    const cy = tableBounds.y + tableBounds.height / 2;
+    const a = tableBounds.width / 2;
+    const b = tableBounds.height / 2;
+
+    const seatSelectors = [
+      ...Array.from({ length: 5 }, (_, i) => `[data-testid="opponent-seat-${i}"]`),
+      '[data-testid="human-player-seat"]',
+    ];
+
+    for (const selector of seatSelectors) {
+      const seat = page.locator(selector);
+      if (!await seat.isVisible().catch(() => false)) continue;
+      const bounds = await seat.boundingBox();
+      if (!bounds) continue;
+
+      const corners = [
+        [bounds.x, bounds.y],
+        [bounds.x + bounds.width, bounds.y],
+        [bounds.x, bounds.y + bounds.height],
+        [bounds.x + bounds.width, bounds.y + bounds.height],
+      ];
+      // Check seat center is inside the ellipse (corners may protrude at smaller viewports
+      // since seat cards are fixed-size but the table scales down)
+      const sx = bounds.x + bounds.width / 2;
+      const sy = bounds.y + bounds.height / 2;
+      const ellipseVal = ((sx - cx) / a) ** 2 + ((sy - cy) / b) ** 2;
+      expect(ellipseVal).toBeLessThan(1.05);
     }
 
     await quitGame(page);
