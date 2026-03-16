@@ -44,7 +44,8 @@ export function Card({ card, hidden = false, 'data-testid': testId }: CardProps)
     );
   }
 
-  const value = card.slice(0, -1);
+  const rawValue = card.slice(0, -1);
+  const value = rawValue === 'T' ? '10' : rawValue;
   const suit = card.slice(-1);
   const suitSymbol = getSuitSymbol(suit);
   const suitColor = getSuitColor(suit);
